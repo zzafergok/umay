@@ -112,9 +112,7 @@ export function ItemPurchaseTab({
                 key={`${url}-${idx}`}
                 className="bg-surface-sunken flex items-center gap-1.5 rounded-sm border border-border px-2 py-1 text-xs"
               >
-                <span className="max-w-[140px] truncate">
-                  Fotoğraf #{idx + 1}
-                </span>
+                <span>Fotoğraf #{idx + 1}</span>
                 <Button
                   type="button"
                   variant="ghost"

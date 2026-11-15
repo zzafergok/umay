@@ -68,7 +68,7 @@ export function DeleteConfirmationDialog({
       <DialogContent
         dismissible={!isDeleting}
         showCloseButton={!isDeleting}
-        className="bg-surface-raised z-[60] max-w-[420px] gap-0 overflow-hidden rounded-2xl border-border p-0 sm:max-w-[420px] sm:p-0"
+        className="bg-surface-raised z-[60] w-[calc(100vw-2rem)] max-w-lg gap-0 overflow-hidden rounded-2xl border-border p-0 sm:max-w-lg sm:p-0"
       >
         <div
           className={cn(
@@ -99,19 +99,19 @@ export function DeleteConfirmationDialog({
                 </span>
               </div>
 
-              <div className="mt-2 flex items-center gap-2.5">
+              <div className="mt-2 flex items-start gap-2.5">
                 {itemIcon ? (
                   <div
-                    className="bg-surface-raised flex size-8 shrink-0 items-center justify-center rounded-lg border border-border"
+                    className="bg-surface-raised mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg border border-border"
                     style={itemColor ? { color: itemColor } : undefined}
                   >
                     {itemIcon}
                   </div>
                 ) : null}
-                <div className="flex min-w-0 flex-1 items-center gap-2">
+                <div className="flex min-w-0 flex-1 items-start gap-2">
                   <span
                     className={cn(
-                      'size-2 shrink-0 rounded-full',
+                      'mt-1.5 size-2 shrink-0 rounded-full',
                       !itemColor && 'bg-danger',
                     )}
                     style={
@@ -119,20 +119,20 @@ export function DeleteConfirmationDialog({
                     }
                     aria-hidden="true"
                   />
-                  <p className="text-text truncate text-[15px] font-semibold">
+                  <p className="text-text min-w-0 flex-1 break-words text-[15px] font-semibold leading-snug">
                     {itemName}
                   </p>
                 </div>
               </div>
 
               {details && details.length > 0 && (
-                <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border/70 pt-2.5">
+                <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2.5 border-t border-border/70 pt-3 sm:grid-cols-2">
                   {details.map((detail) => (
                     <div key={detail.label} className="min-w-0">
                       <dt className="text-text-subtle text-[11px] font-medium">
                         {detail.label}
                       </dt>
-                      <dd className="text-body-sm text-text mt-0.5 truncate font-semibold tabular-nums">
+                      <dd className="text-body-sm text-text mt-0.5 break-words font-semibold tabular-nums leading-snug">
                         {detail.value}
                       </dd>
                     </div>

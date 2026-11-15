@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/core/toast';
 import type { Item } from '@/features/inventory/types';
 import {
@@ -9,9 +10,11 @@ import {
   useLocationsQuery,
   useRecordMovementMutation,
 } from '@/hooks/use-inventory-hooks';
+import { inventoryService } from '@/services/inventory-service';
 
-/** Manages filtering, stock quick-consume, and create/edit/detail modal state for ItemsScreen. */
+/** Manages filtering, stock adjustments, delete confirmation, and create/edit/detail modal state for ItemsScreen. */
 export function useItemsScreen() {
+  const qc = useQueryClient();
   const { data: items = [], isLoading } = useItemsQuery();
   const { data: categories = [] } = useCategoriesQuery();
   const { data: locations = [] } = useLocationsQuery();
@@ -28,6 +31,8 @@ export function useItemsScreen() {
     undefined,
   );
   const [detailItemId, setDetailItemId] = React.useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = React.useState<Item | null>(null);
+  const [pendingItemId, setPendingItemId] = React.useState<string | null>(null);
   const [nowMs] = React.useState(() => Date.now());
 
   const categoryMap = React.useMemo(
@@ -76,17 +81,34 @@ export function useItemsScreen() {
     nowMs,
   ]);
 
-  const handleConsume = async (item: Item) => {
+  const handleAdjustStock = async (item: Item, delta: number) => {
+    setPendingItemId(item.id);
     try {
       await moveMutation.mutateAsync({
         itemId: item.id,
-        type: 'consume',
-        delta: -1,
-        reason: 'Hızlı tüketim',
+        type: delta > 0 ? 'in' : 'consume',
+        delta,
+        reason: delta > 0 ? 'Hızlı stok girişi' : 'Hızlı tüketim',
       });
-      toast.success(`${item.name} (-1 ${item.unit})`);
+      const sign = delta > 0 ? `+${delta}` : `${delta}`;
+      toast.success(`${item.name} (${sign} ${item.unit})`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Stok güncellenemedi.');
+    } finally {
+      setPendingItemId(null);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
+    try {
+      await inventoryService.deleteItem(deleteTarget.id);
+      await qc.invalidateQueries({ queryKey: ['inventory', 'items'] });
+      toast.success('Ürün silindi.');
+      setDeleteTarget(null);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Ürün silinemedi.');
+      throw err;
     }
   };
 
@@ -133,7 +155,7 @@ export function useItemsScreen() {
     filtered,
     categoryMap,
     locationMap,
-    isMoving: moveMutation.isPending,
+    pendingItemId,
     search,
     setSearch,
     categoryFilter,
@@ -149,11 +171,14 @@ export function useItemsScreen() {
     formDialogOpen,
     editingItem,
     detailItemId,
+    deleteTarget,
+    setDeleteTarget,
     openCreateModal,
     openEditModal,
     openDetailModal,
     handleFormOpenChange,
     handleDetailOpenChange,
-    handleConsume,
+    handleAdjustStock,
+    handleConfirmDelete,
   };
 }

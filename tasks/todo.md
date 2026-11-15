@@ -1,5 +1,26 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
+## Faz 24 – Ürün Kartı (`ItemCard`) UX Analizi ve Modüler Refactor (İnceleme Özeti)
+
+### Yapılan Değişiklikler
+- **Modüler `ItemCard` (`src/features/routes/auth/items/item-card/`)**:
+  - [item-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-card/item-card.tsx) (188 satır): `CategoryIcon` + senkronize kategori rengi rozeti, tıklanabilir ürün başlığı (Detay modalını açar), kategori/marka alt başlığı, durum/ürün tipi rozeti, konum (`MapPin`) ve SKT (`CalendarClock`) satırı, özel alan değer rozetleri (`anahtar: değer`) veya not özeti, ve `border-t` ile ayrılmış `Detay`, `Düzenle`, modal `Sil` aksiyon alt çubuğu eklendi.
+  - [item-stock-panel.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-card/item-stock-panel.tsx) (93 satır): Sayısal stok göstergesi, eşik/hedef etiketi, anlamsal renkli (`bg-danger` / `bg-warning` / `bg-success`) stok seviyesi ilerleme çubuğu ve stok `0` olduğunda bile tek tıkla artırma yapabilen iki yönlü `-1` / `+1` segmente kontrol eklendi.
+  - [item-card-utils.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-card/item-card-utils.ts) (91 satır) ve [index.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-card/index.ts) (1 satır) oluşturuldu; eski tek dosya `item-card.tsx` kaldırıldı.
+- **Ekran & Tablo Güncellemeleri**:
+  - [use-items-screen.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/items-screen/use-items-screen.ts) (184 satır), [items-screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/items-screen/items-screen.tsx) (194 satır) ve [items-filter-toolbar.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/items-screen/items-filter-toolbar.tsx) (133 satır) içinde `handleAdjustStock(+1 | -1)`, ürün bazlı `pendingItemId` yükleme durumu ve `DeleteConfirmationDialog` entegrasyonu sağlandı.
+  - [items-table.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/items-table.tsx) (128 satır): Tablo görünümüne de `-1`, `+1`, `Detay`, `Düzenle` ve modal `Sil` butonları eklendi.
+
+### Doğrulama Sonuçları
+- Değiştirilen ve eklenen tüm dosyalar `<= 250` satır sınırının altında (`<= 194` satır).
+- `npm run lint`: 0 hata.
+- `npm test`: 15 test dosyası, 110 test geçti.
+- `npm run metadata:check`: `All app routes expose metadata.`
+- `npm run build` & `npm run type-check`: Hatasız tamamlandı.
+- Açık kalan nokta: Tarayıcı üzerinden görsel UI etkileşim testi yapılmadı; mantık, tip, lint, birim testleri ve production build kontrolleri doğrulandı.
+
+---
+
 ## Faz 23 – Ürün Detay ve Düzenle Akışlarının Modal Olarak Sunulması (İnceleme Özeti)
 
 ### Yapılan Değişiklikler

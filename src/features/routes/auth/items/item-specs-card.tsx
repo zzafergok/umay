@@ -122,7 +122,7 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
                     >
-                      <span className="truncate">{raw}</span>
+                      <span className="break-all">{raw}</span>
                       <ExternalLink className="h-3 w-3 shrink-0" />
                     </a>
                   ) : (

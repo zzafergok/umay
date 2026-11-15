@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LayoutGrid, List, Package, Plus, Search } from 'lucide-react';
+import { Package } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import {
   Empty,
@@ -12,20 +12,16 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/core/empty';
-import { Input } from '@/components/core/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/core/select';
 import { SkeletonCard } from '@/components/core/skeleton';
+import { DeleteConfirmationDialog } from '@/components/shared/delete-confirmation-dialog';
 import { UmayEmptyIllustration } from '@/components/shared/umay-brand';
+import { CategoryIcon } from '@/features/inventory/components';
+import { resolveCategoryColorHex } from '@/features/inventory/utils';
 import { ItemCard } from '@/features/routes/auth/items/item-card';
 import { ItemDetailDialog } from '@/features/routes/auth/items/item-detail-dialog';
 import { ItemFormDialog } from '@/features/routes/auth/items/item-form-dialog';
 import { ItemsTableView } from '@/features/routes/auth/items/items-table';
+import { ItemsFilterToolbar } from './items-filter-toolbar';
 import { useItemsScreen } from './use-items-screen';
 
 function ItemsUrlParamSync({
@@ -56,6 +52,12 @@ function ItemsUrlParamSync({
 
 export function ItemsScreen() {
   const state = useItemsScreen();
+  const deleteCategory = state.deleteTarget
+    ? state.categoryMap.get(state.deleteTarget.categoryId)
+    : undefined;
+  const deleteLocation = state.deleteTarget
+    ? state.locationMap.get(state.deleteTarget.locationId)
+    : undefined;
 
   return (
     <div className="space-y-4">
@@ -66,92 +68,25 @@ export function ItemsScreen() {
         />
       </React.Suspense>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="relative min-w-[220px] max-w-md flex-1">
-          <Search
-            className="text-text-muted pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
-            aria-hidden="true"
-          />
-          <Input
-            value={state.search}
-            onChange={(e) => state.setSearch(e.target.value)}
-            placeholder="Ürün, marka, barkod veya etiket ara..."
-            className="pl-9"
-          />
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            variant={state.viewMode === 'table' ? 'primary' : 'secondary'}
-            size="icon"
-            aria-label="Görünüm değiştir"
-            onClick={() =>
-              state.setViewMode((v) => (v === 'grid' ? 'table' : 'grid'))
-            }
-          >
-            {state.viewMode === 'grid' ? (
-              <List className="h-4 w-4" />
-            ) : (
-              <LayoutGrid className="h-4 w-4" />
-            )}
-          </Button>
-          <Button variant="primary" onClick={state.openCreateModal}>
-            <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />
-            Ürün ekle
-          </Button>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        <Button
-          variant={state.lowStockOnly ? 'primary' : 'secondary'}
-          size="sm"
-          onClick={() => state.setLowStockOnly((v) => !v)}
-          className="shrink-0"
-        >
-          Düşük stok
-        </Button>
-        <Button
-          variant={state.expiringOnly ? 'primary' : 'secondary'}
-          size="sm"
-          onClick={() => state.setExpiringOnly((v) => !v)}
-          className="shrink-0"
-        >
-          SKT yaklaşan
-        </Button>
-        <Select
-          value={state.categoryFilter}
-          onValueChange={state.setCategoryFilter}
-        >
-          <SelectTrigger className="text-body-sm h-9 min-h-[36px] w-[175px] shrink-0">
-            <SelectValue placeholder="Kategori" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tüm kategoriler</SelectItem>
-            {state.categories.map((c) => (
-              <SelectItem key={c.id} value={c.id}>
-                {c.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={state.locationFilter}
-          onValueChange={state.setLocationFilter}
-        >
-          <SelectTrigger className="text-body-sm h-9 min-h-[36px] w-[190px] shrink-0">
-            <SelectValue placeholder="Konum" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tüm konumlar</SelectItem>
-            {state.locations.map((l) => (
-              <SelectItem key={l.id} value={l.id}>
-                {l.path.join(' > ')}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <ItemsFilterToolbar
+        search={state.search}
+        onSearchChange={state.setSearch}
+        viewMode={state.viewMode}
+        onToggleViewMode={() =>
+          state.setViewMode((v) => (v === 'grid' ? 'table' : 'grid'))
+        }
+        onCreateClick={state.openCreateModal}
+        lowStockOnly={state.lowStockOnly}
+        onToggleLowStock={() => state.setLowStockOnly((v) => !v)}
+        expiringOnly={state.expiringOnly}
+        onToggleExpiring={() => state.setExpiringOnly((v) => !v)}
+        categoryFilter={state.categoryFilter}
+        onCategoryFilterChange={state.setCategoryFilter}
+        locationFilter={state.locationFilter}
+        onLocationFilterChange={state.setLocationFilter}
+        categories={state.categories}
+        locations={state.locations}
+      />
 
       {state.isLoading ? (
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -178,17 +113,18 @@ export function ItemsScreen() {
           </EmptyContent>
         </Empty>
       ) : state.viewMode === 'grid' ? (
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
           {state.filtered.map((item) => (
             <ItemCard
               key={item.id}
               item={item}
               category={state.categoryMap.get(item.categoryId)}
               location={state.locationMap.get(item.locationId)}
-              onConsume={state.handleConsume}
+              onAdjustStock={state.handleAdjustStock}
               onDetail={(target) => state.openDetailModal(target.id)}
               onEdit={state.openEditModal}
-              isBusy={state.isMoving}
+              onDelete={state.setDeleteTarget}
+              isBusy={state.pendingItemId === item.id}
             />
           ))}
         </div>
@@ -196,10 +132,11 @@ export function ItemsScreen() {
         <ItemsTableView
           items={state.filtered}
           locationMap={state.locationMap}
-          onConsume={state.handleConsume}
+          onAdjustStock={state.handleAdjustStock}
           onDetail={(target) => state.openDetailModal(target.id)}
           onEdit={state.openEditModal}
-          isBusy={state.isMoving}
+          onDelete={state.setDeleteTarget}
+          pendingItemId={state.pendingItemId}
         />
       )}
 
@@ -218,6 +155,39 @@ export function ItemsScreen() {
         categories={state.categories}
         locations={state.locations}
         editItem={state.editingItem}
+      />
+
+      <DeleteConfirmationDialog
+        open={Boolean(state.deleteTarget)}
+        onOpenChange={(open) => !open && state.setDeleteTarget(null)}
+        entityLabel="Ürün"
+        itemName={state.deleteTarget?.name ?? ''}
+        itemIcon={
+          deleteCategory ? (
+            <CategoryIcon name={deleteCategory.icon} className="size-4" />
+          ) : undefined
+        }
+        itemColor={
+          deleteCategory?.colorToken
+            ? resolveCategoryColorHex(deleteCategory.colorToken)
+            : undefined
+        }
+        details={
+          state.deleteTarget
+            ? [
+                {
+                  label: 'Stok',
+                  value: `${state.deleteTarget.quantity} ${state.deleteTarget.unit}`,
+                },
+                {
+                  label: 'Konum',
+                  value: deleteLocation?.path.join(' > ') ?? 'Konum yok',
+                },
+                { label: 'Kategori', value: deleteCategory?.name ?? 'Genel' },
+              ]
+            : undefined
+        }
+        onConfirm={state.handleConfirmDelete}
       />
     </div>
   );

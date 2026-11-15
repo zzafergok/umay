@@ -24,7 +24,7 @@ export function ItemDetailDialog({
 }: ItemDetailDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[92vh] w-[calc(100vw-1.5rem)] max-w-3xl overflow-y-auto sm:max-w-3xl">
         {open && itemId ? (
           <ItemDetailBody
             key={itemId}

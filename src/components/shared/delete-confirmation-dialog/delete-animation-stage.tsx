@@ -40,11 +40,11 @@ export function DeleteAnimationStage({
         )}
       </div>
 
-      <div className="max-w-xs space-y-1">
+      <div className="max-w-sm space-y-1">
         <p className="text-text-subtle font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
           {upperEntityLabel} · {dialogCopy.deletingStatus}
         </p>
-        <p className="text-body-sm text-text truncate font-semibold">
+        <p className="text-body-sm text-text break-words font-semibold">
           {itemName}
         </p>
         <p className="text-text-muted text-caption">
