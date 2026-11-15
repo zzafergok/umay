@@ -58,10 +58,20 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
     }),
   );
 
+  const accountNavItems: ApplicationShellNavItem[] = (
+    copy.accountNav ?? []
+  ).map((item) => ({
+    href: item.href,
+    label: item.label,
+    subtitle: item.subtitle ?? copy.authHeader?.subtitle,
+    icon: iconMap[item.icon] ?? UserRound,
+  }));
+
   return (
     <ApplicationShell
       brand={copy.brand}
       navItems={navItems}
+      accountNavItems={accountNavItems}
       footer={({ collapsed }) => <SidebarUserFooter collapsed={collapsed} />}
       headerActions={
         <>

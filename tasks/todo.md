@@ -1,5 +1,33 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
+## Faz 26 – `/settings` Ekranı Hizalama Düzeltmesi ve Kapsamlı Uygulama Ayarları (İnceleme Özeti)
+
+### Yapılan Değişiklikler
+- **Ayar Modeli ve Kısmi Güncelleme (`UserSettings`):** [lifecycle.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/types/lifecycle.ts), [lifecycle-schemas.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/schemas/lifecycle-schemas.ts), [memory-store.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/inventory/memory-store.ts) ve [shopping-settings-repo.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/inventory/repo/shopping-settings-repo.ts) içine `defaultUnit` ve `compactMode` alanları geriye dönük uyumlu varsayılanlarla eklendi; `updateUserSettings` kısmi birleştirme (`merge`) yapacak şekilde güncellendi.
+- **Kabuk Genişliği ve Modüler `/settings` Ekranı (`src/features/routes/auth/settings/`):** [screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/settings/screen.tsx) üzerindeki `max-w-3xl` daralması kaldırılarak kabuğun tam genişliği ve `xl:grid-cols-12` düzenine geçildi; [settings-overview-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/settings/components/settings-overview-card.tsx), [theme-selector-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/settings/components/theme-selector-card.tsx) (tema + dil + `DensityToggle`), [inventory-rules-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/settings/components/inventory-rules-card.tsx) (para birimi, tarih formatı, varsayılan birim), [quick-tools-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/settings/components/quick-tools-card.tsx) ve [account-actions-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/settings/components/account-actions-card.tsx) TR/EN sözlükleriyle güncellendi. Yedekleme, dışa aktarma, hatırlatıcı ve çevrimdışı eşitleme arayüzleri `/profile` ve `/settings` ekranlarından tamamen kaldırıldı.
+
+### Doğrulama Sonuçları
+- `npm run lint`, `npm run type-check`, `npm run metadata:check` ve `npm run build` (36/36 rota) hatasız tamamlandı.
+- `npm test`: 15 test dosyası, 111 test geçti ([repository.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/inventory/repository.test.ts) ve [i18n-dictionaries.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/i18n/i18n-dictionaries.test.ts) dahil).
+- Açık kalan nokta: Tarayıcıda canlı görsel ekran görüntüsü doğrulaması yapılmadı; düzen, tip, lint, birim testleri ve production build doğrulandı.
+
+---
+
+## Faz 25 – `/profile` Ekranı Hizalama Düzeltmesi ve Kapsamlı Profil Yönetimi (İnceleme Özeti)
+
+### Yapılan Değişiklikler
+- **Kabuk Başlığı ve Rota Eşleşmesi:** [types.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/_shared/layouts/types.ts), [tr.json](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/_shared/layouts/i18n/tr.json), [en.json](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/_shared/layouts/i18n/en.json) ve [AppShellLayout.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/layout/AppShellLayout.tsx) içine `accountNavItems` (`/profile`, `/settings`, `/workspace`) eklenerek `/profile` rotasında üst bar ve `PageHeader` başlıklarının ("Panel" yerine "Profil ve Hesap") doğru görünmesi sağlandı.
+- **Oturum Meta Verisi ve Şifre Sıfırlama:** [request-user.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/auth/request-user.ts) JWT içinden `sessionIssuedAt` / `sessionExpiresAt` zamanlarını çözecek şekilde genişletildi; [client.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/firebase/client.ts) içine `requestFirebasePasswordReset` eklendi.
+- **Profil Ekranı Hizalaması ve Modüler Kartlar (`src/features/routes/auth/profile/`):** [screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/profile/screen.tsx) üzerindeki `max-w-4xl` daralması kaldırılarak kabuğun tam genişliği ve `xl:grid-cols-12` dengeli 2 sütun düzenine geçildi; [profile-overview-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/profile/components/profile-overview-card.tsx), [profile-preferences-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/profile/components/profile-preferences-card.tsx), [profile-session-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/profile/components/profile-session-card.tsx), [profile-recent-activity-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/profile/components/profile-recent-activity-card.tsx) ve [profile-danger-zone-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/profile/components/profile-danger-zone-card.tsx) ile sade ve odaklı hale getirildi.
+
+### Doğrulama Sonuçları
+- Tüm değiştirilen/eklenen dosyalar `<= 250` satır sınırının altında (`<= 232` satır).
+- `npm run build`, `npm run type-check`, `npm run lint`, `npm run metadata:check` hatasız tamamlandı.
+- `npm test`: 16 test dosyası, 113 test geçti ([export-route.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/auth/export-route.test.ts) ve [i18n-dictionaries.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/i18n/i18n-dictionaries.test.ts) dahil).
+- Açık kalan nokta: Tarayıcıda canlı görsel ekran görüntüsü doğrulaması yapılmadı; tüm yerleşim, tip, lint, build ve API/i18n testleri doğrulandı.
+
+---
+
 ## Faz 24 – Ürün Kartı (`ItemCard`) UX Analizi ve Modüler Refactor (İnceleme Özeti)
 
 ### Yapılan Değişiklikler

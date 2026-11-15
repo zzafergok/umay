@@ -1,11 +1,81 @@
 {
   "title": "Settings",
-  "description": "Umay application preferences and account settings.",
+  "description": "Umay application preferences, regional formats, appearance, and account controls.",
   "cardTitle": "Profile & Preferences",
   "displayNameLabel": "Display name",
   "displayNamePlaceholder": "Homeowner",
   "submitLabel": "Save settings",
   "accountSectionTitle": "Account & Session",
   "accountSectionDescription": "Manage your profile, sign out of this device, or permanently delete your account.",
-  "openProfileLabel": "Open Profile Screen"
+  "openProfileLabel": "Open Profile Screen",
+  "overview": {
+    "activeConfigTitle": "Workspace Configuration",
+    "activeConfigSubtitle": "Live summary of your theme, language, regional formats, and view density.",
+    "themeLabel": "Active Theme",
+    "languageLabel": "Language",
+    "formatLabel": "Currency / Date",
+    "unitAndDensityLabel": "Unit / Density",
+    "compactLabel": "Compact",
+    "detailedLabel": "Detailed",
+    "backToHomeLabel": "Back to Dashboard",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
+  },
+  "appearance": {
+    "title": "Appearance, Language & Density",
+    "description": "Customize color theme, interface language, and list view density.",
+    "themeLabel": "Color Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "languageLabel": "Interface Language",
+    "densityLabel": "List View Density",
+    "densityHint": "Compact mode fits more inventory rows per screen.",
+    "densitySaved": "View density updated.",
+    "densityError": "Could not save view density."
+  },
+  "inventoryRules": {
+    "title": "Regional & Unit Preferences",
+    "description": "Configure default currency, date format, and default unit for new inventory items.",
+    "currencyLabel": "Default Currency",
+    "currencyOptions": {
+      "TRY": "Turkish Lira (₺ TRY)",
+      "USD": "US Dollar ($ USD)",
+      "EUR": "Euro (€ EUR)"
+    },
+    "dateFormatLabel": "Date Format",
+    "dateFormatOptions": {
+      "dd.MM.yyyy": "DD.MM.YYYY (15.11.2026)",
+      "yyyy-MM-dd": "YYYY-MM-DD (2026-11-15)"
+    },
+    "defaultUnitLabel": "Default Item Unit",
+    "unitOptions": {
+      "adet": "Piece (pcs)",
+      "kg": "Kilogram (kg)",
+      "lt": "Liter (lt)",
+      "paket": "Pack",
+      "kutu": "Box"
+    },
+    "submitLabel": "Save Preferences",
+    "loadingLabel": "Saving...",
+    "successMessage": "Regional and unit preferences saved.",
+    "errorMessage": "An error occurred while saving preferences."
+  },
+  "quickTools": {
+    "title": "Quick Tools & Shortcuts",
+    "description": "Jump straight to locations, category templates, lifecycle parts, or activity logs.",
+    "shortcutHint": "Press Ctrl+K or ⌘K anywhere to open the Command Palette for fast navigation.",
+    "links": {
+      "locations": "Locations",
+      "categories": "Categories",
+      "parts": "Lifecycle Parts",
+      "scan": "Barcode / QR Scan",
+      "activity": "Activity Log"
+    }
+  }
 }

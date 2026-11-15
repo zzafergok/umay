@@ -1,15 +1,29 @@
 {
   "title": "Profile & Account",
-  "description": "Update your profile details, manage your active session, or permanently delete your account.",
+  "description": "Manage your personal profile details, regional preferences, and session security.",
   "overview": {
     "activeSession": "Active Session",
     "roleUser": "Standard Account",
     "roleAdmin": "Administrator",
     "accountIdLabel": "Account ID",
+    "copyIdLabel": "Copy ID",
+    "copiedIdMessage": "Account ID copied to clipboard.",
+    "copyIdErrorMessage": "Could not copy account ID.",
+    "activityLink": "Activity Log",
     "settingsLink": "Preferences & Settings",
     "statsItems": "Tracked Items",
     "statsLocations": "Locations",
-    "statsParts": "Lifecycle Parts"
+    "statsParts": "Lifecycle Parts",
+    "statsCategories": "Categories",
+    "statsShopping": "Shopping Items",
+    "verifiedBadge": "Email Verified",
+    "unverifiedBadge": "Verification Pending",
+    "providers": {
+      "google": "Google Account",
+      "password": "Email & Password",
+      "firebase": "Firebase Identity",
+      "demo": "Local / Demo Session"
+    }
   },
   "editForm": {
     "title": "Profile Details",
@@ -23,14 +37,67 @@
     "successMessage": "Your profile has been updated.",
     "errorMessage": "An error occurred while updating your profile."
   },
+  "preferences": {
+    "title": "Regional & Appearance Preferences",
+    "description": "Customize currency, date format, color theme, and interface language for your workspace.",
+    "currencyLabel": "Default Currency",
+    "currencyOptions": {
+      "TRY": "Turkish Lira (₺ TRY)",
+      "USD": "US Dollar ($ USD)",
+      "EUR": "Euro (€ EUR)"
+    },
+    "dateFormatLabel": "Date Format",
+    "dateFormatOptions": {
+      "dd.MM.yyyy": "DD.MM.YYYY (15.11.2026)",
+      "yyyy-MM-dd": "YYYY-MM-DD (2026-11-15)"
+    },
+    "themeLabel": "Theme Mode",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "languageLabel": "Interface Language",
+    "submitLabel": "Save Preferences",
+    "loadingLabel": "Saving...",
+    "successMessage": "Your regional preferences have been saved.",
+    "errorMessage": "Could not save preferences."
+  },
   "sessionCard": {
-    "title": "Session Security",
-    "description": "Review your active session on this device and sign out safely.",
-    "signedInAs": "Signed in as"
+    "title": "Session & Security",
+    "description": "Inspect your active session metadata, sign-in method, and password recovery options.",
+    "signedInAs": "Signed in as",
+    "authMethodLabel": "Sign-in Method",
+    "sessionStartLabel": "Session Started",
+    "sessionExpiryLabel": "Session Expires",
+    "lastSignInLabel": "Last Sign-in",
+    "unknownDate": "Not available",
+    "resetPasswordLabel": "Send Password Reset Email",
+    "resetPasswordSending": "Sending...",
+    "resetPasswordSuccess": "A password reset link has been sent to your email address.",
+    "resetPasswordDemoInfo": "Password reset emails are unavailable in local/demo sessions.",
+    "resetPasswordGoogleInfo": "Accounts signed in with Google manage passwords through Google Account settings.",
+    "resetPasswordError": "Could not send password reset email."
+  },
+  "recentActivity": {
+    "title": "Recent Account Activity",
+    "description": "The 5 most recent stock and maintenance movements in your workspace.",
+    "emptyTitle": "No recent activity yet",
+    "emptyDescription": "Stock additions, updates, and part replacements will appear here.",
+    "viewAllLabel": "View All Activity",
+    "fallbackItemName": "Deleted or archived item",
+    "movementTypes": {
+      "in": "Stock In",
+      "out": "Stock Out",
+      "adjust": "Adjustment",
+      "consume": "Consumed",
+      "replace_part": "Part Replaced",
+      "discard": "Discarded"
+    }
   },
   "dangerZone": {
     "title": "Danger Zone",
-    "description": "Permanently delete your account.",
+    "description": "Permanently delete your account and all associated data.",
     "warning": "Deleting your account permanently removes all items, locations, categories, lifecycle parts, shopping lists, and session credentials. This cannot be undone."
   }
 }

@@ -80,5 +80,7 @@ export interface ShoppingListItem {
 export interface UserSettings {
   currency: CurrencyCode;
   dateFormat: 'dd.MM.yyyy' | 'yyyy-MM-dd';
+  defaultUnit?: string;
+  compactMode?: boolean;
   updatedAt: string;
 }

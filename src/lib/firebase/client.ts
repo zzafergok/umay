@@ -4,6 +4,7 @@ import { getApps, initializeApp, type FirebaseApp } from 'firebase/app';
 import {
   getAuth,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
   signInWithPopup,
   signOut,
   type Auth,
@@ -59,4 +60,12 @@ export async function signOutFirebaseClient(): Promise<void> {
   } catch {
     // Non-fatal: server httpOnly session cookie is cleared independently.
   }
+}
+
+export async function requestFirebasePasswordReset(email: string): Promise<void> {
+  if (!isFirebaseClientConfigured()) {
+    throw new Error('Firebase kimlik doğrulama yapılandırılmamış.');
+  }
+  const auth = getFirebaseClientAuth();
+  await sendPasswordResetEmail(auth, email);
 }

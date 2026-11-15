@@ -7,6 +7,7 @@ import {
   createPart,
   deleteAllUserData,
   getItemById,
+  getUserSettings,
   listItems,
   listLocations,
   listParts,
@@ -14,6 +15,7 @@ import {
   listStockMovements,
   recordStockMovement,
   replacePart,
+  updateUserSettings,
 } from '@/lib/inventory/repo';
 
 describe('inventory repository & user isolation', () => {
@@ -223,5 +225,25 @@ describe('inventory repository & user isolation', () => {
     expect(created.name).toBe('Çamaşır Odası Buzdolabı');
     expect(Object.prototype.hasOwnProperty.call(created, 'icon')).toBe(false);
     expect(Object.values(created)).not.toContain(undefined);
+  });
+
+  it('merges partial user settings updates without clobbering existing fields', async () => {
+    await updateUserSettings(userA, {
+      currency: 'EUR',
+      defaultUnit: 'kg',
+      compactMode: true,
+    });
+    const merged = await updateUserSettings(userA, {
+      dateFormat: 'yyyy-MM-dd',
+    });
+    const fetched = await getUserSettings(userA);
+    expect(merged).toMatchObject({
+      currency: 'EUR',
+      dateFormat: 'yyyy-MM-dd',
+      defaultUnit: 'kg',
+      compactMode: true,
+    });
+    expect(fetched.currency).toBe('EUR');
+    expect(fetched.defaultUnit).toBe('kg');
   });
 });

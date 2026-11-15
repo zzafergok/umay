@@ -36,6 +36,8 @@ export function getUserVault(uid: string): UserVault {
       settings: {
         currency: 'TRY',
         dateFormat: 'dd.MM.yyyy',
+        defaultUnit: 'adet',
+        compactMode: false,
         updatedAt: new Date().toISOString(),
       },
     };

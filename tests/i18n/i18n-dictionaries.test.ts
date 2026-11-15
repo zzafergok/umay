@@ -21,6 +21,9 @@ describe('i18n JSON Dictionaries & Copy Loaders', () => {
       expect(copy).toBeDefined();
       expect(copy.brand.title).toBe('Umay');
       expect(copy.authNav.length).toBeGreaterThan(0);
+      expect(copy.accountNav?.some((item) => item.href === '/profile')).toBe(
+        true,
+      );
       expect(copy.preferenceControls?.themeLight).toBeTruthy();
       expect(copy.preferenceControls?.themeDark).toBeTruthy();
     }
@@ -36,10 +39,16 @@ describe('i18n JSON Dictionaries & Copy Loaders', () => {
       expect(settings.title).toBeTruthy();
       expect(settings.displayNameLabel).toBeTruthy();
       expect(settings.openProfileLabel).toBeTruthy();
+      expect(settings.overview.activeConfigTitle).toBeTruthy();
+      expect(settings.appearance.title).toBeTruthy();
+      expect(settings.inventoryRules.submitLabel).toBeTruthy();
+      expect(settings.quickTools.title).toBeTruthy();
 
       const profile = getAuthProfileCopy(locale);
       expect(profile.title).toBeTruthy();
       expect(profile.editForm.submitLabel).toBeTruthy();
+      expect(profile.preferences.submitLabel).toBeTruthy();
+      expect(profile.recentActivity.title).toBeTruthy();
       expect(profile.dangerZone.title).toBeTruthy();
 
       const accountActions = getAccountActionsCopy(locale);

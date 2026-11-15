@@ -21,6 +21,11 @@ export type ShellCopy = {
       icon: 'home' | 'wrench' | 'settings' | string;
     }
   >;
+  accountNav?: Array<
+    Omit<ShellNavItem, 'icon'> & {
+      icon: string;
+    }
+  >;
   authHeader: {
     title: string;
     subtitle: string;

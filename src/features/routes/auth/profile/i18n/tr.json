@@ -1,15 +1,29 @@
 {
   "title": "Profil ve Hesap",
-  "description": "Kişisel profil bilgilerinizi düzenleyin, oturumunuzu yönetin veya hesabınızı kalıcı olarak silin.",
+  "description": "Kişisel profil bilgilerinizi, bölgesel tercihlerinizi ve oturum güvenliğinizi yönetin.",
   "overview": {
     "activeSession": "Aktif Oturum",
     "roleUser": "Standart Hesap",
     "roleAdmin": "Yönetici",
     "accountIdLabel": "Hesap Kimliği",
+    "copyIdLabel": "Kimliği Kopyala",
+    "copiedIdMessage": "Hesap kimliği panoya kopyalandı.",
+    "copyIdErrorMessage": "Hesap kimliği kopyalanamadı.",
+    "activityLink": "Faaliyet Günlüğü",
     "settingsLink": "Tercihler ve Ayarlar",
     "statsItems": "Kayıtlı Ürün",
     "statsLocations": "Konum",
-    "statsParts": "Ömürlü Parça"
+    "statsParts": "Ömürlü Parça",
+    "statsCategories": "Kategori",
+    "statsShopping": "Alışveriş Öğesi",
+    "verifiedBadge": "E-posta Doğrulandı",
+    "unverifiedBadge": "Doğrulama Bekliyor",
+    "providers": {
+      "google": "Google Hesabı",
+      "password": "E-posta ve Şifre",
+      "firebase": "Firebase Kimliği",
+      "demo": "Yerel / Demo Oturum"
+    }
   },
   "editForm": {
     "title": "Profil Bilgileri",
@@ -23,14 +37,67 @@
     "successMessage": "Profil bilgileriniz güncellendi.",
     "errorMessage": "Profil güncellenirken bir hata oluştu."
   },
+  "preferences": {
+    "title": "Bölgesel ve Görünüm Tercihleri",
+    "description": "Para birimi, tarih formatı, tema ve arayüz dilini hesabınıza göre özelleştirin.",
+    "currencyLabel": "Varsayılan Para Birimi",
+    "currencyOptions": {
+      "TRY": "Türk Lirası (₺ TRY)",
+      "USD": "ABD Doları ($ USD)",
+      "EUR": "Euro (€ EUR)"
+    },
+    "dateFormatLabel": "Tarih Formatı",
+    "dateFormatOptions": {
+      "dd.MM.yyyy": "GG.AA.YYYY (15.11.2026)",
+      "yyyy-MM-dd": "YYYY-AA-GG (2026-11-15)"
+    },
+    "themeLabel": "Tema Görünümü",
+    "themes": {
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem"
+    },
+    "languageLabel": "Arayüz Dili",
+    "submitLabel": "Tercihleri Kaydet",
+    "loadingLabel": "Kaydediliyor...",
+    "successMessage": "Bölgesel tercihleriniz kaydedildi.",
+    "errorMessage": "Tercihler kaydedilirken bir hata oluştu."
+  },
   "sessionCard": {
-    "title": "Oturum Güvenliği",
-    "description": "Mevcut cihazdaki aktif oturumunuzu görüntüleyebilir ve güvenle kapatabilirsiniz.",
-    "signedInAs": "Aktif hesap"
+    "title": "Oturum ve Güvenlik",
+    "description": "Aktif oturum detaylarınızı, kimlik yönteminizi ve şifre sıfırlama işlemlerini yönetin.",
+    "signedInAs": "Aktif hesap",
+    "authMethodLabel": "Kimlik Yöntemi",
+    "sessionStartLabel": "Oturum Başlangıcı",
+    "sessionExpiryLabel": "Oturum Bitişi",
+    "lastSignInLabel": "Son Giriş",
+    "unknownDate": "Belirtilmedi",
+    "resetPasswordLabel": "Şifre Sıfırlama E-postası Gönder",
+    "resetPasswordSending": "Gönderiliyor...",
+    "resetPasswordSuccess": "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.",
+    "resetPasswordDemoInfo": "Yerel/demo oturumlarda şifre sıfırlama e-postası gönderilmez.",
+    "resetPasswordGoogleInfo": "Google ile giriş yapan hesaplarda şifre yönetimi Google hesabınız üzerinden yapılır.",
+    "resetPasswordError": "Şifre sıfırlama e-postası gönderilemedi."
+  },
+  "recentActivity": {
+    "title": "Son Hesap Hareketleri",
+    "description": "Envanterinizdeki en güncel 5 stok ve bakım hareketi.",
+    "emptyTitle": "Henüz kayıtlı hareket yok",
+    "emptyDescription": "Ürün eklediğinizde veya stok güncellediğinizde son hareketler burada listelenir.",
+    "viewAllLabel": "Tüm Hareketleri Gör",
+    "fallbackItemName": "Silinmiş veya arşivlenmiş ürün",
+    "movementTypes": {
+      "in": "Giriş",
+      "out": "Çıkış",
+      "adjust": "Düzeltme",
+      "consume": "Tüketim",
+      "replace_part": "Parça Değişimi",
+      "discard": "Fire / İmha"
+    }
   },
   "dangerZone": {
     "title": "Tehlikeli Bölge",
-    "description": "Hesabınızı kalıcı olarak silin.",
+    "description": "Hesabınızı ve tüm verilerinizi kalıcı olarak silin.",
     "warning": "Hesabınızı sildiğinizde tüm ürünler, konumlar, kategoriler, ömürlü parçalar, alışveriş listeleri ve oturum bilgileriniz geri alınamaz biçimde silinir."
   }
 }

@@ -80,6 +80,26 @@
       "icon": "activity"
     }
   ],
+  "accountNav": [
+    {
+      "href": "/profile",
+      "label": "Profile & Account",
+      "subtitle": "Personal info, preferences, and session security",
+      "icon": "user"
+    },
+    {
+      "href": "/settings",
+      "label": "Settings",
+      "subtitle": "Application preferences and account tools",
+      "icon": "settings"
+    },
+    {
+      "href": "/workspace",
+      "label": "Workspace",
+      "subtitle": "Shared workspace board",
+      "icon": "dashboard"
+    }
+  ],
   "authHeader": {
     "title": "Umay Inventory",
     "subtitle": "Your home's abundance, accounted for."

@@ -9,6 +9,8 @@ export interface AuthenticatedUser {
   email: string;
   name?: string;
   role: 'user' | 'admin';
+  sessionIssuedAt?: string;
+  sessionExpiresAt?: string;
 }
 
 /**
@@ -46,5 +48,13 @@ export async function getAuthenticatedUser(
     email: payload.email,
     name: payload.name,
     role: payload.role,
+    sessionIssuedAt:
+      typeof payload.iat === 'number'
+        ? new Date(payload.iat * 1000).toISOString()
+        : undefined,
+    sessionExpiresAt:
+      typeof payload.exp === 'number'
+        ? new Date(payload.exp * 1000).toISOString()
+        : undefined,
   };
 }

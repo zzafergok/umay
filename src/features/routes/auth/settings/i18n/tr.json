@@ -1,11 +1,81 @@
 {
   "title": "Ayarlar",
-  "description": "Umay uygulama tercihleri ve hesap ayarları.",
+  "description": "Umay uygulama tercihleri, bölgesel biçimler, görünüm ve hesap ayarları.",
   "cardTitle": "Profil ve Tercihler",
   "displayNameLabel": "Görünen Ad",
   "displayNamePlaceholder": "Ev Sahibi",
   "submitLabel": "Ayarları Kaydet",
   "accountSectionTitle": "Hesap ve Oturum",
   "accountSectionDescription": "Profil bilgilerinizi yönetin, oturumu kapatın veya hesabınızı kalıcı olarak silin.",
-  "openProfileLabel": "Profil Ekranını Aç"
+  "openProfileLabel": "Profil Ekranını Aç",
+  "overview": {
+    "activeConfigTitle": "Uygulama Yapılandırması",
+    "activeConfigSubtitle": "Tüm ekranlarınızda geçerli tema, dil, bölgesel biçim ve görünüm yoğunluğu özeti.",
+    "themeLabel": "Aktif Tema",
+    "languageLabel": "Arayüz Dili",
+    "formatLabel": "Para / Tarih",
+    "unitAndDensityLabel": "Birim / Yoğunluk",
+    "compactLabel": "Kompakt",
+    "detailedLabel": "Detaylı",
+    "backToHomeLabel": "Panele Dön",
+    "themes": {
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem"
+    }
+  },
+  "appearance": {
+    "title": "Görünüm, Dil ve Yoğunluk",
+    "description": "Renk temasını, arayüz dilini ve liste görünüm yoğunluğunu tercihinize göre ayarlayın.",
+    "themeLabel": "Renk Teması",
+    "themes": {
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem"
+    },
+    "languageLabel": "Arayüz Dili",
+    "densityLabel": "Liste Görünüm Yoğunluğu",
+    "densityHint": "Kompakt mod listelerde daha fazla satırı tek bakışta gösterir.",
+    "densitySaved": "Görünüm yoğunluğu güncellendi.",
+    "densityError": "Görünüm yoğunluğu kaydedilemedi."
+  },
+  "inventoryRules": {
+    "title": "Bölgesel ve Birim Tercihleri",
+    "description": "Varsayılan para birimi, tarih formatı ve yeni ürünlerde kullanılan birim tercihini yönetin.",
+    "currencyLabel": "Varsayılan Para Birimi",
+    "currencyOptions": {
+      "TRY": "Türk Lirası (₺ TRY)",
+      "USD": "ABD Doları ($ USD)",
+      "EUR": "Euro (€ EUR)"
+    },
+    "dateFormatLabel": "Tarih Formatı",
+    "dateFormatOptions": {
+      "dd.MM.yyyy": "GG.AA.YYYY (15.11.2026)",
+      "yyyy-MM-dd": "YYYY-AA-GG (2026-11-15)"
+    },
+    "defaultUnitLabel": "Varsayılan Ürün Birimi",
+    "unitOptions": {
+      "adet": "Adet",
+      "kg": "Kilogram (kg)",
+      "lt": "Litre (lt)",
+      "paket": "Paket",
+      "kutu": "Kutu"
+    },
+    "submitLabel": "Tercihleri Kaydet",
+    "loadingLabel": "Kaydediliyor...",
+    "successMessage": "Bölgesel ve birim tercihleri kaydedildi.",
+    "errorMessage": "Ayarlar kaydedilirken bir hata oluştu."
+  },
+  "quickTools": {
+    "title": "Hızlı Araçlar ve Kısayollar",
+    "description": "Envanter şablonlarına, konum ağacına ve sistem günlüklerine tek tıkla geçin.",
+    "shortcutHint": "Herhangi bir ekranda hızlı gezinme için Ctrl+K veya ⌘K tuşlarına basarak Komut Paletini açabilirsiniz.",
+    "links": {
+      "locations": "Konumlar",
+      "categories": "Kategoriler",
+      "parts": "Ömürlü Parçalar",
+      "scan": "Barkod / QR Tara",
+      "activity": "Faaliyet Günlüğü"
+    }
+  }
 }

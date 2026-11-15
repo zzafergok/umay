@@ -1,6 +1,6 @@
 'use client';
 
-import { UserRound } from 'lucide-react';
+import { ShieldCheck, UserRound } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import {
   Card,
@@ -22,19 +22,22 @@ interface AccountActionsCardProps {
 
 export function AccountActionsCard({ copy }: AccountActionsCardProps) {
   return (
-    <Card>
+    <Card className="flex h-full flex-col">
       <CardHeader>
-        <CardTitle>{copy.accountSectionTitle}</CardTitle>
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="h-5 w-5 text-accent" aria-hidden="true" />
+          <CardTitle>{copy.accountSectionTitle}</CardTitle>
+        </div>
         <CardDescription>{copy.accountSectionDescription}</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-wrap items-center gap-3">
-        <Button asChild variant="secondary">
+      <CardContent className="mt-auto flex flex-wrap items-center gap-2.5">
+        <Button asChild variant="secondary" size="sm">
           <Link href="/profile">
-            <UserRound className="mr-2 h-4 w-4" aria-hidden="true" />
+            <UserRound className="mr-1.5 h-4 w-4" aria-hidden="true" />
             <span>{copy.openProfileLabel}</span>
           </Link>
         </Button>
-        <LogoutButton variant="outline" />
+        <LogoutButton size="sm" variant="outline" />
         <DeleteAccountButton />
       </CardContent>
     </Card>

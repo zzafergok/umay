@@ -93,7 +93,7 @@ function ApplicationShellContent({
           onToggleCollapsed={toggleSidebar}
         />
 
-        <div className="mx-auto w-full min-w-0 max-w-screen-2xl flex-1 p-4 pb-28 sm:p-6 sm:pb-28 md:pb-8 lg:p-8">
+        <div className="w-full min-w-0 flex-1 p-4 pb-28 sm:p-6 sm:pb-28 md:pb-8 lg:p-8">
           <div className="space-y-6">
             {active && !hidePageHeader && (
               <PageHeader

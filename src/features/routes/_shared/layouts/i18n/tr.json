@@ -80,6 +80,26 @@
       "icon": "activity"
     }
   ],
+  "accountNav": [
+    {
+      "href": "/profile",
+      "label": "Profil ve Hesap",
+      "subtitle": "Kişisel bilgiler, tercihler ve oturum güvenliği",
+      "icon": "user"
+    },
+    {
+      "href": "/settings",
+      "label": "Ayarlar",
+      "subtitle": "Uygulama tercihleri ve hesap araçları",
+      "icon": "settings"
+    },
+    {
+      "href": "/workspace",
+      "label": "Çalışma Alanı",
+      "subtitle": "Ortak düzen ve çalışma panosu",
+      "icon": "dashboard"
+    }
+  ],
   "authHeader": {
     "title": "Umay Envanter",
     "subtitle": "Evin bereketi, kayıt altında."

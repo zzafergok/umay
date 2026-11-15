@@ -99,8 +99,10 @@ export const shoppingItemPatchSchema = z.object({
 });
 
 export const userSettingsInputSchema = z.object({
-  currency: z.enum(['TRY', 'USD', 'EUR']).default('TRY'),
-  dateFormat: z.enum(['dd.MM.yyyy', 'yyyy-MM-dd']).default('dd.MM.yyyy'),
+  currency: z.enum(['TRY', 'USD', 'EUR']).optional(),
+  dateFormat: z.enum(['dd.MM.yyyy', 'yyyy-MM-dd']).optional(),
+  defaultUnit: z.string().trim().min(1).max(24).optional(),
+  compactMode: z.boolean().optional(),
 });
 
 export type PartInput = z.infer<typeof partInputSchema>;

@@ -113,29 +113,46 @@ export async function deleteShoppingItem(
   await ref.delete();
 }
 
+const DEFAULT_USER_SETTINGS: Omit<UserSettings, 'updatedAt'> = {
+  currency: 'TRY',
+  dateFormat: 'dd.MM.yyyy',
+  defaultUnit: 'adet',
+  compactMode: false,
+};
+
 export async function getUserSettings(uid: string): Promise<UserSettings> {
   if (!isFirebaseConfigured()) {
-    return getUserVault(uid).settings;
+    return {
+      ...DEFAULT_USER_SETTINGS,
+      ...getUserVault(uid).settings,
+    };
   }
   const doc = await userCol(uid, 'settings').doc('preferences').get();
   if (!doc.exists) {
     return {
-      currency: 'TRY',
-      dateFormat: 'dd.MM.yyyy',
+      ...DEFAULT_USER_SETTINGS,
       updatedAt: new Date().toISOString(),
     };
   }
-  return doc.data() as UserSettings;
+  const docData = doc.data() as Partial<UserSettings>;
+  return {
+    ...DEFAULT_USER_SETTINGS,
+    ...docData,
+    updatedAt: docData.updatedAt ?? new Date().toISOString(),
+  };
 }
 
 export async function updateUserSettings(
   uid: string,
   input: UserSettingsInput,
 ): Promise<UserSettings> {
-  const updated: UserSettings = {
-    ...input,
+  const current = await getUserSettings(uid);
+  const updated: UserSettings = omitUndefined<UserSettings>({
+    ...DEFAULT_USER_SETTINGS,
+    ...current,
+    ...omitUndefined(input),
     updatedAt: new Date().toISOString(),
-  };
+  });
   if (!isFirebaseConfigured()) {
     getUserVault(uid).settings = updated;
     return updated;
