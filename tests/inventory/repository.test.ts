@@ -212,4 +212,16 @@ describe('inventory repository & user isolation', () => {
     expect(await listParts(userA)).toHaveLength(0);
     expect(await listLocations(userB)).toHaveLength(1);
   });
+
+  it('omits undefined optional fields when creating locations', async () => {
+    const created = await createLocation(userA, {
+      name: 'Çamaşır Odası Buzdolabı',
+      parentId: null,
+      note: '',
+    });
+
+    expect(created.name).toBe('Çamaşır Odası Buzdolabı');
+    expect(Object.prototype.hasOwnProperty.call(created, 'icon')).toBe(false);
+    expect(Object.values(created)).not.toContain(undefined);
+  });
 });

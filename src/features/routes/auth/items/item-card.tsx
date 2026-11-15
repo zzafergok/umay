@@ -1,11 +1,16 @@
 'use client';
 
 import * as React from 'react';
+import { Eye, Pencil } from 'lucide-react';
+import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import { Card, CardContent } from '@/components/core/card';
-import { Link } from '@/components/core/link';
 import { StatusPill, type StatusTone } from '@/components/core/status-pill';
 import type { Category, Item, Location } from '@/features/inventory/types';
+import {
+  formatCustomFieldValue,
+  resolveCategoryColorHex,
+} from '@/features/inventory/utils';
 import { resolveCategoryCssVar } from '@/lib/design/tokens';
 
 function getItemExceptionPill(
@@ -42,6 +47,8 @@ interface ItemCardProps {
   category?: Category;
   location?: Location;
   onConsume: (item: Item) => void;
+  onDetail: (item: Item) => void;
+  onEdit: (item: Item) => void;
   isBusy?: boolean;
 }
 
@@ -50,12 +57,24 @@ export function ItemCard({
   category,
   location,
   onConsume,
+  onDetail,
+  onEdit,
   isBusy = false,
 }: ItemCardProps) {
   const [nowMs] = React.useState(() => Date.now());
   const pill = getItemExceptionPill(item, nowMs);
   const locationText = location ? location.path.join(' > ') : 'Konum yok';
-  const dotColor = resolveCategoryCssVar(category?.name);
+  const dotColor = category?.colorToken
+    ? resolveCategoryColorHex(category.colorToken)
+    : resolveCategoryCssVar(category?.name);
+  const summaryFields = (category?.customFields ?? [])
+    .filter(
+      (field) =>
+        field.showInSummary &&
+        item.customFieldValues[field.key] !== undefined &&
+        item.customFieldValues[field.key] !== '',
+    )
+    .slice(0, 3);
 
   return (
     <Card>
@@ -92,6 +111,24 @@ export function ItemCard({
           </span>
         </div>
 
+        {summaryFields.length > 0 ? (
+          <div className="flex flex-wrap gap-1">
+            {summaryFields.map((field) => (
+              <Badge
+                key={field.key}
+                variant="secondary"
+                className="text-[11px]"
+              >
+                {field.label}:{' '}
+                {formatCustomFieldValue(
+                  field,
+                  item.customFieldValues[field.key],
+                )}
+              </Badge>
+            ))}
+          </div>
+        ) : null}
+
         <div className="flex items-center justify-between gap-2 pt-1">
           <Button
             size="sm"
@@ -102,9 +139,16 @@ export function ItemCard({
           >
             Tüket (-1)
           </Button>
-          <Button asChild size="sm" variant="ghost">
-            <Link href={`/items/${item.id}`}>Detay</Link>
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button size="sm" variant="ghost" onClick={() => onDetail(item)}>
+              <Eye className="mr-1 h-3.5 w-3.5" aria-hidden="true" />
+              Detay
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => onEdit(item)}>
+              <Pencil className="mr-1 h-3.5 w-3.5" aria-hidden="true" />
+              Düzenle
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

@@ -9,6 +9,7 @@ import { getAdminFirestore, isFirebaseConfigured } from '@/lib/firebase/admin';
 import { getUserVault } from '@/lib/inventory/memory-store';
 import { computeNextReplacementAt, computePartHealth } from '@/lib/lifecycle';
 import { InventoryRepoError, newId } from './errors';
+import { omitUndefinedDeep } from './utils';
 
 function userCol(uid: string, name: string) {
   return getAdminFirestore().collection('users').doc(uid).collection(name);
@@ -39,7 +40,11 @@ export async function replacePart(
       const spare = vault.items.get(current.spareItemId);
       if (spare && spare.quantity > 0) {
         const nextQty = spare.quantity - 1;
-        vault.items.set(spare.id, { ...spare, quantity: nextQty, updatedAt: now });
+        vault.items.set(spare.id, {
+          ...spare,
+          quantity: nextQty,
+          updatedAt: now,
+        });
         const mov: StockMovement = {
           id: newId('mov'),
           itemId: spare.id,
@@ -106,9 +111,16 @@ export async function replacePart(
         const spare = { ...(spareDoc.data() as Item), id: spareDoc.id };
         if (spare.quantity > 0) {
           const nextQty = spare.quantity - 1;
-          tx.set(spareRef, { ...spare, quantity: nextQty, updatedAt: now });
+          tx.set(
+            spareRef,
+            omitUndefinedDeep<Item>({
+              ...spare,
+              quantity: nextQty,
+              updatedAt: now,
+            }),
+          );
           const movId = newId('mov');
-          const mov: StockMovement = {
+          const mov: StockMovement = omitUndefinedDeep<StockMovement>({
             id: movId,
             itemId: spare.id,
             type: 'replace_part',
@@ -117,7 +129,7 @@ export async function replacePart(
             reason: `${current.name} değişimi`,
             relatedPartId: partId,
             at: now,
-          };
+          });
           tx.set(userCol(uid, 'stockMovements').doc(movId), mov);
           spareDeducted = true;
           if (nextQty <= spare.minQuantity) suggestShopping = true;
@@ -128,7 +140,7 @@ export async function replacePart(
     }
 
     const logId = newId('rpl');
-    const log: ReplacementLog = {
+    const log: ReplacementLog = omitUndefinedDeep<ReplacementLog>({
       id: logId,
       partId,
       replacedAt,
@@ -138,12 +150,12 @@ export async function replacePart(
       cost: input.cost,
       note: input.note,
       createdAt: now,
-    };
+    });
     const nextReplacementAt = computeNextReplacementAt(
       replacedAt,
       current.lifespan,
     );
-    const updatedPart: Part = {
+    const updatedPart: Part = omitUndefinedDeep<Part>({
       ...current,
       installedAt: replacedAt,
       lastReplacedAt: replacedAt,
@@ -151,7 +163,7 @@ export async function replacePart(
       nextReplacementAt,
       status: 'ok',
       updatedAt: now,
-    };
+    });
     updatedPart.status = computePartHealth(updatedPart).status;
 
     tx.set(partRef, updatedPart);

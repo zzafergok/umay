@@ -1,6 +1,7 @@
 'use client';
 
 import { ShoppingAddForm } from './shopping-add-form';
+import { ShoppingDeleteDialogs } from './shopping-delete-dialogs';
 import { ShoppingEditDialog } from './shopping-edit-dialog';
 import { ShoppingListTable } from './shopping-list-table';
 import { ShoppingReceiptCard } from './shopping-receipt-card';
@@ -45,8 +46,8 @@ export function ShoppingScreen() {
         onToggleDone={s.handleToggleDone}
         onAdjustQty={s.handleAdjustQty}
         onEdit={s.setEditingEntry}
-        onDelete={s.handleDelete}
-        onClearDone={s.handleClearDone}
+        onDelete={s.requestDelete}
+        onClearDone={() => s.setClearDoneOpen(true)}
       />
       <ShoppingEditDialog
         entry={s.editingEntry}
@@ -55,6 +56,18 @@ export function ShoppingScreen() {
         currency={s.currency}
         onClose={() => s.setEditingEntry(null)}
         onSave={s.handleSaveEdit}
+      />
+      <ShoppingDeleteDialogs
+        deleteTarget={s.deleteTarget}
+        onCloseDelete={() => s.setDeleteTarget(null)}
+        onConfirmDelete={s.confirmDelete}
+        clearDoneOpen={s.clearDoneOpen}
+        onClearDoneOpenChange={s.setClearDoneOpen}
+        onConfirmClearDone={s.confirmClearDone}
+        summary={s.summary}
+        itemMap={s.itemMap}
+        categoryMap={s.categoryMap}
+        currency={s.currency}
       />
     </div>
   );

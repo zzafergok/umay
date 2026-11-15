@@ -110,7 +110,7 @@ export function CommandPalette() {
             {items.slice(0, 15).map((item) => (
               <CommandItem
                 key={item.id}
-                onSelect={() => go(`/items/${item.id}`)}
+                onSelect={() => go(`/items?item=${item.id}`)}
               >
                 <Boxes className="mr-2 h-4 w-4" />
                 <span>{item.name}</span>

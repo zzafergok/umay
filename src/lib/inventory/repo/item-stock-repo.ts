@@ -6,6 +6,7 @@ import type {
 import { getAdminFirestore, isFirebaseConfigured } from '@/lib/firebase/admin';
 import { getUserVault } from '@/lib/inventory/memory-store';
 import { InventoryRepoError, newId } from './errors';
+import { omitUndefinedDeep } from './utils';
 
 function userCol(uid: string, name: string) {
   return getAdminFirestore().collection('users').doc(uid).collection(name);
@@ -42,12 +43,12 @@ export async function getItemById(
 export async function createItem(uid: string, input: ItemInput): Promise<Item> {
   const now = new Date().toISOString();
   const id = newId('itm');
-  const item: Item = {
+  const item = omitUndefinedDeep<Item>({
     id,
     ...input,
     createdAt: now,
     updatedAt: now,
-  };
+  });
 
   if (!isFirebaseConfigured()) {
     const vault = getUserVault(uid);
@@ -95,12 +96,12 @@ export async function updateItem(
   const current = await getItemById(uid, id);
   if (!current) throw new InventoryRepoError(404, 'Ürün bulunamadı.');
 
-  const updated: Item = {
+  const updated = omitUndefinedDeep<Item>({
     ...current,
     ...input,
     id,
     updatedAt: new Date().toISOString(),
-  };
+  });
 
   if (!isFirebaseConfigured()) {
     getUserVault(uid).items.set(id, updated);
@@ -157,18 +158,15 @@ export async function recordStockMovement(
 
     const nextQty = item.quantity + input.delta;
     if (nextQty < 0) {
-      throw new InventoryRepoError(
-        400,
-        'Stok miktarı 0 altına düşemez.',
-      );
+      throw new InventoryRepoError(400, 'Stok miktarı 0 altına düşemez.');
     }
 
-    const updatedItem: Item = {
+    const updatedItem = omitUndefinedDeep<Item>({
       ...item,
       quantity: nextQty,
       updatedAt: now,
-    };
-    const movement: StockMovement = {
+    });
+    const movement = omitUndefinedDeep<StockMovement>({
       id: newId('mov'),
       itemId: input.itemId,
       type: input.type,
@@ -177,7 +175,7 @@ export async function recordStockMovement(
       reason: input.reason,
       relatedPartId: input.relatedPartId,
       at: now,
-    };
+    });
     vault.items.set(item.id, updatedItem);
     vault.stockMovements.set(movement.id, movement);
     return { item: updatedItem, movement };
@@ -193,18 +191,15 @@ export async function recordStockMovement(
     const item = { ...(itemDoc.data() as Item), id: itemDoc.id };
     const nextQty = item.quantity + input.delta;
     if (nextQty < 0) {
-      throw new InventoryRepoError(
-        400,
-        'Stok miktarı 0 altına düşemez.',
-      );
+      throw new InventoryRepoError(400, 'Stok miktarı 0 altına düşemez.');
     }
-    const updatedItem: Item = {
+    const updatedItem: Item = omitUndefinedDeep<Item>({
       ...item,
       quantity: nextQty,
       updatedAt: now,
-    };
+    });
     const movId = newId('mov');
-    const movement: StockMovement = {
+    const movement: StockMovement = omitUndefinedDeep<StockMovement>({
       id: movId,
       itemId: input.itemId,
       type: input.type,
@@ -213,7 +208,7 @@ export async function recordStockMovement(
       reason: input.reason,
       relatedPartId: input.relatedPartId,
       at: now,
-    };
+    });
     tx.set(itemRef, updatedItem);
     tx.set(userCol(uid, 'stockMovements').doc(movId), movement);
     return { item: updatedItem, movement };

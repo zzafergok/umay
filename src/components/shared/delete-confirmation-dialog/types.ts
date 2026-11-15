@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export interface DeleteConfirmationDetailItem {
   label: string;
   value: string;
@@ -8,6 +10,8 @@ export interface DeleteConfirmationDialogProps {
   onOpenChange: (open: boolean) => void;
   entityLabel: string;
   itemName: string;
+  itemIcon?: ReactNode;
+  itemColor?: string;
   title?: string;
   description?: string;
   itemLabel?: string;

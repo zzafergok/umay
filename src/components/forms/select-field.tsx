@@ -31,6 +31,7 @@ interface SelectFieldProps {
   placeholder?: string;
   description?: string;
   options: SelectOption[];
+  onValueChange?: (value: string | null) => void;
 }
 
 export function SelectField({
@@ -41,6 +42,7 @@ export function SelectField({
   className,
   triggerClassName,
   description,
+  onValueChange,
   required = false,
   allowNone = false,
   noneLabel = 'None',
@@ -84,8 +86,10 @@ export function SelectField({
               onValueChange={(value) => {
                 if (value === 'none' && allowNone) {
                   field.onChange(null);
+                  onValueChange?.(null);
                 } else {
                   field.onChange(value);
+                  onValueChange?.(value);
                 }
               }}
               disabled={isDisabled}

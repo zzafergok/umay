@@ -1,0 +1,83 @@
+'use client';
+
+import { ExternalLink, ImageIcon } from 'lucide-react';
+import { Badge } from '@/components/core/badge';
+import { Card, CardContent } from '@/components/core/card';
+import { QuantityStepper } from '@/components/core/quantity-stepper';
+import type { Category, Item } from '@/features/inventory/types';
+import { ItemSpecsCard } from '@/features/routes/auth/items/item-specs-card';
+
+interface ItemDetailOverviewProps {
+  item: Item;
+  category?: Category;
+  isAdjusting: boolean;
+  onAdjustStock: (delta: number) => void;
+}
+
+/** Displays stock stepper, general metadata, notes, photos, and technical specs inside the item detail modal. */
+export function ItemDetailOverview({
+  item,
+  category,
+  isAdjusting,
+  onAdjustStock,
+}: ItemDetailOverviewProps) {
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardContent className="space-y-4 pt-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <QuantityStepper
+              value={item.quantity}
+              unit={item.unit}
+              isLoading={isAdjusting}
+              onDecrement={() => onAdjustStock(-1)}
+              onIncrement={() => onAdjustStock(1)}
+            />
+            <div className="flex flex-wrap gap-1.5 text-xs text-muted-foreground">
+              {item.minQuantity > 0 ? (
+                <Badge variant="secondary">
+                  Eşik: {item.minQuantity} {item.unit}
+                </Badge>
+              ) : null}
+              {item.brand ? <Badge variant="outline">{item.brand}</Badge> : null}
+              {item.barcode ? (
+                <Badge variant="outline">Barkod: {item.barcode}</Badge>
+              ) : null}
+              {item.expiresAt ? (
+                <Badge variant="outline">
+                  SKT: {new Date(item.expiresAt).toLocaleDateString('tr-TR')}
+                </Badge>
+              ) : null}
+            </div>
+          </div>
+
+          {item.notes ? (
+            <p className="border-t border-border pt-3 text-sm text-muted-foreground">
+              {item.notes}
+            </p>
+          ) : null}
+
+          {item.photos.length > 0 ? (
+            <div className="flex flex-wrap gap-2 border-t border-border pt-3">
+              {item.photos.map((url, idx) => (
+                <a
+                  key={`${url}-${idx}`}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-surface-sunken/50 hover:border-accent inline-flex items-center gap-1.5 rounded-sm border border-border px-2.5 py-1 text-xs font-medium transition-colors"
+                >
+                  <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span>Fotoğraf #{idx + 1}</span>
+                  <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                </a>
+              ))}
+            </div>
+          ) : null}
+        </CardContent>
+      </Card>
+
+      <ItemSpecsCard item={item} category={category} />
+    </div>
+  );
+}

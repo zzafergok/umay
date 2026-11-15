@@ -1,8 +1,12 @@
 import type { Category, Location } from '@/features/inventory/types';
-import type { CategoryInput, LocationInput } from '@/features/inventory/schemas';
+import type {
+  CategoryInput,
+  LocationInput,
+} from '@/features/inventory/schemas';
 import { getAdminFirestore, isFirebaseConfigured } from '@/lib/firebase/admin';
 import { getUserVault } from '@/lib/inventory/memory-store';
 import { InventoryRepoError, newId } from './errors';
+import { omitUndefinedDeep } from './utils';
 
 function userCol(uid: string, name: string) {
   return getAdminFirestore().collection('users').doc(uid).collection(name);
@@ -35,7 +39,7 @@ export async function createLocation(
   }
 
   const now = new Date().toISOString();
-  const location: Location = {
+  const location = omitUndefinedDeep<Location>({
     id: newId('loc'),
     name: input.name,
     parentId: input.parentId,
@@ -44,7 +48,7 @@ export async function createLocation(
     note: input.note,
     createdAt: now,
     updatedAt: now,
-  };
+  });
 
   if (!isFirebaseConfigured()) {
     getUserVault(uid).locations.set(location.id, location);
@@ -82,7 +86,7 @@ export async function updateLocation(
     path = [...parent.path, nextName];
   }
 
-  const updated: Location = {
+  const updated = omitUndefinedDeep<Location>({
     ...current,
     name: nextName,
     parentId: nextParentId,
@@ -90,7 +94,7 @@ export async function updateLocation(
     icon: input.icon !== undefined ? input.icon : current.icon,
     note: input.note !== undefined ? input.note : current.note,
     updatedAt: new Date().toISOString(),
-  };
+  });
 
   if (!isFirebaseConfigured()) {
     getUserVault(uid).locations.set(id, updated);
@@ -138,15 +142,17 @@ export async function createCategory(
   input: CategoryInput,
 ): Promise<Category> {
   const now = new Date().toISOString();
-  const category: Category = {
+  const category = omitUndefinedDeep<Category>({
     id: newId('cat'),
     name: input.name,
+    description: input.description,
     colorToken: input.colorToken,
     icon: input.icon,
     customFields: input.customFields,
+    itemDefaults: input.itemDefaults,
     createdAt: now,
     updatedAt: now,
-  };
+  });
 
   if (!isFirebaseConfigured()) {
     getUserVault(uid).categories.set(category.id, category);
@@ -166,11 +172,11 @@ export async function updateCategory(
   const current = all.find((c) => c.id === id);
   if (!current) throw new InventoryRepoError(404, 'Kategori bulunamadı.');
 
-  const updated: Category = {
+  const updated = omitUndefinedDeep<Category>({
     ...current,
     ...input,
     updatedAt: new Date().toISOString(),
-  };
+  });
 
   if (!isFirebaseConfigured()) {
     getUserVault(uid).categories.set(id, updated);

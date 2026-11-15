@@ -1,8 +1,8 @@
 'use client';
 
+import { Eye, Pencil } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import { Card } from '@/components/core/card';
-import { Link } from '@/components/core/link';
 import { StatusPill } from '@/components/core/status-pill';
 import {
   Table,
@@ -18,11 +18,15 @@ export function ItemsTableView({
   items,
   locationMap,
   onConsume,
+  onDetail,
+  onEdit,
   isBusy,
 }: {
   items: Item[];
   locationMap: Map<string, Location>;
   onConsume: (item: Item) => void;
+  onDetail: (item: Item) => void;
+  onEdit: (item: Item) => void;
   isBusy: boolean;
 }) {
   return (
@@ -41,12 +45,15 @@ export function ItemsTableView({
           {items.map((item) => (
             <TableRow key={item.id}>
               <TableCell className="font-medium">
-                <Link
-                  href={`/items/${item.id}`}
-                  className="text-text hover:text-accent hover:underline"
+                <Button
+                  type="button"
+                  variant="link"
+                  size="sm"
+                  className="text-text hover:text-accent h-auto p-0 font-medium"
+                  onClick={() => onDetail(item)}
                 >
                   {item.name}
-                </Link>
+                </Button>
               </TableCell>
               <TableCell className="text-text-muted">
                 {locationMap.get(item.locationId)?.path.join(' > ') ?? '—'}
@@ -65,14 +72,32 @@ export function ItemsTableView({
                 {item.quantity} {item.unit}
               </TableCell>
               <TableCell className="text-right">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  disabled={item.quantity <= 0 || isBusy}
-                  onClick={() => onConsume(item)}
-                >
-                  -1
-                </Button>
+                <div className="flex items-center justify-end gap-1">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    disabled={item.quantity <= 0 || isBusy}
+                    onClick={() => onConsume(item)}
+                  >
+                    -1
+                  </Button>
+                  <Button
+                    size="icon-sm"
+                    variant="ghost"
+                    aria-label={`${item.name} detayı`}
+                    onClick={() => onDetail(item)}
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    size="icon-sm"
+                    variant="ghost"
+                    aria-label={`${item.name} düzenle`}
+                    onClick={() => onEdit(item)}
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}

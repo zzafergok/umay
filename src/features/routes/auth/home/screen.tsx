@@ -82,7 +82,7 @@ export function AuthHomeScreen() {
         subtitle: `Kalan: ${i.quantity} ${i.unit} · Eşik: ${i.minQuantity} ${i.unit}`,
         tone: i.quantity <= 0 ? 'out_of_stock' : 'low_stock',
         badge: i.quantity <= 0 ? 'Tükendi' : 'Düşük stok',
-        href: `/items/${i.id}`,
+        href: `/items?item=${i.id}`,
         priority: i.quantity <= 0 ? 1 : 2,
       });
     }
@@ -95,7 +95,7 @@ export function AuthHomeScreen() {
           : 'Garanti yaklaşıyor',
         tone: 'due_soon',
         badge: 'SKT / Garanti',
-        href: `/items/${i.id}`,
+        href: `/items?item=${i.id}`,
         priority: 3,
       });
     }

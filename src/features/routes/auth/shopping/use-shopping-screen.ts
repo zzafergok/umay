@@ -25,6 +25,7 @@ import {
   type ShoppingPriorityFilter,
   type ShoppingStatusFilter,
 } from './shopping-utils';
+import { useShoppingDelete } from './use-shopping-delete';
 
 export function useShoppingScreen() {
   const qc = useQueryClient();
@@ -42,7 +43,12 @@ export function useShoppingScreen() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [editingEntry, setEditingEntry] =
     React.useState<ShoppingListItem | null>(null);
-  const [isClearingDone, setIsClearingDone] = React.useState(false);
+
+  const invalidateShopping = React.useCallback(
+    () => qc.invalidateQueries({ queryKey: ['inventory', 'shopping'] }),
+    [qc],
+  );
+  const deleteState = useShoppingDelete(list, invalidateShopping);
 
   const currency = settings?.currency ?? 'TRY';
 
@@ -79,10 +85,9 @@ export function useShoppingScreen() {
     [list, statusFilter, priorityFilter, searchQuery, itemMap, categoryMap],
   );
 
-  const invalidateShopping = () =>
-    qc.invalidateQueries({ queryKey: ['inventory', 'shopping'] });
-
-  const handleAddManual = async (input: ShoppingItemInput): Promise<boolean> => {
+  const handleAddManual = async (
+    input: ShoppingItemInput,
+  ): Promise<boolean> => {
     try {
       await inventoryService.createShopping(input);
       await invalidateShopping();
@@ -180,33 +185,6 @@ export function useShoppingScreen() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      await inventoryService.deleteShopping(id);
-      await invalidateShopping();
-      toast.success('Kalem listeden silindi.');
-    } catch {
-      toast.error('Silinemedi.');
-    }
-  };
-
-  const handleClearDone = async () => {
-    const doneItems = list.filter((item) => item.done);
-    if (doneItems.length === 0) return;
-    setIsClearingDone(true);
-    try {
-      await Promise.all(
-        doneItems.map((item) => inventoryService.deleteShopping(item.id)),
-      );
-      await invalidateShopping();
-      toast.success(`${doneItems.length} tamamlanan kalem temizlendi.`);
-    } catch {
-      toast.error('Tamamlanan kalemler temizlenemedi.');
-    } finally {
-      setIsClearingDone(false);
-    }
-  };
-
   const resetFilters = () => {
     setStatusFilter('all');
     setPriorityFilter('all');
@@ -224,7 +202,6 @@ export function useShoppingScreen() {
     summary,
     currency,
     isLoading,
-    isClearingDone,
     statusFilter,
     priorityFilter,
     searchQuery,
@@ -240,7 +217,6 @@ export function useShoppingScreen() {
     handleToggleDone,
     handleAdjustQty,
     handleSaveEdit,
-    handleDelete,
-    handleClearDone,
+    ...deleteState,
   };
 }

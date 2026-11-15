@@ -1,117 +1,125 @@
 'use client';
 
 import * as React from 'react';
-import { Plus, Tags, Trash2 } from 'lucide-react';
-import { Badge } from '@/components/core/badge';
+import { Plus, Search, Sparkles, Tags } from 'lucide-react';
 import { Button } from '@/components/core/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/core/dialog';
 import {
   Empty,
+  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from '@/components/core/empty';
-import { Input } from '@/components/core/input';
-import { Label } from '@/components/core/label';
-import { Form, SelectField, SubmitButton, TextField } from '@/components/forms';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/core/input-group';
 import { toast } from '@/components/core/toast';
+import { DeleteConfirmationDialog } from '@/components/shared/delete-confirmation-dialog';
+import { CategoryIcon } from '@/features/inventory/components';
 import {
-  categoryInputSchema,
-  type CategoryInput,
-} from '@/features/inventory/schemas';
-import type { CustomFieldDefinition } from '@/features/inventory/types';
-import {
-  useCategoriesQuery,
-  useItemsQuery,
-} from '@/hooks/use-inventory-hooks';
+  CATEGORY_PRESET_TEMPLATES,
+  type CategoryPresetTemplate,
+} from '@/features/inventory/constants';
+import type { Category } from '@/features/inventory/types';
+import { resolveCategoryColorHex } from '@/features/inventory/utils';
+import { useCategoriesQuery, useItemsQuery } from '@/hooks/use-inventory-hooks';
 import { inventoryService } from '@/services/inventory-service';
 import { useQueryClient } from '@tanstack/react-query';
-
-const COLOR_OPTIONS = [
-  { value: 'umay-blue', label: 'Mavi' },
-  { value: 'emerald', label: 'Yeşil' },
-  { value: 'amber', label: 'Kehribar' },
-  { value: 'rose', label: 'Kırmızı' },
-  { value: 'violet', label: 'Mor' },
-];
-
-const DOT_CLASS: Record<string, string> = {
-  'umay-blue': 'bg-umay-blue',
-  emerald: 'bg-emerald-500',
-  amber: 'bg-amber-500',
-  rose: 'bg-rose-500',
-  violet: 'bg-violet-500',
-};
+import { CategoryCard, CategoryFormDialog } from './components';
+import type { CategoryDialogState } from './types';
 
 export function CategoriesScreen() {
   const qc = useQueryClient();
   const { data: categories = [], isLoading } = useCategoriesQuery();
   const { data: items = [] } = useItemsQuery();
-  const [open, setOpen] = React.useState(false);
-  const [saving, setSaving] = React.useState(false);
-  const [customFields, setCustomFields] = React.useState<
-    CustomFieldDefinition[]
-  >([]);
-  const [fieldLabel, setFieldLabel] = React.useState('');
+  const [search, setSearch] = React.useState('');
+  const [dialogState, setDialogState] = React.useState<CategoryDialogState>({
+    open: false,
+    mode: 'create',
+  });
+  const [deleteTarget, setDeleteTarget] = React.useState<Category | null>(null);
 
-  const addCustomField = () => {
-    const trimmed = fieldLabel.trim();
-    if (!trimmed) return;
-    const key = trimmed
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '_')
-      .replace(/^_|_$/g, '');
-    if (!key || customFields.some((f) => f.key === key)) return;
-    setCustomFields((prev) => [...prev, { key, label: trimmed, type: 'text' }]);
-    setFieldLabel('');
-  };
+  const filteredCategories = React.useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return categories;
+    return categories.filter(
+      (cat) =>
+        cat.name.toLowerCase().includes(query) ||
+        (cat.description?.toLowerCase().includes(query) ?? false) ||
+        cat.customFields.some((f) => f.label.toLowerCase().includes(query)),
+    );
+  }, [categories, search]);
 
-  const handleCreate = async (values: CategoryInput) => {
-    setSaving(true);
-    try {
-      await inventoryService.createCategory({
-        ...values,
-        customFields,
-      });
-      await qc.invalidateQueries({ queryKey: ['inventory', 'categories'] });
-      toast.success('Kategori eklendi.');
-      setCustomFields([]);
-      setOpen(false);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Kategori eklenemedi.');
-    } finally {
-      setSaving(false);
+  const itemCountByCategory = React.useMemo(() => {
+    const map = new Map<string, number>();
+    for (const item of items) {
+      map.set(item.categoryId, (map.get(item.categoryId) ?? 0) + 1);
     }
-  };
+    return map;
+  }, [items]);
 
-  const handleDelete = async (id: string) => {
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await inventoryService.deleteCategory(id);
+      await inventoryService.deleteCategory(deleteTarget.id);
       await qc.invalidateQueries({ queryKey: ['inventory', 'categories'] });
       toast.success('Kategori silindi.');
+      setDeleteTarget(null);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Kategori silinemedi.');
+      throw err;
     }
   };
+
+  const deleteCategoryItemCount = deleteTarget
+    ? (itemCountByCategory.get(deleteTarget.id) ?? 0)
+    : 0;
+
+  const handleQuickCreatePreset = async (preset: CategoryPresetTemplate) => {
+    try {
+      await inventoryService.createCategory(preset.data);
+      await qc.invalidateQueries({ queryKey: ['inventory', 'categories'] });
+      toast.success(`"${preset.data.name}" kategorisi eklendi.`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Kategori eklenemedi.');
+    }
+  };
+
+  const openCreate = () => setDialogState({ open: true, mode: 'create' });
+  const openEdit = (category: Category) =>
+    setDialogState({ open: true, mode: 'edit', category });
+  const openDuplicate = (category: Category) =>
+    setDialogState({ open: true, mode: 'duplicate', category });
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground">
-          Kategorilere özel teknik alanlar tanımla (uzunluk, konnektör, seri no).
+          Kategorilere özel teknik alanlar, ürün varsayılanları ve takip
+          kuralları tanımla.
         </p>
-        <Button onClick={() => setOpen(true)}>
+        <Button onClick={openCreate}>
           <Plus className="mr-1.5 h-4 w-4" />
           Kategori Ekle
         </Button>
       </div>
+
+      {categories.length > 0 ? (
+        <InputGroup className="max-w-md">
+          <InputGroupAddon align="inline-start">
+            <Search className="text-text-muted h-4 w-4" />
+          </InputGroupAddon>
+          <InputGroupInput
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Kategori veya özel alan ara..."
+            className="text-sm"
+          />
+        </InputGroup>
+      ) : null}
 
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Yükleniyor...</p>
@@ -123,120 +131,100 @@ export function CategoriesScreen() {
             </EmptyMedia>
             <EmptyTitle>Henüz kategori yok</EmptyTitle>
             <EmptyDescription>
-              Mutfak, Elektronik veya Kablo & Aksesuar kategorilerini ekle.
+              Sıfırdan gelişmiş bir kategori oluştur veya hazır şablonlardan tek
+              tıkla başla.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <div className="flex flex-wrap justify-center gap-2">
+              {CATEGORY_PRESET_TEMPLATES.slice(0, 3).map((preset) => (
+                <Button
+                  key={preset.id}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleQuickCreatePreset(preset)}
+                >
+                  <Sparkles className="mr-1.5 h-3.5 w-3.5 text-accent" />
+                  {preset.data.name}
+                </Button>
+              ))}
+              <Button size="sm" onClick={openCreate}>
+                <Plus className="mr-1.5 h-3.5 w-3.5" />
+                Özel Kategori Oluştur
+              </Button>
+            </div>
+          </EmptyContent>
+        </Empty>
+      ) : filteredCategories.length === 0 ? (
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyTitle>Eşleşen kategori bulunamadı</EmptyTitle>
+            <EmptyDescription>
+              &ldquo;{search}&rdquo; aramasına uygun kategori veya özel alan
+              yok.
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {categories.map((cat) => {
-            const count = items.filter((i) => i.categoryId === cat.id).length;
-            return (
-              <Card key={cat.id}>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="flex items-center gap-2 text-base">
-                    <span
-                      className={`h-2.5 w-2.5 rounded-full ${
-                        DOT_CLASS[cat.colorToken] ?? 'bg-umay-blue'
-                      }`}
-                    />
-                    <span>{cat.name}</span>
-                  </CardTitle>
-                  <Badge variant="outline" className="tabular-nums">
-                    {count} ürün
-                  </Badge>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex flex-wrap gap-1.5">
-                    {cat.customFields.length === 0 ? (
-                      <span className="text-xs text-muted-foreground">
-                        Özel alan yok
-                      </span>
-                    ) : (
-                      cat.customFields.map((f) => (
-                        <Badge key={f.key} variant="secondary">
-                          {f.label}
-                        </Badge>
-                      ))
-                    )}
-                  </div>
-                  <div className="flex justify-end">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={`${cat.name} kategorisini sil`}
-                      onClick={() => handleDelete(cat.id)}
-                    >
-                      <Trash2 className="h-4 w-4 text-text-muted hover:text-danger" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+          {filteredCategories.map((cat) => (
+            <CategoryCard
+              key={cat.id}
+              category={cat}
+              itemCount={itemCountByCategory.get(cat.id) ?? 0}
+              onEdit={openEdit}
+              onDuplicate={openDuplicate}
+              onDelete={(id) =>
+                setDeleteTarget(categories.find((c) => c.id === id) ?? null)
+              }
+            />
+          ))}
         </div>
       )}
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Yeni Kategori Ekle</DialogTitle>
-          </DialogHeader>
-          <Form
-            schema={categoryInputSchema}
-            defaultValues={{
-              name: '',
-              colorToken: 'umay-blue',
-              icon: 'boxes',
-              customFields: [],
-            }}
-            onSubmit={handleCreate}
-            className="space-y-4"
-          >
-            <TextField
-              name="name"
-              label="Kategori Adı"
-              placeholder="Örn. Kablo & Aksesuar"
-              required
-            />
-            <SelectField
-              name="colorToken"
-              label="Renk Noktası"
-              options={COLOR_OPTIONS}
-            />
-            <div className="space-y-2 rounded-sm border border-border p-3">
-              <Label htmlFor="custom-field-input">Özel Alanlar</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="custom-field-input"
-                  value={fieldLabel}
-                  onChange={(e) => setFieldLabel(e.target.value)}
-                  placeholder="Örn. Konnektör veya Uzunluk"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={addCustomField}
-                >
-                  Ekle
-                </Button>
-              </div>
-              {customFields.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {customFields.map((f) => (
-                    <Badge key={f.key} variant="secondary">
-                      {f.label}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-            </div>
-            <SubmitButton isLoading={saving} fullWidth>
-              Kaydet
-            </SubmitButton>
-          </Form>
-        </DialogContent>
-      </Dialog>
+      <CategoryFormDialog
+        dialogState={dialogState}
+        onOpenChange={(open) => setDialogState((prev) => ({ ...prev, open }))}
+      />
+
+      <DeleteConfirmationDialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+        entityLabel="Kategori"
+        itemName={deleteTarget?.name ?? ''}
+        itemIcon={
+          deleteTarget ? (
+            <CategoryIcon name={deleteTarget.icon} className="size-4" />
+          ) : undefined
+        }
+        itemColor={
+          deleteTarget
+            ? resolveCategoryColorHex(deleteTarget.colorToken)
+            : undefined
+        }
+        details={
+          deleteTarget
+            ? [
+                {
+                  label: 'Bağlı Ürün',
+                  value: `${deleteCategoryItemCount} ürün`,
+                },
+                {
+                  label: 'Özel Alan',
+                  value: `${deleteTarget.customFields.length} alan`,
+                },
+              ]
+            : undefined
+        }
+        warning={
+          deleteCategoryItemCount > 0
+            ? `Bu kategoriye bağlı ${deleteCategoryItemCount} ürün bulunuyor.`
+            : undefined
+        }
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

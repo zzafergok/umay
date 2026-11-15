@@ -8,21 +8,63 @@ const isoDateOrDatetime = z
     'Geçerli bir tarih giriniz.',
   );
 
-export const customFieldDefinitionSchema = z.object({
-  key: z
-    .string()
-    .trim()
-    .min(1, 'Alan anahtarı zorunludur.')
-    .max(50, 'Alan anahtarı en fazla 50 karakter olabilir.'),
-  label: z
-    .string()
-    .trim()
-    .min(1, 'Alan etiketi zorunludur.')
-    .max(80, 'Alan etiketi en fazla 80 karakter olabilir.'),
-  type: z.enum(['text', 'number', 'date', 'select']),
-  unit: z.string().trim().max(20).optional(),
-  options: z.array(z.string().trim().min(1).max(60)).max(30).optional(),
-  required: z.boolean().optional(),
+export const customFieldValueSchema = z.union([
+  z.string(),
+  z.number(),
+  z.boolean(),
+]);
+
+export const customFieldDefinitionSchema = z
+  .object({
+    key: z
+      .string()
+      .trim()
+      .min(1, 'Alan anahtarı zorunludur.')
+      .max(50, 'Alan anahtarı en fazla 50 karakter olabilir.'),
+    label: z
+      .string()
+      .trim()
+      .min(1, 'Alan etiketi zorunludur.')
+      .max(80, 'Alan etiketi en fazla 80 karakter olabilir.'),
+    type: z.enum([
+      'text',
+      'textarea',
+      'number',
+      'date',
+      'select',
+      'boolean',
+      'url',
+    ]),
+    unit: z.string().trim().max(20).optional(),
+    options: z.array(z.string().trim().min(1).max(60)).max(30).optional(),
+    required: z.boolean().optional(),
+    placeholder: z.string().trim().max(120).optional(),
+    helpText: z.string().trim().max(160).optional(),
+    defaultValue: customFieldValueSchema.optional(),
+    min: z.number().finite().optional(),
+    max: z.number().finite().optional(),
+    showInSummary: z.boolean().optional(),
+  })
+  .refine(
+    (field) =>
+      field.min === undefined ||
+      field.max === undefined ||
+      field.min <= field.max,
+    {
+      message: 'Minimum değer maksimum değerden büyük olamaz.',
+      path: ['max'],
+    },
+  );
+
+export const categoryDefaultItemConfigSchema = z.object({
+  defaultType: z.enum(['durable', 'consumable', 'component']).optional(),
+  defaultUnit: z.string().trim().max(24).optional(),
+  defaultMinQuantity: z.number().min(0).max(1000000).optional(),
+  trackBrandModel: z.boolean().optional(),
+  trackSerialNumber: z.boolean().optional(),
+  trackPurchase: z.boolean().optional(),
+  trackWarranty: z.boolean().optional(),
+  trackExpiry: z.boolean().optional(),
 });
 
 export const locationInputSchema = z.object({
@@ -42,9 +84,15 @@ export const categoryInputSchema = z.object({
     .trim()
     .min(1, 'Kategori adı zorunludur.')
     .max(60, 'Kategori adı en fazla 60 karakter olabilir.'),
+  description: z
+    .string()
+    .trim()
+    .max(240, 'Açıklama en fazla 240 karakter olabilir.')
+    .optional(),
   colorToken: z.string().trim().min(1).max(40).default('umay-blue'),
   icon: z.string().trim().min(1).max(40).default('boxes'),
   customFields: z.array(customFieldDefinitionSchema).max(20).default([]),
+  itemDefaults: categoryDefaultItemConfigSchema.optional(),
 });
 
 export const itemDocumentSchema = z.object({
@@ -88,9 +136,7 @@ export const itemInputSchema = z.object({
   photos: z.array(z.string().trim().max(1000)).max(10).default([]),
   documents: z.array(itemDocumentSchema).max(10).default([]),
   tags: z.array(z.string().trim().min(1).max(40)).max(20).default([]),
-  customFieldValues: z
-    .record(z.string(), z.union([z.string(), z.number()]))
-    .default({}),
+  customFieldValues: z.record(z.string(), customFieldValueSchema).default({}),
   notes: z.string().trim().max(2000).default(''),
   status: z
     .enum(['active', 'in_repair', 'lent', 'discarded'])

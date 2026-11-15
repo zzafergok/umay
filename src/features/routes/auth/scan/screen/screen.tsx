@@ -2,27 +2,19 @@
 
 import * as React from 'react';
 import { Camera, CameraOff, Plus, Search } from 'lucide-react';
-import { BrowserMultiFormatReader } from '@zxing/browser';
 import { Button } from '@/components/core/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
 import { Input } from '@/components/core/input';
-import { Link } from '@/components/core/link';
-import { toast } from '@/components/core/toast';
+import type { Item } from '@/features/inventory/types';
+import { ItemDetailDialog } from '@/features/routes/auth/items/item-detail-dialog';
+import { ItemFormDialog } from '@/features/routes/auth/items/item-form-dialog';
 import {
   useCategoriesQuery,
   useItemsQuery,
   useLocationsQuery,
   useRecordMovementMutation,
 } from '@/hooks/use-inventory-hooks';
-import { ItemFormDialog } from '@/features/routes/auth/items/item-form-dialog';
-
-interface BarcodeDetectorResult {
-  rawValue?: string;
-}
-
-interface BarcodeDetectorLike {
-  detect: (source: HTMLVideoElement) => Promise<BarcodeDetectorResult[]>;
-}
+import { useScanCamera } from './use-scan-camera';
 
 export function ScanScreen() {
   const { data: items = [] } = useItemsQuery();
@@ -30,10 +22,12 @@ export function ScanScreen() {
   const { data: locations = [] } = useLocationsQuery();
   const moveMutation = useRecordMovementMutation();
 
-  const videoRef = React.useRef<HTMLVideoElement | null>(null);
-  const [scanning, setScanning] = React.useState(false);
   const [code, setCode] = React.useState('');
-  const [createOpen, setCreateOpen] = React.useState(false);
+  const [formOpen, setFormOpen] = React.useState(false);
+  const [editItem, setEditItem] = React.useState<Item | undefined>(undefined);
+  const [detailOpen, setDetailOpen] = React.useState(false);
+
+  const { videoRef, scanning, setScanning } = useScanCamera(setCode);
 
   const matchedItem = React.useMemo(() => {
     const trimmed = code.trim();
@@ -44,73 +38,6 @@ export function ScanScreen() {
     }
     return items.find((i) => i.barcode === trimmed) ?? null;
   }, [code, items]);
-
-  React.useEffect(() => {
-    if (!scanning || !videoRef.current) return;
-    let active = true;
-    let stream: MediaStream | null = null;
-    let controls: { stop: () => void } | null = null;
-
-    const startScan = async () => {
-      try {
-        const detectorCtor = Reflect.get(globalThis, 'BarcodeDetector');
-        if (typeof detectorCtor === 'function' && videoRef.current) {
-          stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: 'environment' },
-          });
-          videoRef.current.srcObject = stream;
-          await videoRef.current.play();
-
-          const detector = Reflect.construct(detectorCtor, [
-            { formats: ['ean_13', 'ean_8', 'qr_code', 'code_128', 'upc_a'] },
-          ]) as BarcodeDetectorLike;
-
-          const tick = async () => {
-            if (!active || !videoRef.current) return;
-            try {
-              const found = await detector.detect(videoRef.current);
-              const val = found[0]?.rawValue;
-              if (val) {
-                setCode(val);
-                setScanning(false);
-                toast.success(`Okundu: ${val}`);
-                return;
-              }
-            } catch {
-              // ignore frame errors
-            }
-            if (active) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-        } else if (videoRef.current) {
-          const reader = new BrowserMultiFormatReader();
-          controls = await reader.decodeFromVideoDevice(
-            undefined,
-            videoRef.current,
-            (result) => {
-              if (result && active) {
-                const text = result.getText();
-                setCode(text);
-                setScanning(false);
-                toast.success(`Okundu: ${text}`);
-              }
-            },
-          );
-        }
-      } catch {
-        toast.error('Kamera açılamadı. Manuel barkod girebilirsin.');
-        setScanning(false);
-      }
-    };
-
-    startScan();
-
-    return () => {
-      active = false;
-      controls?.stop();
-      stream?.getTracks().forEach((t) => t.stop());
-    };
-  }, [scanning]);
 
   return (
     <div className="space-y-6">
@@ -200,8 +127,22 @@ export function ScanScreen() {
                 >
                   +1
                 </Button>
-                <Button asChild size="sm" variant="ghost">
-                  <Link href={`/items/${matchedItem.id}`}>Detay</Link>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setDetailOpen(true)}
+                >
+                  Detay
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setEditItem(matchedItem);
+                    setFormOpen(true);
+                  }}
+                >
+                  Düzenle
                 </Button>
               </div>
             </CardContent>
@@ -213,7 +154,13 @@ export function ScanScreen() {
                 <span className="font-mono text-foreground">{code}</span>{' '}
                 barkoduna sahip ürün bulunamadı.
               </p>
-              <Button size="sm" onClick={() => setCreateOpen(true)}>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setEditItem(undefined);
+                  setFormOpen(true);
+                }}
+              >
                 <Plus className="mr-1.5 h-4 w-4" />
                 Bu Barkodla Ekle
               </Button>
@@ -222,12 +169,28 @@ export function ScanScreen() {
         )
       ) : null}
 
-      <ItemFormDialog
-        open={createOpen}
-        onOpenChange={setCreateOpen}
+      <ItemDetailDialog
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        itemId={matchedItem?.id ?? null}
         categories={categories}
         locations={locations}
-        initialBarcode={code.trim()}
+        onEdit={(target) => {
+          setEditItem(target);
+          setFormOpen(true);
+        }}
+      />
+
+      <ItemFormDialog
+        open={formOpen}
+        onOpenChange={(nextOpen) => {
+          setFormOpen(nextOpen);
+          if (!nextOpen) setEditItem(undefined);
+        }}
+        categories={categories}
+        locations={locations}
+        initialBarcode={editItem ? undefined : code.trim()}
+        editItem={editItem}
       />
     </div>
   );

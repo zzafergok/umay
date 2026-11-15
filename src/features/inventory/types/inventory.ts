@@ -4,7 +4,10 @@ export type ItemStatus = 'active' | 'in_repair' | 'lent' | 'discarded';
 
 export type CurrencyCode = 'TRY' | 'USD' | 'EUR';
 
-export type CustomFieldType = 'text' | 'number' | 'date' | 'select';
+export type CustomFieldType =
+  'text' | 'textarea' | 'number' | 'date' | 'select' | 'boolean' | 'url';
+
+export type CustomFieldValue = string | number | boolean;
 
 export interface CustomFieldDefinition {
   key: string;
@@ -13,6 +16,23 @@ export interface CustomFieldDefinition {
   unit?: string;
   options?: string[];
   required?: boolean;
+  placeholder?: string;
+  helpText?: string;
+  defaultValue?: CustomFieldValue;
+  min?: number;
+  max?: number;
+  showInSummary?: boolean;
+}
+
+export interface CategoryDefaultItemConfig {
+  defaultType?: ItemType;
+  defaultUnit?: string;
+  defaultMinQuantity?: number;
+  trackBrandModel?: boolean;
+  trackSerialNumber?: boolean;
+  trackPurchase?: boolean;
+  trackWarranty?: boolean;
+  trackExpiry?: boolean;
 }
 
 export interface Location {
@@ -30,9 +50,11 @@ export interface Location {
 export interface Category {
   id: string;
   name: string;
+  description?: string;
   colorToken: string;
   icon: string;
   customFields: CustomFieldDefinition[];
+  itemDefaults?: CategoryDefaultItemConfig;
   createdAt: string;
   updatedAt: string;
   archivedAt?: string;
@@ -69,7 +91,7 @@ export interface Item {
   photos: string[];
   documents: ItemDocument[];
   tags: string[];
-  customFieldValues: Record<string, string | number>;
+  customFieldValues: Record<string, CustomFieldValue>;
   notes: string;
   status: ItemStatus;
   createdAt: string;

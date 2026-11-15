@@ -4,6 +4,7 @@ import { getAdminFirestore, isFirebaseConfigured } from '@/lib/firebase/admin';
 import { getUserVault } from '@/lib/inventory/memory-store';
 import { computeNextReplacementAt, computePartHealth } from '@/lib/lifecycle';
 import { InventoryRepoError, newId } from './errors';
+import { omitUndefinedDeep } from './utils';
 
 function userCol(uid: string, name: string) {
   return getAdminFirestore().collection('users').doc(uid).collection(name);
@@ -42,14 +43,14 @@ export async function createPart(uid: string, input: PartInput): Promise<Part> {
     input.installedAt,
     input.lifespan,
   );
-  const draft: Part = {
+  const draft: Part = omitUndefinedDeep<Part>({
     id: newId('prt'),
     ...input,
     nextReplacementAt,
     status: 'ok',
     createdAt: now,
     updatedAt: now,
-  };
+  });
   draft.status = computePartHealth(draft).status;
 
   if (!isFirebaseConfigured()) {
@@ -75,14 +76,14 @@ export async function updatePart(
     mergedLifespan,
   );
 
-  const updated: Part = {
+  const updated: Part = omitUndefinedDeep<Part>({
     ...current,
     ...input,
     lifespan: mergedLifespan,
     installedAt: mergedInstalledAt,
     nextReplacementAt,
     updatedAt: new Date().toISOString(),
-  };
+  });
   updated.status = computePartHealth(updated).status;
 
   if (!isFirebaseConfigured()) {

@@ -25,10 +25,12 @@ import {
 } from '@/components/core/empty';
 import { Form, SelectField, SubmitButton, TextField } from '@/components/forms';
 import { toast } from '@/components/core/toast';
+import { DeleteConfirmationDialog } from '@/components/shared/delete-confirmation-dialog';
 import {
   locationInputSchema,
   type LocationInput,
 } from '@/features/inventory/schemas';
+import type { Location } from '@/features/inventory/types';
 import { useItemsQuery, useLocationsQuery } from '@/hooks/use-inventory-hooks';
 import { inventoryService } from '@/services/inventory-service';
 import { useQueryClient } from '@tanstack/react-query';
@@ -39,6 +41,7 @@ export function LocationsScreen() {
   const { data: items = [] } = useItemsQuery();
   const [open, setOpen] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
+  const [deleteTarget, setDeleteTarget] = React.useState<Location | null>(null);
 
   const countByLocation = React.useMemo(() => {
     const map = new Map<string, number>();
@@ -47,6 +50,16 @@ export function LocationsScreen() {
     }
     return map;
   }, [items]);
+
+  const childCountByLocation = React.useMemo(() => {
+    const map = new Map<string, number>();
+    for (const loc of locations) {
+      if (loc.parentId) {
+        map.set(loc.parentId, (map.get(loc.parentId) ?? 0) + 1);
+      }
+    }
+    return map;
+  }, [locations]);
 
   const sortedLocations = React.useMemo(
     () =>
@@ -85,15 +98,31 @@ export function LocationsScreen() {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await inventoryService.deleteLocation(id);
+      await inventoryService.deleteLocation(deleteTarget.id);
       await qc.invalidateQueries({ queryKey: ['inventory', 'locations'] });
       toast.success('Konum silindi.');
+      setDeleteTarget(null);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Konum silinemedi.');
+      throw err;
     }
   };
+
+  const deleteItemCount = deleteTarget
+    ? (countByLocation.get(deleteTarget.id) ?? 0)
+    : 0;
+  const deleteChildCount = deleteTarget
+    ? (childCountByLocation.get(deleteTarget.id) ?? 0)
+    : 0;
+  const deleteWarning =
+    deleteChildCount > 0
+      ? `Bu konuma bağlı ${deleteChildCount} alt konum bulunuyor. Önce alt konumları taşımalı veya silmelisiniz.`
+      : deleteItemCount > 0
+        ? `Bu konuma bağlı ${deleteItemCount} ürün bulunuyor.`
+        : undefined;
 
   return (
     <div className="space-y-6">
@@ -149,7 +178,7 @@ export function LocationsScreen() {
                     variant="ghost"
                     size="icon"
                     aria-label={`${loc.name} konumunu sil`}
-                    onClick={() => handleDelete(loc.id)}
+                    onClick={() => setDeleteTarget(loc)}
                   >
                     <Trash2 className="text-text-muted hover:text-danger h-4 w-4" />
                   </Button>
@@ -193,6 +222,27 @@ export function LocationsScreen() {
           </Form>
         </DialogContent>
       </Dialog>
+
+      <DeleteConfirmationDialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) setDeleteTarget(null);
+        }}
+        entityLabel="Konum"
+        itemName={deleteTarget?.name ?? ''}
+        itemIcon={<MapPin className="size-4" />}
+        itemColor="rgb(var(--umay-blue))"
+        details={
+          deleteTarget
+            ? [
+                { label: 'Konum Yolu', value: deleteTarget.path.join(' > ') },
+                { label: 'Bağlı Ürün', value: `${deleteItemCount} ürün` },
+              ]
+            : undefined
+        }
+        warning={deleteWarning}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { AlertTriangle, Trash2 } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import {
   Dialog,
@@ -11,11 +11,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/core/dialog';
-import { cn } from '@/lib/utils';
 import { useCurrentLocale } from '@/components/providers/client-locale-provider';
 import { toBCP47Locale } from '@/i18n/routing';
+import { cn } from '@/lib/utils';
+import { defaultCopy } from './constants';
 import { DeleteAnimationStage } from './delete-animation-stage';
-import { defaultCopy, wait } from './constants';
 import type { DeleteConfirmationDialogProps, DeletePhase } from './types';
 
 /** Shared destructive-action confirmation dialog for user-managed records. */
@@ -24,6 +24,8 @@ export function DeleteConfirmationDialog({
   onOpenChange,
   entityLabel,
   itemName,
+  itemIcon,
+  itemColor,
   title,
   description,
   itemLabel,
@@ -36,45 +38,20 @@ export function DeleteConfirmationDialog({
   const dialogCopy = defaultCopy[locale === 'tr' ? 'tr' : 'en'];
 
   const [phase, setPhase] = useState<DeletePhase>('idle');
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const isDeleting =
     phase === 'crumpling' || phase === 'tossing' || phase === 'waiting';
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const syncPreference = () => setPrefersReducedMotion(mediaQuery.matches);
-    syncPreference();
-    mediaQuery.addEventListener('change', syncPreference);
-    return () => mediaQuery.removeEventListener('change', syncPreference);
-  }, []);
-
   const handleConfirm = async () => {
     if (isDeleting) return;
+    setPhase('waiting');
 
-    const deletionResult = Promise.resolve()
-      .then(() => onConfirm())
-      .then(
-        () => true,
-        () => false,
-      );
-
-    if (prefersReducedMotion) {
-      setPhase('waiting');
-    } else {
-      setPhase('crumpling');
-      await wait(420);
-      setPhase('tossing');
-      await wait(760);
-      setPhase('waiting');
-    }
-
-    const wasDeleted = await deletionResult;
-    if (wasDeleted) {
+    try {
+      await onConfirm();
+      setPhase('idle');
       onOpenChange(false);
-      return;
+    } catch {
+      setPhase('error');
     }
-
-    setPhase('error');
   };
 
   const handleOpenChange = (nextOpen: boolean) => {
@@ -90,76 +67,124 @@ export function DeleteConfirmationDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
         dismissible={!isDeleting}
-        hideCloseButton
-        className="bg-surface-raised border-danger/50 z-[60] max-w-md overflow-hidden rounded-lg p-0"
+        showCloseButton={!isDeleting}
+        className="bg-surface-raised z-[60] max-w-[420px] gap-0 overflow-hidden rounded-2xl border-border p-0 sm:max-w-[420px] sm:p-0"
       >
         <div
           className={cn(
-            'opacity-100 transition-[opacity,transform] duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none',
-            isDeleting && 'pointer-events-none scale-[0.985] opacity-0',
+            'transition-opacity duration-150 motion-reduce:transition-none',
+            isDeleting && 'pointer-events-none opacity-0',
           )}
           aria-hidden={isDeleting}
         >
-          <DialogHeader className="border-b border-border p-6 text-left">
-            <div className="border-danger/40 bg-danger-subtle text-danger mb-3 flex h-10 w-10 items-center justify-center rounded-md border">
-              <Trash2 className="h-5 w-5" aria-hidden="true" />
-            </div>
-            <DialogTitle className="font-heading text-title text-text text-left">
+          <DialogHeader className="space-y-1 px-5 pb-4 pr-11 pt-5 text-left">
+            <DialogTitle className="font-heading text-text text-base font-semibold leading-snug tracking-tight">
               {title ?? dialogCopy.titleConfirm.replace('{label}', entityLabel)}
             </DialogTitle>
-            <DialogDescription className="text-body-sm text-text-muted pt-2 text-left leading-relaxed">
-              {phase === 'error'
-                ? dialogCopy.errorDescription
-                : (description ??
-                  dialogCopy.description.replace('{label}', lowerEntityLabel))}
+            <DialogDescription className="text-body-sm text-text-muted leading-relaxed">
+              {description ??
+                dialogCopy.description.replace('{label}', lowerEntityLabel)}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="border-danger/30 bg-danger-subtle/50 mx-6 my-4 rounded-md border px-4 py-3">
-            <p className="text-text-muted text-caption">
-              {itemLabel ??
-                dialogCopy.itemLabel.replace('{label}', lowerEntityLabel)}
-            </p>
-            <p className="text-body-sm text-danger mt-1 truncate font-semibold">
-              {itemName}
-            </p>
-            {details && details.length > 0 && (
-              <dl className="border-danger/20 mt-3 grid gap-2 border-t pt-3 text-caption sm:grid-cols-2">
-                {details.map((detail) => (
-                  <div key={detail.label}>
-                    <dt className="text-text-muted text-caption">
-                      {detail.label}
-                    </dt>
-                    <dd className="text-text mt-0.5 font-semibold">
-                      {detail.value}
-                    </dd>
+          <div className="px-5 pb-4">
+            <div className="bg-surface-sunken/70 rounded-xl border border-border/80 p-3.5">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-text-subtle text-[11px] font-medium uppercase tracking-wider">
+                  {itemLabel ??
+                    dialogCopy.itemLabel.replace('{label}', lowerEntityLabel)}
+                </span>
+                <span className="border-danger/20 bg-danger-subtle/80 text-danger inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium">
+                  {dialogCopy.permanentBadge}
+                </span>
+              </div>
+
+              <div className="mt-2 flex items-center gap-2.5">
+                {itemIcon ? (
+                  <div
+                    className="bg-surface-raised flex size-8 shrink-0 items-center justify-center rounded-lg border border-border"
+                    style={itemColor ? { color: itemColor } : undefined}
+                  >
+                    {itemIcon}
                   </div>
-                ))}
-              </dl>
+                ) : null}
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <span
+                    className={cn(
+                      'size-2 shrink-0 rounded-full',
+                      !itemColor && 'bg-danger',
+                    )}
+                    style={
+                      itemColor ? { backgroundColor: itemColor } : undefined
+                    }
+                    aria-hidden="true"
+                  />
+                  <p className="text-text truncate text-[15px] font-semibold">
+                    {itemName}
+                  </p>
+                </div>
+              </div>
+
+              {details && details.length > 0 && (
+                <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border/70 pt-2.5">
+                  {details.map((detail) => (
+                    <div key={detail.label} className="min-w-0">
+                      <dt className="text-text-subtle text-[11px] font-medium">
+                        {detail.label}
+                      </dt>
+                      <dd className="text-body-sm text-text mt-0.5 truncate font-semibold tabular-nums">
+                        {detail.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+            </div>
+
+            {warning && (
+              <div className="border-danger/20 bg-danger-subtle/50 text-danger mt-3 flex items-start gap-2 rounded-xl border px-3 py-2 text-caption leading-relaxed">
+                <AlertTriangle
+                  className="mt-0.5 size-4 shrink-0"
+                  aria-hidden="true"
+                />
+                <p>{warning}</p>
+              </div>
+            )}
+
+            {phase === 'error' && (
+              <div
+                role="alert"
+                className="border-danger/30 bg-danger-subtle text-danger mt-3 flex items-start gap-2 rounded-xl border px-3 py-2 text-caption leading-relaxed"
+              >
+                <AlertTriangle
+                  className="mt-0.5 size-4 shrink-0"
+                  aria-hidden="true"
+                />
+                <p>{dialogCopy.errorDescription}</p>
+              </div>
             )}
           </div>
 
-          {warning && (
-            <p className="border-danger/30 bg-danger-subtle text-danger mx-6 mb-4 rounded-md border px-4 py-3 text-caption leading-relaxed">
-              {warning}
-            </p>
-          )}
-
-          <DialogFooter className="border-t border-border px-6 py-4 sm:space-x-3">
+          <DialogFooter className="bg-surface-sunken/45 flex-col-reverse gap-2 border-t border-border/80 px-5 py-3.5 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
             <Button
               type="button"
-              variant="secondary"
+              variant="outline"
+              size="sm"
               disabled={isDeleting}
               onClick={() => handleOpenChange(false)}
+              className="h-9 rounded-lg px-4"
             >
               {dialogCopy.cancel}
             </Button>
             <Button
               type="button"
               variant="danger"
+              size="sm"
               disabled={isDeleting}
               onClick={handleConfirm}
+              className="h-9 rounded-lg px-4 font-medium"
             >
+              <Trash2 className="mr-1.5 size-4" aria-hidden="true" />
               {isDeleting ? dialogCopy.deleting : dialogCopy.confirm}
             </Button>
           </DialogFooter>

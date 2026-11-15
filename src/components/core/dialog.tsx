@@ -39,7 +39,7 @@ export function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        'fixed inset-0 z-50 bg-text/35 dark:bg-bg/75',
+        'bg-text/35 dark:bg-bg/75 fixed inset-0 z-50 backdrop-blur-[3px]',
         'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
         className,
       )}
@@ -110,7 +110,7 @@ export const DialogContent = React.forwardRef<
             pointerEvents: 'auto',
           }}
           className={cn(
-            'fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border border-border dark:border-border-strong bg-surface-raised p-5 text-text shadow-float outline-none duration-200 sm:max-w-lg sm:p-6',
+            'dark:border-border-strong bg-surface-raised text-text shadow-float ring-text/[0.04] fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl border border-border p-5 outline-none ring-1 duration-200 dark:ring-white/[0.06] sm:max-w-lg sm:p-6',
             'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             className,
           )}
@@ -152,7 +152,7 @@ export const DialogContent = React.forwardRef<
           {shouldShowCloseButton && (
             <DialogPrimitive.Close
               data-slot="dialog-close"
-              className="absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-sm text-text-muted transition-colors hover:bg-surface-sunken hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-raised disabled:pointer-events-none [&_svg]:size-4"
+              className="text-text-muted hover:bg-surface-sunken hover:text-text focus-visible:ring-offset-surface-raised absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none [&_svg]:size-4"
             >
               <XIcon />
               <span className="sr-only">Kapat</span>

@@ -78,18 +78,6 @@
       "label": "Activity",
       "subtitle": "Stock & change log",
       "icon": "activity"
-    },
-    {
-      "href": "/settings",
-      "label": "Settings",
-      "subtitle": "Preferences & account",
-      "icon": "settings"
-    },
-    {
-      "href": "/profile",
-      "label": "Profile",
-      "subtitle": "Account & session",
-      "icon": "user"
     }
   ],
   "authHeader": {

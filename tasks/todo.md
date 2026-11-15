@@ -1,5 +1,69 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
+## Faz 23 – Ürün Detay ve Düzenle Akışlarının Modal Olarak Sunulması (İnceleme Özeti)
+
+### Yapılan Değişiklikler
+- **Ürün Detay Sayfasının Kaldırılması**: `src/app/(auth)/items/[id]/page.tsx` rotası ve `src/features/routes/auth/items/item-detail-screen/` klasörü kaldırıldı.
+- **Modüler Ürün Detay Modalı (`item-detail-dialog/`)**: [index.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-dialog/index.ts), [item-detail-dialog.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-dialog/item-detail-dialog.tsx), [item-detail-body.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-dialog/item-detail-body.tsx), [use-item-detail-dialog.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-dialog/use-item-detail-dialog.ts), [item-detail-overview.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-dialog/item-detail-overview.tsx) ve [item-movements-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-dialog/item-movements-card.tsx) ile stok artırma/azaltma (`QuantityStepper`), kategori renk/ikon senkronizasyonu, teknik/özel alanlar, stok hareket geçmişi sekmesi, QR etiket, `ItemFormDialog` düzenleme geçişi ve `DeleteConfirmationDialog` silme akışı modal içine taşındı.
+- **Ürünler Ekranı, Kart ve Tablo (`items/`)**: [items-screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/items-screen/items-screen.tsx), [use-items-screen.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/items-screen/use-items-screen.ts), [item-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-card.tsx) ve [items-table.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/items-table.tsx) üzerinde hem kart hem tablo görünümünden tek tıkla Detay ve Düzenle modallarının açılması sağlandı; `?new=1` ve `?item=<id>` URL parametreleri desteklendi.
+- **Diğer Ekran Yönlendirmeleri**: [home/screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/home/screen.tsx) ve [command-palette.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/layout/command-palette.tsx) `/items?item=<id>` yönlendirmesine geçirildi; [scan/screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/scan/screen/screen.tsx) ve [use-scan-camera.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/scan/screen/use-scan-camera.ts) modülerleştirilerek barkod eşleşmesinde doğrudan Detay ve Düzenle modalları açılacak şekilde güncellendi.
+
+### Doğrulama Sonuçları
+- Değiştirilen ve eklenen tüm dosyalar `<= 250` satır sınırının altında (`item-detail-body.tsx` 229 satır, `items-screen.tsx` 224 satır).
+- `npm run lint`: 0 hata.
+- `npm test`: 15 test dosyası, 110 test geçti.
+- `npm run metadata:check`: `All app routes expose metadata.`
+- `npm run build` & `npm run type-check`: Hatasız tamamlandı (`/items/[id]` rotası route tablosundan kaldırıldı).
+- Açık kalan nokta: Tarayıcıda canlı görsel UI etkileşim testi yapılmadı; mantık, tip, lint, birim testleri ve production build doğrulandı.
+
+---
+
+## Faz 22 – Tüm Silme İşlemlerinin Modal Üzerinden Yönetilmesi (İnceleme Özeti)
+
+### Yapılan Değişiklikler
+- **Paylaşılan Silme Onay Modalı (`DeleteConfirmationDialog`)**: [delete-confirmation-dialog.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/shared/delete-confirmation-dialog/delete-confirmation-dialog.tsx) içinde başarılı silme sonrasında `phase` durumu `'idle'` olarak sıfırlandı; aynı liste ekranında art arda birden fazla silme modalı açıldığında animasyon aşamasında takılma riski giderildi.
+- **Ürün & Parça Detay Silme Akışları**:
+  - [item-detail-screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-screen/item-detail-screen.tsx) ve [item-movements-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-screen/item-movements-card.tsx) klasör yapısına ayrıştırılıp ürün silme işlemi stok/konum/kategori detayları ve hareket geçmişi uyarısıyla `DeleteConfirmationDialog` üzerinden yönetildi.
+  - [part-detail-screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/parts/part-detail-screen/part-detail-screen.tsx) ve [part-logs-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/parts/part-detail-screen/part-logs-card.tsx) klasör yapısına ayrıştırılıp parça silme işlemi kalan ömür ve değişim geçmişi detaylarıyla `DeleteConfirmationDialog` üzerinden yönetildi.
+- **Konum & Kategori Silme Akışları**:
+  - [locations/screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/locations/screen.tsx): Konum silme aksiyonu bağlı ürün sayısı, konum yolu ve varsa alt konum/bağlı ürün uyarılarıyla `DeleteConfirmationDialog` modalına bağlandı.
+  - [categories/screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/screen.tsx) ve [category-custom-fields-tab.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/category-custom-fields-tab.tsx): Kategori silme (bağlı ürün/özel alan detayları ile) ve kategori içindeki özel alan silme aksiyonları `DeleteConfirmationDialog` üzerinden onaylı hale getirildi.
+- **Alışveriş Listesi & Fotoğraf Silme Akışları**:
+  - [use-shopping-delete.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/use-shopping-delete.ts), [shopping-delete-dialogs.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-delete-dialogs.tsx), [use-shopping-screen.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/use-shopping-screen.ts) ve [shopping/screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/screen.tsx): Tekil kalem silme ve "Alınanları Temizle" toplu silme işlemleri `DeleteConfirmationDialog` modalına taşındı.
+  - [item-purchase-tab.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-form-dialog/item-purchase-tab.tsx): Ürün formundaki fotoğraf kaldırma aksiyonu `DeleteConfirmationDialog` onayına bağlandı.
+  - Hesap silme işlemi mevcut [delete-account-dialog.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/shared/account-actions/delete-account-dialog.tsx) modalı ile korunuyor.
+
+### Doğrulama Sonuçları
+- Değiştirilen ve eklenen tüm dosyalar `<= 250` satır sınırının altında (`locations/screen.tsx` 246 satır; diğer tüm dosyalar `<= 220` satır).
+- `npm run lint`: 0 hata.
+- `npm test`: 15 test dosyası, 109 test geçti.
+- `npm run metadata:check`: `All app routes expose metadata.`
+- `npm run type-check`: 0 hata.
+- `npm run build`: Next.js 16.4.6 Turbopack production build başarılı (36/36 statik sayfa).
+- Açık kalan nokta: Tarayıcı üzerinden görsel UI etkileşim testi yapılmadı; tip, lint, birim testleri ve production build kontrolleri çalıştırılıp doğrulandı.
+
+---
+
+## Faz 21 – Gelişmiş Kategori Oluşturma ve Ürün/Alan Input Sistemi (İnceleme Özeti)
+
+### Yapılan Değişiklikler
+- **Veri Modeli, Şema ve Kalıcılık**: [inventory.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/types/inventory.ts), [inventory-schemas.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/schemas/inventory-schemas.ts), [location-category-repo.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/inventory/repo/location-category-repo.ts), [item-stock-repo.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/inventory/repo/item-stock-repo.ts) ve [utils.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/inventory/repo/utils.ts) güncellendi; 7 alan tipi (`text`, `textarea`, `number`, `date`, `select`, `boolean`, `url`), gelişmiş alan kuralları (`unit`, `options`, `required`, `placeholder`, `helpText`, `defaultValue`, `min`, `max`, `showInSummary`), `Category.description`, `Category.itemDefaults` ve Firestore uyumlu `omitUndefinedDeep` temizliği eklendi.
+- **Alan Sabitleri, Yardımcılar & Paylaşılan Inputlar**: [category-constants.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/constants/category-constants.ts), [category-presets.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/constants/category-presets.ts), [custom-field-utils.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/utils/custom-field-utils.ts), [category-icon.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/components/category-icon.tsx), [custom-field-boolean.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/components/custom-field-boolean.tsx) ve [custom-field-input.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/components/custom-field-input.tsx) ile Türkçe karakter duyarlı anahtar üretimi, doğrulama, biçimlendirme ve tüm alan tipleri için gelişmiş input bileşeni kuruldu.
+- **Gelişmiş Kategori Ekranı & Modalı (`categories/`)**: [screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/screen.tsx), [category-form-dialog.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/category-form-dialog.tsx), [category-appearance-panel.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/category-appearance-panel.tsx), [category-item-defaults-panel.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/category-item-defaults-panel.tsx), [category-custom-fields-tab.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/category-custom-fields-tab.tsx), [custom-field-draft-form.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/custom-field-draft-form.tsx), [custom-field-type-options.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/custom-field-type-options.tsx), [select-options-editor.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/select-options-editor.tsx), [category-live-preview.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/category-live-preview.tsx) ve [category-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/categories/components/category-card.tsx) ile 4 sekmeli kategori oluşturma/düzenleme/çoğaltma akışı, hazır şablonlar, renk & ikon paleti, alan sıralama/düzenleme ve canlı önizleme eklendi.
+- **Ürün Formu & Detay Entegrasyonu (`items/`)**: [select-field.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/forms/select-field.tsx), [item-form-dialog.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-form-dialog/item-form-dialog.tsx), [use-item-form-dialog.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-form-dialog/use-item-form-dialog.ts), [item-basic-tab.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-form-dialog/item-basic-tab.tsx), [item-technical-tab.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-form-dialog/item-technical-tab.tsx), [item-purchase-tab.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-form-dialog/item-purchase-tab.tsx), [tags-input.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-form-dialog/tags-input.tsx), [item-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-card.tsx), [item-specs-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-specs-card.tsx) ve [item-detail-screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/items/item-detail-screen.tsx) ile kategori değişiminde varsayılanların canlı uygulanması, tüm ürün ve özel alan inputları ve özet/detay görünümleri sağlandı.
+- **Testler**: [categories.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/inventory/categories.test.ts) eklendi.
+
+### Doğrulama Sonuçları
+- Değiştirilen ve eklenen tüm dosyalar `<= 250` satır sınırının altında (`category-presets.ts` 245 satır).
+- `npm run lint`: 0 hata, 0 uyarı.
+- `npm test`: 15 test dosyası, 109 test geçti.
+- `npm run metadata:check`: `All app routes expose metadata.`
+- `npm run type-check`: 0 hata.
+- `npm run build`: Next.js 16.4.6 Turbopack production build başarılı (36/36 statik sayfa).
+- Açık kalan nokta: Tarayıcı üzerinden görsel UI etkileşim testi yapılmadı; mantık, şema, repository, tip ve derleme kontrolleri otomatik olarak doğrulandı.
+
+---
+
 ## Faz 20 – Detaylı ve Profesyonel Alışveriş Listesi Tasarımı (İnceleme Özeti)
 
 ### Yapılan Değişiklikler

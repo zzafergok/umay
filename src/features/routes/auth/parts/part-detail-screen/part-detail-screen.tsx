@@ -1,8 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { ArrowLeft, CheckCircle2, Trash2 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { ArrowLeft, CheckCircle2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
 import { Input } from '@/components/core/input';
@@ -11,26 +12,20 @@ import { Link } from '@/components/core/link';
 import { Progress } from '@/components/core/progress';
 import { Stat } from '@/components/core/stat';
 import { StatusPill } from '@/components/core/status-pill';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/core/table';
 import { toast } from '@/components/core/toast';
-import { computePartHealth } from '@/lib/lifecycle';
+import { DeleteConfirmationDialog } from '@/components/shared/delete-confirmation-dialog';
+import { ReplacePartDialog } from '@/features/routes/auth/parts/replace-part-dialog';
 import { usePartQuery } from '@/hooks/use-inventory-hooks';
+import { computePartHealth } from '@/lib/lifecycle';
 import { inventoryService } from '@/services/inventory-service';
-import { useQueryClient } from '@tanstack/react-query';
-import { ReplacePartDialog } from './replace-part-dialog';
+import { PartLogsCard } from './part-logs-card';
 
 export function PartDetailScreen({ id }: { id: string }) {
   const router = useRouter();
   const qc = useQueryClient();
   const { data, isLoading } = usePartQuery(id);
   const [replaceOpen, setReplaceOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [usageDraft, setUsageDraft] = React.useState<string | null>(null);
 
   if (isLoading) {
@@ -69,13 +64,15 @@ export function PartDetailScreen({ id }: { id: string }) {
     }
   };
 
-  const handleDelete = async () => {
+  const handleConfirmDelete = async () => {
     try {
       await inventoryService.deletePart(part.id);
+      await qc.invalidateQueries({ queryKey: ['inventory', 'parts'] });
       toast.success('Parça silindi.');
       router.push('/parts');
-    } catch {
-      toast.error('Parça silinemedi.');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Parça silinemedi.');
+      throw err;
     }
   };
 
@@ -93,7 +90,11 @@ export function PartDetailScreen({ id }: { id: string }) {
             <CheckCircle2 className="mr-1.5 h-4 w-4" />
             Değiştirildi
           </Button>
-          <Button size="sm" variant="destructive" onClick={handleDelete}>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => setDeleteOpen(true)}
+          >
             <Trash2 className="mr-1.5 h-4 w-4" />
             Sil
           </Button>
@@ -105,8 +106,7 @@ export function PartDetailScreen({ id }: { id: string }) {
           <div className="space-y-1">
             <CardTitle className="text-xl">{part.name}</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Takılma:{' '}
-              {new Date(part.installedAt).toLocaleDateString('tr-TR')}
+              Takılma: {new Date(part.installedAt).toLocaleDateString('tr-TR')}
               {part.nextReplacementAt
                 ? ` • Planlanan değişim: ${new Date(
                     part.nextReplacementAt,
@@ -168,53 +168,36 @@ export function PartDetailScreen({ id }: { id: string }) {
           label="Gerçekleşen Ort. Ömür"
           value={avgActualDays !== null ? `${avgActualDays} gün` : '—'}
           hint={
-            part.lifespan.days ? `Planlanan: ${part.lifespan.days} gün` : undefined
+            part.lifespan.days
+              ? `Planlanan: ${part.lifespan.days} gün`
+              : undefined
           }
         />
         <Stat label="Toplam Maliyet" value={`${totalCost} TRY`} />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Değişim Geçmişi</CardTitle>
-        </CardHeader>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Tarih</TableHead>
-              <TableHead>Not</TableHead>
-              <TableHead className="text-right">Maliyet</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {logs.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center text-muted-foreground">
-                  Henüz değişim kaydı yok.
-                </TableCell>
-              </TableRow>
-            ) : (
-              logs.map((log) => (
-                <TableRow key={log.id}>
-                  <TableCell className="text-xs">
-                    {new Date(log.replacedAt).toLocaleDateString('tr-TR')}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {log.note || '—'}
-                  </TableCell>
-                  <TableCell className="text-right tabular-nums">
-                    {log.cost ? `${log.cost} TRY` : '—'}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </Card>
+      <PartLogsCard logs={logs} />
 
       <ReplacePartDialog
         part={replaceOpen ? part : null}
         onClose={() => setReplaceOpen(false)}
+      />
+
+      <DeleteConfirmationDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        entityLabel="Parça"
+        itemName={part.name}
+        details={[
+          { label: 'Kalan Ömür', value: `%${health.remainingPercent}` },
+          { label: 'Değişim Geçmişi', value: `${logs.length} kayıt` },
+        ]}
+        warning={
+          logs.length > 0
+            ? `Bu parçaya ait ${logs.length} değişim geçmişi kaydı da kalıcı olarak silinecektir.`
+            : undefined
+        }
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );

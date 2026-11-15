@@ -78,18 +78,6 @@
       "label": "Faaliyet",
       "subtitle": "Hareket ve işlem günlüğü",
       "icon": "activity"
-    },
-    {
-      "href": "/settings",
-      "label": "Ayarlar",
-      "subtitle": "Tercihler ve hesap",
-      "icon": "settings"
-    },
-    {
-      "href": "/profile",
-      "label": "Profil",
-      "subtitle": "Hesap ve oturum",
-      "icon": "user"
     }
   ],
   "authHeader": {
