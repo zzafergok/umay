@@ -1,7 +1,17 @@
-import { describe, expect, it } from 'vitest';
-import { decodeToken, signToken, verifyToken } from '@/lib/auth/jwt';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  decodeToken,
+  getTokenRemainingMs,
+  isTokenExpired,
+  signToken,
+  verifyToken,
+} from '@/lib/auth/jwt';
 
 describe('JWT Utilities', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should sign and verify a valid JWT token', () => {
     const payload = {
       sub: 'usr_123',
@@ -58,5 +68,37 @@ describe('JWT Utilities', () => {
     expect(verifyToken('invalid-token')).toBeNull();
     expect(verifyToken('a.b')).toBeNull();
     expect(decodeToken('invalid-token')).toBeNull();
+    expect(isTokenExpired('invalid-token')).toBe(true);
+    expect(getTokenRemainingMs('invalid-token')).toBeNull();
+  });
+
+  it('should reject expired tokens in verifyToken and isTokenExpired', () => {
+    const eightDaysAgoMs = Date.now() - 8 * 24 * 60 * 60 * 1000;
+    vi.spyOn(Date, 'now').mockReturnValueOnce(eightDaysAgoMs);
+
+    const expiredToken = signToken({
+      sub: 'usr_expired',
+      email: 'expired@umay.app',
+      name: 'Expired',
+      role: 'user',
+    });
+
+    expect(verifyToken(expiredToken)).toBeNull();
+    expect(isTokenExpired(expiredToken)).toBe(true);
+    expect(getTokenRemainingMs(expiredToken)).toBe(0);
+  });
+
+  it('should report active tokens as non-expired with remaining ms', () => {
+    const token = signToken({
+      sub: 'usr_active',
+      email: 'active@umay.app',
+      name: 'Active',
+      role: 'user',
+    });
+
+    expect(isTokenExpired(token)).toBe(false);
+    const remaining = getTokenRemainingMs(token);
+    expect(remaining).not.toBeNull();
+    expect((remaining ?? 0) > 0).toBe(true);
   });
 });

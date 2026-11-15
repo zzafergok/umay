@@ -20,6 +20,7 @@ import { Button } from '@/components/core/button';
 import { AppShellLayout } from '@/components/layout/AppShellLayout';
 import { LanguageSwitcher } from '@/components/layout/language-switcher';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
+import { AuthSessionGuard } from '@/components/shared/auth-route-guard';
 import { UmayMark } from '@/components/shared/umay-brand';
 import { cn } from '@/lib/utils';
 import { CommandPalette } from '@/components/layout/command-palette';
@@ -165,6 +166,7 @@ export async function PublicShell({ children }: { children: React.ReactNode }) {
 export async function AuthShell({ children }: { children: React.ReactNode }) {
   return (
     <AppShellLayout>
+      <AuthSessionGuard />
       {children}
       <CommandPalette />
       <UmayBottomNav />

@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Disable default cross-fade so only the custom clip-path animation is visible */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 @layer base {
   :root {
     /* ── Umay Light Theme (RGB triplets) ── */

@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { routing } from '@/i18n/routing';
-import { hasUserSession } from '@/lib/auth/session';
+import {
+  isAuthRoutePath,
+  isPublicRoutePath,
+  LAST_AUTH_ROUTE_COOKIE,
+  sanitizeLastAuthRoute,
+} from '@/lib/auth/route-policy';
+import {
+  getRequestLastAuthRoute,
+  getRequestSessionStatus,
+  LAST_AUTH_ROUTE_COOKIE_OPTIONS,
+  SESSION_COOKIE,
+} from '@/lib/auth/session';
 
-const AUTH_ENTRY = '/home';
 const LOCALE_HEADER = 'X-NEXT-INTL-LOCALE';
 
 function applySecurityHeaders(response: NextResponse): NextResponse {
@@ -35,7 +45,22 @@ function withLocaleHeader(request: NextRequest): NextResponse {
 
 function redirectWithSecurity(url: URL): NextResponse {
   const response = NextResponse.redirect(url);
+  response.headers.set('Cache-Control', 'no-store, must-revalidate');
   return applySecurityHeaders(response);
+}
+
+function clearAuthCookies(response: NextResponse): NextResponse {
+  response.cookies.delete(SESSION_COOKIE);
+  response.cookies.delete(LAST_AUTH_ROUTE_COOKIE);
+  return response;
+}
+
+function isPrefetchRequest(request: NextRequest): boolean {
+  return (
+    request.headers.get('next-router-prefetch') === '1' ||
+    request.headers.get('purpose') === 'prefetch' ||
+    (request.headers.get('sec-purpose')?.includes('prefetch') ?? false)
+  );
 }
 
 function isStaticAsset(pathname: string): boolean {
@@ -50,24 +75,48 @@ function isStaticAsset(pathname: string): boolean {
 }
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
 
   if (isStaticAsset(pathname) || pathname.startsWith('/api/')) {
     const response = NextResponse.next();
     return applySecurityHeaders(response);
   }
 
-  const hasSession = hasUserSession(request);
+  const { isAuthenticated, hadSessionCookie } =
+    getRequestSessionStatus(request);
 
-  if (pathname === '/') {
-    return withLocaleHeader(request);
+  if (isPublicRoutePath(pathname)) {
+    if (isAuthenticated) {
+      const targetRoute = getRequestLastAuthRoute(request);
+      return redirectWithSecurity(new URL(targetRoute, request.url));
+    }
+
+    const response = withLocaleHeader(request);
+    if (hadSessionCookie) {
+      clearAuthCookies(response);
+    }
+    return response;
   }
 
-  if (!hasSession) {
-    return redirectWithSecurity(new URL('/', request.url));
+  if (!isAuthenticated) {
+    const response = redirectWithSecurity(new URL('/', request.url));
+    if (hadSessionCookie) {
+      clearAuthCookies(response);
+    }
+    return response;
   }
 
-  return withLocaleHeader(request);
+  const response = withLocaleHeader(request);
+  if (!isPrefetchRequest(request) && isAuthRoutePath(pathname)) {
+    const currentAuthRoute = sanitizeLastAuthRoute(`${pathname}${search}`);
+    response.cookies.set(
+      LAST_AUTH_ROUTE_COOKIE,
+      currentAuthRoute,
+      LAST_AUTH_ROUTE_COOKIE_OPTIONS,
+    );
+  }
+
+  return response;
 }
 
 export const config = {

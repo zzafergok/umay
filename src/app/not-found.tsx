@@ -45,7 +45,7 @@ export default async function NotFound() {
           <CardContent className="pt-6">
             <div className="flex justify-center">
               <Button asChild variant="primary">
-                <Link href="/">
+                <Link href="/" prefetch={false}>
                   <Home className="mr-2 h-4 w-4" />
                   {copy.homeButton}
                 </Link>

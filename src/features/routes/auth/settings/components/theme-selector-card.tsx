@@ -27,6 +27,7 @@ import {
 import { useSettingsQuery } from '@/hooks/use-inventory-hooks';
 import { useMounted } from '@/hooks/use-mounted';
 import { routing, type Locale } from '@/i18n/routing';
+import { switchThemeWithTransition } from '@/lib/utils/theme-transition';
 import { inventoryService } from '@/services/inventory-service';
 import type { AuthSettingsCopy } from '../types';
 
@@ -116,7 +117,10 @@ export function ThemeSelectorCard({
                   role="radio"
                   aria-checked={isSelected}
                   variant={isSelected ? 'primary' : 'secondary'}
-                  onClick={() => setTheme(id)}
+                  onClick={(event) => {
+                    if (isSelected) return;
+                    void switchThemeWithTransition(id, setTheme, event);
+                  }}
                   className="justify-center gap-2"
                 >
                   <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />

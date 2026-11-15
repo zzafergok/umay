@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getAdminAuth } from '@/lib/firebase/admin';
 import { signToken } from '@/lib/auth/jwt';
-import { createSession } from '@/lib/auth/session';
+import { clearLastAuthRoute, createSession } from '@/lib/auth/session';
 
 const firebaseTokenSchema = z.object({
   idToken: z.string().min(10, 'Geçersiz Firebase kimlik belirteci.'),
@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
     });
 
     await createSession(token);
+    await clearLastAuthRoute();
 
     return NextResponse.json({
       message: 'Google ile giriş başarılı',

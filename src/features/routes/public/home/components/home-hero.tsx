@@ -62,7 +62,7 @@ export function HomeHero({
               size="lg"
               className="w-full sm:w-auto"
             >
-              <Link href="/home">
+              <Link href="/home" prefetch={false}>
                 <LayoutDashboard
                   className="text-text-muted mr-2 h-4 w-4"
                   aria-hidden="true"

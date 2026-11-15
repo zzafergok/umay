@@ -30,7 +30,7 @@ export function SidebarBrand({
       )}
     >
       <Link
-        href="/"
+        href="/home"
         className={`flex min-w-0 items-center ${
           collapsed ? 'justify-center' : 'flex-1 gap-2.5'
         }`}

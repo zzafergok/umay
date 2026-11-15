@@ -120,7 +120,7 @@ const defaultRequestInterceptor: RequestInterceptor = (url, config) => {
 
 const defaultResponseInterceptor: ResponseInterceptor = async (response) => {
   if (response.status === 401) {
-    useAuthStore.getState().clearAuth();
+    useAuthStore.getState().markUnauthorized();
   }
 
   if (response.ok) return response;

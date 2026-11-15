@@ -46,6 +46,7 @@ export function QuickRoutesSection({
             <Link
               key={route.href}
               href={route.href}
+              prefetch={false}
               className="focus-visible:ring-offset-bg group block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               <Card

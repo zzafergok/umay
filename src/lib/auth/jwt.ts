@@ -11,10 +11,7 @@ const JWT_SECRET =
   process.env.JWT_SECRET || 'umay-secret-key-change-in-production';
 
 function base64UrlEncode(str: string): string {
-  return btoa(str)
-    .replace(/=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
+  return btoa(str).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
 function base64UrlDecode(str: string): string {
@@ -59,14 +56,25 @@ export function verifyToken(token: string): JWTPayload | null {
       return null;
     }
 
-    const payload: JWTPayload = JSON.parse(base64UrlDecode(encodedPayload));
-    const now = Math.floor(Date.now() / 1000);
-
-    if (payload.exp && payload.exp < now) {
-      return null; // Expired token
+    const payload: unknown = JSON.parse(base64UrlDecode(encodedPayload));
+    if (typeof payload !== 'object' || payload === null) {
+      return null;
     }
 
-    return payload;
+    const candidate = payload as Partial<JWTPayload>;
+    const now = Math.floor(Date.now() / 1000);
+
+    if (
+      typeof candidate.sub !== 'string' ||
+      candidate.sub.trim().length === 0 ||
+      typeof candidate.email !== 'string' ||
+      typeof candidate.exp !== 'number' ||
+      candidate.exp <= now
+    ) {
+      return null; // Invalid or expired token
+    }
+
+    return candidate as JWTPayload;
   } catch {
     return null;
   }
@@ -76,8 +84,40 @@ export function decodeToken(token: string): JWTPayload | null {
   try {
     const parts = token.split('.');
     if (parts.length < 2) return null;
-    return JSON.parse(base64UrlDecode(parts[1]));
+    const parsed: unknown = JSON.parse(base64UrlDecode(parts[1]));
+    if (typeof parsed !== 'object' || parsed === null) return null;
+    return parsed as JWTPayload;
   } catch {
     return null;
   }
+}
+
+export function isTokenExpired(
+  token: string,
+  nowSeconds = Math.floor(Date.now() / 1000),
+): boolean {
+  const payload = decodeToken(token);
+  if (!payload) return true;
+  if (typeof payload.sub !== 'string' || payload.sub.trim().length === 0) {
+    return true;
+  }
+  if (typeof payload.exp !== 'number' || Number.isNaN(payload.exp)) {
+    return true;
+  }
+  return payload.exp <= nowSeconds;
+}
+
+export function getTokenRemainingMs(
+  token: string,
+  nowMs = Date.now(),
+): number | null {
+  const payload = decodeToken(token);
+  if (
+    !payload ||
+    typeof payload.exp !== 'number' ||
+    Number.isNaN(payload.exp)
+  ) {
+    return null;
+  }
+  return Math.max(0, payload.exp * 1000 - nowMs);
 }

@@ -39,7 +39,7 @@ export function HomeFooterCta({
               size="lg"
               className="w-full sm:w-auto"
             >
-              <Link href="/home">
+              <Link href="/home" prefetch={false}>
                 <LayoutDashboard
                   className="text-text-muted mr-2 h-4 w-4"
                   aria-hidden="true"
@@ -56,7 +56,7 @@ export function HomeFooterCta({
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2.5">
             <UmayMark className="h-5 w-5" />
-            <span className="text-caption text-text-muted">
+            <span className="text-text-muted text-caption">
               {footerCta.copyright}
             </span>
           </div>

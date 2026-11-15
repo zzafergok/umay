@@ -1,5 +1,24 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
+## Faz 27 – Oturum Süresi (Token Expiry) ve Public / Auth Rota Yönlendirme Koruması (İnceleme Özeti)
+
+### Yapılan Değişiklikler
+- **JWT Süre Doğrulaması ([jwt.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/auth/jwt.ts)):** `verifyToken` içinde `sub`, `email` ve sayısal `exp > now` zorunluluğu sıkılaştırıldı; istemci ve sunucu tarafında süre kontrolü için `isTokenExpired` ve `getTokenRemainingMs` yardımcıları eklendi.
+- **Rota Politikası ve Son Auth Ekranı Takibi ([route-policy.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/auth/route-policy.ts), [session.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/auth/session.ts)):** `isPublicRoutePath`, `isAuthRoutePath` ve açık yönlendirme / geçersiz rota / `_rsc` parametrelerine karşı güvenli `sanitizeLastAuthRoute` eklendi. `hasUserSession` ve `getRequestSessionStatus` artık cookie varlığının yanında gerçek JWT imza ve süre doğrulaması yapıyor. `destroySession` hem `session` hem `umay_last_auth_route` cookie'lerini temizliyor; yeni giriş/kayıt rotaları (`login`, `register`, `firebase`) `clearLastAuthRoute` ile taze oturumu `/home` üzerinden başlatıyor.
+- **Proxy ve Layout Korumaları ([proxy.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/proxy.ts), [layout.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/app/(public)/layout.tsx), [layout.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/app/(auth)/layout.tsx)):**
+  - Geçerli (expire olmamış) oturumlu kullanıcı `/` public ekranına gitmek istediğinde `Cache-Control: no-store, must-revalidate` ile `umay_last_auth_route` değerine (yoksa `/home`) yönlendiriliyor.
+  - Oturumsuz, token'ı expire olmuş veya geçersiz kullanıcılar auth gerektiren tüm ekranlardan `/` ekranına yönlendiriliyor ve geçersiz cookie'ler yanıt üzerinde temizleniyor.
+  - Prefetch istekleri (`next-router-prefetch`, `purpose: prefetch`, `sec-purpose`) ve 404 bilinmeyen rotalar son auth ekranını ezmiyor.
+- **İstemci Tarafı Senkronizasyon ve Süre Takibi ([use-auth-store.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/stores/use-auth-store.ts), [client.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/api/client.ts), [auth-session-guard.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/shared/auth-route-guard/auth-session-guard.tsx), [public-session-sync.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/shared/auth-route-guard/public-session-sync.tsx)):** Router cache içi gezinmelerde `umay_last_auth_route` cookie'si güncel tutuluyor; açık sekmede token süresi dolduğunda veya API `401` döndüğünde istemci oturumu temizlenip `/` ekranına yönlendiriliyor.
+
+### Doğrulama Sonuçları
+- Tüm eklenen/değiştirilen dosyalar `250` satır sınırının altında (`<= 123` satır).
+- `npm run type-check`, `npm run lint`, `npm run metadata:check` ve `npm run build` (36/36 sayfa) hatasız tamamlandı.
+- `npm test`: 17 test dosyası, 122 test geçti ([jwt.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/auth/jwt.test.ts), [route-policy.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/auth/route-policy.test.ts), [proxy.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/auth/proxy.test.ts) dahil).
+- Açık kalan nokta: Canlı tarayıcı E2E etkileşim testi çalıştırılmadı; sunucu yönlendirmeleri, token süre dolumu, rota politikası ve build doğrulamaları Vitest ve Next.js build ile doğrulandı.
+
+---
+
 ## Faz 26 – `/settings` Ekranı Hizalama Düzeltmesi ve Kapsamlı Uygulama Ayarları (İnceleme Özeti)
 
 ### Yapılan Değişiklikler

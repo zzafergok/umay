@@ -7,6 +7,7 @@ import type {
   DeleteAccountFormData,
   ProfileUpdateFormData,
 } from '@/lib/auth/auth-schema';
+import { clearClientLastAuthRouteCookie } from '@/lib/auth/route-policy';
 import { signOutFirebaseClient } from '@/lib/firebase/client';
 import { clearOfflineMutations } from '@/lib/offline/offline-queue';
 import {
@@ -27,6 +28,7 @@ async function resetClientSession(
 ) {
   await signOutFirebaseClient();
   clearAuth();
+  clearClientLastAuthRouteCookie();
   queryClient.setQueryData(AUTH_QUERY_KEY, null);
   queryClient.clear();
   await clearOfflineMutations();

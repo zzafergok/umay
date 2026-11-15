@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createSession } from '@/lib/auth/session';
+import { clearLastAuthRoute, createSession } from '@/lib/auth/session';
 import { signToken } from '@/lib/auth/jwt';
 import { signUpWithFirebasePassword } from '@/lib/auth/firebase-identity';
 
@@ -43,6 +43,7 @@ export async function POST(request: NextRequest) {
     });
 
     await createSession(token);
+    await clearLastAuthRoute();
 
     return NextResponse.json(
       {
