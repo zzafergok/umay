@@ -2,7 +2,6 @@
 
 import { getApps, initializeApp, type FirebaseApp } from 'firebase/app';
 import {
-  connectAuthEmulator,
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
@@ -10,7 +9,6 @@ import {
 } from 'firebase/auth';
 
 let cachedApp: FirebaseApp | null = null;
-let emulatorConnected = false;
 
 export function isFirebaseClientConfigured(): boolean {
   return Boolean(
@@ -40,15 +38,7 @@ export function getFirebaseClientApp(): FirebaseApp {
 }
 
 export function getFirebaseClientAuth(): Auth {
-  const auth = getAuth(getFirebaseClientApp());
-  const emulatorHost = process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST;
-  if (emulatorHost && !emulatorConnected) {
-    connectAuthEmulator(auth, `http://${emulatorHost}`, {
-      disableWarnings: true,
-    });
-    emulatorConnected = true;
-  }
-  return auth;
+  return getAuth(getFirebaseClientApp());
 }
 
 export async function signInWithGooglePopup(): Promise<string> {

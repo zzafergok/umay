@@ -7,18 +7,14 @@ interface FirebaseIdentityResult {
 }
 
 function getIdentityBaseUrl(): string | null {
-  const emulatorHost = process.env.FIREBASE_AUTH_EMULATOR_HOST;
-  if (emulatorHost) {
-    return `http://${emulatorHost}/identitytoolkit.googleapis.com/v1`;
-  }
-  if (process.env.FIREBASE_WEB_API_KEY) {
+  if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
     return 'https://identitytoolkit.googleapis.com/v1';
   }
   return null;
 }
 
 function getApiKeyParam(): string {
-  return process.env.FIREBASE_WEB_API_KEY || 'emulator-api-key';
+  return process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '';
 }
 
 export async function signInWithFirebasePassword(

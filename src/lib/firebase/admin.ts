@@ -2,30 +2,23 @@ if (typeof window !== 'undefined') {
   throw new Error('firebase/admin can only be used on the server.');
 }
 
-import { getApps, initializeApp, cert, type App } from 'firebase-admin/app';
+import { getApps, initializeApp, type App } from 'firebase-admin/app';
 import { getAuth, type Auth } from 'firebase-admin/auth';
 import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 import { getStorage, type Storage } from 'firebase-admin/storage';
 
 let cachedApp: App | null = null;
 
-function getFirebaseProjectId(): string {
+function getFirebaseProjectId(): string | undefined {
   return (
-    process.env.FIREBASE_PROJECT_ID ||
     process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
-    'umay-local'
+    process.env.FIREBASE_PROJECT_ID ||
+    undefined
   );
 }
 
 export function isFirebaseConfigured(): boolean {
-  return Boolean(
-    process.env.FIRESTORE_EMULATOR_HOST ||
-      process.env.FIREBASE_AUTH_EMULATOR_HOST ||
-      (process.env.FIREBASE_PROJECT_ID &&
-        process.env.FIREBASE_CLIENT_EMAIL &&
-        process.env.FIREBASE_PRIVATE_KEY) ||
-      process.env.GOOGLE_APPLICATION_CREDENTIALS,
-  );
+  return Boolean(getFirebaseProjectId());
 }
 
 export function getFirebaseAdminApp(): App {
@@ -39,24 +32,9 @@ export function getFirebaseAdminApp(): App {
 
   const projectId = getFirebaseProjectId();
   const storageBucket =
-    process.env.FIREBASE_STORAGE_BUCKET || `${projectId}.appspot.com`;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+    (projectId ? `${projectId}.appspot.com` : undefined);
 
-  if (clientEmail && privateKey) {
-    cachedApp = initializeApp({
-      credential: cert({
-        projectId,
-        clientEmail,
-        privateKey,
-      }),
-      projectId,
-      storageBucket,
-    });
-    return cachedApp;
-  }
-
-  // Emulator or default credentials mode
   cachedApp = initializeApp({
     projectId,
     storageBucket,
