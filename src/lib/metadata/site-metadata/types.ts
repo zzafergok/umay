@@ -5,17 +5,10 @@ export type RouteRobots = {
   follow: boolean;
 };
 
-export type RouteSection = 'public' | 'auth' | 'admin';
+export type RouteSection = 'public' | 'auth';
 
 export type MetadataRouteId =
-  | 'publicHome'
-  | 'authHome'
-  | 'authWorkspace'
-  | 'authSettings'
-  | 'adminLogin'
-  | 'adminOverview'
-  | 'adminUsers'
-  | 'adminSettings';
+  'publicHome' | 'authHome' | 'authWorkspace' | 'authSettings';
 
 export type LocalizedRouteMetadata = {
   title: string;

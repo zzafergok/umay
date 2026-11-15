@@ -20,13 +20,10 @@ export function AuthSettingsForm({ copy }: AuthSettingsFormProps) {
   const handleSubmit = async (data: UserSettingsFormData) => {
     setLoading(true);
     try {
-      // Simulating settings update
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      toast.success(
-        `${data.displayName} için ayarlar başarıyla güncellendi`,
-      );
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      toast.success(`${data.displayName} için ayarlar güncellendi.`);
     } catch {
-      toast.error('Ayarlar güncellenirken bir hata oluştu');
+      toast.error('Ayarlar güncellenirken bir hata oluştu.');
     } finally {
       setLoading(false);
     }
@@ -40,7 +37,7 @@ export function AuthSettingsForm({ copy }: AuthSettingsFormProps) {
         emailUpdates: true,
       }}
       onSubmit={handleSubmit}
-      className="space-y-5"
+      className="space-y-4"
     >
       <TextField
         name="displayName"
@@ -49,7 +46,7 @@ export function AuthSettingsForm({ copy }: AuthSettingsFormProps) {
         required
       />
 
-      <div className="border border-gunmetal bg-void-black p-4">
+      <div className="bg-surface-sunken rounded-md border border-border p-4">
         <SwitchField
           name="emailUpdates"
           label={copy.updatesTitle}
@@ -57,11 +54,8 @@ export function AuthSettingsForm({ copy }: AuthSettingsFormProps) {
         />
       </div>
 
-      <SubmitButton
-        isLoading={loading}
-        className="rounded-none font-bold uppercase tracking-widest"
-      >
-        <Save className="mr-2 h-4 w-4" />
+      <SubmitButton isLoading={loading}>
+        <Save className="mr-2 h-4 w-4" aria-hidden="true" />
         {copy.submitLabel}
       </SubmitButton>
     </Form>

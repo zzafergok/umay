@@ -5,19 +5,18 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 export const alertVariants = cva(
-  'relative w-full rounded-sm border px-4 py-3 text-sm transition-all [&>svg]:size-4 [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-3.5 [&>svg]:text-current [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-2px] has-[[data-slot=alert-action]]:pr-28 rtl:[&>svg]:left-auto rtl:[&>svg]:right-4 rtl:[&>svg~*]:pl-0 rtl:[&>svg~*]:pr-7 rtl:has-[[data-slot=alert-action]]:pr-4 rtl:has-[[data-slot=alert-action]]:pl-28',
+  'relative w-full rounded-md border px-4 py-3 text-body-sm transition-colors [&>svg]:size-4 [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-3.5 [&>svg]:text-current [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-2px] has-[[data-slot=alert-action]]:pr-28 rtl:[&>svg]:left-auto rtl:[&>svg]:right-4 rtl:[&>svg~*]:pl-0 rtl:[&>svg~*]:pr-7 rtl:has-[[data-slot=alert-action]]:pr-4 rtl:has-[[data-slot=alert-action]]:pl-28',
   {
     variants: {
       variant: {
-        default:
-          'bg-obsidian/60 text-titanium border-gunmetal/40 shadow-sm [&>svg]:text-umay-blue',
+        default: 'bg-surface text-text border-border [&>svg]:text-accent',
         destructive:
-          'bg-alert-red/10 border-alert-red/30 text-alert-red shadow-sm [&>svg]:text-alert-red *:[[data-slot=alert-description]]:text-alert-red/90',
+          'bg-danger-subtle border-danger/30 text-danger [&>svg]:text-danger *:[[data-slot=alert-description]]:text-danger/90',
         warning:
-          'bg-warning/10 border-warning/30 text-warning shadow-sm [&>svg]:text-warning *:[[data-slot=alert-description]]:text-warning/90',
-        info: 'bg-umay-blue/10 border-umay-blue/30 text-umay-blue shadow-sm [&>svg]:text-umay-blue *:[[data-slot=alert-description]]:text-umay-blue/90',
+          'bg-warning-subtle border-warning/30 text-warning [&>svg]:text-warning *:[[data-slot=alert-description]]:text-warning/90',
+        info: 'bg-accent-subtle border-accent/30 text-accent [&>svg]:text-accent *:[[data-slot=alert-description]]:text-accent/90',
         success:
-          'bg-signal-green/10 border-signal-green/30 text-signal-green shadow-sm [&>svg]:text-signal-green *:[[data-slot=alert-description]]:text-signal-green/90',
+          'bg-success-subtle border-success/30 text-success [&>svg]:text-success *:[[data-slot=alert-description]]:text-success/90',
       },
     },
     defaultVariants: {

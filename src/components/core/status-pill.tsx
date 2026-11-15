@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Clock,
   Info,
-  PackageX,
   Wrench,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -34,56 +33,49 @@ const TONE_STYLES: Record<
   { container: string; Icon: React.ComponentType<{ className?: string }> }
 > = {
   ok: {
-    container:
-      'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    container: 'border-success/20 bg-success-subtle text-success',
     Icon: CheckCircle2,
   },
   active: {
-    container:
-      'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    container: 'border-success/20 bg-success-subtle text-success',
     Icon: CheckCircle2,
   },
   due_soon: {
-    container:
-      'border-amber-500/35 bg-amber-500/10 text-amber-700 dark:text-amber-300',
+    container: 'border-warning/25 bg-warning-subtle text-warning',
     Icon: Clock,
   },
   low_stock: {
-    container:
-      'border-amber-500/35 bg-amber-500/10 text-amber-700 dark:text-amber-300',
-    Icon: AlertTriangle,
-  },
-  overdue: {
-    container: 'border-red-500/35 bg-red-500/10 text-red-700 dark:text-red-400',
+    container: 'border-warning/25 bg-warning-subtle text-warning',
     Icon: AlertCircle,
   },
+  overdue: {
+    container: 'border-danger/25 bg-danger-subtle text-danger',
+    Icon: AlertTriangle,
+  },
   out_of_stock: {
-    container: 'border-red-500/35 bg-red-500/10 text-red-700 dark:text-red-400',
-    Icon: PackageX,
+    container: 'border-danger/25 bg-danger-subtle text-danger',
+    Icon: AlertTriangle,
   },
   in_repair: {
-    container:
-      'border-amber-500/35 bg-amber-500/10 text-amber-700 dark:text-amber-300',
+    container: 'border-warning/25 bg-warning-subtle text-warning',
     Icon: Wrench,
   },
   lent: {
-    container:
-      'border-umay-blue/35 bg-umay-blue/10 text-umay-blue',
+    container: 'border-info/25 bg-info-subtle text-info',
     Icon: Info,
   },
   discarded: {
-    container: 'border-border bg-muted text-muted-foreground',
+    container: 'border-border bg-surface-sunken text-text-muted',
     Icon: Archive,
   },
   info: {
-    container:
-      'border-umay-blue/35 bg-umay-blue/10 text-umay-blue',
+    container: 'border-info/25 bg-info-subtle text-info',
     Icon: Info,
   },
 };
 
 /**
- * Color-blind-safe status badge combining color, icon, and explicit text.
+ * Color-blind-safe status badge combining semantic color, 14px icon, and explicit text.
  */
 export function StatusPill({ tone, label, className }: StatusPillProps) {
   const { container, Icon } = TONE_STYLES[tone];
@@ -93,7 +85,7 @@ export function StatusPill({ tone, label, className }: StatusPillProps) {
       data-slot="status-pill"
       data-tone={tone}
       className={cn(
-        'inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-2 py-0.5 text-xs font-medium leading-tight',
+        'inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-2 py-0.5 text-caption font-medium leading-tight',
         container,
         className,
       )}

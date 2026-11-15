@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { routing } from '@/i18n/routing';
-import { hasAdminSession, hasUserSession } from '@/lib/auth/session';
+import { hasUserSession } from '@/lib/auth/session';
 
 const AUTH_ENTRY = '/home';
-const ADMIN_ENTRY = '/admin';
-const ADMIN_LOGIN = '/admin/login';
 const LOCALE_HEADER = 'X-NEXT-INTL-LOCALE';
 
 function applySecurityHeaders(response: NextResponse): NextResponse {
@@ -60,24 +58,6 @@ export function proxy(request: NextRequest) {
   }
 
   const hasSession = hasUserSession(request);
-  const hasAdmin = hasAdminSession(request);
-  const isAdminLogin = pathname === ADMIN_LOGIN;
-  const isAdminRoute =
-    pathname === ADMIN_ENTRY || pathname.startsWith(`${ADMIN_ENTRY}/`);
-
-  if (isAdminLogin) {
-    if (hasAdmin) {
-      return redirectWithSecurity(new URL(ADMIN_ENTRY, request.url));
-    }
-    return withLocaleHeader(request);
-  }
-
-  if (isAdminRoute) {
-    if (!hasAdmin) {
-      return redirectWithSecurity(new URL(ADMIN_LOGIN, request.url));
-    }
-    return withLocaleHeader(request);
-  }
 
   if (pathname === '/') {
     return withLocaleHeader(request);

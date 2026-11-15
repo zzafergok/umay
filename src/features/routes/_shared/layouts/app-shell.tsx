@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Link } from '@/components/core/link';
 import {
   Activity,
@@ -16,18 +15,16 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/core/button';
-import { AdminAppShellLayout } from '@/components/layout/AdminAppShellLayout';
 import { AppShellLayout } from '@/components/layout/AppShellLayout';
 import { LanguageSwitcher } from '@/components/layout/language-switcher';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
+import { UmayMark } from '@/components/shared/umay-brand';
 import { cn } from '@/lib/utils';
 import { CommandPalette } from '@/components/layout/command-palette';
 import { getCurrentLocale } from '@/lib/i18n/server-locale';
-import { siteMetadata } from '@/lib/metadata/site-metadata';
 import { getShellCopy } from './i18n';
 import { UmayBottomNav } from './umay-bottom-nav';
-import type { ShellCopy } from './types';
-import type { ShellNavItem } from './types';
+import type { ShellCopy, ShellNavItem } from './types';
 
 const navIcons = {
   activity: Activity,
@@ -51,9 +48,6 @@ function mapNavItems(
   items: ReturnType<typeof getShellCopy>['authNav'],
 ): ShellNavItem[];
 function mapNavItems(
-  items: ReturnType<typeof getShellCopy>['adminNav'],
-): ShellNavItem[];
-function mapNavItems(
   items: Array<{
     href: string;
     label: string;
@@ -75,23 +69,16 @@ export function BrandMark({
   copy: ShellCopy['brand'];
 }) {
   return (
-    <Link href="/" className="flex items-center gap-3">
-      <span className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-umay-cosmic shadow-sm">
-        <Image
-          src={siteMetadata.assets.logo}
-          alt={`${copy.title} brand mark`}
-          width={36}
-          height={36}
-          className="h-full w-full object-cover"
-          priority
-        />
+    <Link href="/" className="flex items-center gap-2.5">
+      <span className="bg-surface-sunken flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border">
+        <UmayMark className="h-5 w-5" />
       </span>
       {!compact && (
         <span>
-          <span className="block font-mono text-2xs font-black uppercase tracking-widest text-foreground">
+          <span className="font-heading text-title text-text block font-bold tracking-tight">
             {copy.title}
           </span>
-          <span className="block text-xs text-muted-foreground">
+          <span className="text-text-muted block text-caption">
             {copy.subtitle}
           </span>
         </span>
@@ -122,12 +109,12 @@ function ShellNav({
           variant="ghost"
           size="sm"
           className={cn(
-            'rounded-none text-compact font-bold uppercase tracking-widest text-ash hover:text-titanium',
+            'text-body-sm text-text-muted hover:text-text font-medium',
             direction === 'column' && 'justify-start',
           )}
         >
           <Link href={item.href}>
-            <item.icon className="mr-2 h-3.5 w-3.5" />
+            <item.icon className="mr-2 h-4 w-4" />
             {item.label}
           </Link>
         </Button>
@@ -138,7 +125,7 @@ function ShellNav({
 
 function ShellControls() {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1.5">
       <ThemeToggle />
       <LanguageSwitcher />
     </div>
@@ -150,9 +137,9 @@ export async function PublicShell({ children }: { children: React.ReactNode }) {
   const copy = getShellCopy(locale);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-40 border-b border-gunmetal bg-void-black/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
+    <div className="bg-bg text-text min-h-screen">
+      <header className="bg-surface sticky top-0 z-40 border-b border-border">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <BrandMark copy={copy.brand} />
           <div className="flex items-center gap-3">
             <ShellNav items={mapNavItems(copy.publicNav)} />
@@ -173,8 +160,4 @@ export async function AuthShell({ children }: { children: React.ReactNode }) {
       <UmayBottomNav />
     </AppShellLayout>
   );
-}
-
-export async function AdminShell({ children }: { children: React.ReactNode }) {
-  return <AdminAppShellLayout>{children}</AdminAppShellLayout>;
 }

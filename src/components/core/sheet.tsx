@@ -38,7 +38,7 @@ export function SheetOverlay({
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        'fixed inset-0 z-50 bg-void-black/80 backdrop-blur-xs',
+        'bg-text/35 dark:bg-bg/75 fixed inset-0 z-50',
         'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
         className,
       )}
@@ -48,16 +48,16 @@ export function SheetOverlay({
 }
 
 export const sheetVariants = cva(
-  'fixed z-50 flex flex-col gap-4 border-gunmetal/80 bg-obsidian p-6 text-titanium shadow-2xl transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out',
+  'fixed z-50 flex flex-col gap-4 border border-border dark:border-border-strong bg-surface-raised p-5 text-text shadow-float transition ease-out data-[state=closed]:duration-200 data-[state=open]:duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out',
   {
     variants: {
       side: {
-        top: 'inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
+        top: 'inset-x-0 top-0 rounded-b-lg border-t-0 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
         bottom:
-          'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
-        left: 'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
+          'inset-x-0 bottom-0 rounded-t-lg border-b-0 pb-[calc(1.25rem+env(safe-area-inset-bottom))] data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
+        left: 'inset-y-0 left-0 h-full w-3/4 rounded-r-lg border-l-0 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
         right:
-          'inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
+          'inset-y-0 right-0 h-full w-3/4 rounded-l-lg border-r-0 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
       },
     },
     defaultVariants: {
@@ -90,14 +90,20 @@ export const SheetContent = React.forwardRef<
         className={cn(sheetVariants({ side }), className)}
         {...props}
       >
+        {side === 'bottom' ? (
+          <div
+            aria-hidden="true"
+            className="bg-border-strong mx-auto -mt-1 mb-1 h-1 w-10 shrink-0 rounded-full"
+          />
+        ) : null}
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close
             data-slot="sheet-close"
-            className="rounded-xs absolute right-4 top-4 text-ash opacity-70 transition-opacity hover:text-titanium hover:opacity-100 focus:outline-none focus:ring-1 focus:ring-umay-blue/50 disabled:pointer-events-none [&_svg]:size-4"
+            className="text-text-muted hover:bg-surface-sunken hover:text-text focus-visible:ring-offset-surface-raised absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none [&_svg]:size-4"
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">Kapat</span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Content>
@@ -142,10 +148,7 @@ export function SheetTitle({
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
-      className={cn(
-        'font-mono text-base font-semibold leading-none tracking-tight text-titanium',
-        className,
-      )}
+      className={cn('font-heading text-title text-text', className)}
       {...props}
     />
   );
@@ -158,7 +161,7 @@ export function SheetDescription({
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"
-      className={cn('text-sm text-ash/80', className)}
+      className={cn('text-body-sm text-text-muted', className)}
       {...props}
     />
   );

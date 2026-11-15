@@ -24,14 +24,14 @@ export function DeleteAnimationStage({
 }: DeleteAnimationStageProps) {
   return (
     <div
-      className="absolute inset-0 z-10 overflow-hidden bg-obsidian [background-image:linear-gradient(hsl(var(--gunmetal)/0.18)_1px,transparent_1px)] [background-size:100%_24px]"
+      className="bg-surface absolute inset-0 z-10 overflow-hidden [background-image:linear-gradient(rgb(var(--border)/0.4)_1px,transparent_1px)] [background-size:100%_24px]"
       role="status"
       aria-live="polite"
       aria-label={`${itemName} ${dialogCopy.deleting}`}
     >
       <div
         className={cn(
-          'absolute left-1/2 top-[42%] flex min-h-[112px] w-[68%] -translate-x-1/2 -translate-y-1/2 flex-col justify-center gap-[7px] overflow-hidden border border-alert-red/65 bg-void-black p-[18px] text-center text-titanium shadow-[8px_9px_0_hsl(var(--alert-red)/0.12)] motion-reduce:animate-none motion-reduce:transition-none',
+          'border-danger/60 bg-surface-raised text-text shadow-float absolute left-1/2 top-[42%] flex min-h-[112px] w-[68%] -translate-x-1/2 -translate-y-1/2 flex-col justify-center gap-[7px] overflow-hidden rounded-md border p-[18px] text-center motion-reduce:animate-none motion-reduce:transition-none',
           phase === 'crumpling' && 'animate-paper-crumple',
           phase === 'tossing' && 'animate-paper-toss',
           phase === 'waiting' &&

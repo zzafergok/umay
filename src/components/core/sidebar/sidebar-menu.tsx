@@ -47,7 +47,7 @@ export const sidebarMenuButtonVariants = cva(
       variant: {
         default: 'hover:bg-gunmetal/40 hover:text-titanium',
         outline:
-          'bg-void-black shadow-[0_0_0_1px_hsl(var(--gunmetal)/0.6)] hover:bg-gunmetal/40 hover:text-titanium',
+          'bg-surface border border-border hover:bg-surface-sunken hover:text-text',
       },
       size: {
         default: 'h-8 text-sm',

@@ -11,7 +11,7 @@ const Table = React.forwardRef<
     <table
       ref={ref}
       data-slot="table"
-      className={cn('w-full caption-bottom text-sm', className)}
+      className={cn('text-body-sm w-full caption-bottom', className)}
       {...props}
     />
   </div>
@@ -25,7 +25,10 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     data-slot="table-header"
-    className={cn('[&_tr]:border-b [&_tr]:border-gunmetal/40', className)}
+    className={cn(
+      'bg-surface-sunken sticky top-0 z-10 [&_tr]:border-b [&_tr]:border-border',
+      className,
+    )}
     {...props}
   />
 ));
@@ -52,7 +55,7 @@ const TableFooter = React.forwardRef<
     ref={ref}
     data-slot="table-footer"
     className={cn(
-      'border-t border-gunmetal/40 bg-gunmetal/20 font-mono font-medium text-titanium [&>tr]:last:border-b-0',
+      'bg-surface-sunken text-text border-t border-border font-medium [&>tr]:last:border-b-0',
       className,
     )}
     {...props}
@@ -68,7 +71,7 @@ const TableRow = React.forwardRef<
     ref={ref}
     data-slot="table-row"
     className={cn(
-      'has-aria-expanded:bg-gunmetal/20 border-b border-gunmetal/30 transition-colors hover:bg-gunmetal/20 data-[state=selected]:bg-gunmetal/30',
+      'hover:bg-surface-sunken/60 data-[state=selected]:bg-accent-subtle h-11 border-b border-border transition-colors duration-150',
       className,
     )}
     {...props}
@@ -84,7 +87,7 @@ const TableHead = React.forwardRef<
     ref={ref}
     data-slot="table-head"
     className={cn(
-      'h-10 whitespace-nowrap px-3 text-start align-middle font-mono font-medium text-ash [&:has([role=checkbox])]:pe-0 [&>[role=checkbox]]:translate-y-[2px]',
+      'text-text-muted h-10 whitespace-nowrap px-3 text-start align-middle text-caption font-medium [&:has([role=checkbox])]:pe-0 [&>[role=checkbox]]:translate-y-[2px]',
       className,
     )}
     {...props}
@@ -100,7 +103,7 @@ const TableCell = React.forwardRef<
     ref={ref}
     data-slot="table-cell"
     className={cn(
-      'whitespace-nowrap p-3 align-middle font-mono text-titanium [&:has([role=checkbox])]:pe-0 [&>[role=checkbox]]:translate-y-[2px]',
+      'text-body-sm text-text whitespace-nowrap px-3 py-2.5 align-middle [&:has([role=checkbox])]:pe-0 [&>[role=checkbox]]:translate-y-[2px]',
       className,
     )}
     {...props}
@@ -115,7 +118,7 @@ const TableCaption = React.forwardRef<
   <caption
     ref={ref}
     data-slot="table-caption"
-    className={cn('mt-4 text-sm text-ash/60', className)}
+    className={cn('text-text-muted mt-3 text-caption', className)}
     {...props}
   />
 ));

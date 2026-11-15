@@ -22,7 +22,7 @@ export function StandardCardGrid({
       onClick={onClick}
       className={cn(
         'group cursor-pointer rounded-sm border transition-all duration-300',
-        'border-gunmetal bg-obsidian hover:border-umay-blue/50 hover:bg-gunmetal/20 hover:shadow-lg',
+        'hover:border-umay-blue/50 border-gunmetal bg-obsidian hover:bg-gunmetal/20 hover:shadow-lg',
         'flex h-full flex-col gap-3 p-4',
         className,
       )}
@@ -68,10 +68,10 @@ export function StandardCardGrid({
                   action.onClick(e);
                 }}
                 className={cn(
-                  'h-6 w-6 rounded-none border border-gunmetal/30 bg-transparent text-ash',
+                  'text-text-muted h-7 w-7 rounded-md border border-border bg-transparent',
                   action.variant === 'destructive' || action.variant === 'rose'
-                    ? 'hover:border-alert-red/30 hover:bg-alert-red/10 hover:text-alert-red'
-                    : 'hover:border-umay-blue/30 hover:bg-umay-blue/10 hover:text-umay-blue',
+                    ? 'hover:border-danger/40 hover:bg-danger-subtle hover:text-danger'
+                    : 'hover:bg-accent-subtle hover:border-accent/40 hover:text-accent',
                 )}
                 title={action.label}
               >
@@ -83,7 +83,7 @@ export function StandardCardGrid({
       </div>
 
       {/* Title */}
-      <h3 className="line-clamp-2 text-sm font-bold uppercase leading-snug tracking-tight text-titanium transition-colors group-hover:text-umay-blue">
+      <h3 className="group-hover:text-umay-blue line-clamp-2 text-sm font-bold uppercase leading-snug tracking-tight text-titanium transition-colors">
         {title}
       </h3>
 
@@ -121,7 +121,7 @@ export function StandardCardGrid({
           </div>
           <div className="h-1 w-full overflow-hidden rounded-sm bg-gunmetal/60">
             <div
-              className="h-full bg-gradient-to-r from-umay-blue to-signal-green transition-all duration-500"
+              className="from-umay-blue h-full bg-gradient-to-r to-signal-green transition-all duration-500"
               style={{ width: `${progress.percent}%` }}
             />
           </div>

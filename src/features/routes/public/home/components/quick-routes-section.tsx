@@ -30,52 +30,50 @@ export function QuickRoutesSection({
   return (
     <section className="space-y-6">
       <div className="mx-auto max-w-2xl space-y-2 text-center">
-        <Badge
-          variant="outline"
-          className="text-2xs font-bold uppercase tracking-wider"
-        >
-          {quickRoutesSection.badge}
-        </Badge>
-        <h2 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
+        <Badge variant="outline">{quickRoutesSection.badge}</Badge>
+        <h2 className="font-heading text-title sm:text-display text-text">
           {quickRoutesSection.title}
         </h2>
-        <p className="text-sm text-muted-foreground sm:text-base">
+        <p className="text-body-sm text-text-muted">
           {quickRoutesSection.description}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {quickRoutesSection.routes.map((route) => {
           const Icon = routeIconMap[route.icon] ?? Globe2;
           return (
             <Link
               key={route.href}
               href={route.href}
-              className="group block focus:outline-none"
+              className="focus-visible:ring-offset-bg group block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
-              <Card className="flex items-center justify-between border-border/70 bg-card p-5 transition-all duration-200 group-hover:border-umay-blue/50 group-hover:shadow-sm">
-                <div className="flex items-center gap-3.5">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-muted/40 text-foreground transition-colors group-hover:border-umay-blue/30 group-hover:text-umay-blue">
-                    <Icon className="h-5 w-5" />
+              <Card
+                interactive
+                className="flex flex-row items-center justify-between p-4"
+              >
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="bg-surface-sunken text-text-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border transition-colors group-hover:text-accent">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-foreground transition-colors group-hover:text-umay-blue">
+                      <span className="text-body-sm text-text truncate font-medium group-hover:text-accent">
                         {route.title}
                       </span>
-                      <Badge
-                        variant="secondary"
-                        className="text-3xs px-1.5 py-0 font-semibold"
-                      >
+                      <Badge variant="secondary" size="sm">
                         {route.badge}
                       </Badge>
                     </div>
-                    <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                    <p className="text-text-muted mt-0.5 truncate text-caption">
                       {route.subtitle}
                     </p>
                   </div>
                 </div>
-                <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground/60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-umay-blue" />
+                <ArrowUpRight
+                  className="text-text-muted h-4 w-4 shrink-0 group-hover:text-accent"
+                  aria-hidden="true"
+                />
               </Card>
             </Link>
           );

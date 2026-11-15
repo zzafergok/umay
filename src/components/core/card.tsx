@@ -5,20 +5,22 @@ import { cn } from '@/lib/utils';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'default' | 'sm';
+  interactive?: boolean;
 }
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, size = 'default', ...props }, ref) => (
+  ({ className, size = 'default', interactive = false, ...props }, ref) => (
     <div
       ref={ref}
       data-slot="card"
       data-size={size}
       className={cn(
-        'group/card flex select-none flex-col rounded-sm border border-gunmetal/30 bg-obsidian/60 text-titanium shadow-sm',
-        '[--card-spacing:1.5rem] data-[size=sm]:[--card-spacing:1rem]',
+        'group/card flex flex-col rounded-md border border-border bg-surface text-text transition-colors duration-150',
+        '[--card-spacing:1rem] md:[--card-spacing:1.25rem] data-[size=sm]:[--card-spacing:0.875rem]',
         'gap-[var(--card-spacing)] py-[var(--card-spacing)]',
         'has-[[data-slot=card-footer]]:pb-0',
-        '*:[img:first-child]:rounded-t-sm *:[img:last-child]:rounded-b-sm has-[>img:first-child]:pt-0',
+        '*:[img:first-child]:rounded-t-md *:[img:last-child]:rounded-b-md has-[>img:first-child]:pt-0',
+        interactive && 'cursor-pointer hover:border-border-strong',
         className,
       )}
       {...props}
@@ -53,7 +55,7 @@ export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
       ref={ref}
       data-slot="card-title"
       className={cn(
-        'col-start-1 text-lg font-semibold leading-tight tracking-tight text-titanium',
+        'col-start-1 font-heading text-title text-text',
         className,
       )}
       {...props}
@@ -71,7 +73,7 @@ export const CardDescription = React.forwardRef<
   <p
     ref={ref}
     data-slot="card-description"
-    className={cn('col-start-1 text-sm leading-relaxed text-ash', className)}
+    className={cn('col-start-1 text-body-sm text-text-muted', className)}
     {...props}
   />
 ));
@@ -85,7 +87,7 @@ export const CardAction = React.forwardRef<HTMLDivElement, CardActionProps>(
       ref={ref}
       data-slot="card-action"
       className={cn(
-        'col-start-2 row-span-2 row-start-1 self-start justify-self-end rtl:justify-self-start',
+        'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
         className,
       )}
       {...props}

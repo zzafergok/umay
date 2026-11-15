@@ -60,34 +60,9 @@
       "icon": "settings"
     }
   ],
-  "adminNav": [
-    {
-      "href": "/admin",
-      "label": "Overview",
-      "subtitle": "Management overview",
-      "icon": "shield"
-    },
-    {
-      "href": "/admin/users",
-      "label": "Users",
-      "subtitle": "User management",
-      "icon": "users"
-    },
-    {
-      "href": "/admin/settings",
-      "label": "Settings",
-      "subtitle": "System settings",
-      "icon": "settings"
-    }
-  ],
   "authHeader": {
     "title": "Umay Inventory",
     "subtitle": "Your home's abundance, accounted for."
-  },
-  "adminHeader": {
-    "title": "Admin Area",
-    "subtitle": "System & data management",
-    "manageLabel": "Manage"
   },
   "loading": "Loading...",
   "footer": "Umay © 2026",

@@ -78,10 +78,10 @@ export function ComboboxContent({
           data-slot="combobox-content"
           data-chips={!!anchor}
           className={cn(
-            'group/combobox-content w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) relative max-h-96 min-w-[calc(var(--anchor-width)+--spacing(7))] overflow-hidden rounded-sm border border-gunmetal/60 bg-obsidian/95 text-titanium shadow-xl backdrop-blur-xs duration-100',
+            'group/combobox-content w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) relative max-h-96 min-w-[calc(var(--anchor-width)+--spacing(7))] overflow-hidden rounded-lg border border-border bg-surface-raised text-text shadow-float duration-100 dark:border-border-strong',
             'data-[chips=true]:min-w-(--anchor-width)',
             'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-            '*:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-gunmetal/40 *:data-[slot=input-group]:bg-gunmetal/20 *:data-[slot=input-group]:shadow-none',
+            '*:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-9 *:data-[slot=input-group]:border-border *:data-[slot=input-group]:bg-surface-sunken *:data-[slot=input-group]:shadow-none',
             'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
             className,
           )}

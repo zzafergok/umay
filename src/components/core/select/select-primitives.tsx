@@ -18,10 +18,10 @@ export const SelectTrigger = React.forwardRef<
     ref={ref}
     data-slot="select-trigger"
     className={cn(
-      'shadow-xs flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-sm border border-gunmetal/80 bg-void-black px-3 py-1 font-mono text-sm text-titanium outline-none transition-colors',
-      'placeholder:text-ash/50 focus:border-umay-blue/70 focus-visible:ring-1 focus-visible:ring-umay-blue/50',
+      'flex h-11 min-h-[44px] w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border bg-surface-sunken px-3 py-2 text-body text-text outline-none transition-colors duration-150',
+      'placeholder:text-text-subtle focus:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      'aria-invalid:border-alert-red aria-invalid:ring-1 aria-invalid:ring-alert-red/30',
+      'aria-invalid:border-danger aria-invalid:focus-visible:ring-danger',
       '[&>span]:line-clamp-1',
       className,
     )}
@@ -29,7 +29,7 @@ export const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="size-4 shrink-0 text-ash" />
+      <ChevronDown className="size-4 shrink-0 text-text-muted" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -43,7 +43,7 @@ export const SelectScrollUpButton = React.forwardRef<
     ref={ref}
     data-slot="select-scroll-up-button"
     className={cn(
-      'flex cursor-default items-center justify-center py-1 text-ash',
+      'flex cursor-default items-center justify-center py-1 text-text-muted',
       className,
     )}
     {...props}
@@ -61,7 +61,7 @@ export const SelectScrollDownButton = React.forwardRef<
     ref={ref}
     data-slot="select-scroll-down-button"
     className={cn(
-      'flex cursor-default items-center justify-center py-1 text-ash',
+      'flex cursor-default items-center justify-center py-1 text-text-muted',
       className,
     )}
     {...props}
@@ -107,9 +107,8 @@ export const SelectContent = React.forwardRef<
           ref={ref}
           data-slot="select-content"
           className={cn(
-            'relative z-[10000] max-h-96 min-w-[8rem] overflow-hidden rounded-sm border border-gunmetal/60 bg-obsidian/95 p-1 text-titanium shadow-xl outline-none backdrop-blur-xs',
-            'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-            'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+            'relative z-[10000] max-h-96 min-w-[8rem] overflow-hidden rounded-md border border-border dark:border-border-strong bg-surface-raised p-1 text-text shadow-float outline-none',
+            'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             position === 'popper' &&
               'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
             className,
@@ -167,7 +166,7 @@ export const SelectLabel = React.forwardRef<
     ref={ref}
     data-slot="select-label"
     className={cn(
-      'py-1.5 pl-8 pr-2 text-xs font-semibold text-titanium',
+      'py-1.5 pl-8 pr-2 text-caption font-semibold text-text-muted',
       className,
     )}
     {...props}
@@ -183,15 +182,15 @@ export const SelectItem = React.forwardRef<
     ref={ref}
     data-slot="select-item"
     className={cn(
-      'rounded-xs relative flex w-full cursor-pointer select-none items-center py-1.5 pl-7 pr-2 font-mono text-xs text-titanium outline-none transition-colors',
-      'focus:bg-gunmetal/40 focus:text-titanium data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
+      'relative flex min-h-[36px] w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-7 pr-2 text-body-sm text-text outline-none transition-colors duration-150',
+      'focus:bg-accent-subtle focus:text-text data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
       className,
     )}
     {...props}
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator data-slot="select-item-indicator">
-        <Check className="size-4 text-umay-blue" />
+        <Check className="size-4 text-accent" />
       </SelectPrimitive.ItemIndicator>
     </span>
 
@@ -214,7 +213,7 @@ export const SelectSeparator = React.forwardRef<
   <SelectPrimitive.Separator
     ref={ref}
     data-slot="select-separator"
-    className={cn('-mx-1 my-1 h-px bg-gunmetal/40', className)}
+    className={cn('-mx-1 my-1 h-px bg-border', className)}
     {...props}
   />
 ));

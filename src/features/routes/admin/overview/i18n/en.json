@@ -1,9 +1,0 @@
-{
-  "title": "Management Overview",
-  "description": "Management dashboard for users, settings, and Umay status.",
-  "cards": [
-    { "label": "Umay status", "value": "Ready", "icon": "activity" },
-    { "label": "Access level", "value": "Admin", "icon": "shieldCheck" },
-    { "label": "Inventory status", "value": "Active", "icon": "database" }
-  ]
-}

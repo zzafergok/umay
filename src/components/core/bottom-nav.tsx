@@ -19,7 +19,7 @@ export interface BottomNavProps {
 }
 
 /**
- * Mobile-only bottom navigation bar with >= 44px touch targets.
+ * Mobile-only bottom navigation bar with >= 56px targets and safe-area padding.
  */
 export function BottomNav({
   items,
@@ -33,11 +33,11 @@ export function BottomNav({
       aria-label={ariaLabel}
       data-slot="bottom-nav"
       className={cn(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85 md:hidden',
+        'fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden',
         className,
       )}
     >
-      <ul className="grid h-16 grid-cols-5 items-center">
+      <ul className="grid h-14 grid-cols-5 items-center">
         {items.map((item) => {
           const isActive = item.matchPrefix
             ? pathname === item.href || pathname.startsWith(`${item.href}/`)
@@ -50,14 +50,14 @@ export function BottomNav({
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  'flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-sm px-2 py-1 text-[11px] font-medium transition-colors duration-150',
+                  'flex min-h-[56px] min-w-[56px] flex-col items-center justify-center gap-0.5 rounded-sm px-1.5 py-1 text-caption font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
                   isActive
-                    ? 'text-umay-blue'
-                    : 'text-muted-foreground hover:text-foreground',
+                    ? 'text-accent'
+                    : 'text-text-muted hover:text-text',
                 )}
               >
                 <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-                <span className="truncate max-w-[60px]">{item.label}</span>
+                <span className="max-w-[64px] truncate">{item.label}</span>
               </Link>
             </li>
           );

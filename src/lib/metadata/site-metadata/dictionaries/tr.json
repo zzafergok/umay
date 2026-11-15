@@ -18,25 +18,5 @@
     "title": "Umay – Ayarlar",
     "description": "Umay uygulama tercihleri, yedekleme ve hesap ayarları.",
     "aiPurpose": "Kullanıcı ayarlar rotası."
-  },
-  "adminLogin": {
-    "title": "Umay – Yönetici Girişi",
-    "description": "Umay yönetim erişimi için giriş arayüzü.",
-    "aiPurpose": "Yönetim giriş rotası."
-  },
-  "adminOverview": {
-    "title": "Umay – Yönetim Özeti",
-    "description": "Sistem ve veri yönetimi özeti.",
-    "aiPurpose": "Korumalı yönetici genel bakış rotası."
-  },
-  "adminUsers": {
-    "title": "Umay – Kullanıcılar",
-    "description": "Kullanıcı ve yetkilendirme listesi.",
-    "aiPurpose": "Korumalı kullanıcı rotası."
-  },
-  "adminSettings": {
-    "title": "Umay – Sistem Ayarları",
-    "description": "Umay sistem düzeyindeki yapılandırma arayüzü.",
-    "aiPurpose": "Korumalı yönetici yapılandırma rotası."
   }
 }

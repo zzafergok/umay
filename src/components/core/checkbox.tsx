@@ -13,13 +13,13 @@ export const Checkbox = React.forwardRef<
     ref={ref}
     data-slot="checkbox"
     className={cn(
-      'shadow-xs peer size-4 shrink-0 rounded-[4px] border border-gunmetal/80 bg-obsidian text-white outline-none transition-shadow',
-      'hover:border-gunmetal hover:bg-gunmetal/20',
-      'focus-visible:border-umay-blue focus-visible:ring-[3px] focus-visible:ring-umay-blue/20',
+      'peer size-4 shrink-0 rounded-xs border border-border-strong bg-surface text-on-accent outline-none transition-colors',
+      'hover:border-accent/60 hover:bg-surface-sunken',
+      'focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      'aria-invalid:border-alert-red aria-invalid:ring-alert-red/20',
-      'data-[state=checked]:border-umay-blue data-[state=checked]:bg-umay-blue data-[state=checked]:text-white',
-      'data-[state=indeterminate]:border-umay-blue data-[state=indeterminate]:bg-umay-blue data-[state=indeterminate]:text-white',
+      'aria-invalid:border-danger aria-invalid:ring-danger/20',
+      'data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-on-accent',
+      'data-[state=indeterminate]:border-accent data-[state=indeterminate]:bg-accent data-[state=indeterminate]:text-on-accent',
       className,
     )}
     {...props}

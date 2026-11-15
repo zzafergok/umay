@@ -3,7 +3,12 @@
 import * as React from 'react';
 import { Activity, Download, FolderTree, Tags } from 'lucide-react';
 import { Button } from '@/components/core/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/card';
 import { Link } from '@/components/core/link';
 import { toast } from '@/components/core/toast';
 import { useItemsQuery } from '@/hooks/use-inventory-hooks';
@@ -42,7 +47,16 @@ export function BackupAndExportCard() {
   };
 
   const handleExportCsv = () => {
-    const headers = ['id', 'name', 'type', 'quantity', 'unit', 'minQuantity', 'barcode', 'status'];
+    const headers = [
+      'id',
+      'name',
+      'type',
+      'quantity',
+      'unit',
+      'minQuantity',
+      'barcode',
+      'status',
+    ];
     const rows = items.map((i) =>
       [
         i.id,
@@ -62,53 +76,53 @@ export function BackupAndExportCard() {
   };
 
   return (
-    <div className="space-y-6">
-      <Card className="border-gunmetal bg-obsidian">
+    <div className="space-y-4">
+      <Card>
         <CardHeader>
-          <CardTitle className="text-sm uppercase tracking-widest">
-            Hızlı Araçlar
-          </CardTitle>
+          <CardTitle>Hızlı araçlar</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="secondary" size="sm">
             <Link href="/locations">
-              <FolderTree className="mr-1.5 h-4 w-4" />
+              <FolderTree className="mr-1.5 h-4 w-4" aria-hidden="true" />
               Konumlar
             </Link>
           </Button>
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="secondary" size="sm">
             <Link href="/categories">
-              <Tags className="mr-1.5 h-4 w-4" />
+              <Tags className="mr-1.5 h-4 w-4" aria-hidden="true" />
               Kategoriler
             </Link>
           </Button>
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="secondary" size="sm">
             <Link href="/activity">
-              <Activity className="mr-1.5 h-4 w-4" />
-              Faaliyet & Bildirimler
+              <Activity className="mr-1.5 h-4 w-4" aria-hidden="true" />
+              Faaliyet ve bildirimler
             </Link>
           </Button>
         </CardContent>
       </Card>
 
-      <Card className="border-gunmetal bg-obsidian">
+      <Card>
         <CardHeader>
-          <CardTitle className="text-sm uppercase tracking-widest">
-            Veri Yedekleme & Dışa Aktarma
-          </CardTitle>
+          <CardTitle>Yedekleme ve dışa aktarma</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={handleExportCsv}
             disabled={items.length === 0}
           >
-            <Download className="mr-1.5 h-4 w-4" />
-            Ürünleri CSV İndir ({items.length})
+            <Download className="mr-1.5 h-4 w-4" aria-hidden="true" />
+            Ürünleri CSV indir ({items.length})
           </Button>
-          <Button onClick={handleExportJson} disabled={exporting}>
-            <Download className="mr-1.5 h-4 w-4" />
-            {exporting ? 'Hazırlanıyor...' : 'Tam JSON Yedek Al'}
+          <Button
+            variant="primary"
+            onClick={handleExportJson}
+            disabled={exporting}
+          >
+            <Download className="mr-1.5 h-4 w-4" aria-hidden="true" />
+            {exporting ? 'Hazırlanıyor...' : 'Tam JSON yedek al'}
           </Button>
         </CardContent>
       </Card>

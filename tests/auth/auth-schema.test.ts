@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  adminSettingsSchema,
-  loginSchema,
-  userSettingsSchema,
-} from '@/lib/auth/auth-schema';
+import { loginSchema, userSettingsSchema } from '@/lib/auth/auth-schema';
 
 describe('Auth Validation Schemas', () => {
   describe('loginSchema', () => {
@@ -11,27 +7,12 @@ describe('Auth Validation Schemas', () => {
       const validData = {
         email: 'pilot@umay.space',
         password: 'securePassword123',
-        isAdmin: false,
       };
 
       const result = loginSchema.safeParse(validData);
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.email).toBe('pilot@umay.space');
-        expect(result.data.isAdmin).toBe(false);
-      }
-    });
-
-    it('should default isAdmin to false when omitted', () => {
-      const validData = {
-        email: 'user@umay.space',
-        password: 'password123',
-      };
-
-      const result = loginSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-      if (result.success) {
-        expect(result.data.isAdmin).toBe(false);
       }
     });
 
@@ -85,23 +66,6 @@ describe('Auth Validation Schemas', () => {
 
       const result = userSettingsSchema.safeParse(invalid);
       expect(result.success).toBe(false);
-    });
-  });
-
-  describe('adminSettingsSchema', () => {
-    it('should validate proper admin platform configuration', () => {
-      const valid = {
-        siteName: 'Umay Enterprise Platform',
-        maintenanceMode: true,
-        allowRegistration: false,
-      };
-
-      const result = adminSettingsSchema.safeParse(valid);
-      expect(result.success).toBe(true);
-      if (result.success) {
-        expect(result.data.siteName).toBe('Umay Enterprise Platform');
-        expect(result.data.maintenanceMode).toBe(true);
-      }
     });
   });
 });

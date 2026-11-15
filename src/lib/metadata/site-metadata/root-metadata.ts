@@ -7,9 +7,7 @@ export function buildRootMetadata(
   locale: Locale = routing.defaultLocale,
 ): Metadata {
   const title =
-    locale === 'tr'
-      ? 'Umay – Ev Envanteri'
-      : 'Umay – Home Inventory';
+    locale === 'tr' ? 'Umay – Ev Envanteri' : 'Umay – Home Inventory';
 
   return {
     metadataBase: siteMetadata.url,
@@ -24,7 +22,7 @@ export function buildRootMetadata(
     creator: siteMetadata.creator,
     publisher: siteMetadata.publisher,
     category: 'technology',
-    classification: 'application template',
+    classification: 'home inventory application',
     referrer: 'origin-when-cross-origin',
     formatDetection: {
       email: false,
@@ -34,6 +32,10 @@ export function buildRootMetadata(
     manifest: '/manifest.webmanifest',
     icons: {
       icon: [
+        {
+          url: '/umay-icon.svg',
+          type: 'image/svg+xml',
+        },
         {
           url: siteMetadata.assets.icon16,
           sizes: '16x16',
@@ -67,8 +69,8 @@ export function buildRootMetadata(
       other: [
         {
           rel: 'mask-icon',
-          url: siteMetadata.assets.icon48,
-          color: '#5d5dff',
+          url: '/umay-logo.svg',
+          color: '#D9622B',
         },
       ],
     },
@@ -84,9 +86,9 @@ export function buildRootMetadata(
       images: [
         {
           url: siteMetadata.assets.openGraph,
-          width: 1024,
-          height: 1024,
-          alt: `${siteMetadata.name} application template brand symbol`,
+          width: 512,
+          height: 512,
+          alt: `${siteMetadata.name} brand symbol`,
         },
       ],
       locale,

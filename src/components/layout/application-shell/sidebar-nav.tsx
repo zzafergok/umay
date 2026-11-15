@@ -21,32 +21,28 @@ export function SidebarNav({
   onNavigate,
 }: SidebarNavProps) {
   return (
-    <nav
-      className={`flex-1 space-y-1.5 font-mono text-xs uppercase tracking-wider ${
-        collapsed ? 'p-2' : 'p-3'
-      }`}
-    >
+    <nav className={`flex-1 space-y-1 ${collapsed ? 'p-2' : 'p-3'}`}>
       {navItems.map((item) => {
         const isActive = isNavItemActive(pathname, item);
         const Icon = item.icon;
 
         if (collapsed) {
-          const collapsedClassName = `flex h-12 w-full items-center justify-center overflow-hidden border transition-all ${
+          const collapsedClassName = `flex h-11 w-full items-center justify-center rounded-md border transition-colors duration-150 ${
             isActive
-              ? 'cursor-default border-l-4 border-umay-blue/40 border-l-umay-blue bg-background text-foreground shadow-md'
+              ? 'border-accent/25 bg-accent-subtle text-accent'
               : item.highlight
-                ? 'cursor-pointer border-border bg-background/40 text-umay-blue hover:border-muted-foreground hover:text-foreground'
-                : 'cursor-pointer border-transparent text-muted-foreground hover:border-border hover:bg-background/60 hover:text-foreground'
+                ? 'border-border bg-surface text-accent hover:border-border-strong'
+                : 'border-transparent text-text-muted hover:bg-surface-sunken hover:text-text'
           }`;
 
           const content = (
             <Icon
               className={`h-5 w-5 shrink-0 ${
                 isActive
-                  ? 'text-umay-blue'
+                  ? 'text-accent'
                   : item.highlight
                     ? 'text-warning'
-                    : 'text-muted-foreground'
+                    : 'text-text-muted'
               }`}
             />
           );
@@ -56,9 +52,9 @@ export function SidebarNav({
               key={item.href}
               content={
                 <div>
-                  <div className="font-bold">{item.label}</div>
+                  <div className="font-medium">{item.label}</div>
                   {item.subtitle && (
-                    <div className="text-2xs text-muted-foreground">
+                    <div className="text-text-muted text-caption">
                       {item.subtitle}
                     </div>
                   )}
@@ -88,12 +84,12 @@ export function SidebarNav({
           );
         }
 
-        const expandedClassName = `flex h-14 w-full items-center justify-between gap-2 overflow-hidden border px-3.5 transition-all ${
+        const expandedClassName = `flex min-h-[44px] w-full items-center justify-between gap-2 rounded-md border px-3 py-2 transition-colors duration-150 ${
           isActive
-            ? 'cursor-default border-l-4 border-umay-blue/40 border-l-umay-blue bg-background text-foreground shadow-md'
+            ? 'border-accent/25 bg-accent-subtle text-accent'
             : item.highlight
-              ? 'cursor-pointer border-border bg-background/40 text-umay-blue hover:border-muted-foreground hover:text-foreground'
-              : 'cursor-pointer border-transparent text-muted-foreground hover:border-border hover:bg-background/60 hover:text-foreground'
+              ? 'border-border bg-surface text-accent hover:border-border-strong'
+              : 'border-transparent text-text-muted hover:bg-surface-sunken hover:text-text'
         }`;
 
         const content = (
@@ -102,22 +98,24 @@ export function SidebarNav({
               <Icon
                 className={`h-4 w-4 shrink-0 ${
                   isActive
-                    ? 'text-umay-blue'
+                    ? 'text-accent'
                     : item.highlight
                       ? 'text-warning'
-                      : 'text-muted-foreground'
+                      : 'text-text-muted'
                 }`}
               />
               <span className="min-w-0 flex-1 text-left">
                 <span
-                  className="block truncate text-xs font-bold"
+                  className={`text-body-sm block truncate font-medium ${
+                    isActive ? 'text-text' : ''
+                  }`}
                   title={item.label}
                 >
                   {item.label}
                 </span>
                 {item.subtitle && (
                   <span
-                    className="block truncate text-micro normal-case text-muted-foreground"
+                    className="text-text-muted block truncate text-caption"
                     title={item.subtitle}
                   >
                     {item.subtitle}
@@ -126,7 +124,7 @@ export function SidebarNav({
               </span>
             </span>
             {isActive && (
-              <ChevronRight className="h-3.5 w-3.5 shrink-0 text-umay-blue" />
+              <ChevronRight className="h-4 w-4 shrink-0 text-accent" />
             )}
           </>
         );

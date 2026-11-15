@@ -16,8 +16,8 @@ export function InputGroup({
       data-slot="input-group"
       role="group"
       className={cn(
-        'group/input-group shadow-xs relative flex w-full items-center rounded-sm border border-gunmetal/80 bg-obsidian text-titanium outline-none transition-[color,box-shadow]',
-        'h-9 min-w-0 has-[>textarea]:h-auto',
+        'group/input-group bg-surface-sunken text-text relative flex w-full items-center rounded-md border border-border outline-none transition-[color,box-shadow]',
+        'min-h-[44px] min-w-0 has-[>textarea]:h-auto',
 
         // Variants based on alignment.
         'has-[>[data-align=inline-start]]:[&>input]:pl-2',
@@ -26,10 +26,10 @@ export function InputGroup({
         'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3',
 
         // Focus state.
-        'has-[[data-slot=input-group-control]:focus-visible]:border-umay-blue has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-umay-blue/20',
+        'has-[[data-slot=input-group-control]:focus-visible]:border-accent has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-accent/20',
 
         // Error state.
-        'has-[[data-slot][aria-invalid=true]]:border-alert-red has-[[data-slot][aria-invalid=true]]:ring-alert-red/20',
+        'has-[[data-slot][aria-invalid=true]]:border-danger has-[[data-slot][aria-invalid=true]]:ring-danger/20',
 
         className,
       )}
@@ -141,7 +141,7 @@ export function InputGroupInput({
     <Input
       data-slot="input-group-control"
       className={cn(
-        'flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0',
+        'flex-1 rounded-md border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-offset-0',
         className,
       )}
       {...props}
@@ -157,7 +157,7 @@ export function InputGroupTextarea({
     <Textarea
       data-slot="input-group-control"
       className={cn(
-        'flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0',
+        'flex-1 resize-none rounded-md border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0',
         className,
       )}
       {...props}

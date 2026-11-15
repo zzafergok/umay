@@ -65,7 +65,7 @@ export function RadioField({
               orientation === 'horizontal'
                 ? 'flex flex-wrap gap-4'
                 : 'space-y-2',
-              error && 'border-red-500',
+              error && 'border-danger',
             )}
           >
             {options.map((option) => (

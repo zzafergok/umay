@@ -3,7 +3,11 @@
 import { type ReactNode } from 'react';
 import { Menu, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { Button } from '@/components/core/button';
-import type { ApplicationShellNavItem } from './types';
+import { cn } from '@/lib/utils';
+import {
+  SHELL_TOPBAR_HEIGHT_CLASS,
+  type ApplicationShellNavItem,
+} from './types';
 
 interface ApplicationShellHeaderProps {
   active?: ApplicationShellNavItem;
@@ -21,23 +25,28 @@ export function ApplicationShellHeader({
   onToggleCollapsed,
 }: ApplicationShellHeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-border bg-card/90 px-4 backdrop-blur-md sm:px-6 lg:px-8">
+    <header
+      className={cn(
+        'bg-surface sticky top-0 z-30 flex shrink-0 items-center justify-between gap-3 border-b border-border px-4 sm:px-6 lg:px-8',
+        SHELL_TOPBAR_HEIGHT_CLASS,
+      )}
+    >
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <Button
           onClick={onOpenMobile}
-          variant="outline"
+          variant="secondary"
           size="icon"
           aria-label="Menüyü aç"
-          className="shrink-0 border-border bg-background p-2 text-muted-foreground hover:text-foreground md:hidden"
+          className="shrink-0 md:hidden"
         >
           <Menu className="h-5 w-5" />
         </Button>
         <Button
           onClick={onToggleCollapsed}
-          variant="outline"
-          size="icon"
+          variant="secondary"
+          size="icon-sm"
           aria-label={collapsed ? 'Menüyü genişlet' : 'Menüyü daralt'}
-          className="hidden shrink-0 border-border bg-background text-muted-foreground hover:text-foreground md:inline-flex"
+          className="hidden shrink-0 md:inline-flex"
         >
           {collapsed ? (
             <PanelLeftOpen className="h-4 w-4" />
@@ -45,14 +54,14 @@ export function ApplicationShellHeader({
             <PanelLeftClose className="h-4 w-4" />
           )}
         </Button>
-        <div className="flex min-w-0 items-center gap-2 font-mono text-xs text-muted-foreground">
-          <span className="truncate font-semibold uppercase tracking-widest">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="font-heading text-body-sm text-text truncate font-semibold">
             {active?.label}
           </span>
         </div>
       </div>
       {headerActions && (
-        <div className="flex shrink-0 items-center gap-3 font-mono text-xs">
+        <div className="text-body-sm flex shrink-0 items-center gap-2">
           {headerActions}
         </div>
       )}

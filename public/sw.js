@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'umay-static-v2';
+const STATIC_CACHE = 'umay-static-v3';
 const API_CACHE = 'umay-api-v1';
 
 self.addEventListener('install', (event) => {
@@ -12,6 +12,7 @@ self.addEventListener('install', (event) => {
           '/items',
           '/parts',
           '/shopping',
+          '/umay-icon.svg',
           '/assets/images/umay-brand-logo.png',
         ]),
       )

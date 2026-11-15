@@ -4,7 +4,12 @@ import * as React from 'react';
 import { FolderTree, MapPin, Plus, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/card';
 import {
   Dialog,
   DialogContent,
@@ -125,7 +130,7 @@ export function LocationsScreen() {
                 <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
                   <div className="space-y-1">
                     <CardTitle className="flex items-center gap-2 text-base">
-                      <MapPin className="h-4 w-4 text-umay-blue" />
+                      <MapPin className="text-umay-blue h-4 w-4" />
                       <span>{loc.name}</span>
                     </CardTitle>
                     <p className="text-xs text-muted-foreground">
@@ -146,7 +151,7 @@ export function LocationsScreen() {
                     aria-label={`${loc.name} konumunu sil`}
                     onClick={() => handleDelete(loc.id)}
                   >
-                    <Trash2 className="h-4 w-4 text-muted-foreground hover:text-red-500" />
+                    <Trash2 className="text-text-muted hover:text-danger h-4 w-4" />
                   </Button>
                 </CardContent>
               </Card>

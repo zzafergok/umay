@@ -60,34 +60,9 @@
       "icon": "settings"
     }
   ],
-  "adminNav": [
-    {
-      "href": "/admin",
-      "label": "Genel Bakış",
-      "subtitle": "Yönetim genel bakışı",
-      "icon": "shield"
-    },
-    {
-      "href": "/admin/users",
-      "label": "Kullanıcılar",
-      "subtitle": "Kullanıcı yönetimi",
-      "icon": "users"
-    },
-    {
-      "href": "/admin/settings",
-      "label": "Ayarlar",
-      "subtitle": "Sistem ayarları",
-      "icon": "settings"
-    }
-  ],
   "authHeader": {
     "title": "Umay Envanter",
     "subtitle": "Evin bereketi, kayıt altında."
-  },
-  "adminHeader": {
-    "title": "Yönetim Alanı",
-    "subtitle": "Sistem ve veri yönetimi",
-    "manageLabel": "Yönet"
   },
   "loading": "Yükleniyor...",
   "footer": "Umay © 2026",

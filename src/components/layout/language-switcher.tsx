@@ -45,7 +45,7 @@ export function LanguageSwitcher() {
     <CompactControl
       onClick={() => void handleLocaleChange(nextLocale)}
       disabled={pendingLocale !== null || routing.locales.length < 2}
-      className="font-mono text-[10px] font-bold uppercase tracking-widest hover:bg-gunmetal/30"
+      className="font-mono text-caption font-semibold tracking-wide"
       aria-label={`Switch language to ${localeLabels[nextLocale]}`}
       title={`Switch language to ${localeLabels[nextLocale]}`}
     >

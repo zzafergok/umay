@@ -31,22 +31,22 @@ function useBubbleContext() {
 }
 
 export const bubbleContentVariants = cva(
-  'relative inline-block break-words leading-relaxed text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-umay-blue/50',
+  'relative inline-block break-words leading-relaxed text-body-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
   {
     variants: {
       variant: {
-        default: 'bg-umay-blue text-white rounded-sm px-3.5 py-2 shadow-sm',
+        default: 'bg-accent text-on-accent rounded-md px-3.5 py-2',
         secondary:
-          'bg-obsidian/80 border border-gunmetal/40 text-titanium rounded-sm px-3.5 py-2 shadow-xs',
+          'bg-surface border border-border text-text rounded-md px-3.5 py-2',
         muted:
-          'bg-gunmetal/30 border border-gunmetal/20 text-ash rounded-sm px-3.5 py-2',
+          'bg-surface-sunken border border-border text-text-muted rounded-md px-3.5 py-2',
         tinted:
-          'bg-umay-blue/10 border border-umay-blue/20 text-umay-blue rounded-sm px-3.5 py-2',
+          'bg-accent-subtle border border-accent/25 text-accent rounded-md px-3.5 py-2',
         outline:
-          'bg-transparent border border-gunmetal/50 text-titanium rounded-sm px-3.5 py-2',
-        ghost: 'bg-transparent text-titanium px-0 py-1',
+          'bg-transparent border border-border-strong text-text rounded-md px-3.5 py-2',
+        ghost: 'bg-transparent text-text px-0 py-1',
         destructive:
-          'bg-alert-red/10 border border-alert-red/30 text-alert-red rounded-sm px-3.5 py-2',
+          'bg-danger-subtle border border-danger/30 text-danger rounded-md px-3.5 py-2',
       },
     },
     defaultVariants: {

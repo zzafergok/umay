@@ -91,7 +91,7 @@ export function DeleteConfirmationDialog({
       <DialogContent
         dismissible={!isDeleting}
         hideCloseButton
-        className="z-[60] max-w-md overflow-hidden rounded-none border-alert-red/70 bg-obsidian p-0 font-mono shadow-2xl"
+        className="bg-surface-raised border-danger/50 z-[60] max-w-md overflow-hidden rounded-lg p-0"
       >
         <div
           className={cn(
@@ -100,14 +100,14 @@ export function DeleteConfirmationDialog({
           )}
           aria-hidden={isDeleting}
         >
-          <DialogHeader className="border-b border-gunmetal p-6 text-left">
-            <div className="mb-3 flex h-10 w-10 items-center justify-center border border-alert-red/60 bg-alert-red/10 text-alert-red">
+          <DialogHeader className="border-b border-border p-6 text-left">
+            <div className="border-danger/40 bg-danger-subtle text-danger mb-3 flex h-10 w-10 items-center justify-center rounded-md border">
               <Trash2 className="h-5 w-5" aria-hidden="true" />
             </div>
-            <DialogTitle className="text-left font-mono text-base font-bold uppercase tracking-wider text-titanium">
+            <DialogTitle className="font-heading text-title text-text text-left">
               {title ?? dialogCopy.titleConfirm.replace('{label}', entityLabel)}
             </DialogTitle>
-            <DialogDescription className="pt-2 text-left font-mono text-xs leading-relaxed text-ash">
+            <DialogDescription className="text-body-sm text-text-muted pt-2 text-left leading-relaxed">
               {phase === 'error'
                 ? dialogCopy.errorDescription
                 : (description ??
@@ -115,22 +115,22 @@ export function DeleteConfirmationDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mx-6 border border-alert-red/30 bg-alert-red/5 px-4 py-3">
-            <p className="text-2xs uppercase tracking-wider text-ash">
+          <div className="border-danger/30 bg-danger-subtle/50 mx-6 my-4 rounded-md border px-4 py-3">
+            <p className="text-text-muted text-caption">
               {itemLabel ??
                 dialogCopy.itemLabel.replace('{label}', lowerEntityLabel)}
             </p>
-            <p className="mt-1 truncate text-sm font-bold uppercase tracking-wide text-alert-red">
+            <p className="text-body-sm text-danger mt-1 truncate font-semibold">
               {itemName}
             </p>
             {details && details.length > 0 && (
-              <dl className="mt-3 grid gap-2 border-t border-alert-red/20 pt-3 text-xs sm:grid-cols-2">
+              <dl className="border-danger/20 mt-3 grid gap-2 border-t pt-3 text-caption sm:grid-cols-2">
                 {details.map((detail) => (
                   <div key={detail.label}>
-                    <dt className="text-2xs uppercase tracking-wider text-ash">
+                    <dt className="text-text-muted text-caption">
                       {detail.label}
                     </dt>
-                    <dd className="mt-0.5 font-bold text-titanium">
+                    <dd className="text-text mt-0.5 font-semibold">
                       {detail.value}
                     </dd>
                   </div>
@@ -140,26 +140,25 @@ export function DeleteConfirmationDialog({
           </div>
 
           {warning && (
-            <p className="mx-6 border border-alert-red/30 bg-alert-red/10 px-4 py-3 text-xs leading-relaxed text-alert-red">
+            <p className="border-danger/30 bg-danger-subtle text-danger mx-6 mb-4 rounded-md border px-4 py-3 text-caption leading-relaxed">
               {warning}
             </p>
           )}
 
-          <DialogFooter className="border-t border-gunmetal px-6 py-4 sm:space-x-3">
+          <DialogFooter className="border-t border-border px-6 py-4 sm:space-x-3">
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               disabled={isDeleting}
               onClick={() => handleOpenChange(false)}
-              className="rounded-none border border-gunmetal bg-void-black px-5 py-2.5 font-mono text-xs font-bold uppercase text-ash hover:border-ash hover:bg-void-black hover:text-titanium"
             >
               {dialogCopy.cancel}
             </Button>
             <Button
               type="button"
+              variant="danger"
               disabled={isDeleting}
               onClick={handleConfirm}
-              className="rounded-none border border-alert-red bg-alert-red px-5 py-2.5 font-mono text-xs font-bold uppercase text-white hover:bg-red-600"
             >
               {isDeleting ? dialogCopy.deleting : dialogCopy.confirm}
             </Button>

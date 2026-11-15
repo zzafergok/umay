@@ -18,25 +18,5 @@
     "title": "Umay – Settings",
     "description": "Umay preferences, backup, and account settings.",
     "aiPurpose": "Authenticated settings route."
-  },
-  "adminLogin": {
-    "title": "Umay – Admin login",
-    "description": "Admin sign-in surface for Umay management access.",
-    "aiPurpose": "Administrative login route."
-  },
-  "adminOverview": {
-    "title": "Umay – Management overview",
-    "description": "Protected management dashboard for Umay.",
-    "aiPurpose": "Protected admin overview route."
-  },
-  "adminUsers": {
-    "title": "Umay – Users",
-    "description": "Protected admin user roster.",
-    "aiPurpose": "Protected admin users route."
-  },
-  "adminSettings": {
-    "title": "Umay – System settings",
-    "description": "Protected configuration surface for Umay.",
-    "aiPurpose": "Protected admin configuration route."
   }
 }

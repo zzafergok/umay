@@ -6,7 +6,7 @@ import {
   CheckCircle2Icon,
   InfoIcon,
   AlertTriangleIcon,
-  AlertCircleIcon,
+  ClockIcon,
   Loader2Icon,
   XIcon,
 } from 'lucide-react';
@@ -16,15 +16,17 @@ import { toast } from './toast-manager';
 function ToastIcon({ type }: { type?: string }) {
   switch (type) {
     case 'success':
-      return <CheckCircle2Icon className="size-4 shrink-0 text-signal-green" />;
+      return <CheckCircle2Icon className="size-4 shrink-0 text-success" />;
     case 'error':
-      return <AlertCircleIcon className="size-4 shrink-0 text-alert-red" />;
+      return <AlertTriangleIcon className="text-danger size-4 shrink-0" />;
     case 'warning':
-      return <AlertTriangleIcon className="size-4 shrink-0 text-umay-gold" />;
+      return <ClockIcon className="size-4 shrink-0 text-warning" />;
     case 'loading':
-      return <Loader2Icon className="size-4 shrink-0 animate-spin text-ash" />;
+      return (
+        <Loader2Icon className="text-text-muted size-4 shrink-0 animate-spin" />
+      );
     case 'info':
-      return <InfoIcon className="size-4 shrink-0 text-umay-blue" />;
+      return <InfoIcon className="size-4 shrink-0 text-info" />;
     default:
       return null;
   }
@@ -32,27 +34,28 @@ function ToastIcon({ type }: { type?: string }) {
 
 export function ToastList() {
   const { toasts } = ToastPrimitive.useToastManager();
+  const visibleToasts = toasts.slice(-1);
 
   return (
     <>
-      {toasts.map((t) => (
+      {visibleToasts.map((t) => (
         <ToastPrimitive.Root
           key={t.id}
           toast={t}
           data-slot="toast"
           className={cn(
-            'group/toast pointer-events-auto relative flex w-full items-center justify-between gap-3 overflow-hidden rounded-sm border border-gunmetal/80 bg-obsidian p-4 font-mono text-titanium shadow-2xl transition-all',
+            'group/toast dark:border-border-strong bg-surface-raised text-text shadow-float pointer-events-auto relative flex w-full items-center justify-between gap-3 overflow-hidden rounded-md border border-border p-4 transition-all duration-150',
             'data-[starting-style]:translate-y-2 data-[starting-style]:opacity-0',
             'data-[ending-style]:translate-y-2 data-[ending-style]:opacity-0',
           )}
         >
           <div className="flex min-w-0 flex-1 items-start gap-3">
             <ToastIcon type={t.type} />
-            <div className="grid min-w-0 flex-1 gap-1">
+            <div className="grid min-w-0 flex-1 gap-0.5">
               {t.title && (
                 <ToastPrimitive.Title
                   data-slot="toast-title"
-                  className="text-sm font-semibold leading-snug text-titanium"
+                  className="text-body-sm text-text font-medium"
                 >
                   {t.title}
                 </ToastPrimitive.Title>
@@ -60,7 +63,7 @@ export function ToastList() {
               {t.description && (
                 <ToastPrimitive.Description
                   data-slot="toast-description"
-                  className="text-xs leading-relaxed text-ash/80"
+                  className="text-text-muted text-caption"
                 >
                   {t.description}
                 </ToastPrimitive.Description>
@@ -72,14 +75,15 @@ export function ToastList() {
               data-slot="toast-action"
               {...t.actionProps}
               className={cn(
-                'rounded-xs inline-flex h-7 shrink-0 items-center justify-center border border-gunmetal/80 bg-void-black px-2.5 font-mono text-xs font-medium text-titanium transition-colors hover:bg-gunmetal/40 focus:outline-none focus:ring-1 focus:ring-umay-blue/50 disabled:pointer-events-none disabled:opacity-50',
+                'bg-surface text-text hover:bg-surface-sunken focus-visible:ring-offset-surface-raised inline-flex h-8 shrink-0 items-center justify-center rounded-sm border border-border px-2.5 text-caption font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
                 t.actionProps.className,
               )}
             />
           )}
           <ToastPrimitive.Close
             data-slot="toast-close"
-            className="rounded-xs shrink-0 p-1 text-ash opacity-70 transition-opacity hover:text-titanium hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-1 focus:ring-umay-blue/50"
+            aria-label="Kapat"
+            className="text-text-muted hover:bg-surface-sunken hover:text-text focus-visible:ring-offset-surface-raised shrink-0 rounded-sm p-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
             <XIcon className="size-4" />
           </ToastPrimitive.Close>
@@ -109,13 +113,15 @@ export function Toaster({
           data-slot="toast-viewport"
           className={cn(
             'fixed z-[100] flex max-h-screen w-full flex-col gap-2 p-4 sm:max-w-[420px]',
-            position === 'bottom-right' && 'bottom-0 right-0',
-            position === 'bottom-left' && 'bottom-0 left-0',
+            position === 'bottom-right' &&
+              'bottom-[calc(4rem+env(safe-area-inset-bottom))] right-0 md:bottom-4',
+            position === 'bottom-left' &&
+              'bottom-[calc(4rem+env(safe-area-inset-bottom))] left-0 md:bottom-4',
             position === 'top-right' && 'right-0 top-0',
             position === 'top-left' && 'left-0 top-0',
             position === 'top-center' && 'left-1/2 top-0 -translate-x-1/2',
             position === 'bottom-center' &&
-              'bottom-0 left-1/2 -translate-x-1/2',
+              'bottom-[calc(4rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 md:bottom-4',
             className,
           )}
           {...props}

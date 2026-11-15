@@ -1,6 +1,16 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
-## İnceleme Özeti
+## Faz 13 – Umay Tasarım Rehberi (`design.md`) Uygulaması (İnceleme Özeti)
+
+- **Tek Kaynak & Modüler Tasarım Token'ları:** `docs/design.md` belgesi oluşturuldu. Tüm renkler (`--bg`, `--surface`, `--surface-raised`, `--surface-sunken`, `--border`, `--border-strong`, `--text`, `--text-muted`, `--text-subtle`, `--accent`, `--accent-hover`, `--accent-subtle`, `--on-accent`, `--ember`, durum token'ları ve `--cat-1`..`--cat-8`), tipografi ve boşluk ölçekleri `src/lib/design/tokens/` altına modüler olarak eklendi; `src/lib/design/contrast.ts` ve `src/lib/design/contrast.test.ts` (38 test) ile açık/koyu tema WCAG AA (≥ 4.5:1) kontrastları doğrulandı (`vitest.config.mts` `src/**/*.test.{ts,tsx}` içerecek şekilde güncellendi).
+- **Tema, Font & CSS Altyapısı:** `src/lib/fonts.ts` (`Inter` `--font-body`, `Manrope` `--font-heading`, `JetBrains_Mono` `--font-mono`, `latin` + `latin-ext`), `src/app/layout.tsx`, `src/components/providers/theme-provider.tsx` (`defaultTheme="system"`, `enableSystem`), `src/app/globals.css` (RGB üçlüleri, `tabular-nums`, `prefers-reduced-motion` desteği), `src/app/typeset.css` ve `tailwind.config.mjs` (semantik renkler, `cat-*`, Tulpar uyumluluk takma adları, tipografi ölçeği, `6/10/14px` köşe yarıçapları, `shadow-float`) güncellendi.
+- **Marka Varlıkları & PWA:** `public/brand/` (`umay-mark.svg`, `umay-wordmark.svg`, `umay-lockup.svg`), `public/umay-icon.svg`, `public/umay-logo.svg`, `src/components/shared/umay-brand.tsx` ve `src/app/manifest.ts` (`#FAF8F5` tema/zemin) oluşturuldu/güncellendi.
+- **Çekirdek UI & Ekranlar:** `src/components/core/` bileşenleri (`button`, `input`, `textarea`, `label`, `badge`, `status-pill`, `progress`, `quantity-stepper`, `card`, `sheet`, `dialog`, `table`, `skeleton`, `empty`, `bottom-nav`, `stat`, `select/*`, `toast/*`), uygulama kabuğu (`application-shell`, `pwa-offline-provider`, `page-header`, `theme-toggle`), ekranlar (`home`, `items`, `parts`, `settings` 3 yönlü tema seçici, `public/home`) "sessizlik = iyi", istisna odaklı durum rozetleri ve 4 gruplu kart hiyerarşisine geçirildi.
+- **Doğrulama:** `npm run lint`, `npm run type-check`, `npm test` (9 dosya, 83 test), `npm run metadata:check` ve `npm run build` hatasız tamamlandı.
+
+---
+
+## İnceleme Özeti (Önceki Fazlar)
 
 - **Faz 0–1 (Keşif & Dönüşüm):** Tulpar mimarisi `docs/TULPAR-NOTES.md` ve varsayımlar `docs/ASSUMPTIONS.md` içinde belgelendi. Proje `umay` adına taşındı, `public/umay-logo.svg` ve PWA ikonları üretildi, `firebase.json`, `firestore.rules`, `firestore.indexes.json` ve `storage.rules` oluşturuldu.
 - **Faz 2 (Tasarım Sistemi):** Semantik yüzey token'ları eklendi; `StatusPill`, `Stat`, `QuantityStepper` ve `BottomNav` çekirdek bileşenleri geliştirildi; `/design` vitrini ve mobil alt gezinmeli `AuthShell` kuruldu.

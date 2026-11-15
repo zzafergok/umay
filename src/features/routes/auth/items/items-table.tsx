@@ -26,10 +26,10 @@ export function ItemsTableView({
   isBusy: boolean;
 }) {
   return (
-    <Card>
+    <Card className="overflow-hidden py-0">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="hover:bg-transparent">
             <TableHead>Ürün</TableHead>
             <TableHead>Konum</TableHead>
             <TableHead>Durum</TableHead>
@@ -41,30 +41,25 @@ export function ItemsTableView({
           {items.map((item) => (
             <TableRow key={item.id}>
               <TableCell className="font-medium">
-                <Link href={`/items/${item.id}`} className="hover:underline">
+                <Link
+                  href={`/items/${item.id}`}
+                  className="text-text hover:text-accent hover:underline"
+                >
                   {item.name}
                 </Link>
               </TableCell>
-              <TableCell className="text-muted-foreground">
+              <TableCell className="text-text-muted">
                 {locationMap.get(item.locationId)?.path.join(' > ') ?? '—'}
               </TableCell>
               <TableCell>
-                <StatusPill
-                  tone={
-                    item.quantity <= 0
-                      ? 'out_of_stock'
-                      : item.quantity <= item.minQuantity
-                        ? 'low_stock'
-                        : 'ok'
-                  }
-                  label={
-                    item.quantity <= 0
-                      ? 'Tükendi'
-                      : item.quantity <= item.minQuantity
-                        ? 'Düşük'
-                        : 'Stokta'
-                  }
-                />
+                {item.quantity <= 0 ? (
+                  <StatusPill tone="out_of_stock" label="Tükendi" />
+                ) : item.minQuantity > 0 &&
+                  item.quantity <= item.minQuantity ? (
+                  <StatusPill tone="low_stock" label="Düşük stok" />
+                ) : (
+                  <span className="text-text-muted text-caption">—</span>
+                )}
               </TableCell>
               <TableCell className="text-right tabular-nums">
                 {item.quantity} {item.unit}

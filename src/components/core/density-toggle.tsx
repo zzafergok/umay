@@ -38,7 +38,7 @@ export function DensityToggle({
     <div
       role="group"
       aria-label={toggleLabel}
-      className="inline-flex border border-gunmetal bg-void-black"
+      className="bg-surface inline-flex gap-1 rounded-md border border-border p-1"
     >
       <Button
         type="button"
@@ -46,10 +46,10 @@ export function DensityToggle({
         size="sm"
         onClick={() => onValueChange('compact')}
         aria-pressed={value === 'compact'}
-        className={`h-9 gap-2 rounded-none border-r border-gunmetal px-3 font-mono text-2xs font-bold uppercase ${
+        className={`h-8 gap-1.5 rounded-sm px-3 text-caption font-medium ${
           value === 'compact'
-            ? 'bg-umay-blue text-white hover:bg-umay-blue/90'
-            : 'text-titanium hover:bg-gunmetal/30'
+            ? 'text-on-accent hover:bg-accent-hover hover:text-on-accent bg-accent'
+            : 'text-text-muted hover:bg-surface-sunken hover:text-text'
         }`}
       >
         <Rows3 className="h-3.5 w-3.5" aria-hidden="true" />
@@ -61,10 +61,10 @@ export function DensityToggle({
         size="sm"
         onClick={() => onValueChange('detailed')}
         aria-pressed={value === 'detailed'}
-        className={`h-9 gap-2 rounded-none px-3 font-mono text-2xs font-bold uppercase ${
+        className={`h-8 gap-1.5 rounded-sm px-3 text-caption font-medium ${
           value === 'detailed'
-            ? 'bg-umay-blue text-white hover:bg-umay-blue/90'
-            : 'text-titanium hover:bg-gunmetal/30'
+            ? 'text-on-accent hover:bg-accent-hover hover:text-on-accent bg-accent'
+            : 'text-text-muted hover:bg-surface-sunken hover:text-text'
         }`}
       >
         <AlignJustify className="h-3.5 w-3.5" aria-hidden="true" />

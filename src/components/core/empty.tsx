@@ -7,7 +7,7 @@ export function Empty({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="empty"
       className={cn(
-        'flex min-w-0 flex-1 flex-col items-center justify-center gap-6 text-balance rounded-sm border-dashed border-gunmetal/60 p-6 text-center md:p-12',
+        'flex min-w-0 flex-1 flex-col items-center justify-center gap-4 text-balance rounded-md border border-dashed border-border bg-surface p-6 text-center md:p-10',
         className,
       )}
       {...props}
@@ -32,12 +32,12 @@ export function EmptyHeader({
 }
 
 const emptyMediaVariants = cva(
-  'mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'mb-1 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default: 'bg-transparent',
-        icon: "flex size-10 shrink-0 items-center justify-center rounded-sm bg-gunmetal/30 text-titanium [&_svg:not([class*='size-'])]:size-5",
+        default: 'bg-transparent text-text-muted',
+        icon: "flex size-12 shrink-0 items-center justify-center rounded-md bg-surface-sunken text-text-muted [&_svg:not([class*='size-'])]:size-6",
       },
     },
     defaultVariants: {
@@ -68,10 +68,7 @@ export function EmptyTitle({
   return (
     <div
       data-slot="empty-title"
-      className={cn(
-        'text-base font-semibold tracking-tight text-titanium',
-        className,
-      )}
+      className={cn('font-heading text-title text-text', className)}
       {...props}
     />
   );
@@ -85,7 +82,7 @@ export function EmptyDescription({
     <div
       data-slot="empty-description"
       className={cn(
-        'text-sm/relaxed text-ash [&>a:hover]:text-umay-blue [&>a]:underline [&>a]:underline-offset-4',
+        'text-body-sm text-text-muted [&>a:hover]:text-accent [&>a]:underline [&>a]:underline-offset-4',
         className,
       )}
       {...props}
@@ -101,7 +98,7 @@ export function EmptyContent({
     <div
       data-slot="empty-content"
       className={cn(
-        'flex w-full min-w-0 max-w-sm flex-col items-center gap-4 text-balance text-sm',
+        'flex w-full min-w-0 max-w-sm flex-col items-center gap-3 text-balance text-body-sm',
         className,
       )}
       {...props}

@@ -53,10 +53,10 @@ export function PwaOfflineProvider() {
   return (
     <div
       role="status"
-      className="fixed bottom-16 inset-x-0 z-50 flex items-center justify-center gap-2 bg-amber-500 px-3 py-1.5 text-xs font-medium text-black md:bottom-0"
+      className="bg-info-subtle sticky top-0 z-50 flex items-center justify-center gap-2 border-b border-info/25 px-3 py-1.5 text-caption font-medium text-info"
     >
-      <WifiOff className="h-3.5 w-3.5" aria-hidden="true" />
-      <span>Çevrimdışısın — önbellekteki veriler gösteriliyor.</span>
+      <WifiOff className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+      <span>Çevrimdışısın — değişiklikler kuyruğa alınıyor.</span>
     </div>
   );
 }

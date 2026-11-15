@@ -21,19 +21,9 @@ export type ShellCopy = {
       icon: 'home' | 'wrench' | 'settings' | string;
     }
   >;
-  adminNav: Array<
-    Omit<ShellNavItem, 'icon'> & {
-      icon: 'shield' | 'users' | 'settings' | string;
-    }
-  >;
   authHeader: {
     title: string;
     subtitle: string;
-  };
-  adminHeader: {
-    title: string;
-    subtitle: string;
-    manageLabel: string;
   };
   loading?: string;
   footer?: string;

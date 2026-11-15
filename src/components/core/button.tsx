@@ -6,28 +6,32 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-sm text-sm font-medium transition-colors cursor-pointer select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-umay-blue/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&>[data-icon=inline-start]]:-ml-0.5 [&>[data-icon=inline-start]]:mr-1.5 [&>[data-icon=inline-end]]:-mr-0.5 [&>[data-icon=inline-end]]:ml-1.5 rtl:[&>[data-icon=inline-start]]:-mr-0.5 rtl:[&>[data-icon=inline-start]]:ml-1.5 rtl:[&>[data-icon=inline-end]]:-ml-0.5 rtl:[&>[data-icon=inline-end]]:mr-1.5',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-body-sm font-medium transition-colors duration-150 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&>[data-icon=inline-start]]:-ml-0.5 [&>[data-icon=inline-start]]:mr-1.5 [&>[data-icon=inline-end]]:-mr-0.5 [&>[data-icon=inline-end]]:ml-1.5',
   {
     variants: {
       variant: {
-        default: 'bg-umay-blue text-white shadow-xs hover:bg-umay-blue/90',
+        default: 'bg-accent text-on-accent hover:bg-accent-hover',
+        primary: 'bg-accent text-on-accent hover:bg-accent-hover',
         destructive:
-          'bg-alert-red text-white shadow-xs hover:bg-alert-red/90 focus-visible:ring-alert-red/50',
+          'bg-danger text-on-accent hover:bg-danger/90 focus-visible:ring-danger',
+        danger:
+          'bg-danger text-on-accent hover:bg-danger/90 focus-visible:ring-danger',
         outline:
-          'border border-gunmetal bg-transparent text-titanium hover:bg-gunmetal/20 hover:border-gunmetal',
-        secondary: 'bg-gunmetal text-titanium hover:bg-gunmetal/80',
-        ghost: 'text-titanium hover:bg-gunmetal/20',
-        link: 'text-umay-blue underline-offset-4 hover:underline p-0 h-auto',
+          'border border-border bg-surface text-text hover:bg-surface-sunken hover:border-border-strong',
+        secondary:
+          'border border-border bg-surface text-text hover:bg-surface-sunken hover:border-border-strong',
+        ghost: 'text-text hover:bg-surface-sunken',
+        link: 'text-accent underline-offset-4 hover:underline p-0 h-auto',
       },
       size: {
-        default: 'h-10 px-4 py-2 text-sm',
-        xs: 'h-7 rounded-sm px-2 text-xs [&_svg]:size-3.5',
-        sm: 'h-9 rounded-sm px-3 text-sm [&_svg]:size-4',
-        lg: 'h-11 rounded-sm px-8 text-base [&_svg]:size-5',
-        icon: 'size-10 [&_svg]:size-5',
-        'icon-xs': 'size-7 [&_svg]:size-3.5',
+        default: 'h-11 min-h-[44px] px-4 py-2 text-body-sm',
+        xs: 'h-8 rounded-sm px-2.5 text-caption [&_svg]:size-3.5',
+        sm: 'h-9 rounded-md px-3 text-body-sm [&_svg]:size-4',
+        lg: 'h-11 min-h-[44px] rounded-md px-6 text-body [&_svg]:size-5',
+        icon: 'size-11 min-h-[44px] min-w-[44px] [&_svg]:size-5',
+        'icon-xs': 'size-8 [&_svg]:size-4',
         'icon-sm': 'size-9 [&_svg]:size-4',
-        'icon-lg': 'size-11 [&_svg]:size-5',
+        'icon-lg': 'size-11 min-h-[44px] min-w-[44px] [&_svg]:size-5',
       },
     },
     defaultVariants: {

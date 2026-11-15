@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 
+/** Shared fixed height for sidebar brand bar and top navbar so border lines stay aligned. */
+export const SHELL_TOPBAR_HEIGHT_CLASS = 'h-16';
+
 export interface ApplicationShellNavItem {
   href: string;
   label: string;

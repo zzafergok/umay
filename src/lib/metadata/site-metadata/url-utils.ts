@@ -30,14 +30,16 @@ export function humanizePath(path: string): string {
 }
 
 export function inferRouteSection(path: string): RouteSection {
-  if (path === '/admin' || path.startsWith('/admin/')) return 'admin';
   if (path === '/home' || path === '/workspace' || path === '/settings') {
     return 'auth';
   }
   return 'public';
 }
 
-export function inferRouteRobots(path: string, section: RouteSection): RouteRobots {
+export function inferRouteRobots(
+  path: string,
+  section: RouteSection,
+): RouteRobots {
   if (section !== 'public') return { index: false, follow: false };
   if (path === '/login' || path.endsWith('/login')) {
     return { index: false, follow: false };

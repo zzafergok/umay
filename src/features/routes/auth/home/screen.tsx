@@ -3,18 +3,17 @@
 import * as React from 'react';
 import {
   AlertTriangle,
-  Boxes,
   CalendarClock,
+  Package,
   Plus,
-  QrCode,
+  ScanLine,
   ShoppingCart,
   Wrench,
 } from 'lucide-react';
 import { Button } from '@/components/core/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
 import { Link } from '@/components/core/link';
 import { Stat } from '@/components/core/stat';
-import { StatusPill, type StatusTone } from '@/components/core/status-pill';
+import { resolveCategoryCssVar } from '@/lib/design/tokens';
 import {
   useCategoriesQuery,
   useItemsQuery,
@@ -23,16 +22,21 @@ import {
   usePartsQuery,
 } from '@/hooks/use-inventory-hooks';
 import { inventoryService } from '@/services/inventory-service';
+import {
+  AttentionListCard,
+  type AttentionItem,
+} from './components/attention-list-card';
+import {
+  CategoryDistributionCard,
+  type CategoryDistributionItem,
+} from './components/category-distribution-card';
 
-interface AttentionItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  tone: StatusTone;
-  badge: string;
-  href: string;
-  priority: number;
-}
+const ISTANBUL_DATE_FORMAT = new Intl.DateTimeFormat('tr-TR', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'Europe/Istanbul',
+});
 
 export function AuthHomeScreen() {
   const { data: items = [] } = useItemsQuery();
@@ -52,7 +56,7 @@ export function AuthHomeScreen() {
   const dueParts = parts.filter((p) => p.status !== 'ok');
 
   const [nowMs] = React.useState(() => Date.now());
-  const soonWindowMs = 14 * 24 * 60 * 60 * 1000;
+  const soonWindowMs = 30 * 24 * 60 * 60 * 1000;
   const expiringOrWarranty = items.filter((i) => {
     const expMs = i.expiresAt ? Date.parse(i.expiresAt) : NaN;
     const warMs = i.warrantyEndsAt ? Date.parse(i.warrantyEndsAt) : NaN;
@@ -82,9 +86,9 @@ export function AuthHomeScreen() {
       list.push({
         id: `low-${i.id}`,
         title: i.name,
-        subtitle: `Kalan: ${i.quantity} ${i.unit} (Eşik: ${i.minQuantity})`,
+        subtitle: `Kalan: ${i.quantity} ${i.unit} · Eşik: ${i.minQuantity} ${i.unit}`,
         tone: i.quantity <= 0 ? 'out_of_stock' : 'low_stock',
-        badge: i.quantity <= 0 ? 'Tükendi' : 'Düşük Stok',
+        badge: i.quantity <= 0 ? 'Tükendi' : 'Düşük stok',
         href: `/items/${i.id}`,
         priority: i.quantity <= 0 ? 1 : 2,
       });
@@ -94,7 +98,7 @@ export function AuthHomeScreen() {
         id: `exp-${i.id}`,
         title: i.name,
         subtitle: i.expiresAt
-          ? `SKT: ${new Date(i.expiresAt).toLocaleDateString('tr-TR')}`
+          ? `SKT: ${ISTANBUL_DATE_FORMAT.format(new Date(i.expiresAt))}`
           : 'Garanti yaklaşıyor',
         tone: 'due_soon',
         badge: 'SKT / Garanti',
@@ -105,7 +109,7 @@ export function AuthHomeScreen() {
     return list.sort((a, b) => a.priority - b.priority).slice(0, 8);
   }, [dueParts, lowStockItems, expiringOrWarranty]);
 
-  const categoryDistribution = React.useMemo(() => {
+  const categoryDistribution: CategoryDistributionItem[] = React.useMemo(() => {
     const total = Math.max(1, items.length);
     return categories
       .map((cat) => {
@@ -115,6 +119,7 @@ export function AuthHomeScreen() {
           name: cat.name,
           count,
           percent: Math.round((count / total) * 100),
+          dotColor: resolveCategoryCssVar(cat.name),
         };
       })
       .sort((a, b) => b.count - a.count)
@@ -126,27 +131,27 @@ export function AuthHomeScreen() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-2">
-        <Button asChild size="sm">
-          <Link href="/items">
-            <Plus className="mr-1.5 h-4 w-4" />
-            Ürün Ekle
+        <Button asChild size="sm" variant="primary">
+          <Link href="/items?new=1">
+            <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />
+            Ürün ekle
           </Link>
         </Button>
-        <Button asChild size="sm" variant="outline">
+        <Button asChild size="sm" variant="secondary">
           <Link href="/scan">
-            <QrCode className="mr-1.5 h-4 w-4" />
-            Barkod Tara
+            <ScanLine className="mr-1.5 h-4 w-4" aria-hidden="true" />
+            Barkod tara
           </Link>
         </Button>
-        <Button asChild size="sm" variant="outline">
+        <Button asChild size="sm" variant="secondary">
           <Link href="/parts">
-            <Wrench className="mr-1.5 h-4 w-4" />
+            <Wrench className="mr-1.5 h-4 w-4" aria-hidden="true" />
             Parçalar
           </Link>
         </Button>
-        <Button asChild size="sm" variant="outline">
+        <Button asChild size="sm" variant="secondary">
           <Link href="/shopping">
-            <ShoppingCart className="mr-1.5 h-4 w-4" />
+            <ShoppingCart className="mr-1.5 h-4 w-4" aria-hidden="true" />
             Alışveriş
           </Link>
         </Button>
@@ -154,91 +159,37 @@ export function AuthHomeScreen() {
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat
-          label="Toplam Ürün"
+          label="Toplam ürün"
           value={items.length}
           hint={`${locations.length} konum`}
-          icon={<Boxes className="h-4 w-4" />}
+          icon={<Package className="h-4 w-4" />}
         />
         <Stat
-          label="Düşük Stok"
+          label="Düşük stok"
           value={lowStockItems.length}
           tone={lowStockItems.length > 0 ? 'warning' : 'default'}
           icon={<AlertTriangle className="h-4 w-4" />}
         />
         <Stat
-          label="Yaklaşan Parça"
+          label="Yaklaşan parça değişimi"
           value={dueParts.length}
-          tone={dueParts.some((p) => p.status === 'overdue') ? 'danger' : 'default'}
+          tone={
+            dueParts.some((p) => p.status === 'overdue') ? 'danger' : 'default'
+          }
           hint={unreadNotifs > 0 ? `${unreadNotifs} bildirim` : undefined}
           icon={<Wrench className="h-4 w-4" />}
         />
         <Stat
-          label="SKT / Garanti"
+          label="SKT / garanti"
           value={expiringOrWarranty.length}
           tone={expiringOrWarranty.length > 0 ? 'warning' : 'default'}
           icon={<CalendarClock className="h-4 w-4" />}
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-base">
-              Bugün İlgilenmen Gerekenler
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {attentionList.length === 0 ? (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                Harika! Bugün acil bir işlem görünmüyor.
-              </p>
-            ) : (
-              attentionList.map((entry) => (
-                <Link
-                  key={entry.id}
-                  href={entry.href}
-                  className="flex items-center justify-between gap-3 rounded-sm border border-border p-3 transition-colors hover:bg-muted/40"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">{entry.title}</p>
-                    <p className="truncate text-xs text-muted-foreground">
-                      {entry.subtitle}
-                    </p>
-                  </div>
-                  <StatusPill tone={entry.tone} label={entry.badge} />
-                </Link>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Kategori Dağılımı</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {categoryDistribution.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Henüz veri yok.</p>
-            ) : (
-              categoryDistribution.map((cat) => (
-                <div key={cat.id} className="space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span className="font-medium">{cat.name}</span>
-                    <span className="text-muted-foreground tabular-nums">
-                      {cat.count} ({cat.percent}%)
-                    </span>
-                  </div>
-                  <div className="h-2 w-full overflow-hidden rounded-sm bg-muted">
-                    <div
-                      className="h-full bg-umay-blue transition-all duration-200"
-                      style={{ width: `${cat.percent}%` }}
-                    />
-                  </div>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
+      <div className="grid gap-4 lg:grid-cols-3">
+        <AttentionListCard items={attentionList} />
+        <CategoryDistributionCard categories={categoryDistribution} />
       </div>
     </div>
   );

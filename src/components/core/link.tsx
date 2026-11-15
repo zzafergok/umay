@@ -19,8 +19,9 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     return (
       <NextLink
         className={cn(
-          variant || size ? buttonVariants({ variant, size }) : undefined,
-          'rounded-none',
+          variant || size
+            ? buttonVariants({ variant, size })
+            : 'focus-visible:ring-offset-bg rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
           className,
         )}
         ref={ref}

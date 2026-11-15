@@ -13,34 +13,32 @@ export function PageHeader({
   children,
 }: PageHeaderProps) {
   return (
-    <div className={cn('flex flex-col gap-4', className)}>
+    <div className={cn('flex flex-col gap-3', className)}>
       {breadcrumbs && (
-        <div className="text-xs text-muted-foreground">{breadcrumbs}</div>
+        <div className="text-text-muted text-caption">{breadcrumbs}</div>
       )}
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="space-y-1.5">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div className="space-y-1">
           {badge && (
             <div>
               {typeof badge === 'string' ? (
-                <Badge className="rounded-none border-umay-blue/30 bg-umay-blue/10 text-umay-blue">
-                  {badge}
-                </Badge>
+                <Badge variant="default">{badge}</Badge>
               ) : (
                 badge
               )}
             </div>
           )}
-          <h1 className="text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl lg:text-4xl">
+          <h1 className="font-heading text-display-sm sm:text-display text-text">
             {title}
           </h1>
           {description && (
-            <p className="max-w-2xl text-sm leading-relaxed text-ash">
+            <p className="text-body-sm text-text-muted max-w-prose">
               {description}
             </p>
           )}
         </div>
         {actions && (
-          <div className="flex shrink-0 flex-wrap items-center gap-3">
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
             {actions}
           </div>
         )}

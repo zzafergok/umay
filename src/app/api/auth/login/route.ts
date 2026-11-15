@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminSession, createSession } from '@/lib/auth/session';
+import { createSession } from '@/lib/auth/session';
 import { signToken } from '@/lib/auth/jwt';
 import { loginSchema } from '@/lib/auth/auth-schema';
 import { signInWithFirebasePassword } from '@/lib/auth/firebase-identity';
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { email, password, isAdmin } = parseResult.data;
+    const { email, password } = parseResult.data;
     const identity = await signInWithFirebasePassword(email, password);
     if (!identity) {
       return NextResponse.json(
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const role = isAdmin ? 'admin' : 'user';
+    const role = 'user' as const;
     const name = identity.displayName || email.split('@')[0];
 
     const token = signToken({
@@ -40,11 +40,7 @@ export async function POST(request: NextRequest) {
       role,
     });
 
-    if (isAdmin) {
-      await createAdminSession(token);
-    } else {
-      await createSession(token);
-    }
+    await createSession(token);
 
     return NextResponse.json(
       {

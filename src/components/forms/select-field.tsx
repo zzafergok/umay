@@ -96,7 +96,7 @@ export function SelectField({
                   {selectedOption?.swatchColor && (
                     <span
                       aria-hidden="true"
-                      className="h-4 w-7 shrink-0 rounded-none border border-foreground/20"
+                      className="h-4 w-7 shrink-0 rounded-sm border border-border"
                       style={{ backgroundColor: selectedOption.swatchColor }}
                     />
                   )}
@@ -122,7 +122,7 @@ export function SelectField({
                       {option.swatchColor && (
                         <span
                           aria-hidden="true"
-                          className="h-4 w-7 shrink-0 rounded-none border border-foreground/20"
+                          className="h-4 w-7 shrink-0 rounded-sm border border-border"
                           style={{ backgroundColor: option.swatchColor }}
                         />
                       )}

@@ -38,40 +38,4 @@ export const routeMetadata: Record<MetadataRouteId, RouteMetadataDescriptor> = {
       tr: trRouteMetadata.authSettings,
     },
   },
-  adminLogin: {
-    path: '/admin/login',
-    section: 'admin',
-    robots: { index: false, follow: false },
-    locale: {
-      en: enRouteMetadata.adminLogin,
-      tr: trRouteMetadata.adminLogin,
-    },
-  },
-  adminOverview: {
-    path: '/admin',
-    section: 'admin',
-    robots: { index: false, follow: false },
-    locale: {
-      en: enRouteMetadata.adminOverview,
-      tr: trRouteMetadata.adminOverview,
-    },
-  },
-  adminUsers: {
-    path: '/admin/users',
-    section: 'admin',
-    robots: { index: false, follow: false },
-    locale: {
-      en: enRouteMetadata.adminUsers,
-      tr: trRouteMetadata.adminUsers,
-    },
-  },
-  adminSettings: {
-    path: '/admin/settings',
-    section: 'admin',
-    robots: { index: false, follow: false },
-    locale: {
-      en: enRouteMetadata.adminSettings,
-      tr: trRouteMetadata.adminSettings,
-    },
-  },
 };

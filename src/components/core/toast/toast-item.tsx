@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, Check, Info, Loader2, X } from 'lucide-react';
+import { AlertTriangle, Check, Clock, Info, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import { cn } from '@/lib/utils';
 import type { Toast, ToastType } from '@/types';
@@ -11,33 +11,33 @@ import { toast } from './toast-observer';
 const ToastIcon = ({ type }: { type?: ToastType }) => {
   switch (type) {
     case 'success':
-      return <Check className="h-4 w-4 text-signal-green" />;
+      return <Check className="h-4 w-4 text-success" />;
     case 'error':
-      return <AlertCircle className="h-4 w-4 text-alert-red" />;
+      return <AlertTriangle className="text-danger h-4 w-4" />;
     case 'warning':
-      return <AlertCircle className="h-4 w-4 text-amber-500" />;
+      return <Clock className="h-4 w-4 text-warning" />;
     case 'loading':
-      return <Loader2 className="h-4 w-4 animate-spin text-ash" />;
+      return <Loader2 className="text-text-muted h-4 w-4 animate-spin" />;
     default:
-      return <Info className="h-4 w-4 text-umay-blue" />;
+      return <Info className="h-4 w-4 text-info" />;
   }
 };
 
 const getProgressColor = (type?: ToastType): string => {
   switch (type) {
     case 'success':
-      return 'bg-signal-green';
+      return 'bg-success';
     case 'error':
-      return 'bg-alert-red';
+      return 'bg-danger';
     case 'warning':
-      return 'bg-amber-500';
+      return 'bg-warning';
     default:
-      return 'bg-umay-blue';
+      return 'bg-accent';
   }
 };
 
 export function ToastItem({ t }: { t: Toast }) {
-  const totalDuration = t.duration ?? 4000;
+  const totalDuration = t.duration ?? (t.action ? 5000 : 3000);
   const isInfinite = !isFinite(totalDuration as number);
 
   const [progress, setProgress] = useState(100);
@@ -87,15 +87,14 @@ export function ToastItem({ t }: { t: Toast }) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 50, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.1 } }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, transition: { duration: 0.15 } }}
       onMouseEnter={isInfinite ? undefined : pauseTimer}
       onMouseLeave={isInfinite ? undefined : resumeTimer}
       className={cn(
-        'layout-group pointer-events-auto relative w-full overflow-hidden',
-        'rounded-xl border border-gunmetal/30 bg-obsidian p-4 shadow-2xl shadow-void-black/50',
-        'flex items-start gap-3 backdrop-blur-xl',
+        'layout-group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden',
+        'dark:border-border-strong bg-surface-raised text-text shadow-float rounded-md border border-border p-4',
       )}
     >
       <div className="mt-0.5 shrink-0">
@@ -103,19 +102,20 @@ export function ToastItem({ t }: { t: Toast }) {
       </div>
       <div className="flex-1 space-y-1">
         {t.title && (
-          <p className="text-sm font-medium text-titanium">{t.title}</p>
+          <p className="text-body-sm text-text font-medium">{t.title}</p>
         )}
-        {t.description && <p className="text-xs text-ash">{t.description}</p>}
+        {t.description && (
+          <p className="text-text-muted text-caption">{t.description}</p>
+        )}
         {t.action && (
-          <div className="pt-2">
+          <div className="pt-1.5">
             <Button
-              variant="outline"
-              size="sm"
+              variant="secondary"
+              size="xs"
               onClick={() => {
                 t.action?.onClick();
                 toast.dismiss(t.id);
               }}
-              className="h-7 w-max rounded-md border-gunmetal/80 bg-gunmetal/30 px-3 text-xs font-semibold text-titanium hover:bg-gunmetal/50 active:scale-95"
             >
               {t.action.label}
             </Button>
@@ -124,9 +124,8 @@ export function ToastItem({ t }: { t: Toast }) {
       </div>
       <Button
         variant="ghost"
-        size="icon"
+        size="icon-xs"
         onClick={() => toast.dismiss(t.id)}
-        className="mt-0.5 h-6 w-6 rounded-md p-1 text-ash hover:bg-gunmetal/20 hover:text-titanium"
         aria-label="Bildirimi kapat"
       >
         <X className="h-3.5 w-3.5" />
@@ -134,7 +133,7 @@ export function ToastItem({ t }: { t: Toast }) {
       {!isInfinite && (
         <div
           className={cn(
-            'absolute bottom-0 left-0 h-[3px]',
+            'absolute bottom-0 left-0 h-[2px]',
             getProgressColor(t.type),
           )}
           style={{ width: `${progress}%` }}

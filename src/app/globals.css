@@ -4,318 +4,123 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Disable default cross-fade so only the custom clip-path animation is visible */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
 @layer base {
   :root {
-    /* ── Light Mode Semantic Variables ── */
-    --background: 38 30% 96%;
-    --foreground: 20 15% 10%;
-    --card: 36 20% 91%;
-    --card-foreground: 20 15% 10%;
-    --popover: 36 20% 91%;
-    --popover-foreground: 20 15% 10%;
-    --primary: 215 88% 46%;
-    --primary-50: 217 91% 97%;
-    --primary-100: 217 91% 94%;
-    --primary-200: 217 91% 86%;
-    --primary-300: 217 91% 77%;
-    --primary-400: 217 91% 68%;
-    --primary-500: 215 88% 46%;
-    --primary-600: 215 88% 40%;
-    --primary-700: 215 88% 32%;
-    --primary-800: 215 88% 24%;
-    --primary-900: 215 88% 16%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 30 12% 80%;
-    --secondary-foreground: 20 15% 10%;
-    --muted: 33 16% 87%;
-    --muted-foreground: 24 8% 42%;
-    --accent: 30 12% 80%;
-    --accent-foreground: 20 15% 10%;
-    --destructive: 0 78.7% 45%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 30 12% 80%;
-    --input: 36 20% 91%;
-    --ring: 215 88% 46%;
-    --radius: 0.5rem;
-    --chart-1: hsl(12 76% 61%);
-    --chart-2: hsl(173 58% 39%);
-    --chart-3: hsl(197 37% 24%);
-    --chart-4: hsl(43 74% 66%);
-    --chart-5: hsl(27 87% 67%);
+    /* ── Umay Light Theme (RGB triplets) ── */
+    --bg: 250 248 245; /* #FAF8F5 */
+    --surface: 255 255 255; /* #FFFFFF */
+    --surface-raised: 255 255 255; /* #FFFFFF */
+    --surface-sunken: 243 240 235; /* #F3F0EB */
+    --border: 229 224 216; /* #E5E0D8 */
+    --border-strong: 207 200 189; /* #CFC8BD */
+    --text: 28 26 23; /* #1C1A17 */
+    --text-muted: 95 90 82; /* #5F5A52 */
+    --text-subtle: 138 132 122; /* #8A847A */
+    --accent: 43 89 195; /* #2B59C3 */
+    --accent-hover: 35 74 163; /* #234AA3 */
+    --accent-subtle: 232 238 251; /* #E8EEFB */
+    --on-accent: 255 255 255; /* #FFFFFF */
+    --ember: 217 98 43; /* #D9622B */
 
-    /* ── Umay Brand & Semantic Surface Tokens ── */
-    --umay-blue: 215 88% 46%;
-    --umay-gold: 43 85% 48%;
-    --umay-firuze: 174 75% 36%;
-    --umay-cosmic: 222 47% 12%;
-    --surface: 38 30% 96%;
-    --surface-raised: 36 24% 93%;
-    --text: 20 15% 10%;
-    --text-muted: 24 8% 42%;
-    --umay-accent: 215 88% 46%;
-    --success: 145 63% 34%;
-    --warning: 38 92% 45%;
-    --danger: 0 78% 45%;
+    /* ── Status Tokens ── */
+    --success: 31 122 77; /* #1F7A4D */
+    --success-subtle: 227 243 234; /* #E3F3EA */
+    --warning: 161 92 7; /* #A15C07 */
+    --warning-subtle: 251 240 220; /* #FBF0DC */
+    --danger: 179 38 30; /* #B3261E */
+    --danger-subtle: 251 229 227; /* #FBE5E3 */
+    --info: var(--accent);
+    --info-subtle: var(--accent-subtle);
 
-    /* ── Light Mode: Brutalist Palette DEFAULT Overrides ── */
-    /* Numbered scales remain fixed absolute values; DEFAULTs shift with theme */
-    --void-black: 38 30% 96%; /* near-black → warm cream */
-    --obsidian: 36 20% 91%; /* deep dark → warm parchment */
-    --gunmetal: 30 12% 80%; /* dark border → warm stone */
-    --titanium: 20 15% 10%; /* light text → dark charcoal */
-    --ash: 24 8% 42%; /* medium gray → warm gray */
+    /* ── Category Dots / Labels ── */
+    --cat-1: 196 98 45; /* #C4622D */
+    --cat-2: 122 139 46; /* #7A8B2E */
+    --cat-3: 30 138 138; /* #1E8A8A */
+    --cat-4: 61 127 208; /* #3D7FD0 */
+    --cat-5: 122 91 196; /* #7A5BC4 */
+    --cat-6: 194 72 122; /* #C2487A */
+    --cat-7: 184 137 43; /* #B8892B */
+    --cat-8: 95 113 133; /* #5F7185 */
 
-    /* ── Fixed Brutalist Palette Scales (absolute values, no theme shift) ── */
+    /* ── Radius & Elevation ── */
+    --radius: 10px;
+    --shadow-float: 0 4px 16px rgb(28 26 23 / 0.08);
 
-    /* void-black (Base: #050505) */
-    --void-black-50: 0 0% 97%;
-    --void-black-100: 0 0% 94%;
-    --void-black-200: 0 0% 86%;
-    --void-black-300: 0 0% 77%;
-    --void-black-400: 0 0% 68%;
-    --void-black-500: 0 0% 2%;
-    --void-black-600: 0 0% 1.7%;
-    --void-black-700: 0 0% 1.4%;
-    --void-black-800: 0 0% 1%;
-    --void-black-900: 0 0% 0.6%;
-    --void-black-950: 0 0% 0.3%;
+    /* ── Tulpar & shadcn Semantic Aliases ── */
+    --background: var(--bg);
+    --foreground: var(--text);
+    --card: var(--surface);
+    --card-foreground: var(--text);
+    --popover: var(--surface-raised);
+    --popover-foreground: var(--text);
+    --primary: var(--accent);
+    --primary-foreground: var(--on-accent);
+    --secondary: var(--surface-sunken);
+    --secondary-foreground: var(--text);
+    --muted: var(--surface-sunken);
+    --muted-foreground: var(--text-muted);
+    --accent-foreground: var(--on-accent);
+    --destructive: var(--danger);
+    --destructive-foreground: 255 255 255;
+    --input: var(--border);
+    --ring: var(--accent);
 
-    /* obsidian (Base: #0F0F11) */
-    --obsidian-50: 240 6.2% 97%;
-    --obsidian-100: 240 6.2% 94%;
-    --obsidian-200: 240 6.2% 86%;
-    --obsidian-300: 240 6.2% 77%;
-    --obsidian-400: 240 6.2% 68%;
-    --obsidian-500: 240 6.2% 6.3%;
-    --obsidian-600: 240 6.2% 5.3%;
-    --obsidian-700: 240 6.2% 4.4%;
-    --obsidian-800: 240 6.2% 3.1%;
-    --obsidian-900: 240 6.2% 1.9%;
-    --obsidian-950: 240 6.2% 0.9%;
-
-    /* gunmetal (Base: #2A2A2E) */
-    --gunmetal-50: 240 4.5% 97%;
-    --gunmetal-100: 240 4.5% 94%;
-    --gunmetal-200: 240 4.5% 86%;
-    --gunmetal-300: 240 4.5% 77%;
-    --gunmetal-400: 240 4.5% 68%;
-    --gunmetal-500: 240 4.5% 17.3%;
-    --gunmetal-600: 240 4.5% 14.7%;
-    --gunmetal-700: 240 4.5% 12.1%;
-    --gunmetal-800: 240 4.5% 8.6%;
-    --gunmetal-900: 240 4.5% 5.2%;
-    --gunmetal-950: 240 4.5% 2.6%;
-
-    /* titanium (Base: #E2E2E2) */
-    --titanium-50: 0 0% 97%;
-    --titanium-100: 0 0% 94%;
-    --titanium-200: 0 0% 86%;
-    --titanium-300: 0 0% 77%;
-    --titanium-400: 0 0% 68%;
-    --titanium-500: 0 0% 88.6%;
-    --titanium-600: 0 0% 75.3%;
-    --titanium-700: 0 0% 62%;
-    --titanium-800: 0 0% 44.3%;
-    --titanium-900: 0 0% 26.6%;
-    --titanium-950: 0 0% 13.3%;
-
-    /* ash (Base: #6B6B70) */
-    --ash-50: 240 2.3% 97%;
-    --ash-100: 240 2.3% 94%;
-    --ash-200: 240 2.3% 86%;
-    --ash-300: 240 2.3% 77%;
-    --ash-400: 240 2.3% 68%;
-    --ash-500: 240 2.3% 42.9%;
-    --ash-600: 240 2.3% 36.5%;
-    --ash-700: 240 2.3% 30.1%;
-    --ash-800: 240 2.3% 21.5%;
-    --ash-900: 240 2.3% 12.9%;
-    --ash-950: 240 2.3% 6.4%;
-
-    /* umay-blue (Umay Mavi: Base #0F4C81 / #2563EB) */
-    --umay-blue-50: 217 91% 97%;
-    --umay-blue-100: 217 91% 94%;
-    --umay-blue-200: 217 91% 86%;
-    --umay-blue-300: 217 91% 77%;
-    --umay-blue-400: 217 91% 68%;
-    --umay-blue-500: 215 88% 46%;
-    --umay-blue-600: 215 88% 40%;
-    --umay-blue-700: 215 88% 32%;
-    --umay-blue-800: 215 88% 24%;
-    --umay-blue-900: 215 88% 16%;
-    --umay-blue-950: 215 88% 10%;
-    --umay-blue: 215 88% 46%;
-
-    /* umay-gold (Sıcak Kehribar / Ocak Altını) */
-    --umay-gold-50: 43 90% 97%;
-    --umay-gold-100: 43 90% 92%;
-    --umay-gold-200: 43 85% 82%;
-    --umay-gold-300: 43 85% 70%;
-    --umay-gold-400: 43 85% 60%;
-    --umay-gold-500: 43 85% 50%;
-    --umay-gold-600: 43 85% 44%;
-    --umay-gold-700: 43 85% 36%;
-    --umay-gold-800: 43 85% 28%;
-    --umay-gold-900: 43 85% 18%;
-    --umay-gold-950: 43 85% 10%;
-
-    /* umay-firuze (Firuze Vurgu) */
-    --umay-firuze-50: 174 75% 97%;
-    --umay-firuze-100: 174 75% 92%;
-    --umay-firuze-200: 174 75% 80%;
-    --umay-firuze-300: 174 75% 65%;
-    --umay-firuze-400: 174 75% 50%;
-    --umay-firuze-500: 174 75% 40%;
-    --umay-firuze-600: 174 75% 34%;
-    --umay-firuze-700: 174 75% 28%;
-    --umay-firuze-800: 174 75% 22%;
-    --umay-firuze-900: 174 75% 14%;
-    --umay-firuze-950: 174 75% 8%;
-
-    /* signal-green (Base: #27AE60) — slightly darker in light mode */
-    --signal-green-50: 145 63.4% 97%;
-    --signal-green-100: 145 63.4% 94%;
-    --signal-green-200: 145 63.4% 86%;
-    --signal-green-300: 145 63.4% 77%;
-    --signal-green-400: 145 63.4% 68%;
-    --signal-green-500: 145 63.4% 41.8%;
-    --signal-green-600: 145 63.4% 35.5%;
-    --signal-green-700: 145 63.4% 29.2%;
-    --signal-green-800: 145 63.4% 20.9%;
-    --signal-green-900: 145 63.4% 12.5%;
-    --signal-green-950: 145 63.4% 6.3%;
-    --signal-green: 145 63.4% 35%;
-
-    /* alert-red (Base: #EB5757) — slightly darker in light mode */
-    --alert-red-50: 0 78.7% 97%;
-    --alert-red-100: 0 78.7% 94%;
-    --alert-red-200: 0 78.7% 86%;
-    --alert-red-300: 0 78.7% 77%;
-    --alert-red-400: 0 78.7% 68%;
-    --alert-red-500: 0 78.7% 63.1%;
-    --alert-red-600: 0 78.7% 53.7%;
-    --alert-red-700: 0 78.7% 44.2%;
-    --alert-red-800: 0 78.7% 31.6%;
-    --alert-red-900: 0 78.7% 18.9%;
-    --alert-red-950: 0 78.7% 9.5%;
-    --alert-red: 0 78.7% 48%;
-
-    /* ── Light Palette Scales ── */
-
-    /* linen (warm off-white, main light background) */
-    --linen-50: 40 40% 99%;
-    --linen-100: 40 35% 97%;
-    --linen-200: 38 32% 94%;
-    --linen-300: 38 28% 89%;
-    --linen-400: 38 22% 83%;
-    --linen-500: 36 18% 75%;
-    --linen-600: 33 14% 62%;
-    --linen-700: 28 10% 47%;
-    --linen-800: 22 8% 31%;
-    --linen-900: 18 7% 17%;
-    --linen-950: 16 6% 9%;
-    --linen: 38 30% 96%;
-
-    /* parchment (warm card surface) */
-    --parchment-50: 38 35% 98%;
-    --parchment-100: 36 28% 95%;
-    --parchment-200: 36 22% 91%;
-    --parchment-300: 35 18% 86%;
-    --parchment-400: 33 15% 79%;
-    --parchment-500: 30 12% 70%;
-    --parchment-600: 27 10% 57%;
-    --parchment-700: 23 8% 43%;
-    --parchment-800: 18 6% 29%;
-    --parchment-900: 14 5% 16%;
-    --parchment-950: 12 4% 8%;
-    --parchment: 36 20% 91%;
-
-    /* sandstone (warm border/divider) */
-    --sandstone-50: 35 25% 97%;
-    --sandstone-100: 34 20% 93%;
-    --sandstone-200: 33 16% 87%;
-    --sandstone-300: 32 13% 80%;
-    --sandstone-400: 30 11% 71%;
-    --sandstone-500: 28 9% 60%;
-    --sandstone-600: 25 7% 48%;
-    --sandstone-700: 22 6% 36%;
-    --sandstone-800: 18 5% 24%;
-    --sandstone-900: 14 4% 13%;
-    --sandstone-950: 12 3% 7%;
-    --sandstone: 30 12% 80%;
-
-    /* ink (dark warm text) */
-    --ink-50: 22 15% 97%;
-    --ink-100: 22 13% 93%;
-    --ink-200: 21 12% 85%;
-    --ink-300: 20 12% 72%;
-    --ink-400: 20 13% 55%;
-    --ink-500: 20 14% 38%;
-    --ink-600: 20 15% 27%;
-    --ink-700: 20 15% 18%;
-    --ink-800: 19 15% 12%;
-    --ink-900: 18 14% 7%;
-    --ink-950: 17 13% 4%;
-    --ink: 20 15% 10%;
+    --void-black: var(--bg);
+    --obsidian: var(--surface);
+    --gunmetal: var(--border-strong);
+    --titanium: var(--text);
+    --ash: var(--text-muted);
+    --umay-blue: var(--accent);
+    --tulpar-blue: var(--accent);
+    --umay-accent: var(--accent);
+    --umay-gold: var(--ember);
+    --umay-firuze: var(--cat-3);
+    --umay-cosmic: 28 26 23;
+    --signal-green: var(--success);
+    --alert-red: var(--danger);
   }
 
   .dark {
-    /* ── Dark Mode Semantic Variables (Umay Midnight) ── */
-    --background: 222 47% 5%;
-    --foreground: 210 40% 98%;
-    --card: 222 40% 7.5%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 40% 7.5%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
-    --primary-500: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 222 25% 15%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 222 25% 15%;
-    --muted-foreground: 215 18% 65%;
-    --accent: 222 25% 15%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 222 25% 16%;
-    --input: 222 25% 16%;
-    --ring: 217 91% 60%;
-    --chart-1: hsl(220 70% 50%);
-    --chart-2: hsl(160 60% 45%);
-    --chart-3: hsl(30 80% 55%);
-    --chart-4: hsl(280 65% 60%);
-    --chart-5: hsl(340 75% 55%);
+    /* ── Umay Dark Theme (RGB triplets) ── */
+    --bg: 18 17 16; /* #121110 */
+    --surface: 26 24 22; /* #1A1816 */
+    --surface-raised: 33 31 28; /* #211F1C */
+    --surface-sunken: 13 12 11; /* #0D0C0B */
+    --border: 46 43 39; /* #2E2B27 */
+    --border-strong: 67 63 57; /* #433F39 */
+    --text: 243 239 233; /* #F3EFE9 */
+    --text-muted: 181 174 163; /* #B5AEA3 */
+    --text-subtle: 138 131 121; /* #8A8379 */
+    --accent: 122 156 255; /* #7A9CFF */
+    --accent-hover: 152 179 255; /* #98B3FF */
+    --accent-subtle: 27 37 64; /* #1B2540 */
+    --on-accent: 11 16 32; /* #0B1020 */
+    --ember: 240 138 75; /* #F08A4B */
 
-    /* ── Dark Mode: Brutalist Palette DEFAULT Overrides ── */
-    --void-black: 222 47% 3%;
-    --obsidian: 222 40% 7.5%;
-    --gunmetal: 222 25% 16%;
-    --titanium: 210 40% 98%;
-    --ash: 215 18% 55%;
+    /* ── Status Tokens ── */
+    --success: 76 195 138; /* #4CC38A */
+    --success-subtle: 18 40 30; /* #12281E */
+    --warning: 232 163 61; /* #E8A33D */
+    --warning-subtle: 44 34 16; /* #2C2210 */
+    --danger: 242 118 110; /* #F2766E */
+    --danger-subtle: 48 22 21; /* #301615 */
+    --info: var(--accent);
+    --info-subtle: var(--accent-subtle);
 
-    /* ── Dark Mode: Brand & Semantic Surface Overrides ── */
-    --umay-blue: 217 91% 60%;
-    --umay-gold: 43 90% 55%;
-    --umay-firuze: 174 75% 45%;
-    --umay-cosmic: 222 47% 5%;
-    --surface: 222 47% 5%;
-    --surface-raised: 222 40% 8%;
-    --text: 210 40% 98%;
-    --text-muted: 215 18% 65%;
-    --umay-accent: 217 91% 60%;
-    --success: 145 63.4% 41.8%;
-    --warning: 38 92% 55%;
-    --danger: 0 78.7% 63.1%;
-    --signal-green: 145 63.4% 41.8%;
-    --alert-red: 0 78.7% 63.1%;
+    /* ── Category Dots / Labels (12–15% lighter) ── */
+    --cat-1: 217 124 73;
+    --cat-2: 147 164 70;
+    --cat-3: 56 162 162;
+    --cat-4: 92 150 222;
+    --cat-5: 147 119 212;
+    --cat-6: 211 102 147;
+    --cat-7: 204 160 71;
+    --cat-8: 122 139 158;
+
+    --shadow-float: none;
+
+    --destructive-foreground: 11 16 32;
+    --umay-cosmic: 18 17 16;
   }
 
   * {
@@ -324,7 +129,22 @@
 
   html,
   body {
-    @apply selection:bg-umay-blue/20 bg-background font-sans text-foreground antialiased;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+    @apply selection:text-text font-sans antialiased selection:bg-accent/20;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading text-text tracking-tight;
+  }
+
+  code {
+    @apply font-mono text-xs;
   }
 }
 
@@ -339,11 +159,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply rounded-full bg-gunmetal/60 transition-colors;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-ash/50;
+  background-color: rgb(var(--border-strong));
+  border-radius: 9999px;
 }
 
 /* Hide Number Input Arrows */
@@ -357,80 +174,17 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-/* Utility Utilities */
-.glass-panel-premium {
-  @apply border border-titanium/5 bg-obsidian shadow-xl;
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
-/* Landing page grid — color adapts via --gunmetal CSS variable */
-.grid-pattern {
-  background-image:
-    linear-gradient(to right, hsl(var(--gunmetal) / 0.4) 1px, transparent 1px),
-    linear-gradient(to bottom, hsl(var(--gunmetal) / 0.4) 1px, transparent 1px);
-  background-size: 4rem 4rem;
-}
-
-/* Assistant radial glow — adapts via --umay-blue */
-.umay-glow-radial {
-  background: radial-gradient(
-    circle at center,
-    hsl(var(--umay-blue) / 0.15) 0%,
-    transparent 70%
-  );
-}
-
-/* Typography Overrides */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-display font-medium tracking-tight;
-}
-
-code {
-  @apply font-mono text-xs;
-}
-
-.glass-panel {
-  background: hsl(var(--obsidian) / 0.72);
-  backdrop-filter: blur(8px);
-  border: 1px solid hsl(var(--gunmetal) / 0.6);
-}
-
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(10px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes caret-blink {
-  0%,
-  70%,
-  100% {
-    opacity: 1;
-  }
-  20%,
-  50% {
-    opacity: 0;
-  }
-}
-
-.animate-caret-blink {
-  animation: caret-blink 1.25s ease-out infinite;
 }

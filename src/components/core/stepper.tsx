@@ -68,8 +68,8 @@ export function StepperItem({
           className={cn(
             'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 font-mono text-xs font-bold transition-colors sm:h-10 sm:w-10 sm:text-sm',
             isActive || isCompleted
-              ? 'border-umay-blue bg-umay-blue text-white'
-              : 'border-border bg-background text-muted-foreground',
+              ? 'text-on-accent border-accent bg-accent'
+              : 'bg-surface text-text-muted border-border',
           )}
         >
           {isCompleted ? (
@@ -84,18 +84,18 @@ export function StepperItem({
         <div className="mt-2 max-w-24 text-center sm:max-w-40">
           <div
             className={cn(
-              'text-2xs font-bold uppercase tracking-wider sm:text-xs',
+              'text-caption font-semibold',
               isActive
-                ? 'text-umay-blue'
+                ? 'text-accent'
                 : isCompleted
-                  ? 'text-foreground'
-                  : 'text-muted-foreground',
+                  ? 'text-text'
+                  : 'text-text-muted',
             )}
           >
             {title}
           </div>
           {description && (
-            <div className="mt-1 hidden text-xs text-muted-foreground sm:block">
+            <div className="text-text-muted mt-1 hidden text-caption sm:block">
               {description}
             </div>
           )}
@@ -106,7 +106,7 @@ export function StepperItem({
           aria-hidden="true"
           className={cn(
             'mx-2 mt-[18px] h-0.5 min-w-3 flex-1 transition-colors sm:mx-4 sm:mt-5',
-            isCompleted ? 'bg-umay-blue' : 'bg-border',
+            isCompleted ? 'bg-accent' : 'bg-border',
           )}
         />
       )}

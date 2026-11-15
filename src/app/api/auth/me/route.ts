@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminSessionToken, getSessionToken } from '@/lib/auth/session';
+import { getSessionToken } from '@/lib/auth/session';
 import { verifyToken } from '@/lib/auth/jwt';
 
 export async function GET(request: NextRequest) {
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     // 2. Fallback to HTTP-Only Cookie
     if (!token) {
-      token = (await getSessionToken()) || (await getAdminSessionToken());
+      token = await getSessionToken();
     }
 
     if (!token) {

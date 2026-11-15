@@ -21,7 +21,7 @@ import type { ApplicationShellProps } from './types';
 
 export function ApplicationShell({ ...props }: ApplicationShellProps) {
   return (
-    <SidebarProvider className="bg-background font-sans text-foreground [&_[data-sidebar=sidebar]]:bg-card [&_[data-sidebar=sidebar]]:text-foreground">
+    <SidebarProvider className="bg-bg text-text [&_[data-sidebar=sidebar]]:bg-surface [&_[data-sidebar=sidebar]]:text-text font-sans">
       <ApplicationShellContent {...props} />
     </SidebarProvider>
   );
@@ -84,7 +84,7 @@ function ApplicationShellContent({
         )}
       </Sidebar>
 
-      <SidebarInset className="min-h-screen bg-background text-foreground antialiased selection:bg-umay-blue/20 selection:text-foreground">
+      <SidebarInset className="bg-bg text-text selection:text-text min-h-screen antialiased selection:bg-accent/20">
         <ApplicationShellHeader
           active={active}
           collapsed={collapsed}
@@ -93,7 +93,7 @@ function ApplicationShellContent({
           onToggleCollapsed={toggleSidebar}
         />
 
-        <div className="min-w-0 flex-1 p-4 pb-20 sm:p-6 sm:pb-20 lg:p-8 lg:pb-8">
+        <div className="mx-auto w-full min-w-0 max-w-6xl flex-1 p-4 pb-28 sm:p-6 sm:pb-28 md:pb-8 lg:p-8">
           <div className="space-y-6">
             {active && !hidePageHeader && (
               <PageHeader

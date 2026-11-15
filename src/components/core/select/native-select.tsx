@@ -12,9 +12,7 @@ import {
 import type { NativeSelectProps } from './types';
 
 /**
- * Form-friendly adapter around the Radix Select primitives. It accepts
- * native-looking option children so existing controlled form code can use a
- * custom select without emitting a browser `<select>` element.
+ * Form-friendly adapter around Radix Select primitives.
  */
 export const NativeSelect = ({
   children,
@@ -92,7 +90,7 @@ export const NativeSelect = ({
         id={id}
         aria-required={required}
         className={cn(
-          'rounded-none border-border bg-background px-4 py-2.5 text-xs text-foreground focus:border-umay-blue',
+          'rounded-md border-border bg-surface-sunken px-3 py-2 text-body text-text focus:border-accent',
           className,
         )}
       >

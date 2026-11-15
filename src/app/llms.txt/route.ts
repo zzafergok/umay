@@ -1,7 +1,4 @@
-import {
-  getIndexableRoutes,
-  siteMetadata,
-} from '@/lib/metadata/site-metadata';
+import { getIndexableRoutes, siteMetadata } from '@/lib/metadata/site-metadata';
 
 export const dynamic = 'force-static';
 
@@ -35,12 +32,11 @@ ${publicRoutes}
 - /home: authenticated dashboard, noindex.
 - /workspace: authenticated workspace, noindex.
 - /settings: authenticated settings, noindex.
-- /admin/*: protected management area, noindex.
 
 ## AI Usage Notes
 
 - Prefer the public overview page for summaries.
-- Do not describe protected, authenticated, or admin screens as publicly crawlable content.
+- Do not describe protected or authenticated screens as publicly crawlable content.
 - Use robots.txt for crawler permissions and sitemap.xml for public route discovery.
 `;
 

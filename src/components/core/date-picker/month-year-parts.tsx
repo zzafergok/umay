@@ -73,12 +73,13 @@ export function MonthYearGrid({
               variant="ghost"
               size="sm"
               className={cn(
-                'relative flex h-10 items-center justify-center px-3 text-sm font-normal',
-                'text-titanium hover:bg-gunmetal/20',
-                selected && 'bg-umay-blue text-white hover:bg-umay-blue/90',
+                'relative flex h-10 items-center justify-center px-3 text-body-sm font-normal',
+                'text-text hover:bg-surface-sunken',
+                selected &&
+                  'bg-accent text-on-accent hover:bg-accent-hover hover:text-on-accent',
                 current &&
                   !selected &&
-                  'border border-umay-blue/20 bg-umay-blue/10 text-umay-blue',
+                  'border border-accent/25 bg-accent-subtle text-accent',
                 disabled && 'cursor-not-allowed opacity-50',
               )}
               onClick={() => !disabled && onMonthSelect(index)}
@@ -86,21 +87,21 @@ export function MonthYearGrid({
             >
               {month}
               {current && !selected && (
-                <div className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 transform rounded-full bg-umay-blue" />
+                <div className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 transform rounded-full bg-accent" />
               )}
             </Button>
           );
         })}
       </div>
-      <div className="mt-4 flex items-center justify-between border-t border-gunmetal pt-3">
-        <div className="text-xs text-ash">
+      <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
+        <div className="text-caption text-text-muted">
           {value ? displayValue : 'Ay/Yıl seçilmedi'}
         </div>
         <Button
           size="sm"
           variant="outline"
           onClick={onClose}
-          className="h-7 px-3 text-xs"
+          className="h-7 px-3 text-caption"
         >
           Tamam
         </Button>
@@ -115,8 +116,8 @@ interface MonthYearSidebarProps {
 
 export function MonthYearSidebar({ onQuickDateSelect }: MonthYearSidebarProps) {
   return (
-    <div className="min-w-[120px] border-r border-gunmetal p-3">
-      <div className="mb-2 text-xs font-bold uppercase tracking-wide text-ash/70">
+    <div className="min-w-[120px] border-r border-border p-3">
+      <div className="mb-2 text-caption font-semibold text-text-muted">
         Hızlı Seçim
       </div>
       <div className="space-y-1">
@@ -125,7 +126,7 @@ export function MonthYearSidebar({ onQuickDateSelect }: MonthYearSidebarProps) {
             key={quickDate.label}
             variant="ghost"
             size="sm"
-            className="h-8 w-full justify-start px-2 text-xs font-normal hover:bg-umay-blue/10"
+            className="h-8 w-full justify-start px-2 text-caption font-normal hover:bg-accent-subtle"
             onClick={() => onQuickDateSelect(quickDate)}
           >
             {quickDate.label}

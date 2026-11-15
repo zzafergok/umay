@@ -4,7 +4,6 @@ import { AuthUser } from '@/stores/use-auth-store';
 export interface LoginCredentials {
   email: string;
   password?: string;
-  isAdmin?: boolean;
 }
 
 export interface LoginResponse {

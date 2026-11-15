@@ -1,6 +1,6 @@
 'use client';
 
-import { Sparkles, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Wrench } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import {
   Card,
@@ -18,23 +18,18 @@ export function LifecycleCtaCard({
   lifecycleCallout: PublicHomeCopy['lifecycleCallout'];
 }) {
   return (
-    <Card className="overflow-hidden border-border/80 bg-gradient-to-br from-card to-muted/30 shadow-sm transition-all hover:border-umay-blue/40">
-      <CardHeader className="p-6 sm:p-8">
+    <Card>
+      <CardHeader>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Badge
-                variant="outline"
-                className="border-umay-firuze/40 text-2xs font-bold uppercase tracking-wider text-umay-firuze"
-              >
-                <Sparkles className="mr-1 h-3 w-3" />
-                {lifecycleCallout.badge}
-              </Badge>
-            </div>
-            <CardTitle className="font-mono text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+            <Badge variant="default">
+              <Wrench className="mr-1 h-3 w-3" aria-hidden="true" />
+              {lifecycleCallout.badge}
+            </Badge>
+            <CardTitle className="font-heading text-title sm:text-display-sm">
               {lifecycleCallout.title}
             </CardTitle>
-            <CardDescription className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+            <CardDescription className="max-w-prose">
               {lifecycleCallout.description}
             </CardDescription>
           </div>
@@ -43,20 +38,23 @@ export function LifecycleCtaCard({
             <GoogleSignInButton
               label={lifecycleCallout.action}
               size="lg"
-              className="w-full font-bold shadow-sm sm:w-auto"
+              className="w-full sm:w-auto"
             />
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="px-6 pb-6 pt-0 sm:px-8 sm:pb-8">
-        <div className="grid grid-cols-1 gap-3 border-t border-border/50 pt-4 sm:grid-cols-2 lg:grid-cols-4">
+      <CardContent>
+        <div className="grid grid-cols-1 gap-3 border-t border-border pt-4 sm:grid-cols-2 lg:grid-cols-4">
           {lifecycleCallout.features.map((feature) => (
             <div
               key={feature}
-              className="flex items-start gap-2.5 rounded-lg border border-border/40 bg-background/50 p-3 text-xs leading-snug text-foreground/90"
+              className="bg-surface-sunken text-text flex items-start gap-2.5 rounded-md border border-border p-3 text-caption"
             >
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-umay-blue" />
+              <CheckCircle2
+                className="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                aria-hidden="true"
+              />
               <span>{feature}</span>
             </div>
           ))}

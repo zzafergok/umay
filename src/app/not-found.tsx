@@ -27,27 +27,24 @@ export default async function NotFound() {
   return (
     <PublicShell>
       <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-16">
-        <Card className="w-full max-w-lg border-gunmetal bg-obsidian text-center shadow-2xl">
+        <Card className="bg-surface shadow-float w-full max-w-lg rounded-lg border-border text-center">
           <CardHeader className="space-y-4 pb-2">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-sm border border-umay-blue/40 bg-umay-blue/10 text-umay-blue">
+            <div className="bg-accent-subtle mx-auto flex h-14 w-14 items-center justify-center rounded-md border border-accent/30 text-accent">
               <Compass className="h-7 w-7" />
             </div>
-            <div className="inline-block font-mono text-xs font-bold uppercase tracking-widest text-umay-blue">
+            <div className="inline-block font-mono text-caption font-semibold text-accent">
               {copy.badge}
             </div>
-            <CardTitle className="text-2xl font-black uppercase tracking-tight text-titanium sm:text-3xl">
+            <CardTitle className="font-heading text-display-sm text-text sm:text-display">
               {copy.title}
             </CardTitle>
-            <CardDescription className="mx-auto max-w-md font-sans text-sm leading-relaxed text-ash">
+            <CardDescription className="text-body-sm text-text-muted mx-auto max-w-md leading-relaxed">
               {copy.description}
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="flex justify-center">
-              <Button
-                asChild
-                className="h-10 rounded-none bg-umay-blue font-bold uppercase tracking-wider text-white hover:bg-umay-blue/90"
-              >
+              <Button asChild variant="primary">
                 <Link href="/">
                   <Home className="mr-2 h-4 w-4" />
                   {copy.homeButton}

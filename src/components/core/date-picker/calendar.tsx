@@ -28,7 +28,7 @@ export function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        'select-none rounded-sm border border-gunmetal/30 bg-obsidian/60 p-3 text-titanium',
+        'select-none rounded-md border border-border bg-surface p-3 text-text',
         className,
       )}
       captionLayout={captionLayout}
@@ -47,11 +47,11 @@ export function Calendar({
         month: cn(defaultClassNames.month, 'space-y-4'),
         month_caption: cn(
           defaultClassNames.month_caption,
-          'relative flex h-7 items-center justify-center pt-1 text-sm font-medium text-titanium',
+          'relative flex h-7 items-center justify-center pt-1 text-body-sm font-medium text-text',
         ),
         caption_label: cn(
           defaultClassNames.caption_label,
-          'text-sm font-medium',
+          'text-body-sm font-medium',
         ),
         nav: cn(
           defaultClassNames.nav,
@@ -59,11 +59,11 @@ export function Calendar({
         ),
         button_previous: cn(
           buttonVariants({ variant: buttonVariant }),
-          'size-7 bg-transparent p-0 text-ash hover:bg-gunmetal/40 hover:text-titanium',
+          'size-7 bg-transparent p-0 text-text-muted hover:bg-surface-sunken hover:text-text',
         ),
         button_next: cn(
           buttonVariants({ variant: buttonVariant }),
-          'size-7 bg-transparent p-0 text-ash hover:bg-gunmetal/40 hover:text-titanium',
+          'size-7 bg-transparent p-0 text-text-muted hover:bg-surface-sunken hover:text-text',
         ),
         month_grid: cn(
           defaultClassNames.month_grid,
@@ -72,31 +72,31 @@ export function Calendar({
         weekdays: cn(defaultClassNames.weekdays, 'flex'),
         weekday: cn(
           defaultClassNames.weekday,
-          'w-9 rounded-sm text-center text-[0.8rem] font-normal text-ash',
+          'w-9 rounded-sm text-center text-caption font-normal text-text-muted',
         ),
         week: cn(defaultClassNames.week, 'mt-2 flex w-full'),
         day: cn(
-          'relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-umay-blue/10 [&:has([aria-selected].day-range-end)]:rounded-e-sm [&:has([aria-selected].day-outside)]:bg-transparent',
+          'relative p-0 text-center text-body-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent-subtle [&:has([aria-selected].day-range-end)]:rounded-e-sm [&:has([aria-selected].day-outside)]:bg-transparent',
           props.mode === 'range'
             ? '[&:has(>.day-range-end)]:rounded-e-sm [&:has(>.day-range-start)]:rounded-s-sm first:[&:has([aria-selected])]:rounded-s-sm last:[&:has([aria-selected])]:rounded-e-sm'
             : '[&:has([aria-selected])]:rounded-sm',
         ),
         day_button: cn(
           buttonVariants({ variant: 'ghost' }),
-          'size-9 rounded-sm p-0 font-normal transition-colors hover:bg-gunmetal/40 hover:text-titanium aria-selected:opacity-100',
+          'size-9 rounded-sm p-0 font-normal transition-colors hover:bg-surface-sunken hover:text-text aria-selected:opacity-100',
         ),
         range_start:
-          'day-range-start rounded-s-sm bg-umay-blue text-white hover:bg-umay-blue',
+          'day-range-start rounded-s-sm bg-accent text-on-accent hover:bg-accent-hover hover:text-on-accent',
         range_end:
-          'day-range-end rounded-e-sm bg-umay-blue text-white hover:bg-umay-blue',
+          'day-range-end rounded-e-sm bg-accent text-on-accent hover:bg-accent-hover hover:text-on-accent',
         selected:
-          'rounded-sm bg-umay-blue text-white hover:bg-umay-blue hover:text-white focus:bg-umay-blue focus:text-white',
-        today: 'rounded-sm bg-gunmetal/40 font-bold text-umay-blue',
+          'rounded-sm bg-accent text-on-accent hover:bg-accent-hover hover:text-on-accent focus:bg-accent focus:text-on-accent',
+        today: 'rounded-sm bg-accent-subtle font-semibold text-accent',
         outside:
-          'day-outside text-ash/40 aria-selected:bg-umay-blue/5 aria-selected:text-ash/60',
-        disabled: 'cursor-not-allowed text-ash/30 opacity-50',
+          'day-outside text-text-subtle aria-selected:bg-accent-subtle/50 aria-selected:text-text-muted',
+        disabled: 'cursor-not-allowed text-text-subtle opacity-50',
         range_middle:
-          'rounded-none aria-selected:bg-umay-blue/10 aria-selected:text-umay-blue',
+          'rounded-sm aria-selected:bg-accent-subtle aria-selected:text-accent',
         hidden: 'invisible',
         ...classNames,
       }}

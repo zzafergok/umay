@@ -19,11 +19,11 @@ export const Switch = React.forwardRef<
     data-slot="switch"
     data-size={size}
     className={cn(
-      'group/switch shadow-xs peer inline-flex shrink-0 cursor-pointer items-center rounded-sm border-2 border-transparent outline-none transition-all',
-      'focus-visible:border-umay-blue/70 focus-visible:ring-1 focus-visible:ring-umay-blue/50',
+      'group/switch peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent outline-none transition-colors',
+      'focus-visible:ring-offset-bg focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      'aria-invalid:border-alert-red aria-invalid:ring-1 aria-invalid:ring-alert-red/30',
-      'data-[state=checked]:bg-umay-blue data-[state=unchecked]:bg-ash/45 dark:data-[state=unchecked]:bg-gunmetal/80',
+      'aria-invalid:border-danger aria-invalid:ring-1 aria-invalid:ring-danger/30',
+      'data-[state=unchecked]:bg-border-strong data-[state=checked]:bg-accent',
       'data-[size=default]:h-5 data-[size=default]:w-9',
       'data-[size=sm]:h-4 data-[size=sm]:w-7',
       className,
@@ -33,7 +33,7 @@ export const Switch = React.forwardRef<
     <SwitchPrimitive.Thumb
       data-slot="switch-thumb"
       className={cn(
-        'rounded-xs pointer-events-none block bg-void-black shadow-sm transition-transform dark:bg-titanium',
+        'dark:group-data-[state=unchecked]/switch:bg-text group-data-[state=checked]/switch:bg-on-accent pointer-events-none block rounded-full bg-white transition-transform',
         'data-[size=default]:size-4 data-[size=sm]:size-3',
         'data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0',
         'rtl:data-[state=checked]:-translate-x-4',

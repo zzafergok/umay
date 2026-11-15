@@ -31,10 +31,10 @@ export function QuestionnaireChoice({
     <QuestionnairePrimitive.Choice
       data-slot="questionnaire-choice"
       className={cn(
-        'group/questionnaire-choice relative flex min-h-11 cursor-pointer select-none items-start gap-2.5 rounded-sm border border-gunmetal/80 bg-obsidian/40 px-3 py-2.5 text-start text-sm text-titanium outline-none transition-colors hover:bg-gunmetal/30',
-        'has-[>input:focus-visible]:border-umay-blue has-[>input:focus-visible]:ring-1 has-[>input:focus-visible]:ring-umay-blue/50',
-        'data-invalid:border-alert-red',
-        'data-checked:border-umay-blue data-checked:bg-umay-blue/10',
+        'group/questionnaire-choice relative flex min-h-11 cursor-pointer select-none items-start gap-2.5 rounded-md border border-border bg-surface px-3 py-2.5 text-start text-body-sm text-text outline-none transition-colors hover:bg-surface-sunken',
+        'has-[>input:focus-visible]:border-accent has-[>input:focus-visible]:ring-2 has-[>input:focus-visible]:ring-accent/25',
+        'data-invalid:border-danger',
+        'data-checked:border-accent data-checked:bg-accent-subtle',
         'data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className,
       )}
@@ -47,11 +47,11 @@ export function QuestionnaireChoice({
       <span
         aria-hidden="true"
         data-slot="questionnaire-choice-indicator"
-        className="rounded-xs group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-data-checked/questionnaire-choice:border-umay-blue group-data-checked/questionnaire-choice:bg-umay-blue group-data-checked/questionnaire-choice:text-white pointer-events-none relative flex size-4 shrink-0 translate-y-0.5 items-center justify-center border border-gunmetal/80 bg-void-black group-data-[type=radio]/questionnaire-choice:rounded-full"
+        className="rounded-xs group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-data-checked/questionnaire-choice:border-accent group-data-checked/questionnaire-choice:bg-accent group-data-checked/questionnaire-choice:text-on-accent pointer-events-none relative flex size-4 shrink-0 translate-y-0.5 items-center justify-center border border-border-strong bg-surface-sunken group-data-[type=radio]/questionnaire-choice:rounded-full"
       >
         <span
           data-slot="questionnaire-choice-indicator-dot"
-          className="group-data-checked/questionnaire-choice:block hidden size-2 rounded-full bg-white group-data-[type=checkbox]/questionnaire-choice:hidden"
+          className="group-data-checked/questionnaire-choice:block hidden size-2 rounded-full bg-on-accent group-data-[type=checkbox]/questionnaire-choice:hidden"
         />
         <Check
           data-slot="questionnaire-choice-indicator-check"
@@ -66,7 +66,7 @@ export function QuestionnaireChoice({
       </QuestionnairePrimitive.ChoiceLabel>
       <QuestionnairePrimitive.ChoiceShortcut
         data-slot="questionnaire-choice-shortcut"
-        className="rounded-xs group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 pointer-events-none ms-auto hidden size-5 shrink-0 translate-y-0.5 items-center justify-center border border-gunmetal/80 bg-obsidian font-mono text-[0.625rem] font-medium leading-none text-ash group-data-[shortcut]/questionnaire-choice:inline-flex"
+        className="rounded-xs group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 pointer-events-none ms-auto hidden size-5 shrink-0 translate-y-0.5 items-center justify-center border border-border bg-surface-sunken font-mono text-2xs font-medium leading-none text-text-muted group-data-[shortcut]/questionnaire-choice:inline-flex"
       />
     </QuestionnairePrimitive.Choice>
   );
@@ -79,7 +79,7 @@ export function QuestionnaireChoiceDescription({
   return (
     <span
       data-slot="questionnaire-choice-description"
-      className={cn('text-ash', className)}
+      className={cn('text-text-muted', className)}
       {...props}
     />
   );
@@ -97,11 +97,11 @@ export function QuestionnaireInput({
       <QuestionnairePrimitive.Input
         data-slot="questionnaire-input"
         className={cn(
-          'h-8 min-h-11 w-full min-w-0 rounded-sm border border-gunmetal/80 bg-void-black px-2.5 py-1 text-base text-titanium outline-none transition-[color,box-shadow,background-color]',
-          'focus-visible:border-umay-blue focus-visible:ring-1 focus-visible:ring-umay-blue/50',
+          'min-h-11 w-full min-w-0 rounded-md border border-border bg-surface-sunken px-3 py-2 text-body text-text outline-none transition-colors',
+          'focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
           'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
-          'aria-invalid:border-alert-red aria-invalid:ring-1 aria-invalid:ring-alert-red/30',
-          'selection:bg-umay-blue selection:text-white placeholder:text-ash/50 sm:min-h-0 md:text-sm',
+          'aria-invalid:border-danger aria-invalid:ring-danger/30',
+          'selection:bg-accent selection:text-on-accent placeholder:text-text-subtle',
           className,
         )}
         {...props}

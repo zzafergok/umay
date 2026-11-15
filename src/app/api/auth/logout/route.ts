@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import { destroyAdminSession, destroySession } from '@/lib/auth/session';
+import { destroySession } from '@/lib/auth/session';
 
 export async function POST() {
   try {
     await destroySession();
-    await destroyAdminSession();
 
     return NextResponse.json(
       { message: 'Logged out successfully' },

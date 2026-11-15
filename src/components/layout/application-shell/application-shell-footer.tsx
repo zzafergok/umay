@@ -14,7 +14,7 @@ export function ApplicationShellFooter({
           ? collapsed
             ? 'h-auto min-h-16 px-2 py-3'
             : 'h-16 px-3 sm:px-4'
-          : 'min-h-16 px-4 py-3 text-center font-mono text-2xs uppercase text-ash'
+          : 'text-text-muted min-h-16 px-4 py-3 text-center text-caption'
       }`}
     >
       {children}

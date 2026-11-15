@@ -19,8 +19,9 @@ export const CompactControl = React.forwardRef<
   <Button
     ref={ref}
     variant={variant}
+    size="icon-sm"
     className={cn(
-      'relative inline-flex h-8 min-w-8 items-center justify-center overflow-hidden rounded-none border border-gunmetal px-2 text-ash transition-colors hover:border-umay-blue/50 hover:text-titanium',
+      'bg-surface text-text-muted hover:border-border-strong hover:bg-surface-sunken hover:text-text relative inline-flex h-10 min-w-10 items-center justify-center overflow-hidden rounded-md border border-border px-2.5 transition-colors md:h-9 md:min-w-9',
       className,
     )}
     data-slot="compact-control"

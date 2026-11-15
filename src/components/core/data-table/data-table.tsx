@@ -54,7 +54,7 @@ export function DataTable<TData extends RowData>({
   return (
     <div className={className}>
       {toolbar && <div className="mb-3">{toolbar(table)}</div>}
-      <div className="overflow-hidden rounded-sm border border-gunmetal/60 bg-obsidian">
+      <div className="overflow-hidden rounded-md border border-border bg-surface">
         <Table aria-label={ariaLabel}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -86,7 +86,7 @@ export function DataTable<TData extends RowData>({
               <TableRow>
                 <TableCell
                   colSpan={Math.max(table.getVisibleLeafColumns().length, 1)}
-                  className="h-24 text-center text-ash"
+                  className="h-24 text-center text-text-muted"
                 >
                   {emptyMessage ?? copy.empty}
                 </TableCell>

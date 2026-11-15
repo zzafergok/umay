@@ -56,7 +56,7 @@ const NavigationMenuItem = React.forwardRef<
 NavigationMenuItem.displayName = 'NavigationMenuItem';
 
 const navigationMenuTriggerStyle = cva(
-  'group inline-flex h-9 w-max items-center justify-center rounded-sm border border-transparent bg-obsidian px-4 py-2 text-sm font-medium text-titanium transition-colors hover:bg-gunmetal/30 hover:text-titanium focus:bg-gunmetal/30 focus:text-titanium focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-gunmetal/40 data-[state=open]:text-titanium',
+  'group inline-flex h-9 w-max items-center justify-center rounded-md border border-transparent bg-surface px-4 py-2 text-body-sm font-medium text-text transition-colors hover:bg-surface-sunken hover:text-text focus:bg-surface-sunken focus:text-text focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-surface-sunken data-[state=open]:text-text',
 );
 
 const NavigationMenuTrigger = React.forwardRef<
@@ -118,7 +118,7 @@ const NavigationMenuViewport = React.forwardRef<
       ref={ref}
       data-slot="navigation-menu-viewport"
       className={cn(
-        'origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-sm border border-gunmetal/60 bg-obsidian/95 text-titanium shadow-xl backdrop-blur-xs',
+        'origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-lg border border-border bg-surface-raised text-text shadow-float dark:border-border-strong',
         'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]',
         className,
       )}
@@ -142,7 +142,7 @@ const NavigationMenuIndicator = React.forwardRef<
     )}
     {...props}
   >
-    <div className="rounded-tl-xs relative top-[60%] size-2 rotate-45 border-l border-t border-gunmetal/60 bg-obsidian shadow-md" />
+    <div className="rounded-tl-xs relative top-[60%] size-2 rotate-45 border-l border-t border-border bg-surface-raised dark:border-border-strong" />
   </NavigationMenuPrimitive.Indicator>
 ));
 NavigationMenuIndicator.displayName =

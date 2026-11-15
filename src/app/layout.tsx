@@ -1,7 +1,7 @@
-import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/core/toast';
+import { fontBody, fontHeading, fontMono } from '@/lib/fonts';
 import { getCurrentLocale } from '@/lib/i18n/server-locale';
 import { buildRootMetadata } from '@/lib/metadata/site-metadata';
 import {
@@ -11,20 +11,12 @@ import {
   ThemeProvider,
 } from '@/components/providers';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-display',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-});
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FAF8F5' },
+    { media: '(prefers-color-scheme: dark)', color: '#121110' },
+  ],
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getCurrentLocale();
@@ -39,10 +31,12 @@ export default async function RootLayout({
   const locale = await getCurrentLocale();
 
   return (
-    <html lang={locale} className="dark" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
-      >
+    <html
+      lang={locale}
+      className={`${fontBody.variable} ${fontHeading.variable} ${fontMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body>
         <ClientLocaleProvider initialLocale={locale}>
           <LocaleHtmlSync />
           <ThemeProvider>

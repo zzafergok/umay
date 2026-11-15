@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { getShellCopy } from '@/features/routes/_shared/layouts/i18n';
-import { getAdminLoginCopy } from '@/features/routes/admin/login/i18n';
-import { getAdminOverviewCopy } from '@/features/routes/admin/overview/i18n';
-import { getAdminSettingsCopy } from '@/features/routes/admin/settings/i18n';
-import { getAdminUsersCopy } from '@/features/routes/admin/users/i18n';
 import { getAuthHomeCopy } from '@/features/routes/auth/home/i18n';
 import { getAuthSettingsCopy } from '@/features/routes/auth/settings/i18n';
 import { getAuthWorkspaceCopy } from '@/features/routes/auth/workspace/i18n';
@@ -23,33 +19,8 @@ describe('i18n JSON Dictionaries & Copy Loaders', () => {
       expect(copy).toBeDefined();
       expect(copy.brand.title).toBe('Umay');
       expect(copy.authNav.length).toBeGreaterThan(0);
-      expect(copy.adminNav.length).toBeGreaterThan(0);
       expect(copy.preferenceControls?.themeLight).toBeTruthy();
       expect(copy.preferenceControls?.themeDark).toBeTruthy();
-    }
-  });
-
-  it('loads admin route copies with identical structure for tr and en', () => {
-    for (const locale of locales) {
-      const login = getAdminLoginCopy(locale);
-      expect(login.title).toBeTruthy();
-      expect(login.emailLabel).toBeTruthy();
-      expect(login.passwordLabel).toBeTruthy();
-      expect(login.submitLabel).toBeTruthy();
-
-      const overview = getAdminOverviewCopy(locale);
-      expect(overview.title).toBeTruthy();
-      expect(overview.cards.length).toBe(3);
-
-      const settings = getAdminSettingsCopy(locale);
-      expect(settings.title).toBeTruthy();
-      expect(settings.appNameLabel).toBeTruthy();
-      expect(settings.submitLabel).toBeTruthy();
-
-      const users = getAdminUsersCopy(locale);
-      expect(users.title).toBeTruthy();
-      expect(users.users.length).toBe(3);
-      expect(users.columns.name).toBeTruthy();
     }
   });
 

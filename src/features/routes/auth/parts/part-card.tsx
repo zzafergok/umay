@@ -1,10 +1,10 @@
 'use client';
 
-import { CheckCircle2 } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import { Card, CardContent } from '@/components/core/card';
 import { Link } from '@/components/core/link';
-import { Progress } from '@/components/core/progress';
+import { LifecycleProgressBar } from '@/components/core/progress';
 import { StatusPill, type StatusTone } from '@/components/core/status-pill';
 import type { Item, Part } from '@/features/inventory/types';
 import { computePartHealth } from '@/lib/lifecycle';
@@ -23,61 +23,51 @@ export function PartCard({
   onReplaceClick,
 }: PartCardProps) {
   const health = computePartHealth(part);
-  const tone: StatusTone = health.status;
-  const label =
+  const pill: { tone: StatusTone; label: string } | null =
     health.status === 'overdue'
-      ? 'Gecikti'
+      ? { tone: 'overdue', label: 'Gecikti' }
       : health.status === 'due_soon'
-        ? health.daysRemaining !== null
-          ? `${health.daysRemaining} gün kaldı`
-          : 'Yaklaşıyor'
-        : health.daysRemaining !== null
-          ? `${health.daysRemaining} gün`
-          : 'İyi Durumda';
+        ? {
+            tone: 'due_soon',
+            label:
+              health.daysRemaining !== null
+                ? `${health.daysRemaining} gün kaldı`
+                : 'Yaklaşıyor',
+          }
+        : null;
 
-  const barColor =
-    health.status === 'overdue'
-      ? 'bg-red-500'
-      : health.status === 'due_soon'
-        ? 'bg-amber-500'
-        : 'bg-emerald-500';
+  const metaLabel = part.lifespan.usageLimit
+    ? `${part.usageCurrent ?? 0} / ${part.lifespan.usageLimit} ${
+        part.lifespan.usageUnit ?? 'birim'
+      }`
+    : part.lifespan.days
+      ? `${part.lifespan.days} gün döngü`
+      : undefined;
 
   return (
     <Card>
-      <CardContent className="space-y-4 p-5">
+      <CardContent className="space-y-3">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="line-clamp-1 text-base font-semibold text-foreground">
+          <h3 className="font-heading text-title text-text line-clamp-1">
             {part.name}
           </h3>
-          <StatusPill tone={tone} label={label} />
+          {pill ? <StatusPill tone={pill.tone} label={pill.label} /> : null}
         </div>
 
-        <div className="space-y-1.5">
-          <div className="flex justify-between text-xs tabular-nums">
-            <span className="font-medium">
-              Kalan Ömür: %{health.remainingPercent}
-            </span>
-            {part.lifespan.usageLimit ? (
-              <span className="text-muted-foreground">
-                {part.usageCurrent ?? 0} / {part.lifespan.usageLimit}{' '}
-                {part.lifespan.usageUnit ?? 'birim'}
-              </span>
-            ) : part.lifespan.days ? (
-              <span className="text-muted-foreground">
-                {part.lifespan.days} gün döngü
-              </span>
-            ) : null}
-          </div>
-          <Progress
-            value={health.remainingPercent}
-            indicatorClassName={barColor}
+        <LifecycleProgressBar
+          remainingPercent={health.remainingPercent}
+          daysRemaining={health.daysRemaining}
+          status={health.status}
+          metaLabel={metaLabel}
+        />
+
+        <div className="text-text-muted flex items-center gap-2 truncate text-caption">
+          <span
+            className="bg-cat-7 h-2 w-2 shrink-0 rounded-full"
+            aria-hidden="true"
           />
-        </div>
-
-        <div className="flex items-center gap-2 truncate text-xs text-muted-foreground">
-          <span className="h-2 w-2 shrink-0 rounded-full bg-umay-blue" />
           <span className="truncate">
-            {parentItem?.name ?? 'Bağımsız parça'} •{' '}
+            {parentItem?.name ?? 'Bağımsız parça'} ·{' '}
             {spareItem
               ? `Yedek stok: ${spareItem.quantity} ${spareItem.unit}`
               : 'Yedek bağlı değil'}
@@ -87,10 +77,11 @@ export function PartCard({
         <div className="flex items-center justify-between gap-2 pt-1">
           <Button
             size="sm"
+            variant="secondary"
             onClick={() => onReplaceClick(part)}
             className="min-h-[44px] md:min-h-0"
           >
-            <CheckCircle2 className="mr-1.5 h-4 w-4" />
+            <RefreshCw className="mr-1.5 h-4 w-4" aria-hidden="true" />
             Değiştirildi
           </Button>
           <Button asChild size="sm" variant="ghost">

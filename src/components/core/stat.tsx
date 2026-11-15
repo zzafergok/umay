@@ -12,14 +12,14 @@ export interface StatProps {
 }
 
 const VALUE_TONE_CLASSES: Record<NonNullable<StatProps['tone']>, string> = {
-  default: 'text-foreground',
-  success: 'text-emerald-600 dark:text-emerald-400',
-  warning: 'text-amber-700 dark:text-amber-300',
-  danger: 'text-red-700 dark:text-red-400',
+  default: 'text-text',
+  success: 'text-success',
+  warning: 'text-warning',
+  danger: 'text-danger',
 };
 
 /**
- * Compact metric display with small muted label and prominent tabular-nums value.
+ * Compact metric display with caption label and Manrope tabular-nums metric readout.
  */
 export function Stat({
   label,
@@ -34,16 +34,14 @@ export function Stat({
     <div
       data-slot="stat"
       className={cn(
-        'flex flex-col justify-between gap-1.5 rounded-sm border border-border bg-card p-4',
+        'bg-surface flex flex-col justify-between gap-2 rounded-md border border-border p-4 md:p-5',
         className,
       )}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-medium text-muted-foreground">
-          {label}
-        </span>
+        <span className="text-text-muted text-caption">{label}</span>
         {icon ? (
-          <span className="text-muted-foreground" aria-hidden="true">
+          <span className="text-text-muted" aria-hidden="true">
             {icon}
           </span>
         ) : null}
@@ -51,20 +49,18 @@ export function Stat({
       <div className="flex items-baseline gap-1.5">
         <span
           className={cn(
-            'text-2xl font-bold tracking-tight tabular-nums',
+            'font-heading text-metric tabular-nums',
             VALUE_TONE_CLASSES[tone],
           )}
         >
           {value}
         </span>
         {unit ? (
-          <span className="text-xs font-medium text-muted-foreground">
-            {unit}
-          </span>
+          <span className="text-text-muted text-caption">{unit}</span>
         ) : null}
       </div>
       {hint ? (
-        <span className="text-xs text-muted-foreground">{hint}</span>
+        <span className="text-text-muted text-caption">{hint}</span>
       ) : null}
     </div>
   );

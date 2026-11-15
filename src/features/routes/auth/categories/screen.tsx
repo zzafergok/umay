@@ -167,7 +167,7 @@ export function CategoriesScreen() {
                       aria-label={`${cat.name} kategorisini sil`}
                       onClick={() => handleDelete(cat.id)}
                     >
-                      <Trash2 className="h-4 w-4 text-muted-foreground hover:text-red-500" />
+                      <Trash2 className="h-4 w-4 text-text-muted hover:text-danger" />
                     </Button>
                   </div>
                 </CardContent>

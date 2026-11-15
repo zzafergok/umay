@@ -20,7 +20,7 @@ export function Command({
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        'flex h-full w-full flex-col overflow-hidden rounded-sm border border-gunmetal/80 bg-obsidian text-titanium',
+        'flex h-full w-full flex-col overflow-hidden rounded-lg bg-surface-raised text-text',
         className,
       )}
       {...props}
@@ -49,12 +49,12 @@ export function CommandDialog({
       </DialogHeader>
       <DialogContent
         className={cn(
-          'overflow-hidden border border-gunmetal/80 bg-obsidian p-0 text-titanium shadow-2xl',
+          'overflow-hidden border border-border bg-surface-raised p-0 text-text shadow-float dark:border-border-strong',
           className,
         )}
         showCloseButton={showCloseButton}
       >
-        <Command className="**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-ash [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:size-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:size-5">
+        <Command className="**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-text-muted [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:size-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:size-5">
           {children}
         </Command>
       </DialogContent>
@@ -69,13 +69,13 @@ export function CommandInput({
   return (
     <div
       data-slot="command-input-wrapper"
-      className="flex h-10 items-center gap-2 border-b border-gunmetal/60 px-3"
+      className="flex h-11 items-center gap-2 border-b border-border px-3"
     >
-      <Search className="size-4 shrink-0 text-ash opacity-70" />
+      <Search className="size-4 shrink-0 text-text-muted" />
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(
-          'flex h-10 w-full rounded-sm bg-transparent py-3 text-sm text-titanium outline-none placeholder:text-ash/60 disabled:cursor-not-allowed disabled:opacity-50',
+          'flex h-11 w-full bg-transparent py-3 text-body text-text outline-none placeholder:text-text-subtle disabled:cursor-not-allowed disabled:opacity-50',
           className,
         )}
         {...props}
