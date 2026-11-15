@@ -86,7 +86,7 @@ export function proxy(request: NextRequest) {
     return withLocaleHeader(request);
   }
 
-  if (pathname === '/' || pathname === '/design') {
+  if (pathname === '/') {
     return withLocaleHeader(request);
   }
 
