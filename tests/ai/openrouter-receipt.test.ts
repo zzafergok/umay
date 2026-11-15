@@ -1,21 +1,86 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createOpenRouterChatCompletion,
-  FALLBACK_FREE_VISION_MODELS,
-  getFreeVisionModels,
-  isFreeVisionTextModel,
+  fetchOpenRouterModels,
   OpenRouterApiError,
   resetOpenRouterModelsCache,
-  resolveDefaultVisionModel,
   type OpenRouterModel,
 } from '@/lib/ai/openrouter';
-import { parseReceiptModelResponse } from '@/lib/ai/receipt-analyzer';
+import {
+  filterAndSortReceiptModels,
+  isFreeOpenRouterModel,
+  isVisionTextModel,
+  pickDefaultReceiptModelId,
+} from '@/lib/ai/receipt-analyzer';
 
 const originalEnv = process.env;
 
-describe('OpenRouter free vision model filtering', () => {
-  it('accepts free vision+text models and rejects paid or text-only models', () => {
-    const freeVision: OpenRouterModel = {
+describe('OpenRouter raw models client & app-level catalog filtering', () => {
+  beforeEach(() => {
+    process.env = { ...originalEnv };
+    resetOpenRouterModelsCache();
+    vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  it('passes through the raw OpenRouter /models response without filtering or stripping fields', async () => {
+    process.env.OPENROUTER_API_KEY = 'sk-or-test-key';
+    const rawPayload = {
+      data: [
+        {
+          id: 'inclusionai/ling-3.2-flash:free',
+          name: 'inclusionAI: Ling 3.2 Flash (free)',
+          context_length: 1048576,
+          architecture: {
+            input_modalities: ['text', 'image'],
+            output_modalities: ['text'],
+          },
+          pricing: { prompt: '0', completion: '0' },
+          endpoints: ['/api/v1/chat/completions'],
+          supported_parameters: ['structured_outputs', 'response_format'],
+          benchmarks: { artificial_analysis: { intelligence_index: 50 } },
+        },
+        {
+          id: 'google/gemini-4-hydrogen:batch',
+          name: 'Google: Gemini 4 Hydrogen (batch)',
+          context_length: 1048576,
+          architecture: {
+            input_modalities: ['text', 'image'],
+            output_modalities: ['text'],
+          },
+          pricing: { prompt: '0.00000075', completion: '0.00000375' },
+          endpoints: ['/api/v1/batches'],
+        },
+      ],
+      total_count: 470,
+      links: { next: null },
+    };
+
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify(rawPayload), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const response = await fetchOpenRouterModels({ forceRefresh: true });
+    expect(response).toEqual(rawPayload);
+    expect(response.total_count).toBe(470);
+    expect(response.data).toHaveLength(2);
+
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(url).toBe('https://openrouter.ai/api/v1/models');
+    expect((init.headers as Record<string, string>).Authorization).toBe(
+      'Bearer sk-or-test-key',
+    );
+  });
+
+  it('filters vision+chat+free models in app catalog layer while preserving full model objects', () => {
+    const freeVisionChat: OpenRouterModel = {
       id: 'nvidia/nemotron-3.5-super-vl:free',
       name: 'NVIDIA: Nemotron 3.5 Super VL (free)',
       context_length: 1000000,
@@ -25,17 +90,20 @@ describe('OpenRouter free vision model filtering', () => {
         output_modalities: ['text'],
       },
       pricing: { prompt: '0', completion: '0' },
+      endpoints: ['/api/v1/chat/completions'],
+      supported_parameters: ['structured_outputs', 'response_format'],
     };
 
-    const paidVision: OpenRouterModel = {
-      ...freeVision,
-      id: 'google/gemini-4-hydrogen',
+    const paidBatchOnly: OpenRouterModel = {
+      ...freeVisionChat,
+      id: 'google/gemini-4-hydrogen:batch',
       pricing: { prompt: '0.0000015', completion: '0.0000075' },
+      endpoints: ['/api/v1/batches'],
     };
 
     const freeTextOnly: OpenRouterModel = {
-      ...freeVision,
-      id: 'example/text-only:free',
+      ...freeVisionChat,
+      id: 'baidu/ernie-5.5-flash-preview:free',
       architecture: {
         modality: 'text->text',
         input_modalities: ['text'],
@@ -43,53 +111,19 @@ describe('OpenRouter free vision model filtering', () => {
       },
     };
 
-    expect(isFreeVisionTextModel(freeVision)).toBe(true);
-    expect(isFreeVisionTextModel(paidVision)).toBe(false);
-    expect(isFreeVisionTextModel(freeTextOnly)).toBe(false);
-  });
+    expect(isVisionTextModel(freeVisionChat)).toBe(true);
+    expect(isFreeOpenRouterModel(freeVisionChat)).toBe(true);
+    expect(isVisionTextModel(paidBatchOnly)).toBe(false);
+    expect(isVisionTextModel(freeTextOnly)).toBe(false);
 
-  it('fetches dynamic live vision models and falls back to static list on error', async () => {
-    resetOpenRouterModelsCache();
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            data: [
-              {
-                id: 'vendor/new-dynamic-vision:free',
-                name: 'Vendor: New Dynamic Vision (free)',
-                context_length: 128000,
-                architecture: {
-                  input_modalities: ['text', 'image'],
-                  output_modalities: ['text'],
-                },
-                pricing: { prompt: '0', completion: '0' },
-                supported_parameters: ['structured_outputs', 'response_format'],
-              },
-            ],
-          }),
-          { status: 200, headers: { 'Content-Type': 'application/json' } },
-        ),
-      ),
+    const catalog = filterAndSortReceiptModels(
+      [freeVisionChat, paidBatchOnly, freeTextOnly],
+      { freeOnly: true },
     );
-
-    const live = await getFreeVisionModels(true);
-    expect(live.source).toBe('live');
-    expect(live.models[0]?.id).toBe('vendor/new-dynamic-vision:free');
-    expect(resolveDefaultVisionModel(live.models)).toBe(
-      'vendor/new-dynamic-vision:free',
+    expect(catalog).toEqual([freeVisionChat]);
+    expect(pickDefaultReceiptModelId(catalog)).toBe(
+      'nvidia/nemotron-3.5-super-vl:free',
     );
-
-    resetOpenRouterModelsCache();
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockRejectedValue(new Error('Network unavailable')),
-    );
-
-    const fallback = await getFreeVisionModels(true);
-    expect(fallback.source).toBe('fallback');
-    expect(fallback.models).toEqual(FALLBACK_FREE_VISION_MODELS);
   });
 });
 
@@ -188,46 +222,5 @@ describe('OpenRouter chat completions client', () => {
     expect(headers.Authorization).toBe('Bearer sk-or-test-key');
     expect(headers['X-OpenRouter-Title']).toBe('Umay Test');
     expect(headers['HTTP-Referer']).toBe('https://umay.example.com');
-  });
-});
-
-describe('Receipt response parser', () => {
-  it('parses fenced JSON and normalizes Turkish decimal numbers', () => {
-    const modelOutput = `\`\`\`json
-{
-  "rawText": "MİGROS TİCARET A.Ş.\\nSÜT 1L 49,90\\nTOPLAM 49,90",
-  "merchantName": "Migros",
-  "date": "2026-11-15",
-  "currency": "TRY",
-  "grandTotal": "49,90",
-  "items": [
-    {
-      "name": "SÜT 1L",
-      "normalizedName": "Süt 1L",
-      "quantity": 1,
-      "unit": "adet",
-      "totalPrice": "49,90",
-      "categoryHint": "Gıda"
-    }
-  ],
-  "confidence": "high"
-}
-\`\`\``;
-
-    const result = parseReceiptModelResponse(modelOutput);
-    expect(result.parsedFromJson).toBe(true);
-    expect(result.data.merchantName).toBe('Migros');
-    expect(result.data.grandTotal).toBe(49.9);
-    expect(result.data.items).toHaveLength(1);
-    expect(result.data.items[0]?.totalPrice).toBe(49.9);
-    expect(result.data.rawText).toContain('MİGROS');
-  });
-
-  it('falls back cleanly to rawText when model returns plain text', () => {
-    const result = parseReceiptModelResponse('MARKET FİŞİ\nEKMEK 15 TL');
-    expect(result.parsedFromJson).toBe(false);
-    expect(result.data.confidence).toBe('low');
-    expect(result.data.rawText).toBe('MARKET FİŞİ\nEKMEK 15 TL');
-    expect(result.data.items).toEqual([]);
   });
 });

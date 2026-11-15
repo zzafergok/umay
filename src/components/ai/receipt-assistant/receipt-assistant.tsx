@@ -6,7 +6,6 @@ import {
   ChevronDown,
   ChevronUp,
   ReceiptText,
-  RefreshCw,
   RotateCcw,
   Sparkles,
 } from 'lucide-react';
@@ -22,15 +21,8 @@ import {
 } from '@/components/core/card';
 import { Input } from '@/components/core/input';
 import { Label } from '@/components/core/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/core/select';
 import { Spinner } from '@/components/core/spinner';
-import { StatusPill } from '@/components/core/status-pill';
+import { ReceiptModelSelector } from './receipt-model-selector';
 import { ReceiptResultView } from './receipt-result-view';
 import type { ReceiptAssistantProps } from './types';
 import { useReceiptAssistant } from './use-receipt-assistant';
@@ -40,24 +32,34 @@ export function ReceiptAssistant({
   onAnalyzed,
   applyLabel,
   title = 'AI Fiş Analiz Asistanı',
-  description = 'Alışveriş fişi fotoğrafını yükleyin; ücretsiz OpenRouter vision modelleri ile metne çevirip kalemleri otomatik çıkarın.',
+  description = 'Alışveriş fişi fotoğrafını yükleyin; OpenRouter vision modelleri ile metne çevirip kalemleri otomatik çıkarın.',
   defaultExpanded = false,
+  modelQuery,
+  defaultFreeOnly = false,
 }: ReceiptAssistantProps) {
   const [expanded, setExpanded] = React.useState(defaultExpanded);
-  const state = useReceiptAssistant({ onAnalyzed, onApplyItems });
+  const state = useReceiptAssistant({
+    modelQuery,
+    defaultFreeOnly,
+    onAnalyzed,
+    onApplyItems,
+  });
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0 pb-3">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <ReceiptText className="h-4 w-4 text-umay-blue" />
+            <ReceiptText className="text-umay-blue h-4 w-4" />
             <CardTitle className="font-display text-base">{title}</CardTitle>
             <Badge variant="secondary" size="sm" className="font-mono">
-              Ücretsiz Modeller
+              {state.freeOnly ? 'Ücretsiz Modeller' : 'Tüm Vision Modeller'} (
+              {state.models.length})
             </Badge>
           </div>
-          <CardDescription className="text-caption">{description}</CardDescription>
+          <CardDescription className="text-caption">
+            {description}
+          </CardDescription>
         </div>
         <Button
           variant="ghost"
@@ -108,51 +110,20 @@ export function ReceiptAssistant({
               )}
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between gap-2">
-                <Label htmlFor="receipt-model-select">
-                  Ücretsiz Vision Modeli
-                </Label>
-                <div className="flex items-center gap-1.5">
-                  <StatusPill
-                    tone={state.modelsSource === 'live' ? 'ok' : 'due_soon'}
-                    label={state.modelsSource === 'live' ? 'Canlı' : 'Yedek'}
-                    className="text-2xs"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={state.refreshModels}
-                    disabled={state.isRefreshingModels}
-                    aria-label="Model listesini yenile"
-                  >
-                    <RefreshCw
-                      className={`h-3.5 w-3.5 ${
-                        state.isRefreshingModels ? 'animate-spin' : ''
-                      }`}
-                    />
-                  </Button>
-                </div>
-              </div>
-              <Select
-                value={state.selectedModelId}
-                onValueChange={state.setSelectedModelId}
-                disabled={state.isLoadingModels}
-              >
-                <SelectTrigger id="receipt-model-select">
-                  <SelectValue placeholder="Model seçin" />
-                </SelectTrigger>
-                <SelectContent>
-                  {state.models.map((model) => (
-                    <SelectItem key={model.id} value={model.id}>
-                      {model.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <ReceiptModelSelector
+              models={state.models}
+              totalCatalogCount={state.totalCatalogCount}
+              freeOnly={state.freeOnly}
+              onFreeOnlyChange={state.setFreeOnly}
+              defaultModelId={state.defaultModelId}
+              selectedModelId={state.selectedModelId}
+              selectedModel={state.selectedModel}
+              isLoadingModels={state.isLoadingModels}
+              modelsLoadError={state.modelsLoadError}
+              isRefreshingModels={state.isRefreshingModels}
+              onSelectModel={state.setSelectedModelId}
+              onRefreshModels={state.refreshModels}
+            />
           </div>
 
           <div className="space-y-1.5">
@@ -176,7 +147,7 @@ export function ReceiptAssistant({
               <div className="flex flex-wrap gap-2">
                 <Button
                   onClick={state.handleAnalyze}
-                  disabled={state.isAnalyzing || !state.isConfigured}
+                  disabled={state.isAnalyzing}
                 >
                   {state.isAnalyzing ? (
                     <>

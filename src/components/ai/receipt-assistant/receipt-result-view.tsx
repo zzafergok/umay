@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Check, Copy, FileText, ListChecks, Plus } from 'lucide-react';
+import { Braces, Check, Copy, FileText, ListChecks, Plus } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import { Checkbox } from '@/components/core/checkbox';
@@ -21,6 +21,7 @@ import {
 } from '@/components/core/tabs';
 import { toast } from '@/components/core/toast';
 import type { ReceiptAnalysisResult } from '@/lib/ai/receipt-analyzer';
+import { formatReceiptMoney, ReceiptResultMeta } from './receipt-result-meta';
 
 interface ReceiptResultViewProps {
   analysis: ReceiptAnalysisResult;
@@ -31,11 +32,6 @@ interface ReceiptResultViewProps {
   applyLabel?: string;
   isApplying?: boolean;
   canApply: boolean;
-}
-
-function formatMoney(value: number | null, currency: string): string {
-  if (value === null) return '—';
-  return `${value.toFixed(2)} ${currency}`;
 }
 
 export function ReceiptResultView({
@@ -64,33 +60,11 @@ export function ReceiptResultView({
 
   const allSelected =
     analysis.items.length > 0 && selectedIndices.size === analysis.items.length;
+  const hasModelMeta = Boolean(analysis.reasoning || analysis.rawResponse);
 
   return (
     <div className="space-y-4 border-t border-gunmetal/40 pt-4">
-      <div className="flex flex-wrap items-center gap-2">
-        {analysis.merchantName && (
-          <Badge variant="secondary" className="font-display">
-            {analysis.merchantName}
-          </Badge>
-        )}
-        {analysis.date && (
-          <Badge variant="outline" className="font-mono tabular-nums">
-            {analysis.date}
-          </Badge>
-        )}
-        {analysis.grandTotal !== null && (
-          <Badge variant="default" className="font-mono tabular-nums">
-            Toplam: {formatMoney(analysis.grandTotal, analysis.currency)}
-          </Badge>
-        )}
-        <Badge
-          variant="outline"
-          size="sm"
-          className="ml-auto font-mono text-compact text-ash"
-        >
-          {analysis.modelUsed}
-        </Badge>
-      </div>
+      <ReceiptResultMeta analysis={analysis} />
 
       <Tabs defaultValue={analysis.items.length > 0 ? 'items' : 'raw'}>
         <TabsList>
@@ -102,6 +76,12 @@ export function ReceiptResultView({
             <FileText className="h-3.5 w-3.5" />
             Ham Metin (OCR)
           </TabsTrigger>
+          {hasModelMeta && (
+            <TabsTrigger value="response">
+              <Braces className="h-3.5 w-3.5" />
+              Model Yanıtı
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="items" className="space-y-3">
@@ -153,17 +133,21 @@ export function ReceiptResultView({
                               </p>
                             )}
                           {item.categoryHint && (
-                            <Badge variant="outline" size="sm" className="text-2xs">
+                            <Badge
+                              variant="outline"
+                              size="sm"
+                              className="text-2xs"
+                            >
                               {item.categoryHint}
                             </Badge>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="font-mono text-caption text-titanium tabular-nums">
+                      <TableCell className="font-mono text-caption tabular-nums text-titanium">
                         {item.quantity} {item.unit}
                       </TableCell>
-                      <TableCell className="text-right font-mono text-caption text-titanium tabular-nums">
-                        {formatMoney(item.totalPrice, analysis.currency)}
+                      <TableCell className="text-right font-mono text-caption tabular-nums text-titanium">
+                        {formatReceiptMoney(item.totalPrice, analysis.currency)}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -172,7 +156,7 @@ export function ReceiptResultView({
 
               {canApply && onApplySelected && (
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-compact text-ash tabular-nums">
+                  <span className="font-mono text-compact tabular-nums text-ash">
                     {selectedIndices.size} / {analysis.items.length} ürün seçili
                   </span>
                   <Button
@@ -209,6 +193,31 @@ export function ReceiptResultView({
             {analysis.rawText || 'Metin çıktısı boş.'}
           </pre>
         </TabsContent>
+
+        {hasModelMeta && (
+          <TabsContent value="response" className="space-y-3">
+            {analysis.reasoning && (
+              <div className="space-y-1">
+                <p className="font-mono text-2xs uppercase text-ash">
+                  Muhakeme (Reasoning)
+                </p>
+                <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded-sm border border-gunmetal/40 bg-void-black/60 p-3 font-mono text-compact leading-relaxed text-titanium">
+                  {analysis.reasoning}
+                </pre>
+              </div>
+            )}
+            {analysis.rawResponse && (
+              <div className="space-y-1">
+                <p className="font-mono text-2xs uppercase text-ash">
+                  OpenRouter Ham Yanıt
+                </p>
+                <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-sm border border-gunmetal/40 bg-void-black/60 p-3 font-mono text-compact leading-relaxed text-titanium">
+                  {JSON.stringify(analysis.rawResponse, null, 2)}
+                </pre>
+              </div>
+            )}
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );

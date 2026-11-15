@@ -1,3 +1,4 @@
+import type { OpenRouterModelsQueryParams } from '@/lib/ai/openrouter';
 import type {
   ReceiptAnalysisResult,
   ReceiptLineItem,
@@ -13,4 +14,6 @@ export interface ReceiptAssistantProps {
   title?: string;
   description?: string;
   defaultExpanded?: boolean;
+  modelQuery?: OpenRouterModelsQueryParams;
+  defaultFreeOnly?: boolean;
 }

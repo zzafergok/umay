@@ -1,5 +1,40 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
+## Faz 18 – OpenRouter OpenAPI Spesifikasyonuna Tam Uyum (İnceleme Özeti)
+
+- **OpenAPI Tip Tanımları (`src/lib/ai/openrouter/model-types.ts`, `types.ts`):**
+  - `ModelsListResponse`, `ModelResponse` (`OpenRouterSingleModelResponse`), `ModelsCountResponse` (`OpenRouterModelsCountResponse`), `PublicPricing` (`discount`, `image_token`, `overrides`), `ModelReasoning`, `ModelBenchmarks`, `ReasoningEffort` (including `max`) ve `GET /models` / `GET /models/user` query parametreleri OpenRouter OpenAPI 3.1.0 şemasıyla birebir uyumlu hale getirildi.
+- **OpenRouter İstemci & Katalog Fonksiyonları (`src/lib/ai/openrouter/models.ts`, `request.ts`, `constants.ts`, `query-params.ts`, `next-route.ts`):**
+  - `limit=500` varsayılanı kaldırıldı; `fetchOpenRouterModels()`, `aiReceiptService.listModels()` ve `useReceiptAssistant` `limit`/`offset` göndermeden OpenRouter'ın tam listesini çeker (varsa `links.next` sayfalarını da otomatik birleştirir) ve tüm OpenAPI `/models` query parametrelerini destekler.
+  - `fetchOpenRouterModelsCount` (`GET /models/count`), `fetchOpenRouterUserModels` (`GET /models/user`, API key zorunlu) ve `fetchOpenRouterModelBySlug` (`GET /model/{author}/{slug}`, `:free` varyantı ve alias çözümleme) eklendi; tüm `GET` çağrıları `requestOpenRouterGet` ve `parseOpenRouterErrorPayload` ile birleştirildi.
+- **Next.js API Route'ları & Uygulama Katmanı:**
+  - `GET /api/ai/openrouter/models`, `GET /api/ai/openrouter/models/count`, `GET /api/ai/openrouter/models/user` ve `GET /api/ai/openrouter/model/[author]/[slug]` passthrough uç noktaları `openrouter/next-route.ts` üzerinden kuruldu.
+  - `src/lib/ai/receipt-analyzer/model-catalog.ts` (`:free`, `openrouter/free`, `pricing.discount === 1` ve sıfır fiyatlı tüm ücretsiz modellerin tam kapsanması), `analyzer.ts` (`resolveMissingPreferredModel` ile alias/eksik model detayı çekme) ve `src/services/ai-receipt-service.ts` (`listModels`, `getModelsCount`, `getUserModels`, `getModelBySlug`) güncellendi.
+  - `/shopping` ekranına özel opsiyonel `modelQuery?: OpenRouterModelsQueryParams` ve `defaultFreeOnly?: boolean` desteği (`ReceiptAssistant`, `useReceiptAssistant`, `getOpenRouterModelsQueryKey`) eklendi; [shopping-receipt-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-receipt-card.tsx) üzerinden `input_modalities: 'text,image'`, `output_modalities: 'text'`, `endpoints: '/api/v1/chat/completions'` sorgusu ve `defaultFreeOnly={true}` aktif edildi. `isFreeOpenRouterModel` tüm `pricing` alanları `0` (veya `discount: 1`) olan ücretsiz modelleri (`11 ücretsiz` vision → text) listeleyecek şekilde sıkılaştırıldı.
+- **Doğrulama:**
+  - İlgili tüm dosyalar `<= 250` satır (`wc -l`, `receipt-assistant/*` en uzun dosya `use-receipt-assistant.ts` 237 satır).
+  - `npm run type-check`, `npm run lint`, `npm test` (13 test dosyası, 102 test) ve `npm run build` sıfır hata ile geçti.
+  - Canlı doğrulama: `GET /api/ai/openrouter/models` (limitsiz tam liste) `HTTP 200` (`435` model, `17` ücretsiz metin modeli); `/shopping` sorgusu (`?input_modalities=text,image&output_modalities=text&endpoints=/api/v1/chat/completions`) `HTTP 200` (`242` vision->text chat modeli, `11` ücretsiz vision->text modeli) döndürdü.
+
+---
+
+## Faz 17 – OpenRouter Ham Yanıtlarını Olduğu Gibi Kabul Etme ve Uygulama Yapısını Uyarlama (İnceleme Özeti)
+
+- **OpenRouter Servisi (Passthrough):**
+  - `src/lib/ai/openrouter/models.ts` (`fetchOpenRouterModels`) ve `src/app/api/ai/openrouter/models/route.ts` (`GET`) OpenRouter `GET /api/v1/models?limit=500` yanıtını (`{ data, total_count, links, ... }`) hiçbir filtreleme, alan kırpma veya yeniden eşleme yapmadan olduğu gibi döndürür (`X-OpenRouter-Configured` header'ı ile).
+  - `src/lib/ai/openrouter/types.ts` ve `src/lib/ai/openrouter/client.ts` gerçek OpenRouter model ve `/chat/completions` yanıt alanlarını (`canonical_slug`, `hugging_face_id`, `architecture`, `pricing`, `top_provider`, `supported_parameters`, `default_parameters`, `endpoints`, `reasoning`, `reasoning_details`, `cost_details`, `is_byok` vb. + `[key: string]: unknown`) tam olarak kabul eder.
+- **Uygulama Katmanı Uyarlaması (`src/lib/ai/receipt-analyzer/`, `src/services/ai-receipt-service.ts`):**
+  - `model-catalog.ts`: Görsel/chat uygunluğu, ücretsiz/ücretli ayrımı, bağlam/fiyat formatlama ve varsayılan model seçimi ham `OpenRouterModel` alanları üzerinden uygulama katmanında yapılır.
+  - `analyzer.ts` & `response-extract.ts`: `fetchOpenRouterModels()` verisini tüketir, OpenRouter'ın maksimum 3 model sınırı için fallback gruplarını 3'erli gönderir, `supportsJsonObject` bayrağına göre `response_format` yönetir ve `content`, `reasoning`, `reasoning_details`, `refusal`, `finish_reason`, `native_finish_reason`, `id`, `provider`, `usage`, `rawResponse` alanlarını kayıpsız saklar.
+  - `parser.ts`, `normalizers.ts` & `schemas.ts`: `camelCase`/`snake_case` ve alternatif alan adlarını, `₺`/`TL` para birimini, sayısal/Türkçe `confidence` değerlerini ve Türkçe ondalık sayıları normalize eder; JSON parse edilemeyen yanıtlarda hata atmak yerine tam metni `rawText` olarak sunar.
+  - `ai-receipt-service.ts`: Ham `OpenRouterModelsResponse` tipini tüketir.
+- **UI Katmanı (`src/components/ai/receipt-assistant/`):**
+  - `receipt-assistant-utils.ts`, `use-receipt-assistant.ts` & `receipt-model-selector.tsx`: Ham `data: OpenRouterModel[]` listesini okuyarak ücretsiz/tüm modeller filtresi (`freeOnly` Switch), bağlam/fiyat/akıl yürütme bilgisi ve tek istekli `refreshModels` akışı sunar.
+  - `receipt-result-meta.tsx` & `receipt-result-view.tsx`: Güven seviyesi, sağlayıcı, token kullanımı, ara toplam/KDV/indirim/ödeme yöntemi ve `Model Yanıtı` (`reasoning` + `rawResponse`) sekmesi gösterir.
+- **Doğrulama:** İlgili tüm dosyalar `<= 250` satır (`wc -l`, en uzun dosya 229 satır). `npm run type-check`, `npm run lint`, `npm test` (12 test dosyası, 96 test), `npm run build` ve canlı `GET http://localhost:3000/api/ai/openrouter/models` (`HTTP 200`, `data` 435 model, `total_count: 435`, `links`) başarıyla doğrulandı.
+
+---
+
 ## Faz 16 – Hatırlatıcı ve Yedekleme Yapılarının Sistem Genelinden Kaldırılması (İnceleme Özeti)
 
 - **Silinen API Uç Noktaları ve Bildirim Altyapısı:**

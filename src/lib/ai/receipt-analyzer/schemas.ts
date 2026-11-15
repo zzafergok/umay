@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import type { OpenRouterUsage } from '@/lib/ai/openrouter';
+import type {
+  OpenRouterChatCompletionResponse,
+  OpenRouterUsage,
+} from '@/lib/ai/openrouter';
 
 const MAX_IMAGE_DATA_URL_LENGTH = 7_500_000;
 
@@ -31,7 +34,13 @@ export const receiptLineItemSchema = z.object({
   unitPrice: z.number().nonnegative().nullable().optional().default(null),
   totalPrice: z.number().nonnegative().nullable().optional().default(null),
   categoryHint: z.string().trim().nullable().optional().default(null),
-  vatRate: z.number().nonnegative().max(100).nullable().optional().default(null),
+  vatRate: z
+    .number()
+    .nonnegative()
+    .max(100)
+    .nullable()
+    .optional()
+    .default(null),
 });
 
 export const receiptModelOutputSchema = z.object({
@@ -40,7 +49,7 @@ export const receiptModelOutputSchema = z.object({
   merchantTaxId: z.string().trim().nullable().optional().default(null),
   date: z.string().trim().nullable().optional().default(null),
   time: z.string().trim().nullable().optional().default(null),
-  currency: z.string().trim().min(1).max(10).optional().default('TRY'),
+  currency: z.string().trim().min(1).max(20).optional().default('TRY'),
   subtotal: z.number().nonnegative().nullable().optional().default(null),
   taxTotal: z.number().nonnegative().nullable().optional().default(null),
   discountTotal: z.number().nonnegative().nullable().optional().default(null),
@@ -55,9 +64,20 @@ export type ReceiptAnalyzeInput = z.infer<typeof receiptAnalyzeRequestSchema>;
 export type ReceiptLineItem = z.infer<typeof receiptLineItemSchema>;
 export type ReceiptModelOutput = z.infer<typeof receiptModelOutputSchema>;
 
+export type OpenRouterExtendedUsage = OpenRouterUsage & Record<string, unknown>;
+
+export type OpenRouterRawCompletionResponse = OpenRouterChatCompletionResponse &
+  Record<string, unknown>;
+
 export interface ReceiptAnalysisResult extends ReceiptModelOutput {
   modelUsed: string;
   provider?: string;
-  usage?: OpenRouterUsage;
+  usage?: OpenRouterExtendedUsage;
   parsedFromJson: boolean;
+  completionId?: string;
+  finishReason?: string | null;
+  nativeFinishReason?: string | null;
+  reasoning?: string | null;
+  refusal?: string | null;
+  rawResponse?: OpenRouterRawCompletionResponse;
 }

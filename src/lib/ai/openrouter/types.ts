@@ -1,3 +1,24 @@
+import type { OpenRouterReasoningEffort } from './model-types';
+
+export type {
+  OpenRouterInputModality,
+  OpenRouterModel,
+  OpenRouterModelArchitecture,
+  OpenRouterModelBenchmarks,
+  OpenRouterModelPricing,
+  OpenRouterModelReasoning,
+  OpenRouterModelsCountResponse,
+  OpenRouterModelsQueryParams,
+  OpenRouterModelsSort,
+  OpenRouterModelsResponse,
+  OpenRouterModelTopProvider,
+  OpenRouterOutputModality,
+  OpenRouterPricingOverride,
+  OpenRouterReasoningEffort,
+  OpenRouterSingleModelResponse,
+  OpenRouterUserModelsQueryParams,
+} from './model-types';
+
 export type OpenRouterRole = 'system' | 'user' | 'assistant' | 'tool';
 
 export interface OpenRouterTextContentPart {
@@ -14,8 +35,7 @@ export interface OpenRouterImageUrlContentPart {
 }
 
 export type OpenRouterContentPart =
-  | OpenRouterTextContentPart
-  | OpenRouterImageUrlContentPart;
+  OpenRouterTextContentPart | OpenRouterImageUrlContentPart;
 
 export interface OpenRouterMessage {
   role: OpenRouterRole;
@@ -45,7 +65,7 @@ export interface OpenRouterProviderPreferences {
 }
 
 export interface OpenRouterReasoningConfig {
-  effort?: 'xhigh' | 'high' | 'medium' | 'low' | 'minimal' | 'none';
+  effort?: OpenRouterReasoningEffort;
   max_tokens?: number;
   exclude?: boolean;
   enabled?: boolean;
@@ -71,21 +91,20 @@ export interface OpenRouterUsage {
   completion_tokens: number;
   total_tokens: number;
   cost?: number;
-  prompt_tokens_details?: {
-    cached_tokens?: number;
-    audio_tokens?: number;
-  };
-  completion_tokens_details?: {
-    reasoning_tokens?: number;
-    image_tokens?: number;
-  };
+  is_byok?: boolean;
+  prompt_tokens_details?: Record<string, unknown>;
+  completion_tokens_details?: Record<string, unknown>;
+  cost_details?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 export interface OpenRouterChoiceMessage {
   role: 'assistant';
   content: string | null;
   reasoning?: string | null;
+  reasoning_details?: Array<Record<string, unknown>>;
   refusal?: string | null;
+  [key: string]: unknown;
 }
 
 export interface OpenRouterChoice {
@@ -93,12 +112,15 @@ export interface OpenRouterChoice {
   message: OpenRouterChoiceMessage;
   finish_reason: string | null;
   native_finish_reason?: string | null;
+  logprobs?: unknown;
+  [key: string]: unknown;
 }
 
 export interface OpenRouterErrorMetadata {
   provider_name?: string;
   raw?: unknown;
   error_type?: string;
+  [key: string]: unknown;
 }
 
 export interface OpenRouterErrorPayload {
@@ -116,60 +138,9 @@ export interface OpenRouterChatCompletionResponse {
   choices: OpenRouterChoice[];
   usage?: OpenRouterUsage;
   system_fingerprint?: string | null;
+  service_tier?: string | null;
   error?: OpenRouterErrorPayload;
-}
-
-export interface OpenRouterModelArchitecture {
-  modality?: string | null;
-  input_modalities?: string[] | null;
-  output_modalities?: string[] | null;
-  tokenizer?: string | null;
-  instruct_type?: string | null;
-}
-
-export interface OpenRouterModelPricing {
-  prompt: string;
-  completion: string;
-  image?: string;
-  request?: string;
-  web_search?: string;
-  internal_reasoning?: string;
-  input_cache_read?: string;
-  input_cache_write?: string;
-}
-
-export interface OpenRouterModelTopProvider {
-  context_length?: number | null;
-  max_completion_tokens?: number | null;
-  is_moderated?: boolean;
-}
-
-export interface OpenRouterModel {
-  id: string;
-  canonical_slug?: string | null;
-  hugging_face_id?: string | null;
-  name: string;
-  created?: number;
-  description?: string;
-  context_length: number | null;
-  architecture?: OpenRouterModelArchitecture | null;
-  pricing: OpenRouterModelPricing;
-  top_provider?: OpenRouterModelTopProvider | null;
-  per_request_limits?: Record<string, unknown> | null;
-  supported_parameters?: string[] | null;
-  default_parameters?: Record<string, unknown> | null;
-  endpoints?: string[] | null;
-}
-
-export interface OpenRouterModelsResponse {
-  data: OpenRouterModel[];
-}
-
-export interface OpenRouterFreeVisionModel {
-  id: string;
-  name: string;
-  contextLength: number | null;
-  supportsStructuredOutputs: boolean;
-  supportsJsonObject: boolean;
-  description?: string;
+  openrouter_metadata?: Record<string, unknown> | null;
+  user_id?: string | null;
+  [key: string]: unknown;
 }

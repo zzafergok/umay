@@ -1,146 +1,172 @@
+import { OpenRouterApiError } from './client';
 import {
-  FALLBACK_FREE_VISION_MODELS,
-  OPENROUTER_API_BASE_URL,
-  OPENROUTER_DEFAULT_VISION_MODEL,
   OPENROUTER_MODELS_CACHE_TTL_MS,
+  OPENROUTER_MODELS_COUNT_PATH,
   OPENROUTER_MODELS_PATH,
+  OPENROUTER_MODELS_USER_PATH,
+  OPENROUTER_SINGLE_MODEL_PATH,
 } from './constants';
+import { buildQueryString, requestOpenRouterGet } from './request';
 import type {
-  OpenRouterFreeVisionModel,
-  OpenRouterModel,
+  OpenRouterModelsCountResponse,
+  OpenRouterModelsQueryParams,
   OpenRouterModelsResponse,
+  OpenRouterSingleModelResponse,
+  OpenRouterUserModelsQueryParams,
 } from './types';
 
-let cachedModels: {
+interface CachedModelsEntry {
   expiresAt: number;
-  items: OpenRouterFreeVisionModel[];
-} | null = null;
-
-const EXCLUDED_MODEL_IDS = new Set([
-  'google/lyria-3-pro-preview',
-  'google/lyria-3-clip-preview',
-]);
-
-export function isFreeVisionTextModel(model: OpenRouterModel): boolean {
-  if (EXCLUDED_MODEL_IDS.has(model.id)) {
-    return false;
-  }
-
-  const promptFree = model.pricing?.prompt === '0';
-  const completionFree = model.pricing?.completion === '0';
-  if (!promptFree || !completionFree) {
-    return false;
-  }
-
-  const inputs = model.architecture?.input_modalities ?? [];
-  const outputs = model.architecture?.output_modalities ?? [];
-
-  return (
-    inputs.includes('image') &&
-    inputs.includes('text') &&
-    outputs.includes('text')
-  );
+  response: OpenRouterModelsResponse;
 }
 
-export function mapToFreeVisionModel(
-  model: OpenRouterModel,
-): OpenRouterFreeVisionModel {
-  const params = model.supported_parameters ?? [];
-  return {
-    id: model.id,
-    name: model.name,
-    contextLength: model.context_length ?? null,
-    supportsStructuredOutputs: params.includes('structured_outputs'),
-    supportsJsonObject: params.includes('response_format'),
-    description: model.description,
-  };
-}
+const MAX_CACHE_ENTRIES = 20;
+const cachedModelsMap = new Map<string, CachedModelsEntry>();
 
-function scoreVisionModel(model: OpenRouterFreeVisionModel): number {
-  let score = 0;
-  if (model.supportsStructuredOutputs) score += 100;
-  if (model.supportsJsonObject) score += 50;
-  if (model.id !== 'openrouter/free') score += 10;
-  if (model.contextLength) {
-    score += Math.min(20, Math.floor(model.contextLength / 100_000));
+function resolveNextPagePath(
+  nextLink: string | null | undefined,
+): string | null {
+  if (!nextLink) return null;
+  if (nextLink.startsWith('/api/v1/')) {
+    return nextLink.slice('/api/v1'.length);
   }
-  return score;
-}
-
-function sortDynamicVisionModels(
-  liveModels: OpenRouterFreeVisionModel[],
-): OpenRouterFreeVisionModel[] {
-  return [...liveModels].sort((a, b) => {
-    const diff = scoreVisionModel(b) - scoreVisionModel(a);
-    return diff !== 0 ? diff : a.name.localeCompare(b.name);
-  });
-}
-
-export function resolveDefaultVisionModel(
-  models: OpenRouterFreeVisionModel[],
-  envOverride?: string,
-): string {
-  const trimmedOverride = envOverride?.trim();
-  if (trimmedOverride && models.some((m) => m.id === trimmedOverride)) {
-    return trimmedOverride;
+  if (nextLink.startsWith('/models')) {
+    return nextLink;
   }
-  return models[0]?.id ?? OPENROUTER_DEFAULT_VISION_MODEL;
+  return null;
+}
+
+export interface FetchOpenRouterModelsOptions {
+  limit?: number;
+  query?: OpenRouterModelsQueryParams;
+  forceRefresh?: boolean;
+  signal?: AbortSignal;
 }
 
 export async function fetchOpenRouterModels(
-  signal?: AbortSignal,
-): Promise<OpenRouterModel[]> {
-  const response = await fetch(
-    `${OPENROUTER_API_BASE_URL}${OPENROUTER_MODELS_PATH}`,
-    {
-      method: 'GET',
-      headers: { Accept: 'application/json' },
-      signal,
-    },
+  options: FetchOpenRouterModelsOptions = {},
+): Promise<OpenRouterModelsResponse> {
+  const effectiveQuery: Record<string, unknown> = {
+    ...(options.query ?? {}),
+  };
+  if (options.limit !== undefined && effectiveQuery.limit === undefined) {
+    effectiveQuery.limit = options.limit;
+  }
+
+  const fetchFullList =
+    effectiveQuery.limit === undefined && effectiveQuery.offset === undefined;
+  const queryString = buildQueryString(effectiveQuery);
+  const now = Date.now();
+  const cached = cachedModelsMap.get(queryString);
+
+  if (!options.forceRefresh && cached && cached.expiresAt > now) {
+    return cached.response;
+  }
+
+  const firstPage = await requestOpenRouterGet<OpenRouterModelsResponse>(
+    `${OPENROUTER_MODELS_PATH}${queryString}`,
+    { signal: options.signal },
   );
 
-  if (!response.ok) {
-    throw new Error(`OpenRouter models fetch failed (${response.status})`);
+  if (!Array.isArray(firstPage.data)) {
+    throw new OpenRouterApiError(
+      'OpenRouter models yanıtı beklenen formatta değil.',
+      502,
+      'invalid_models_response',
+    );
   }
 
-  const json = (await response.json()) as Partial<OpenRouterModelsResponse>;
-  return Array.isArray(json.data) ? json.data : [];
+  let response = firstPage;
+  if (fetchFullList && firstPage.links?.next) {
+    const allData = [...firstPage.data];
+    let nextPath = resolveNextPagePath(firstPage.links.next);
+    let lastLinks = firstPage.links;
+    for (let page = 0; page < 10 && nextPath; page += 1) {
+      const nextPage = await requestOpenRouterGet<OpenRouterModelsResponse>(
+        nextPath,
+        { signal: options.signal },
+      );
+      if (Array.isArray(nextPage.data)) {
+        allData.push(...nextPage.data);
+      }
+      lastLinks = nextPage.links ?? { next: null };
+      nextPath = resolveNextPagePath(nextPage.links?.next);
+    }
+    response = {
+      ...firstPage,
+      data: allData,
+      total_count: firstPage.total_count ?? allData.length,
+      links: lastLinks,
+    };
+  }
+
+  if (cachedModelsMap.size >= MAX_CACHE_ENTRIES) {
+    const oldestKey = cachedModelsMap.keys().next().value;
+    if (oldestKey !== undefined) cachedModelsMap.delete(oldestKey);
+  }
+  cachedModelsMap.set(queryString, {
+    expiresAt: now + OPENROUTER_MODELS_CACHE_TTL_MS,
+    response,
+  });
+
+  return response;
 }
 
-export async function getFreeVisionModels(
-  forceRefresh = false,
-): Promise<{ models: OpenRouterFreeVisionModel[]; source: 'live' | 'fallback' }> {
-  const now = Date.now();
-  if (!forceRefresh && cachedModels && cachedModels.expiresAt > now) {
-    return { models: cachedModels.items, source: 'live' };
-  }
+export interface FetchOpenRouterUserModelsOptions {
+  query?: OpenRouterUserModelsQueryParams;
+  signal?: AbortSignal;
+}
 
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
-    const rawModels = await fetchOpenRouterModels(controller.signal).finally(
-      () => clearTimeout(timer),
+export async function fetchOpenRouterUserModels(
+  options: FetchOpenRouterUserModelsOptions = {},
+): Promise<OpenRouterModelsResponse> {
+  const queryString = buildQueryString({ ...(options.query ?? {}) });
+  const response = await requestOpenRouterGet<OpenRouterModelsResponse>(
+    `${OPENROUTER_MODELS_USER_PATH}${queryString}`,
+    { requireAuth: true, signal: options.signal },
+  );
+  if (!Array.isArray(response.data)) {
+    throw new OpenRouterApiError(
+      'OpenRouter user models yanıtı beklenen formatta değil.',
+      502,
+      'invalid_models_response',
     );
-
-    const dynamicModels = sortDynamicVisionModels(
-      rawModels.filter(isFreeVisionTextModel).map(mapToFreeVisionModel),
-    );
-
-    if (dynamicModels.length === 0) {
-      return { models: FALLBACK_FREE_VISION_MODELS, source: 'fallback' };
-    }
-
-    cachedModels = {
-      expiresAt: now + OPENROUTER_MODELS_CACHE_TTL_MS,
-      items: dynamicModels,
-    };
-
-    return { models: dynamicModels, source: 'live' };
-  } catch {
-    return { models: FALLBACK_FREE_VISION_MODELS, source: 'fallback' };
   }
+  return response;
+}
+
+export async function fetchOpenRouterModelsCount(
+  options: { outputModalities?: string; signal?: AbortSignal } = {},
+): Promise<OpenRouterModelsCountResponse> {
+  const queryString = buildQueryString({
+    output_modalities: options.outputModalities,
+  });
+  return requestOpenRouterGet<OpenRouterModelsCountResponse>(
+    `${OPENROUTER_MODELS_COUNT_PATH}${queryString}`,
+    { signal: options.signal },
+  );
+}
+
+export async function fetchOpenRouterModelBySlug(
+  author: string,
+  slug: string,
+  options: { signal?: AbortSignal } = {},
+): Promise<OpenRouterSingleModelResponse> {
+  const safeAuthor = encodeURIComponent(author.trim());
+  const safeSlug = encodeURIComponent(slug.trim()).replace(/%3A/gi, ':');
+  if (!safeAuthor || !safeSlug) {
+    throw new OpenRouterApiError(
+      'Geçerli bir model author ve slug belirtilmelidir.',
+      400,
+      'invalid_model_slug',
+    );
+  }
+  return requestOpenRouterGet<OpenRouterSingleModelResponse>(
+    `${OPENROUTER_SINGLE_MODEL_PATH}/${safeAuthor}/${safeSlug}`,
+    { signal: options.signal },
+  );
 }
 
 export function resetOpenRouterModelsCache(): void {
-  cachedModels = null;
+  cachedModelsMap.clear();
 }

@@ -31,7 +31,7 @@ export class OpenRouterApiError extends Error {
   }
 }
 
-function parseErrorPayload(
+export function parseOpenRouterErrorPayload(
   body: unknown,
 ): OpenRouterErrorPayload | undefined {
   if (typeof body !== 'object' || body === null) return undefined;
@@ -102,7 +102,7 @@ export async function createOpenRouterChatCompletion(
     );
 
     const rawBody: unknown = await response.json().catch(() => null);
-    const errorPayload = parseErrorPayload(rawBody);
+    const errorPayload = parseOpenRouterErrorPayload(rawBody);
 
     if (!response.ok || errorPayload) {
       const status = response.ok
