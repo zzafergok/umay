@@ -11,6 +11,7 @@ import {
 import {
   ITEM_STATUS_OPTIONS,
   ITEM_TYPE_OPTIONS,
+  MIN_QUANTITY_TOOLTIP,
   UNIT_SUGGESTIONS,
 } from '@/features/inventory/constants';
 
@@ -72,7 +73,11 @@ export function ItemBasicTab({
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <AmountField name="quantity" label="Miktar" required />
         <TextField name="unit" label="Birim" placeholder="adet" required />
-        <AmountField name="minQuantity" label="Min. Eşik" />
+        <AmountField
+          name="minQuantity"
+          label="Min. Eşik"
+          labelTooltip={MIN_QUANTITY_TOOLTIP}
+        />
         <AmountField
           name="targetQuantity"
           label="Hedef Stok"

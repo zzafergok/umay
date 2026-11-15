@@ -4,8 +4,10 @@ import { Button } from '@/components/core/button';
 import { Input } from '@/components/core/input';
 import { Label } from '@/components/core/label';
 import { Switch } from '@/components/core/switch';
+import { InfoTooltip } from '@/components/shared/info-tooltip';
 import {
   ITEM_TYPE_OPTIONS,
+  MIN_QUANTITY_TOOLTIP,
   UNIT_SUGGESTIONS,
 } from '@/features/inventory/constants';
 import type { CategoryDefaultItemConfig } from '@/features/inventory/types';
@@ -125,9 +127,15 @@ export function CategoryItemDefaultsPanel({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="cat-default-min-qty" className="text-xs">
-            Varsayılan Minimum Stok Eşiği
-          </Label>
+          <div className="flex items-center gap-1">
+            <Label htmlFor="cat-default-min-qty" className="text-xs">
+              Varsayılan Minimum Stok Eşiği
+            </Label>
+            <InfoTooltip
+              content={MIN_QUANTITY_TOOLTIP}
+              ariaLabel="Varsayılan minimum stok eşiği hakkında bilgi"
+            />
+          </div>
           <Input
             id="cat-default-min-qty"
             type="number"

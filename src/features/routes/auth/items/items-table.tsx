@@ -12,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/core/table';
+import { TableActionButton } from '@/components/shared/table-action-button';
 import type { Item, Location } from '@/features/inventory/types';
 
 export function ItemsTableView({
@@ -76,48 +77,39 @@ export function ItemsTableView({
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1">
-                    <Button
-                      size="icon-sm"
-                      variant="ghost"
+                    <TableActionButton
+                      icon={Minus}
+                      tooltip="Stok azalt (-1)"
                       disabled={item.quantity <= 0 || pendingItemId === item.id}
                       aria-label={`${item.name} stok azalt (-1)`}
                       onClick={() => onAdjustStock(item, -1)}
-                    >
-                      <Minus className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      size="icon-sm"
-                      variant="ghost"
+                    />
+                    <TableActionButton
+                      icon={Plus}
+                      tooltip="Stok artır (+1)"
                       disabled={pendingItemId === item.id}
                       aria-label={`${item.name} stok artır (+1)`}
                       onClick={() => onAdjustStock(item, 1)}
-                    >
-                      <Plus className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      size="icon-sm"
-                      variant="ghost"
+                    />
+                    <TableActionButton
+                      icon={Eye}
+                      tooltip="Detayı görüntüle"
                       aria-label={`${item.name} detayı`}
                       onClick={() => onDetail(item)}
-                    >
-                      <Eye className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      size="icon-sm"
-                      variant="ghost"
+                    />
+                    <TableActionButton
+                      icon={Pencil}
+                      tooltip="Düzenle"
                       aria-label={`${item.name} düzenle`}
                       onClick={() => onEdit(item)}
-                    >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      size="icon-sm"
-                      variant="ghost"
+                    />
+                    <TableActionButton
+                      icon={Trash2}
+                      tooltip="Sil"
+                      tone="danger"
                       aria-label={`${item.name} ürününü sil`}
                       onClick={() => onDelete(item)}
-                    >
-                      <Trash2 className="text-text-muted hover:text-danger h-3.5 w-3.5" />
-                    </Button>
+                    />
                   </div>
                 </TableCell>
               </TableRow>

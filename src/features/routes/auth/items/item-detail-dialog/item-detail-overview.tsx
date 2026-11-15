@@ -4,6 +4,8 @@ import { ExternalLink, ImageIcon } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Card, CardContent } from '@/components/core/card';
 import { QuantityStepper } from '@/components/core/quantity-stepper';
+import { InfoTooltip } from '@/components/shared/info-tooltip';
+import { MIN_QUANTITY_TOOLTIP } from '@/features/inventory/constants';
 import type { Category, Item } from '@/features/inventory/types';
 import { ItemSpecsCard } from '@/features/routes/auth/items/item-specs-card';
 
@@ -33,13 +35,21 @@ export function ItemDetailOverview({
               onDecrement={() => onAdjustStock(-1)}
               onIncrement={() => onAdjustStock(1)}
             />
-            <div className="flex flex-wrap gap-1.5 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
               {item.minQuantity > 0 ? (
-                <Badge variant="secondary">
-                  Eşik: {item.minQuantity} {item.unit}
+                <Badge variant="secondary" className="gap-1">
+                  <span>
+                    Eşik: {item.minQuantity} {item.unit}
+                  </span>
+                  <InfoTooltip
+                    content={MIN_QUANTITY_TOOLTIP}
+                    ariaLabel="Minimum stok eşiği hakkında bilgi"
+                  />
                 </Badge>
               ) : null}
-              {item.brand ? <Badge variant="outline">{item.brand}</Badge> : null}
+              {item.brand ? (
+                <Badge variant="outline">{item.brand}</Badge>
+              ) : null}
               {item.barcode ? (
                 <Badge variant="outline">Barkod: {item.barcode}</Badge>
               ) : null}
@@ -65,7 +75,7 @@ export function ItemDetailOverview({
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-surface-sunken/50 hover:border-accent inline-flex items-center gap-1.5 rounded-sm border border-border px-2.5 py-1 text-xs font-medium transition-colors"
+                  className="bg-surface-sunken/50 inline-flex items-center gap-1.5 rounded-sm border border-border px-2.5 py-1 text-xs font-medium transition-colors hover:border-accent"
                 >
                   <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" />
                   <span>Fotoğraf #{idx + 1}</span>

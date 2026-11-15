@@ -117,10 +117,11 @@ export function ItemPurchaseTab({
                   type="button"
                   variant="ghost"
                   size="icon-xs"
+                  className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
                   onClick={() => setDeletePhotoIndex(idx)}
                   aria-label={`Fotoğraf ${idx + 1} kaldır`}
                 >
-                  <Trash2 className="text-text-muted hover:text-danger h-3 w-3" />
+                  <Trash2 className="h-3 w-3" aria-hidden="true" />
                 </Button>
               </div>
             ))}

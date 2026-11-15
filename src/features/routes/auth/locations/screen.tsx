@@ -177,10 +177,11 @@ export function LocationsScreen() {
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
                     aria-label={`${loc.name} konumunu sil`}
                     onClick={() => setDeleteTarget(loc)}
                   >
-                    <Trash2 className="text-text-muted hover:text-danger h-4 w-4" />
+                    <Trash2 className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </CardContent>
               </Card>

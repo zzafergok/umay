@@ -115,10 +115,11 @@ export function CustomFieldListItem({
           type="button"
           variant="ghost"
           size="icon-xs"
+          className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
           onClick={onRemove}
           aria-label={`${field.label} alanını sil`}
         >
-          <Trash2 className="text-text-muted hover:text-danger h-3.5 w-3.5" />
+          <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
         </Button>
       </div>
     </div>

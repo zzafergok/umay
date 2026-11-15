@@ -181,3 +181,7 @@ export const NUMBER_UNIT_SUGGESTIONS = [
   'lt',
   'saat',
 ] as const;
+
+export const MIN_QUANTITY_TOOLTIP =
+  "Stok bu değere eşit veya altına düştüğünde ürün 'Düşük stok' olarak işaretlenir ve alışveriş listesine önerilir. Takip istemiyorsanız 0 bırakabilirsiniz.";
+

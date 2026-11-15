@@ -186,13 +186,11 @@ export function ItemCard({
               type="button"
               size="icon-sm"
               variant="ghost"
+              className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
               aria-label={`${item.name} ürününü sil`}
               onClick={() => onDelete(item)}
             >
-              <Trash2
-                className="text-text-muted hover:text-danger h-3.5 w-3.5"
-                aria-hidden="true"
-              />
+              <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
           </div>
         </div>

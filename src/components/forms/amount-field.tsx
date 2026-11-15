@@ -5,12 +5,14 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { Input } from '@/components/core/input';
 import { Label } from '@/components/core/label';
+import { InfoTooltip } from '@/components/shared/info-tooltip';
 import { formatAmountInput } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 
 interface AmountFieldProps {
   name: string;
   label: string;
+  labelTooltip?: string;
   required?: boolean;
   className?: string;
   inputClassName?: string;
@@ -22,6 +24,7 @@ interface AmountFieldProps {
 export function AmountField({
   name,
   label,
+  labelTooltip,
   disabled,
   className,
   inputClassName,
@@ -39,12 +42,20 @@ export function AmountField({
 
   return (
     <div className={cn('space-y-1.5 sm:space-y-2', className)}>
-      <Label
-        htmlFor={name}
-        className="font-mono text-2xs uppercase tracking-wider text-ash"
-      >
-        {label} {required && <span className="text-umay-blue">*</span>}
-      </Label>
+      <div className="flex min-h-4 items-center gap-1">
+        <Label
+          htmlFor={name}
+          className="font-mono text-2xs uppercase tracking-wider text-ash"
+        >
+          {label} {required && <span className="text-umay-blue">*</span>}
+        </Label>
+        {labelTooltip && (
+          <InfoTooltip
+            content={labelTooltip}
+            ariaLabel={`${label} hakkında bilgi`}
+          />
+        )}
+      </div>
       <Controller
         control={control}
         name={name}

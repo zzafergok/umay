@@ -145,10 +145,11 @@ export function CategoryCard({
           <Button
             variant="ghost"
             size="icon-sm"
+            className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
             aria-label={`${category.name} kategorisini sil`}
             onClick={() => onDelete(category.id)}
           >
-            <Trash2 className="text-text-muted hover:text-danger h-3.5 w-3.5" />
+            <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
           </Button>
         </div>
       </CardContent>

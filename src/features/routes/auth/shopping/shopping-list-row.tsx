@@ -5,6 +5,7 @@ import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import { Checkbox } from '@/components/core/checkbox';
 import { TableCell, TableRow } from '@/components/core/table';
+import { TableActionButton } from '@/components/shared/table-action-button';
 import type {
   Category,
   CurrencyCode,
@@ -65,8 +66,8 @@ export function ShoppingListRow({
         <div className="min-w-[180px] space-y-1">
           <p
             className={cn(
-              'text-body-sm font-medium text-text',
-              entry.done && 'line-through text-text-muted',
+              'text-body-sm text-text font-medium',
+              entry.done && 'text-text-muted line-through',
             )}
           >
             {title}
@@ -81,7 +82,7 @@ export function ShoppingListRow({
               {SHOPPING_SOURCE_LABELS[entry.source]}
             </Badge>
             {entry.store && (
-              <span className="inline-flex items-center gap-1 text-caption text-text-muted">
+              <span className="text-text-muted inline-flex items-center gap-1 text-caption">
                 <MapPin className="h-3 w-3" />
                 {entry.store}
               </span>
@@ -89,14 +90,12 @@ export function ShoppingListRow({
             {linked && (
               <span className="inline-flex items-center gap-1 text-caption text-accent">
                 <Link2 className="h-3 w-3" />
-                {entry.done
-                  ? 'Stoğa işlendi'
-                  : `Alınınca +${entry.qty} stok`}
+                {entry.done ? 'Stoğa işlendi' : `Alınınca +${entry.qty} stok`}
               </span>
             )}
           </div>
           {entry.note && (
-            <p className="text-caption text-text-muted">{entry.note}</p>
+            <p className="text-text-muted text-caption">{entry.note}</p>
           )}
         </div>
       </TableCell>
@@ -106,7 +105,7 @@ export function ShoppingListRow({
         </Badge>
       </TableCell>
       <TableCell>
-        <div className="inline-flex items-center gap-1 rounded-sm border border-border bg-surface-sunken px-1 py-0.5">
+        <div className="bg-surface-sunken inline-flex items-center gap-1 rounded-sm border border-border px-1 py-0.5">
           <Button
             type="button"
             variant="ghost"
@@ -117,7 +116,7 @@ export function ShoppingListRow({
           >
             <Minus className="h-3 w-3" />
           </Button>
-          <span className="min-w-[5.25rem] whitespace-nowrap px-1.5 text-center font-mono text-caption tabular-nums text-text">
+          <span className="text-text min-w-[5.25rem] whitespace-nowrap px-1.5 text-center font-mono text-caption tabular-nums">
             {entry.qty} {formatShoppingUnit(entry.unit)}
           </span>
           <Button
@@ -135,10 +134,10 @@ export function ShoppingListRow({
       <TableCell className="text-right font-mono tabular-nums">
         {lineTotal !== null ? (
           <div className="space-y-0.5">
-            <p className="text-body-sm font-medium text-text">
+            <p className="text-body-sm text-text font-medium">
               {formatCurrency(lineTotal, { currency, locale: 'tr' })}
             </p>
-            <p className="text-2xs text-text-muted">
+            <p className="text-text-muted text-2xs">
               {formatCurrency(entry.estimatedPrice ?? 0, {
                 currency,
                 locale: 'tr',
@@ -152,24 +151,21 @@ export function ShoppingListRow({
       </TableCell>
       <TableCell className="text-right">
         <div className="inline-flex items-center justify-end gap-1">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+          <TableActionButton
+            icon={Pencil}
+            tooltip="Düzenle"
+            iconClassName="h-4 w-4 text-text-muted"
             aria-label={`${title} düzenle`}
             onClick={() => onEdit(entry)}
-          >
-            <Pencil className="h-4 w-4 text-text-muted" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+          />
+          <TableActionButton
+            icon={Trash2}
+            tooltip="Listeden sil"
+            tone="danger"
+            iconClassName="h-4 w-4"
             aria-label={`${title} listeden sil`}
             onClick={() => onDelete(entry.id)}
-          >
-            <Trash2 className="h-4 w-4 text-text-muted hover:text-danger" />
-          </Button>
+          />
         </div>
       </TableCell>
     </TableRow>
