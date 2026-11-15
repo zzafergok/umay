@@ -4,6 +4,6 @@
   "cards": [
     { "label": "Sistem Durumu", "value": "Hazır", "icon": "activity" },
     { "label": "Erişim Seviyesi", "value": "Yönetici", "icon": "shieldCheck" },
-    { "label": "Kültür Verisi", "value": "Aktif", "icon": "database" }
+    { "label": "Envanter Verisi", "value": "Aktif", "icon": "database" }
   ]
 }

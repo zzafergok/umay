@@ -1,4 +1,4 @@
-import { ArrowLeft, Compass, Home } from 'lucide-react';
+import { Compass, Home } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import {
   Card,
@@ -17,12 +17,11 @@ export default async function NotFound() {
 
   const copy = {
     badge: isTr ? '404 • SAYFA BULUNAMADI' : '404 • PAGE NOT FOUND',
-    title: isTr ? 'Kayıp Rota' : 'Lost in the Steppes',
+    title: isTr ? 'Kayıp Rota' : 'Page Not Found',
     description: isTr
-      ? 'Aradığınız sayfa silinmiş, taşınmış veya henüz inşa edilmemiş olabilir. Ana sayfaya dönebilir veya Türk kültür atlasını keşfedebilirsiniz.'
-      : 'The page you are looking for might have been removed, moved, or is still under construction. Return home or explore the Turkic culture atlas.',
+      ? 'Aradığın sayfa silinmiş, taşınmış veya henüz oluşturulmamış olabilir. Ana sayfaya dönebilirsin.'
+      : 'The page you are looking for might have been removed, moved, or does not exist. Return home.',
     homeButton: isTr ? 'Ana Sayfaya Dön' : 'Return Home',
-    cultureButton: isTr ? 'Kültür Atlasını Keşfet' : 'Explore Culture Atlas',
   };
 
   return (
@@ -31,7 +30,7 @@ export default async function NotFound() {
         <Card className="w-full max-w-lg border-gunmetal bg-obsidian text-center shadow-2xl">
           <CardHeader className="space-y-4 pb-2">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-sm border border-tulpar-blue/40 bg-tulpar-blue/10 text-tulpar-blue">
-              <Compass className="h-7 w-7 animate-pulse" />
+              <Compass className="h-7 w-7" />
             </div>
             <div className="inline-block font-mono text-xs font-bold uppercase tracking-widest text-tulpar-blue">
               {copy.badge}
@@ -44,7 +43,7 @@ export default async function NotFound() {
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
-            <div className="flex flex-col justify-center gap-3 sm:flex-row">
+            <div className="flex justify-center">
               <Button
                 asChild
                 className="h-10 rounded-none bg-tulpar-blue font-bold uppercase tracking-wider text-white hover:bg-tulpar-blue/90"
@@ -52,16 +51,6 @@ export default async function NotFound() {
                 <Link href="/">
                   <Home className="mr-2 h-4 w-4" />
                   {copy.homeButton}
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="h-10 rounded-none border-gunmetal font-bold uppercase tracking-wider text-titanium hover:bg-gunmetal/20"
-              >
-                <Link href="/culture">
-                  <ArrowLeft className="mr-2 h-4 w-4 rotate-180" />
-                  {copy.cultureButton}
                 </Link>
               </Button>
             </div>

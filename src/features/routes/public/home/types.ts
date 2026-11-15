@@ -22,7 +22,7 @@ export interface PublicHomeCopy {
     loginAction: string;
     adminAction: string;
   };
-  cultureCallout: {
+  lifecycleCallout: {
     badge: string;
     title: string;
     description: string;

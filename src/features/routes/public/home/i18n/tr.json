@@ -11,7 +11,7 @@
     "loginAction": "Giriş Yap",
     "adminAction": "Paneli Aç"
   },
-  "cultureCallout": {
+  "lifecycleCallout": {
     "badge": "Ömürlü Parça Takibi",
     "title": "Filtreleri, Pilleri ve Bakım Zamanlarını Unutma",
     "description": "Su arıtma filtresi, diş fırçası başlığı, robot süpürge fırçası veya yazıcı kartuşu... Zamana veya kullanıma göre ömür hesapla, tek dokunuşla değiştirdiğini işaretle ve yedek stoğundan otomatik düş.",

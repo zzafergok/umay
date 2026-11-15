@@ -11,7 +11,7 @@
     "loginAction": "Sign In",
     "adminAction": "Open Dashboard"
   },
-  "cultureCallout": {
+  "lifecycleCallout": {
     "badge": "Lifecycle Parts",
     "title": "Never Miss a Filter, Battery, or Maintenance Cycle",
     "description": "Water purifier filters, toothbrush heads, robot vacuum brushes, or printer cartridges—track remaining lifespan by time or usage, mark replaced in two taps, and auto-deduct from spare stock.",

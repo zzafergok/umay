@@ -4,6 +4,6 @@
   "cards": [
     { "label": "Tulpar status", "value": "Ready", "icon": "activity" },
     { "label": "Access level", "value": "Admin", "icon": "shieldCheck" },
-    { "label": "Culture data", "value": "Active", "icon": "database" }
+    { "label": "Inventory status", "value": "Active", "icon": "database" }
   ]
 }

@@ -86,12 +86,7 @@ export function proxy(request: NextRequest) {
     return withLocaleHeader(request);
   }
 
-  if (
-    pathname === '/' ||
-    pathname === '/design' ||
-    pathname === '/culture' ||
-    pathname.startsWith('/culture/')
-  ) {
+  if (pathname === '/' || pathname === '/design') {
     return withLocaleHeader(request);
   }
 
