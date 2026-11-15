@@ -1,0 +1,36 @@
+{
+  "title": "Profile & Account",
+  "description": "Update your profile details, manage your active session, or permanently delete your account.",
+  "overview": {
+    "activeSession": "Active Session",
+    "roleUser": "Standard Account",
+    "roleAdmin": "Administrator",
+    "accountIdLabel": "Account ID",
+    "settingsLink": "Preferences & Settings",
+    "statsItems": "Tracked Items",
+    "statsLocations": "Locations",
+    "statsParts": "Lifecycle Parts"
+  },
+  "editForm": {
+    "title": "Profile Details",
+    "description": "Update the display name shown across your Umay workspace.",
+    "nameLabel": "Display Name",
+    "namePlaceholder": "Your Name",
+    "emailLabel": "Email Address",
+    "emailHint": "Your email address is tied to your login identity and cannot be changed.",
+    "submitLabel": "Update Profile",
+    "loadingLabel": "Updating...",
+    "successMessage": "Your profile has been updated.",
+    "errorMessage": "An error occurred while updating your profile."
+  },
+  "sessionCard": {
+    "title": "Session Security",
+    "description": "Review your active session on this device and sign out safely.",
+    "signedInAs": "Signed in as"
+  },
+  "dangerZone": {
+    "title": "Danger Zone",
+    "description": "Permanently delete your account.",
+    "warning": "Deleting your account permanently removes all items, locations, categories, lifecycle parts, shopping lists, and session credentials. This cannot be undone."
+  }
+}

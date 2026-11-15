@@ -1,10 +1,11 @@
 {
   "title": "Settings",
-  "description": "Umay application preferences, reminders, and data backup.",
+  "description": "Umay application preferences and account settings.",
   "cardTitle": "Profile & Preferences",
   "displayNameLabel": "Display name",
   "displayNamePlaceholder": "Homeowner",
-  "updatesTitle": "Part & Stock Reminders",
-  "updatesDescription": "Show upcoming part replacement and low-stock notifications.",
-  "submitLabel": "Save settings"
+  "submitLabel": "Save settings",
+  "accountSectionTitle": "Account & Session",
+  "accountSectionDescription": "Manage your profile, sign out of this device, or permanently delete your account.",
+  "openProfileLabel": "Open Profile Screen"
 }

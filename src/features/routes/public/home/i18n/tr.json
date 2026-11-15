@@ -218,7 +218,7 @@
         "points": [
           "BarcodeDetector + tarayıcı fallback desteği",
           "Raf, kutu ve ürün için yazdırılabilir QR etiketler",
-          "CSV ve JSON tam yedekleme dışa/içe aktarma"
+          "Barkod ile anında stok artırma veya düşme"
         ]
       },
       {
@@ -300,7 +300,7 @@
       {
         "id": "privacy",
         "question": "Verilerim güvende mi, başkaları görebilir mi?",
-        "answer": "Tüm envanter, konum ve faaliyet kayıtların yalnızca senin kullanıcı kimliğinle (UID) izole edilir. İstekler sunucu tarafında oturum ve Zod şemalarıyla doğrulanır; ayrıca dilediğinde CSV veya JSON olarak tam yedeğini alabilirsin."
+        "answer": "Tüm envanter, konum ve faaliyet kayıtların yalnızca senin kullanıcı kimliğinle (UID) izole edilir; tüm istekler sunucu tarafında oturum ve Zod şemalarıyla doğrulanır."
       },
       {
         "id": "lifecycle",

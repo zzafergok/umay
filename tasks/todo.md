@@ -1,5 +1,53 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
+## Faz 16 – Hatırlatıcı ve Yedekleme Yapılarının Sistem Genelinden Kaldırılması (İnceleme Özeti)
+
+- **Silinen API Uç Noktaları ve Bildirim Altyapısı:**
+  - `src/app/api/inventory/backup/route.ts`, `src/app/api/inventory/notifications/route.ts`, `src/app/api/inventory/notifications/[id]/route.ts`, `src/app/api/jobs/refresh-parts/route.ts` ve `src/lib/inventory/notification-channel.ts` kaldırıldı.
+- **Tip, Şema, Repository ve Servis Temizliği:**
+  - `src/features/inventory/types/lifecycle.ts` & `src/features/inventory/schemas/lifecycle-schemas.ts`: `Part.reminderLeadDays`, `NotificationType`, `InventoryNotification`, `UserSettings.defaultReminderLeadDays` ve `UserSettings.notifyInApp` kaldırıldı.
+  - `src/lib/auth/auth-schema.ts`: `userSettingsSchema` içinden `emailUpdates` alanı kaldırıldı.
+  - `src/lib/lifecycle/index.ts`: `computePartHealth` içindeki `reminderLeadDays` bağımlılığı kaldırılıp sabit `DEFAULT_DUE_SOON_DAYS = 7` eşiği kullanıldı.
+  - `src/lib/inventory/memory-store.ts`, `src/lib/inventory/repo/shopping-settings-repo.ts` (`shopping-notification-repo.ts` yerine) & `src/lib/inventory/repo/index.ts`: Bildirim deposu, `refreshPartsForUser` ve bildirim ayar varsayılanları temizlendi; alışveriş listesi ve kullanıcı ayarları (`currency`, `dateFormat`) korundu.
+  - `src/services/inventory-service.ts`, `src/hooks/use-inventory-hooks.ts` & `scripts/seed.ts`: `listNotifications`, `markNotificationRead`, `refreshParts`, `exportBackup`, `useNotificationsQuery` ve seed `reminderLeadDays` alanı kaldırıldı.
+- **Arayüz, Metadata ve i18n Güncellemeleri (Ömürlü yedek parça / yedek stok mantığı korundu):**
+  - `src/features/routes/auth/settings/`: `backup-export-card.tsx` kaldırılıp yalnızca hızlı bağlantıları içeren `QuickToolsCard` (`src/features/routes/auth/settings/components/quick-tools-card.tsx`) eklendi; `AuthSettingsForm` içindeki hatırlatıcı anahtarı kaldırıldı ve `types.ts`, `i18n/tr.json`, `i18n/en.json` güncellendi.
+  - `src/features/routes/auth/profile/`: `ProfileSessionCard` ve `ProfileDangerZoneCard` içindeki yedekleme yönlendirmeleri kaldırıldı; `types.ts`, `i18n/tr.json`, `i18n/en.json` güncellendi.
+  - `src/features/routes/auth/activity/screen.tsx` & `src/app/(auth)/activity/page.tsx`: Bildirim Merkezi kartı kaldırıldı; sayfa başlık ve açıklaması `Faaliyet Günlüğü` olarak güncellendi.
+  - `src/features/routes/auth/home/screen.tsx` & `src/features/routes/auth/parts/part-form-dialog.tsx`: `refreshParts()` / `useNotificationsQuery()` çağrıları ve `Hatırlatma (Gün önce)` girişi kaldırıldı.
+  - `src/features/routes/_shared/layouts/i18n/{tr,en}.json`, `src/lib/metadata/site-metadata/dictionaries/{tr,en}.json`, `src/components/shared/account-actions/i18n/{tr,en}.json` ve `src/features/routes/public/home/i18n/{tr,en}.json` yedekleme/bildirim metinlerinden arındırıldı.
+- **Doğrulama & Firebase Yayınlama:**
+  - Tüm değiştirilen/eklenen dosyalar 250 satır sınırının altında doğrulandı (en uzun dosya: `part-form-dialog.tsx`, 208 satır).
+  - `npm run type-check`, `npm run lint`, `npm test` (11 test dosyası, 93 test), `npm run metadata:check` ve `npm run build` sıfır hatayla geçti.
+  - [firestore.rules](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/firestore.rules) (`notifications` açıklaması kaldırıldı) ve [firestore.indexes.json](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/firestore.indexes.json) (`notifications` bileşik indeksi kaldırıldı) güncellenip doğrulandı; `umay-d5bb8` Firebase projesine `firestore` hedefiyle başarıyla yayınlandı (5 indeks `CREATING` durumunda).
+  - [storage.rules](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/storage.rules) sözdizimi doğrulamasından geçti ancak `umay-d5bb8` projesinde varsayılan Storage bucket henüz oluşturulmadığı (`No active Storage rules were found in project 'umay-d5bb8'`) için `storage` yayını başarısız oldu.
+
+---
+
+## Faz 15 – Hesap Yönetimi Servisleri (Çıkış Yap, Hesabı Sil), Butonlar ve Profil Ekranı (İnceleme Özeti)
+
+- **Sunucu Uç Noktaları & Veri Temizliği:**
+  - `src/lib/auth/auth-schema.ts`: `profileUpdateSchema` (`name`), `deleteAccountSchema` (`confirmEmail`) ve `createDeleteAccountSchema` Zod doğrulamaları eklendi.
+  - `src/lib/inventory/repo/account-repo.ts`: `deleteAllUserData(uid)` ile bellek deposu (`clearMemoryStore`), Firestore `/users/{uid}` alt koleksiyonları (`recursiveDelete`) ve Firebase Storage `users/{uid}/` dosyaları temizlenecek şekilde eklendi.
+  - `src/app/api/auth/me/route.ts`: `GET` ve `PATCH` (profil adı güncelleme, Firebase Auth `displayName` güncelleme ve yeni JWT/cookie oturumu üretme) eklendi.
+  - `src/app/api/auth/account/route.ts`: `DELETE` (oturum kontrolü, Zod + e-posta eşleşme doğrulaması, kullanıcı verilerinin ve Firebase Auth kaydının silinmesi, `destroySession()`) eklendi.
+- **İstemci Servisleri, Store ve Hook Katmanı:**
+  - `src/lib/api/client.ts`: `/api` taban URL normalizasyonu eklendi.
+  - `src/lib/firebase/client.ts` & `src/lib/offline/offline-queue.ts`: `signOutFirebaseClient()` ve `clearOfflineMutations()` eklendi.
+  - `src/stores/use-auth-store.ts`: Cookie tabanlı oturumlar için `setUser` aksiyonu eklendi.
+  - `src/services/auth-service.ts` & `src/hooks/use-auth-hooks.ts`: `/auth/*` yollarına hizalandı; `useCurrentUserQuery`, `useUpdateProfileMutation`, `useLogoutMutation` ve `useDeleteAccountMutation` eklendi.
+  - `src/features/routes/public/home/components/google-signin-button.tsx`: `isAuthUser` tip koruyucusu API yanıtındaki `{ id, email, name, role }` yapısına uyarlandı.
+- **Yeniden Kullanılabilir Hesap Butonları & Kabuk Entegrasyonu (`src/components/shared/account-actions/`):**
+  - `LogoutButton`, `DeleteAccountButton`, `DeleteAccountDialog` (`Form` + `TextField` + `SubmitButton` ile e-posta doğrulamalı), `UserAccountMenu` ve `SidebarUserFooter` oluşturuldu.
+  - `AppShellLayout`, `CommandPalette`, `src/features/routes/_shared/layouts/i18n/*` ve `src/features/routes/auth/settings/` (`/settings` içinde gerçek profil/ayar kaydı + `AccountActionsCard`) ile entegre edildi.
+- **Profil Ekranı (`/profile`):**
+  - `src/lib/metadata/site-metadata/` (`authProfile`), `src/app/(auth)/profile/page.tsx` ve `src/features/routes/auth/profile/` (`ProfileOverviewCard`, `ProfileEditForm`, `ProfileSessionCard`, `ProfileDangerZoneCard` + `tr.json`/`en.json`) oluşturuldu.
+- **Doğrulama & Açık Noktalar:**
+  - `tests/auth/auth-schema.test.ts`, `tests/auth/account-routes.test.ts`, `tests/inventory/repository.test.ts` ve `tests/i18n/i18n-dictionaries.test.ts` güncellendi/eklendi.
+  - `npm run type-check`, `npm run lint`, `npm test` (10 dosya, 90 test), `npm run metadata:check` ve `npm run build` hatasız tamamlandı. Canlı Firebase projesi/emülatörü üzerinde gerçek uçtan uca kimlik silme doğrulaması ise ortam yapılandırmasına bağlıdır (yerel birim testleri mock/bellek deposu ile doğrulandı).
+
+---
+
 ## Faz 14 – Modern Responsive One-Page Anasayfa Revizyonu (İnceleme Özeti)
 
 - **One-Page Üst Gezinme & Kaydırma:** `src/app/globals.css` içine `scroll-behavior: smooth` (`prefers-reduced-motion` uyumlu) eklendi; `src/features/routes/_shared/layouts/app-shell.tsx` ile `i18n/tr.json` ve `i18n/en.json` içinde masaüstü one-page bölüm bağlantıları (`#nasil-calisir`, `#omurlu-parcalar`, `#ozellikler`, `#ekranlar`, `#sss`) tanımlandı.

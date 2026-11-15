@@ -43,3 +43,9 @@ Bu dosya, kullanıcı geri bildirimleri, mimari denetimler ve geliştirme sürec
 ## 8. Submit Button İçeriği
 
 - **İkon ve metin hizalaması:** `SubmitButton` çağıranları SVG ve metni `children` olarak birlikte geçebilir. Ortak bileşen, bu içeriği `inline-flex items-center whitespace-nowrap` sarmalayıcısında tutarak dar viewport'larda satır kırılmasını ve buton taşmasını engellemelidir.
+
+---
+
+## 9. i18n Sözlük Yapısı Standardı
+
+- **JSON Sözlük Klasörü:** Bileşen veya rota bazlı tüm çeviri metinleri `i18n.ts` içinde inline TypeScript nesnesi olarak değil; proje standardına uygun şekilde `i18n/tr.json`, `i18n/en.json` ve `i18n/index.ts` klasör yapısıyla tanımlanmalıdır.

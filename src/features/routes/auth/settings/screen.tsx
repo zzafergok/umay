@@ -5,8 +5,9 @@ import {
   CardTitle,
 } from '@/components/core/card';
 import { getCurrentLocale } from '@/lib/i18n/server-locale';
+import { AccountActionsCard } from './components/account-actions-card';
 import { AuthSettingsForm } from './components/auth-settings-form';
-import { BackupAndExportCard } from './components/backup-export-card';
+import { QuickToolsCard } from './components/quick-tools-card';
 import { ThemeSelectorCard } from './components/theme-selector-card';
 import { getAuthSettingsCopy } from './i18n';
 
@@ -25,7 +26,8 @@ export async function AuthSettingsScreen() {
           <AuthSettingsForm copy={copy} />
         </CardContent>
       </Card>
-      <BackupAndExportCard />
+      <QuickToolsCard />
+      <AccountActionsCard copy={copy} />
     </div>
   );
 }

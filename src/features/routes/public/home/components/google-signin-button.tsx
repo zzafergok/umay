@@ -21,15 +21,14 @@ interface GoogleSignInButtonProps {
 
 function isAuthUser(value: unknown): value is AuthUser {
   if (typeof value !== 'object' || value === null) return false;
+  const record = value as Record<string, unknown>;
   return (
-    'uid' in value &&
-    typeof value.uid === 'string' &&
-    'email' in value &&
-    typeof value.email === 'string' &&
-    'displayName' in value &&
-    typeof value.displayName === 'string' &&
-    'role' in value &&
-    (value.role === 'user' || value.role === 'admin')
+    typeof record.id === 'string' &&
+    typeof record.email === 'string' &&
+    (record.name === undefined || typeof record.name === 'string') &&
+    (record.role === undefined ||
+      record.role === 'user' ||
+      record.role === 'admin')
   );
 }
 

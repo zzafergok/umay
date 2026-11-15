@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { getAccountActionsCopy } from '@/components/shared/account-actions/i18n';
 import { getShellCopy } from '@/features/routes/_shared/layouts/i18n';
 import { getAuthHomeCopy } from '@/features/routes/auth/home/i18n';
+import { getAuthProfileCopy } from '@/features/routes/auth/profile/i18n';
 import { getAuthSettingsCopy } from '@/features/routes/auth/settings/i18n';
 import { getAuthWorkspaceCopy } from '@/features/routes/auth/workspace/i18n';
 import { getPublicHomeCopy } from '@/features/routes/public/home/i18n';
@@ -33,6 +35,17 @@ describe('i18n JSON Dictionaries & Copy Loaders', () => {
       const settings = getAuthSettingsCopy(locale);
       expect(settings.title).toBeTruthy();
       expect(settings.displayNameLabel).toBeTruthy();
+      expect(settings.openProfileLabel).toBeTruthy();
+
+      const profile = getAuthProfileCopy(locale);
+      expect(profile.title).toBeTruthy();
+      expect(profile.editForm.submitLabel).toBeTruthy();
+      expect(profile.dangerZone.title).toBeTruthy();
+
+      const accountActions = getAccountActionsCopy(locale);
+      expect(accountActions.logoutLabel).toBeTruthy();
+      expect(accountActions.deleteLabel).toBeTruthy();
+      expect(accountActions.deleteScopeItems.length).toBeGreaterThan(0);
 
       const workspace = getAuthWorkspaceCopy(locale);
       expect(workspace.title).toBeTruthy();

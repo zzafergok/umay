@@ -1,31 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSessionToken } from '@/lib/auth/session';
-import { verifyToken } from '@/lib/auth/jwt';
+import { profileUpdateSchema } from '@/lib/auth/auth-schema';
+import { signToken } from '@/lib/auth/jwt';
+import { getAuthenticatedUser } from '@/lib/auth/request-user';
+import { createSession } from '@/lib/auth/session';
+import { getAdminAuth, isFirebaseConfigured } from '@/lib/firebase/admin';
 
 export async function GET(request: NextRequest) {
   try {
-    // 1. Try Bearer header token
-    const authHeader = request.headers.get('Authorization');
-    let token = authHeader?.startsWith('Bearer ')
-      ? authHeader.substring(7)
-      : null;
+    const user = await getAuthenticatedUser(request);
 
-    // 2. Fallback to HTTP-Only Cookie
-    if (!token) {
-      token = await getSessionToken();
-    }
-
-    if (!token) {
+    if (!user) {
       return NextResponse.json(
-        { message: 'Unauthorized: No token provided' },
-        { status: 401 },
-      );
-    }
-
-    const payload = verifyToken(token);
-    if (!payload) {
-      return NextResponse.json(
-        { message: 'Unauthorized: Invalid or expired token' },
+        { message: 'Yetkisiz erişim: Oturum bulunamadı.' },
         { status: 401 },
       );
     }
@@ -33,17 +19,83 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         user: {
-          id: payload.sub,
-          email: payload.email,
-          name: payload.name,
-          role: payload.role,
+          id: user.uid,
+          email: user.email,
+          name: user.name,
+          role: user.role,
         },
       },
       { status: 200 },
     );
   } catch {
     return NextResponse.json(
-      { message: 'An error occurred fetching user profile' },
+      { message: 'Kullanıcı profili alınırken bir hata oluştu.' },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
+      return NextResponse.json(
+        { message: 'Yetkisiz erişim: Oturum bulunamadı.' },
+        { status: 401 },
+      );
+    }
+
+    const rawBody: unknown = await request.json();
+    const parsed = profileUpdateSchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          message:
+            parsed.error.errors[0]?.message ?? 'Geçersiz profil bilgileri.',
+          errors: parsed.error.flatten().fieldErrors,
+        },
+        { status: 400 },
+      );
+    }
+
+    const nextName = parsed.data.name;
+
+    if (isFirebaseConfigured() && !user.uid.startsWith('demo_')) {
+      try {
+        await getAdminAuth().updateUser(user.uid, { displayName: nextName });
+      } catch (error) {
+        if (process.env.ALLOW_DEMO_AUTH === 'false') {
+          throw error;
+        }
+        console.warn('Firebase Auth displayName update skipped:', error);
+      }
+    }
+
+    const token = signToken({
+      sub: user.uid,
+      email: user.email,
+      name: nextName,
+      role: user.role,
+    });
+
+    await createSession(token);
+
+    return NextResponse.json(
+      {
+        message: 'Profil bilgileri güncellendi.',
+        token,
+        user: {
+          id: user.uid,
+          email: user.email,
+          name: nextName,
+          role: user.role,
+        },
+      },
+      { status: 200 },
+    );
+  } catch {
+    return NextResponse.json(
+      { message: 'Profil güncellenirken bir hata oluştu.' },
       { status: 500 },
     );
   }

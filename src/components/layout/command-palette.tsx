@@ -2,7 +2,16 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Boxes, Home, QrCode, ShoppingCart, Wrench } from 'lucide-react';
+import {
+  Boxes,
+  Home,
+  LogOut,
+  QrCode,
+  Settings,
+  ShoppingCart,
+  UserRound,
+  Wrench,
+} from 'lucide-react';
 import {
   CommandDialog,
   CommandEmpty,
@@ -11,13 +20,20 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/core/command';
+import { toast } from '@/components/core/toast';
+import { useCurrentLocale } from '@/components/providers/client-locale-provider';
+import { getAccountActionsCopy } from '@/components/shared/account-actions/i18n';
+import { useLogoutMutation } from '@/hooks/use-auth-hooks';
 import { useItemsQuery, usePartsQuery } from '@/hooks/use-inventory-hooks';
 
 export function CommandPalette() {
   const router = useRouter();
+  const locale = useCurrentLocale();
+  const accountCopy = getAccountActionsCopy(locale);
   const [open, setOpen] = React.useState(false);
   const { data: items = [] } = useItemsQuery();
   const { data: partsData } = usePartsQuery();
+  const logoutMutation = useLogoutMutation();
 
   React.useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -33,6 +49,19 @@ export function CommandPalette() {
   const go = (href: string) => {
     setOpen(false);
     router.push(href);
+  };
+
+  const handleLogout = async () => {
+    setOpen(false);
+    try {
+      await logoutMutation.mutateAsync();
+      toast.success(accountCopy.logoutSuccess);
+    } catch {
+      toast.warning(accountCopy.logoutError);
+    } finally {
+      router.replace('/');
+      router.refresh();
+    }
   };
 
   return (
@@ -60,6 +89,20 @@ export function CommandPalette() {
           <CommandItem onSelect={() => go('/scan')}>
             <QrCode className="mr-2 h-4 w-4" />
             <span>Barkod / QR Tara</span>
+          </CommandItem>
+        </CommandGroup>
+        <CommandGroup heading={accountCopy.menuAccountLabel}>
+          <CommandItem onSelect={() => go('/profile')}>
+            <UserRound className="mr-2 h-4 w-4" />
+            <span>{accountCopy.menuProfile}</span>
+          </CommandItem>
+          <CommandItem onSelect={() => go('/settings')}>
+            <Settings className="mr-2 h-4 w-4" />
+            <span>{accountCopy.menuSettings}</span>
+          </CommandItem>
+          <CommandItem onSelect={() => void handleLogout()}>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>{accountCopy.logoutLabel}</span>
           </CommandItem>
         </CommandGroup>
         {items.length > 0 && (

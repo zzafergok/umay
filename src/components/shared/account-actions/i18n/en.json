@@ -1,0 +1,28 @@
+{
+  "logoutLabel": "Sign Out",
+  "logoutLoadingLabel": "Signing out...",
+  "logoutSuccess": "You have been signed out.",
+  "logoutError": "Could not reach the server; local session was cleared.",
+  "deleteLabel": "Delete Account",
+  "deleteDialogTitle": "Permanently delete account",
+  "deleteDialogDescription": "This action cannot be undone. Your account and all home inventory records will be permanently removed.",
+  "deleteScopeTitle": "Data that will be deleted",
+  "deleteScopeItems": [
+    "All items, stock movements, and barcode/QR records",
+    "Locations tree, categories, and custom field templates",
+    "Lifecycle spare parts, replacement logs, and shopping list",
+    "Preferences, profile details, and account session"
+  ],
+  "deleteConfirmEmailLabel": "Type your email address to confirm",
+  "deleteConfirmEmailPlaceholder": "name@umay.app",
+  "deleteConfirmMismatch": "The email address does not match your account.",
+  "deleteCancelLabel": "Cancel",
+  "deleteConfirmLabel": "Permanently Delete Account",
+  "deleteLoadingLabel": "Deleting account...",
+  "deleteSuccess": "Your account and all associated data have been deleted.",
+  "deleteError": "An error occurred while deleting your account.",
+  "menuProfile": "My Profile",
+  "menuSettings": "Settings",
+  "menuAccountLabel": "Account",
+  "fallbackName": "Umay User"
+}

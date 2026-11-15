@@ -1,6 +1,5 @@
 import type {
   Category,
-  InventoryNotification,
   Item,
   Location,
   Part,
@@ -18,7 +17,6 @@ export interface UserVault {
   replacementLogs: Map<string, ReplacementLog>;
   stockMovements: Map<string, StockMovement>;
   shoppingList: Map<string, ShoppingListItem>;
-  notifications: Map<string, InventoryNotification>;
   settings: UserSettings;
 }
 
@@ -35,12 +33,9 @@ export function getUserVault(uid: string): UserVault {
       replacementLogs: new Map(),
       stockMovements: new Map(),
       shoppingList: new Map(),
-      notifications: new Map(),
       settings: {
         currency: 'TRY',
         dateFormat: 'dd.MM.yyyy',
-        defaultReminderLeadDays: 7,
-        notifyInApp: true,
         updatedAt: new Date().toISOString(),
       },
     };

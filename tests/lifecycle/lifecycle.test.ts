@@ -34,7 +34,6 @@ describe('lifecycle calculations (Europe/Istanbul)', () => {
       lifespan: { mode: 'time' as const, days: 30 },
       installedAt: '2026-05-01T00:00:00.000Z',
       nextReplacementAt: '2026-05-31T00:00:00.000Z',
-      reminderLeadDays: 7,
     };
 
     const okHealth = computePartHealth(
@@ -71,7 +70,6 @@ describe('lifecycle calculations (Europe/Istanbul)', () => {
         installedAt: '2026-05-01T00:00:00.000Z',
         nextReplacementAt: '2026-10-28T00:00:00.000Z',
         usageCurrent: 920,
-        reminderLeadDays: 7,
       },
       new Date('2026-05-15T10:00:00.000Z'),
     );

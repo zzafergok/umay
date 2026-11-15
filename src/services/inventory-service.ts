@@ -1,7 +1,6 @@
 import { apiClient } from '@/lib/api';
 import type {
   Category,
-  InventoryNotification,
   Item,
   Location,
   Part,
@@ -52,8 +51,10 @@ export const inventoryService = {
   getItem: (id: string) => apiClient.get<Item>(`/inventory/items/${id}`),
   createItem: (data: ItemInput) =>
     apiClient.post<Item>('/inventory/items', data),
-  updateItem: (id: string, data: Partial<ItemInput> & { archivedAt?: string }) =>
-    apiClient.patch<Item>(`/inventory/items/${id}`, data),
+  updateItem: (
+    id: string,
+    data: Partial<ItemInput> & { archivedAt?: string },
+  ) => apiClient.patch<Item>(`/inventory/items/${id}`, data),
   deleteItem: (id: string) =>
     apiClient.delete<{ ok: boolean }>(`/inventory/items/${id}`),
 
@@ -68,12 +69,15 @@ export const inventoryService = {
     ),
 
   listParts: () =>
-    apiClient.get<{ parts: Part[]; logs: ReplacementLog[] }>('/inventory/parts'),
+    apiClient.get<{ parts: Part[]; logs: ReplacementLog[] }>(
+      '/inventory/parts',
+    ),
   getPart: (id: string) =>
     apiClient.get<{ part: Part; logs: ReplacementLog[] }>(
       `/inventory/parts/${id}`,
     ),
-  createPart: (data: PartInput) => apiClient.post<Part>('/inventory/parts', data),
+  createPart: (data: PartInput) =>
+    apiClient.post<Part>('/inventory/parts', data),
   updatePart: (id: string, data: Partial<PartInput>) =>
     apiClient.patch<Part>(`/inventory/parts/${id}`, data),
   deletePart: (id: string) =>
@@ -94,19 +98,7 @@ export const inventoryService = {
   deleteShopping: (id: string) =>
     apiClient.delete<{ ok: boolean }>(`/inventory/shopping/${id}`),
 
-  listNotifications: () =>
-    apiClient.get<InventoryNotification[]>('/inventory/notifications'),
-  markNotificationRead: (id: string) =>
-    apiClient.patch<InventoryNotification>(`/inventory/notifications/${id}`, {}),
-  refreshParts: () =>
-    apiClient.post<{ updatedParts: number; createdNotifications: number }>(
-      '/jobs/refresh-parts',
-      {},
-    ),
-
   getSettings: () => apiClient.get<UserSettings>('/inventory/settings'),
   updateSettings: (data: UserSettingsInput) =>
     apiClient.put<UserSettings>('/inventory/settings', data),
-
-  exportBackup: () => apiClient.get<Record<string, unknown>>('/inventory/backup'),
 };

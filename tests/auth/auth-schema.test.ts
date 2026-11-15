@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { loginSchema, userSettingsSchema } from '@/lib/auth/auth-schema';
+import {
+  createDeleteAccountSchema,
+  deleteAccountSchema,
+  loginSchema,
+  profileUpdateSchema,
+  userSettingsSchema,
+} from '@/lib/auth/auth-schema';
 
 describe('Auth Validation Schemas', () => {
   describe('loginSchema', () => {
@@ -51,7 +57,6 @@ describe('Auth Validation Schemas', () => {
     it('should validate proper user settings', () => {
       const valid = {
         displayName: 'Umay Pilot',
-        emailUpdates: true,
       };
 
       const result = userSettingsSchema.safeParse(valid);
@@ -61,11 +66,46 @@ describe('Auth Validation Schemas', () => {
     it('should reject empty display name', () => {
       const invalid = {
         displayName: '',
-        emailUpdates: false,
       };
 
       const result = userSettingsSchema.safeParse(invalid);
       expect(result.success).toBe(false);
+    });
+  });
+
+  describe('profileUpdateSchema', () => {
+    it('should trim and accept valid display name', () => {
+      const result = profileUpdateSchema.safeParse({ name: '  Ayşe Yılmaz  ' });
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.name).toBe('Ayşe Yılmaz');
+      }
+    });
+
+    it('should reject names shorter than 2 characters', () => {
+      const result = profileUpdateSchema.safeParse({ name: 'A' });
+      expect(result.success).toBe(false);
+    });
+  });
+
+  describe('deleteAccountSchema & createDeleteAccountSchema', () => {
+    it('should validate email format in deleteAccountSchema', () => {
+      expect(
+        deleteAccountSchema.safeParse({ confirmEmail: 'ev@umay.app' }).success,
+      ).toBe(true);
+      expect(
+        deleteAccountSchema.safeParse({ confirmEmail: 'bad-email' }).success,
+      ).toBe(false);
+    });
+
+    it('should enforce case-insensitive email match', () => {
+      const schema = createDeleteAccountSchema('Ev@Umay.app');
+      expect(schema.safeParse({ confirmEmail: 'ev@umay.app' }).success).toBe(
+        true,
+      );
+      expect(schema.safeParse({ confirmEmail: 'other@umay.app' }).success).toBe(
+        false,
+      );
     });
   });
 });

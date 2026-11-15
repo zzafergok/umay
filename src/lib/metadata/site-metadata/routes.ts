@@ -38,4 +38,13 @@ export const routeMetadata: Record<MetadataRouteId, RouteMetadataDescriptor> = {
       tr: trRouteMetadata.authSettings,
     },
   },
+  authProfile: {
+    path: '/profile',
+    section: 'auth',
+    robots: { index: false, follow: false },
+    locale: {
+      en: enRouteMetadata.authProfile,
+      tr: trRouteMetadata.authProfile,
+    },
+  },
 };

@@ -15,7 +15,6 @@ rules_version = '2';
 //   - /users/{uid}/replacementLogs/{logId}
 //   - /users/{uid}/stockMovements/{movementId}
 //   - /users/{uid}/shoppingList/{entryId}
-//   - /users/{uid}/notifications/{notificationId}
 //   - /users/{uid}/activityLogs/{logId}
 //   - /users/{uid}/settings/{settingId}
 //

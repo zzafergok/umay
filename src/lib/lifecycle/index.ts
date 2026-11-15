@@ -1,4 +1,8 @@
-import type { Part, PartLifespan, PartStatus } from '@/features/inventory/types';
+import type {
+  Part,
+  PartLifespan,
+  PartStatus,
+} from '@/features/inventory/types';
 
 export const ISTANBUL_TIMEZONE = 'Europe/Istanbul';
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -52,14 +56,16 @@ function clampPercent(value: number): number {
   return Math.max(0, Math.min(100, Math.round(value)));
 }
 
+const DEFAULT_DUE_SOON_DAYS = 7;
+
 export function computePartHealth(
   part: Pick<
     Part,
-    'lifespan' | 'installedAt' | 'nextReplacementAt' | 'usageCurrent' | 'reminderLeadDays'
+    'lifespan' | 'installedAt' | 'nextReplacementAt' | 'usageCurrent'
   >,
   now: Date = new Date(),
 ): PartHealth {
-  const { lifespan, nextReplacementAt, usageCurrent = 0, reminderLeadDays } = part;
+  const { lifespan, nextReplacementAt, usageCurrent = 0 } = part;
 
   let timePercent: number | null = null;
   let daysRemaining: number | null = null;
@@ -80,7 +86,7 @@ export function computePartHealth(
 
       if (daysRemaining <= 0) {
         timeStatus = 'overdue';
-      } else if (daysRemaining <= reminderLeadDays) {
+      } else if (daysRemaining <= DEFAULT_DUE_SOON_DAYS) {
         timeStatus = 'due_soon';
       }
     }
@@ -112,7 +118,9 @@ export function computePartHealth(
   };
 
   const finalStatus: PartStatus =
-    statusRank[timeStatus] >= statusRank[usageStatus] ? timeStatus : usageStatus;
+    statusRank[timeStatus] >= statusRank[usageStatus]
+      ? timeStatus
+      : usageStatus;
 
   const percents = [timePercent, usagePercent].filter(
     (v): v is number => v !== null,

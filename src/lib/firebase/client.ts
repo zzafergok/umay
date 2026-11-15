@@ -5,6 +5,7 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
+  signOut,
   type Auth,
 } from 'firebase/auth';
 
@@ -48,4 +49,14 @@ export async function signInWithGooglePopup(): Promise<string> {
   provider.setCustomParameters({ prompt: 'select_account' });
   const credential = await signInWithPopup(auth, provider);
   return credential.user.getIdToken();
+}
+
+export async function signOutFirebaseClient(): Promise<void> {
+  if (!isFirebaseClientConfigured()) return;
+  try {
+    const auth = getFirebaseClientAuth();
+    await signOut(auth);
+  } catch {
+    // Non-fatal: server httpOnly session cookie is cleared independently.
+  }
 }

@@ -8,7 +8,11 @@ export type RouteRobots = {
 export type RouteSection = 'public' | 'auth';
 
 export type MetadataRouteId =
-  'publicHome' | 'authHome' | 'authWorkspace' | 'authSettings';
+  | 'publicHome'
+  | 'authHome'
+  | 'authWorkspace'
+  | 'authSettings'
+  | 'authProfile';
 
 export type LocalizedRouteMetadata = {
   title: string;

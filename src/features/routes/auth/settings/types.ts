@@ -4,7 +4,8 @@ export type AuthSettingsCopy = {
   cardTitle: string;
   displayNameLabel: string;
   displayNamePlaceholder: string;
-  updatesTitle: string;
-  updatesDescription: string;
   submitLabel: string;
+  accountSectionTitle: string;
+  accountSectionDescription: string;
+  openProfileLabel: string;
 };

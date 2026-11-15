@@ -8,7 +8,6 @@ import {
 } from '@/services/inventory-service';
 import type {
   Category,
-  InventoryNotification,
   Item,
   Location,
   Part,
@@ -89,15 +88,6 @@ export function useShoppingQuery() {
   return useApiQuery<ShoppingListItem[]>(
     ['inventory', 'shopping'],
     '/inventory/shopping',
-    {},
-    CACHE_STRATEGIES.SHORT,
-  );
-}
-
-export function useNotificationsQuery() {
-  return useApiQuery<InventoryNotification[]>(
-    ['inventory', 'notifications'],
-    '/inventory/notifications',
     {},
     CACHE_STRATEGIES.SHORT,
   );

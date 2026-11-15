@@ -16,7 +16,12 @@
   },
   "authSettings": {
     "title": "Umay – Ayarlar",
-    "description": "Umay uygulama tercihleri, yedekleme ve hesap ayarları.",
+    "description": "Umay uygulama tercihleri ve hesap ayarları.",
     "aiPurpose": "Kullanıcı ayarlar rotası."
+  },
+  "authProfile": {
+    "title": "Umay – Profil ve Hesap",
+    "description": "Kullanıcı profil bilgileri, oturum yönetimi ve hesap silme işlemleri.",
+    "aiPurpose": "Kimliği doğrulanmış kullanıcı profil ve hesap yönetimi ekranı."
   }
 }

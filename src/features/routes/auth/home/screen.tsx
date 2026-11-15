@@ -18,10 +18,8 @@ import {
   useCategoriesQuery,
   useItemsQuery,
   useLocationsQuery,
-  useNotificationsQuery,
   usePartsQuery,
 } from '@/hooks/use-inventory-hooks';
-import { inventoryService } from '@/services/inventory-service';
 import {
   AttentionListCard,
   type AttentionItem,
@@ -43,11 +41,6 @@ export function AuthHomeScreen() {
   const { data: partsData } = usePartsQuery();
   const { data: categories = [] } = useCategoriesQuery();
   const { data: locations = [] } = useLocationsQuery();
-  const { data: notifications = [] } = useNotificationsQuery();
-
-  React.useEffect(() => {
-    inventoryService.refreshParts().catch(() => undefined);
-  }, []);
 
   const parts = partsData?.parts ?? [];
   const lowStockItems = items.filter(
@@ -126,8 +119,6 @@ export function AuthHomeScreen() {
       .slice(0, 5);
   }, [categories, items]);
 
-  const unreadNotifs = notifications.filter((n) => !n.readAt).length;
-
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-2">
@@ -176,7 +167,6 @@ export function AuthHomeScreen() {
           tone={
             dueParts.some((p) => p.status === 'overdue') ? 'danger' : 'default'
           }
-          hint={unreadNotifs > 0 ? `${unreadNotifs} bildirim` : undefined}
           icon={<Wrench className="h-4 w-4" />}
         />
         <Stat

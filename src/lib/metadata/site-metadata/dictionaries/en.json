@@ -16,7 +16,12 @@
   },
   "authSettings": {
     "title": "Umay – Settings",
-    "description": "Umay preferences, backup, and account settings.",
+    "description": "Umay preferences and account settings.",
     "aiPurpose": "Authenticated settings route."
+  },
+  "authProfile": {
+    "title": "Umay – Profile & Account",
+    "description": "User profile details, active session controls, and permanent account deletion.",
+    "aiPurpose": "Authenticated user profile and account management screen."
   }
 }

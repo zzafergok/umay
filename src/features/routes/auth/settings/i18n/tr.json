@@ -1,10 +1,11 @@
 {
   "title": "Ayarlar",
-  "description": "Umay uygulama tercihleri, bildirimler ve veri yedekleme.",
+  "description": "Umay uygulama tercihleri ve hesap ayarları.",
   "cardTitle": "Profil ve Tercihler",
   "displayNameLabel": "Görünen Ad",
   "displayNamePlaceholder": "Ev Sahibi",
-  "updatesTitle": "Parça ve Stok Hatırlatıcıları",
-  "updatesDescription": "Yaklaşan parça değişimleri ve düşük stok bildirimlerini göster.",
-  "submitLabel": "Ayarları Kaydet"
+  "submitLabel": "Ayarları Kaydet",
+  "accountSectionTitle": "Hesap ve Oturum",
+  "accountSectionDescription": "Profil bilgilerinizi yönetin, oturumu kapatın veya hesabınızı kalıcı olarak silin.",
+  "openProfileLabel": "Profil Ekranını Aç"
 }

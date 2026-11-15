@@ -1,0 +1,36 @@
+{
+  "title": "Profil ve Hesap",
+  "description": "Kişisel profil bilgilerinizi düzenleyin, oturumunuzu yönetin veya hesabınızı kalıcı olarak silin.",
+  "overview": {
+    "activeSession": "Aktif Oturum",
+    "roleUser": "Standart Hesap",
+    "roleAdmin": "Yönetici",
+    "accountIdLabel": "Hesap Kimliği",
+    "settingsLink": "Tercihler ve Ayarlar",
+    "statsItems": "Kayıtlı Ürün",
+    "statsLocations": "Konum",
+    "statsParts": "Ömürlü Parça"
+  },
+  "editForm": {
+    "title": "Profil Bilgileri",
+    "description": "Umay genelinde görünecek adınızı güncelleyebilirsiniz.",
+    "nameLabel": "Görünen Ad",
+    "namePlaceholder": "Adınız Soyadınız",
+    "emailLabel": "E-posta Adresi",
+    "emailHint": "E-posta adresi oturum kimliğinizdir ve değiştirilemez.",
+    "submitLabel": "Profili Güncelle",
+    "loadingLabel": "Güncelleniyor...",
+    "successMessage": "Profil bilgileriniz güncellendi.",
+    "errorMessage": "Profil güncellenirken bir hata oluştu."
+  },
+  "sessionCard": {
+    "title": "Oturum Güvenliği",
+    "description": "Mevcut cihazdaki aktif oturumunuzu görüntüleyebilir ve güvenle kapatabilirsiniz.",
+    "signedInAs": "Aktif hesap"
+  },
+  "dangerZone": {
+    "title": "Tehlikeli Bölge",
+    "description": "Hesabınızı kalıcı olarak silin.",
+    "warning": "Hesabınızı sildiğinizde tüm ürünler, konumlar, kategoriler, ömürlü parçalar, alışveriş listeleri ve oturum bilgileriniz geri alınamaz biçimde silinir."
+  }
+}

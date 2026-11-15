@@ -35,7 +35,6 @@ export const partInputSchema = z.object({
   lifespan: partLifespanSchema,
   installedAt: isoDateOrDatetime,
   usageCurrent: z.number().min(0).max(10000000).default(0),
-  reminderLeadDays: z.number().int().min(0).max(180).default(7),
   notes: z.string().trim().max(1000).default(''),
 });
 
@@ -52,14 +51,7 @@ export const partUsageInputSchema = z.object({
 
 export const stockMovementInputSchema = z.object({
   itemId: z.string().trim().min(1, 'Ürün kimliği zorunludur.'),
-  type: z.enum([
-    'in',
-    'out',
-    'adjust',
-    'consume',
-    'replace_part',
-    'discard',
-  ]),
+  type: z.enum(['in', 'out', 'adjust', 'consume', 'replace_part', 'discard']),
   delta: z
     .number({ invalid_type_error: 'Değişim miktarı sayı olmalıdır.' })
     .refine((v) => v !== 0, 'Miktar değişimi 0 olamaz.'),
@@ -85,8 +77,6 @@ export const shoppingItemInputSchema = z
 export const userSettingsInputSchema = z.object({
   currency: z.enum(['TRY', 'USD', 'EUR']).default('TRY'),
   dateFormat: z.enum(['dd.MM.yyyy', 'yyyy-MM-dd']).default('dd.MM.yyyy'),
-  defaultReminderLeadDays: z.number().int().min(1).max(90).default(7),
-  notifyInApp: z.boolean().default(true),
 });
 
 export type PartInput = z.infer<typeof partInputSchema>;

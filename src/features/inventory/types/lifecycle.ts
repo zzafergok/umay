@@ -21,7 +21,6 @@ export interface Part {
   usageCurrent?: number;
   nextReplacementAt: string | null;
   lastReplacedAt?: string;
-  reminderLeadDays: number;
   status: PartStatus;
   notes: string;
   createdAt: string;
@@ -42,12 +41,7 @@ export interface ReplacementLog {
 }
 
 export type StockMovementType =
-  | 'in'
-  | 'out'
-  | 'adjust'
-  | 'consume'
-  | 'replace_part'
-  | 'discard';
+  'in' | 'out' | 'adjust' | 'consume' | 'replace_part' | 'discard';
 
 export interface StockMovement {
   id: string;
@@ -60,10 +54,7 @@ export interface StockMovement {
   at: string;
 }
 
-export type ShoppingSource =
-  | 'auto_low_stock'
-  | 'auto_part_due'
-  | 'manual';
+export type ShoppingSource = 'auto_low_stock' | 'auto_part_due' | 'manual';
 
 export interface ShoppingListItem {
   id: string;
@@ -77,28 +68,8 @@ export interface ShoppingListItem {
   updatedAt: string;
 }
 
-export type NotificationType =
-  | 'part_due'
-  | 'part_overdue'
-  | 'low_stock'
-  | 'expiring_soon';
-
-export interface InventoryNotification {
-  id: string;
-  type: NotificationType;
-  refId: string;
-  title: string;
-  message: string;
-  dueAt: string;
-  readAt?: string;
-  snoozedUntil?: string;
-  createdAt: string;
-}
-
 export interface UserSettings {
   currency: CurrencyCode;
   dateFormat: 'dd.MM.yyyy' | 'yyyy-MM-dd';
-  defaultReminderLeadDays: number;
-  notifyInApp: boolean;
   updatedAt: string;
 }

@@ -5,8 +5,11 @@ import {
   createItem,
   createLocation,
   createPart,
+  deleteAllUserData,
   getItemById,
   listItems,
+  listLocations,
+  listParts,
   listReplacementLogs,
   listStockMovements,
   recordStockMovement,
@@ -107,7 +110,6 @@ describe('inventory repository & user isolation', () => {
       lifespan: { mode: 'time', days: 180 },
       installedAt: '2026-01-01T00:00:00.000Z',
       usageCurrent: 0,
-      reminderLeadDays: 7,
       notes: '',
     });
 
@@ -164,5 +166,50 @@ describe('inventory repository & user isolation', () => {
         delta: -1,
       }),
     ).rejects.toThrow(/bulunamadı/);
+  });
+
+  it('deletes all user data on account deletion without affecting other users', async () => {
+    const locA = await createLocation(userA, { name: 'Kiler', parentId: null });
+    const catA = await createCategory(userA, {
+      name: 'Gıda',
+      colorToken: 'emerald',
+      icon: 'boxes',
+      customFields: [],
+    });
+    await createItem(userA, {
+      name: 'Bakliyat',
+      categoryId: catA.id,
+      locationId: locA.id,
+      type: 'consumable',
+      quantity: 2,
+      unit: 'kg',
+      minQuantity: 1,
+      currency: 'TRY',
+      photos: [],
+      documents: [],
+      tags: [],
+      customFieldValues: {},
+      notes: '',
+      status: 'active',
+    });
+    await createPart(userA, {
+      name: 'HEPA Filtre',
+      parentItemId: null,
+      spareItemId: null,
+      lifespan: { mode: 'time', days: 90 },
+      installedAt: '2026-01-01T00:00:00.000Z',
+      usageCurrent: 0,
+      notes: '',
+    });
+
+    const locB = await createLocation(userB, { name: 'Salon', parentId: null });
+    expect(locB.id).toBeTruthy();
+
+    await deleteAllUserData(userA);
+
+    expect(await listItems(userA)).toHaveLength(0);
+    expect(await listLocations(userA)).toHaveLength(0);
+    expect(await listParts(userA)).toHaveLength(0);
+    expect(await listLocations(userB)).toHaveLength(1);
   });
 });

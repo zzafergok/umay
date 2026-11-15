@@ -218,7 +218,7 @@
         "points": [
           "BarcodeDetector with @zxing/browser fallback",
           "Printable QR labels for shelves, boxes, and items",
-          "Full CSV & JSON export and import"
+          "Instant stock increase or deduction from scans"
         ]
       },
       {
@@ -300,7 +300,7 @@
       {
         "id": "privacy",
         "question": "Is my inventory data private?",
-        "answer": "Every item, location, and activity record is strictly isolated by your user ID (UID). Requests are validated on the server with Zod schemas, and you can export a full CSV or JSON backup anytime."
+        "answer": "Every item, location, and activity record is strictly isolated by your user ID (UID), and all requests are validated on the server with session checks and Zod schemas."
       },
       {
         "id": "lifecycle",

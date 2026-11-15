@@ -39,14 +39,6 @@
         { "fieldPath": "partId", "order": "ASCENDING" },
         { "fieldPath": "replacedAt", "order": "DESCENDING" }
       ]
-    },
-    {
-      "collectionGroup": "notifications",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "readAt", "order": "ASCENDING" },
-        { "fieldPath": "dueAt", "order": "DESCENDING" }
-      ]
     }
   ],
   "fieldOverrides": []

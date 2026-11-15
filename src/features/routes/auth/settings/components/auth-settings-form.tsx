@@ -1,9 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Save } from 'lucide-react';
-import { Form, SubmitButton, SwitchField, TextField } from '@/components/forms';
 import { toast } from '@/components/core/toast';
+import { Form, SubmitButton, TextField } from '@/components/forms';
+import {
+  useCurrentUserQuery,
+  useUpdateProfileMutation,
+} from '@/hooks/use-auth-hooks';
 import {
   userSettingsSchema,
   type UserSettingsFormData,
@@ -15,13 +20,22 @@ interface AuthSettingsFormProps {
 }
 
 export function AuthSettingsForm({ copy }: AuthSettingsFormProps) {
+  const router = useRouter();
+  const { data: userData } = useCurrentUserQuery();
+  const updateProfileMutation = useUpdateProfileMutation();
   const [loading, setLoading] = useState(false);
+
+  const resolvedName =
+    userData?.user?.name?.trim() ||
+    userData?.user?.email?.split('@')[0] ||
+    copy.displayNamePlaceholder;
 
   const handleSubmit = async (data: UserSettingsFormData) => {
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 400));
+      await updateProfileMutation.mutateAsync({ name: data.displayName });
       toast.success(`${data.displayName} için ayarlar güncellendi.`);
+      router.refresh();
     } catch {
       toast.error('Ayarlar güncellenirken bir hata oluştu.');
     } finally {
@@ -30,11 +44,11 @@ export function AuthSettingsForm({ copy }: AuthSettingsFormProps) {
   };
 
   return (
-    <Form
+    <Form<UserSettingsFormData>
+      key={resolvedName}
       schema={userSettingsSchema}
       defaultValues={{
-        displayName: 'Demo User',
-        emailUpdates: true,
+        displayName: resolvedName,
       }}
       onSubmit={handleSubmit}
       className="space-y-4"
@@ -45,14 +59,6 @@ export function AuthSettingsForm({ copy }: AuthSettingsFormProps) {
         placeholder={copy.displayNamePlaceholder}
         required
       />
-
-      <div className="bg-surface-sunken rounded-md border border-border p-4">
-        <SwitchField
-          name="emailUpdates"
-          label={copy.updatesTitle}
-          description={copy.updatesDescription}
-        />
-      </div>
 
       <SubmitButton isLoading={loading}>
         <Save className="mr-2 h-4 w-4" aria-hidden="true" />

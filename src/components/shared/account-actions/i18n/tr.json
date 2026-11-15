@@ -1,0 +1,28 @@
+{
+  "logoutLabel": "Çıkış Yap",
+  "logoutLoadingLabel": "Çıkış yapılıyor...",
+  "logoutSuccess": "Oturumunuz kapatıldı.",
+  "logoutError": "Çıkış yapılırken bir sorun oluştu, yerel oturum temizlendi.",
+  "deleteLabel": "Hesabı Sil",
+  "deleteDialogTitle": "Hesabı kalıcı olarak sil",
+  "deleteDialogDescription": "Bu işlem geri alınamaz. Hesabınız ve tüm ev envanteri verileriniz kalıcı olarak silinecektir.",
+  "deleteScopeTitle": "Silinecek veriler",
+  "deleteScopeItems": [
+    "Tüm ürünler, stok hareketleri ve barkod/QR kayıtları",
+    "Konum ağacı, kategoriler ve özel alan şablonları",
+    "Ömürlü yedek parçalar, değişim geçmişi ve alışveriş listesi",
+    "Uygulama tercihleri, profil bilgileri ve hesap oturumu"
+  ],
+  "deleteConfirmEmailLabel": "Onaylamak için e-posta adresinizi yazın",
+  "deleteConfirmEmailPlaceholder": "ornek@umay.app",
+  "deleteConfirmMismatch": "Girilen e-posta adresi hesabınızla eşleşmiyor.",
+  "deleteCancelLabel": "Vazgeç",
+  "deleteConfirmLabel": "Hesabımı Kalıcı Olarak Sil",
+  "deleteLoadingLabel": "Hesap siliniyor...",
+  "deleteSuccess": "Hesabınız ve tüm verileriniz kalıcı olarak silindi.",
+  "deleteError": "Hesap silinirken bir hata oluştu.",
+  "menuProfile": "Profilim",
+  "menuSettings": "Ayarlar",
+  "menuAccountLabel": "Hesap",
+  "fallbackName": "Umay Kullanıcısı"
+}

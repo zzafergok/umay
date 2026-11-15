@@ -82,3 +82,18 @@ export async function flushOfflineMutations(): Promise<number> {
 
   return flushed;
 }
+
+export async function clearOfflineMutations(): Promise<void> {
+  if (typeof indexedDB === 'undefined') return;
+  try {
+    const db = await openDb();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch {
+    // Ignore IndexedDB cleanup failures during sign-out.
+  }
+}
