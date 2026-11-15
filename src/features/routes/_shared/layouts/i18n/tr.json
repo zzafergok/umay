@@ -3,7 +3,33 @@
     "title": "Umay",
     "subtitle": "Evin bereketi, kayıt altında."
   },
-  "publicNav": [],
+  "publicNav": [
+    {
+      "href": "/#nasil-calisir",
+      "label": "Nasıl Çalışır",
+      "icon": "layers"
+    },
+    {
+      "href": "/#omurlu-parcalar",
+      "label": "Ömürlü Parçalar",
+      "icon": "wrench"
+    },
+    {
+      "href": "/#ozellikler",
+      "label": "Özellikler",
+      "icon": "boxes"
+    },
+    {
+      "href": "/#ekranlar",
+      "label": "Ekranlar",
+      "icon": "home"
+    },
+    {
+      "href": "/#sss",
+      "label": "SSS",
+      "icon": "helpCircle"
+    }
+  ],
   "authNav": [
     {
       "href": "/home",

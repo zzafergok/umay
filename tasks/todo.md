@@ -1,5 +1,18 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
+## Faz 14 – Modern Responsive One-Page Anasayfa Revizyonu (İnceleme Özeti)
+
+- **One-Page Üst Gezinme & Kaydırma:** `src/app/globals.css` içine `scroll-behavior: smooth` (`prefers-reduced-motion` uyumlu) eklendi; `src/features/routes/_shared/layouts/app-shell.tsx` ile `i18n/tr.json` ve `i18n/en.json` içinde masaüstü one-page bölüm bağlantıları (`#nasil-calisir`, `#omurlu-parcalar`, `#ozellikler`, `#ekranlar`, `#sss`) tanımlandı.
+- **Modüler One-Page Bileşenleri (`src/features/routes/public/home/`):**
+  - `HomeHero` (`home-hero.tsx`) & `HeroLivePreview` (`hero-live-preview.tsx`): İki kolonlu responsive hero düzeni ve `Tabs`, `StatusPill`, `Button` ile etkileşimli "Bugünün Ev Defteri" stok önizlemesi oluşturuldu.
+  - `HowItWorksSection` (`how-it-works-section.tsx`): 3 adımlı responsive akış kartları eklendi.
+  - `LifecycleCtaCard` (`lifecycle-cta-card.tsx`): `LifecycleProgressBar` ve `StatusPill` ile etkileşimli parça değişimi önizlemesi eklendi.
+  - `FeatureInfoCards` (`feature-info-cards.tsx`) & `QuickRoutesSection` (`quick-routes-section.tsx`): `cat-1..cat-6` kategori noktalı 6 özellik kartı ve 5 hızlı ekran kartı bölüm çapalarıyla güncellendi.
+  - `FaqSection` (`faq-section.tsx`) & `HomeFooterCta` (`home-footer-cta.tsx`): `@/components/core/accordion` tabanlı SSS ve kapanış CTA + altbilgi eklendi.
+- **Standartlar & Doğrulama:** Tüm dosyalar 250 satır sınırının altında tutuldu (en uzun dosya 173 satır), yalnızca `@/components/core/*` bileşenleri kullanıldı ve `tr.json` / `en.json` sözlükleri güncellendi. `npm run type-check`, `npm run lint`, `npm test` (9 dosya, 80 test), `npm run metadata:check` ve `npm run build` hatasız tamamlandı.
+
+---
+
 ## Faz 13 – Umay Tasarım Rehberi (`design.md`) Uygulaması (İnceleme Özeti)
 
 - **Tek Kaynak & Modüler Tasarım Token'ları:** `docs/design.md` belgesi oluşturuldu. Tüm renkler (`--bg`, `--surface`, `--surface-raised`, `--surface-sunken`, `--border`, `--border-strong`, `--text`, `--text-muted`, `--text-subtle`, `--accent`, `--accent-hover`, `--accent-subtle`, `--on-accent`, `--ember`, durum token'ları ve `--cat-1`..`--cat-8`), tipografi ve boşluk ölçekleri `src/lib/design/tokens/` altına modüler olarak eklendi; `src/lib/design/contrast.ts` ve `src/lib/design/contrast.test.ts` (38 test) ile açık/koyu tema WCAG AA (≥ 4.5:1) kontrastları doğrulandı (`vitest.config.mts` `src/**/*.test.{ts,tsx}` içerecek şekilde güncellendi).

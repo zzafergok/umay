@@ -2,14 +2,151 @@
   "badges": [
     "Ev Envanteri & Stok Defteri",
     "Ömürlü Parça Takibi",
-    "Barkod & QR Etiket",
     "Çevrimdışı Hazır PWA"
   ],
   "hero": {
-    "title": "Umay: Evin bereketi, kayıt altında.",
-    "description": "Mutfaktaki erzaklardan elektronik cihazlara, çekmecedeki kablolardan su arıtma filtresine kadar evdeki tüm eşyalarını, stoklarını ve değiştirilebilir yedek parçalarını tek bir sakin arayüzde takip et.",
+    "title": "Evin bereketi, sakin bir düzende kayıt altında.",
+    "description": "Mutfaktaki erzaklardan elektronik cihazlara, çekmecedeki kablolardan su arıtma filtresine kadar evdeki tüm eşyalarını, stoklarını ve ömürlü yedek parçalarını tek bir defterde takip et.",
     "loginAction": "Google ile Giriş Yap",
-    "adminAction": "Paneli Aç"
+    "adminAction": "Paneli Aç",
+    "highlights": [
+      { "label": "Stok Hareketi", "value": "Atomik Defter" },
+      { "label": "Barkod & QR", "value": "Kamera ile Tara" },
+      { "label": "Çevrimdışı", "value": "PWA Eşitleme" }
+    ]
+  },
+  "heroPreview": {
+    "title": "Bugünün Ev Defteri",
+    "subtitle": "Yalnızca dikkat gerektiren kalemler öne çıkar",
+    "liveLabel": "Etkileşimli Önizleme",
+    "tabs": [
+      {
+        "id": "today",
+        "label": "Bugün",
+        "items": [
+          {
+            "id": "filter-1",
+            "name": "Su Arıtma Karbon Filtresi",
+            "location": "Mutfak · Tezgah Altı",
+            "quantity": 1,
+            "unit": "yedek",
+            "statusTone": "due_soon",
+            "statusLabel": "14 gün kaldı"
+          },
+          {
+            "id": "oil-1",
+            "name": "Sızma Zeytinyağı (5L)",
+            "location": "Kiler · Alt Raf",
+            "quantity": 1,
+            "unit": "teneke",
+            "statusTone": "low_stock",
+            "statusLabel": "Düşük stok"
+          },
+          {
+            "id": "hepa-1",
+            "name": "Robot Süpürge HEPA Filtre",
+            "location": "Antre · Temizlik Dolabı",
+            "quantity": 2,
+            "unit": "adet",
+            "statusTone": "overdue",
+            "statusLabel": "4 gün gecikti"
+          },
+          {
+            "id": "cable-1",
+            "name": "USB-C 2m Örgülü Kablo",
+            "location": "Çalışma Odası · Çekmece 2",
+            "quantity": 4,
+            "unit": "adet"
+          }
+        ]
+      },
+      {
+        "id": "pantry",
+        "label": "Mutfak",
+        "items": [
+          {
+            "id": "coffee-1",
+            "name": "Filtre Kahve (250g)",
+            "location": "Mutfak · Üst Dolap",
+            "quantity": 2,
+            "unit": "paket"
+          },
+          {
+            "id": "oil-2",
+            "name": "Sızma Zeytinyağı (5L)",
+            "location": "Kiler · Alt Raf",
+            "quantity": 1,
+            "unit": "teneke",
+            "statusTone": "low_stock",
+            "statusLabel": "Düşük stok"
+          },
+          {
+            "id": "detergent-1",
+            "name": "Bulaşık Makinesi Tableti",
+            "location": "Mutfak · Tezgah Altı",
+            "quantity": 18,
+            "unit": "tablet"
+          }
+        ]
+      },
+      {
+        "id": "parts",
+        "label": "Parçalar",
+        "items": [
+          {
+            "id": "part-1",
+            "name": "Su Arıtma Karbon Filtresi",
+            "location": "Mutfak · Arıtma Cihazı",
+            "quantity": 1,
+            "unit": "yedek",
+            "statusTone": "due_soon",
+            "statusLabel": "14 gün kaldı"
+          },
+          {
+            "id": "part-2",
+            "name": "Robot Süpürge HEPA Filtre",
+            "location": "Antre · Süpürge",
+            "quantity": 2,
+            "unit": "yedek",
+            "statusTone": "overdue",
+            "statusLabel": "4 gün gecikti"
+          },
+          {
+            "id": "part-3",
+            "name": "Diş Fırçası Yedek Başlık",
+            "location": "Banyo · Ayna Dolabı",
+            "quantity": 3,
+            "unit": "başlık"
+          }
+        ]
+      }
+    ],
+    "footerNote": "+ / − butonlarıyla stok önizlemesini deneyebilirsin"
+  },
+  "howItWorksSection": {
+    "badge": "Nasıl Çalışır?",
+    "title": "Üç Adımda Evinin Düzenini Kur",
+    "description": "Karmaşık tablolar yok; gerçek ev rutinine uyan sade ve hızlı bir akış.",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Oda ve Dolapları Tanımla",
+        "description": "Ev > Mutfak > Üst Dolap gibi hiyerarşik konum ağacını kur, kategorilere özel alanlar ekle.",
+        "meta": "Konum Ağacı & QR Etiket"
+      },
+      {
+        "step": "02",
+        "title": "Barkod Okut veya Tek Dokunuşla Ekle",
+        "description": "Kamera ile barkodu tara, erzak ve eşyalarını kaydet; günlük tüketimi tek dokunuşla düş.",
+        "meta": "Atomik Stok Defteri"
+      },
+      {
+        "step": "03",
+        "title": "Eksikler ve Bakımlar Kendiliğinden Gelsin",
+        "description": "Minimum stok eşiği veya parça ömrü dolduğunda otomatik alışveriş listesi ve uyarı al.",
+        "meta": "FEFO & Ömür Takibi"
+      }
+    ]
   },
   "lifecycleCallout": {
     "badge": "Ömürlü Parça Takibi",
@@ -21,12 +158,24 @@
       "Son kullanma tarihi (SKT) yaklaşanlar için FEFO uyarısı",
       "Otomatik alışveriş listesi ve QR raf etiketi yazdırma"
     ],
-    "action": "Envanterine Başla →"
+    "action": "Envanterine Başla →",
+    "demoPart": {
+      "name": "Su Arıtma Karbon Filtresi",
+      "appliance": "Mutfak · Tezgah Altı Arıtma",
+      "statusLabel": "Yaklaşıyor",
+      "remainingPercent": 18,
+      "daysRemaining": 14,
+      "metaLabel": "180 günlük ömür",
+      "spareLabel": "Yedek stok",
+      "spareCount": 2,
+      "replaceAction": "Değiştirildi olarak işaretle",
+      "replacedNote": "Değişim kaydedildi, yedek stok 1 azaldı"
+    }
   },
   "featuresSection": {
     "badge": "Umay Özellikleri",
     "title": "Evin İçin Sakin, Hızlı ve Güvenilir Takip",
-    "description": "İhtiyacın olan her şey elinin altında; gereksiz karmaşa yok.",
+    "description": "İhtiyacın olan her şey elinin altında; gereksiz görsel karmaşa yok.",
     "cards": [
       {
         "icon": "layers",
@@ -97,17 +246,10 @@
     ]
   },
   "quickRoutesSection": {
-    "badge": "Hızlı Başlangıç",
-    "title": "Umay Ekranlarına Geç",
+    "badge": "Uygulama Ekranları",
+    "title": "Umay Ekranlarına Doğrudan Geç",
     "description": "Giriş yaparak ev envanterini hemen yönetmeye başla.",
     "routes": [
-      {
-        "href": "/locations",
-        "title": "Konumlar",
-        "subtitle": "Ev, oda ve dolap hiyerarşisi",
-        "badge": "Konum",
-        "icon": "lock"
-      },
       {
         "href": "/home",
         "title": "Kontrol Paneli",
@@ -130,12 +272,61 @@
         "icon": "sparkles"
       },
       {
+        "href": "/locations",
+        "title": "Konumlar",
+        "subtitle": "Ev, oda ve dolap hiyerarşisi",
+        "badge": "Konum",
+        "icon": "lock"
+      },
+      {
         "href": "/shopping",
         "title": "Alışveriş Listesi",
         "subtitle": "Düşük stok ve geciken parça önerileri",
         "badge": "Liste",
         "icon": "shield"
       }
+    ]
+  },
+  "faqSection": {
+    "badge": "Sık Sorulan Sorular",
+    "title": "Merak Edilenler",
+    "description": "Umay'ı kullanmaya başlamadan önce bilmek isteyeceğin temel noktalar.",
+    "items": [
+      {
+        "id": "offline",
+        "question": "Kilerde veya bodrumda internet çekmezse kullanabilir miyim?",
+        "answer": "Evet. Umay çevrimdışı hazır bir PWA olarak çalışır. Son görüntülediğin listeler cihazında saklanır; internet yokken yaptığın stok hareketleri kuyruğa alınır ve bağlantı geldiğinde otomatik eşitlenir."
+      },
+      {
+        "id": "privacy",
+        "question": "Verilerim güvende mi, başkaları görebilir mi?",
+        "answer": "Tüm envanter, konum ve faaliyet kayıtların yalnızca senin kullanıcı kimliğinle (UID) izole edilir. İstekler sunucu tarafında oturum ve Zod şemalarıyla doğrulanır; ayrıca dilediğinde CSV veya JSON olarak tam yedeğini alabilirsin."
+      },
+      {
+        "id": "lifecycle",
+        "question": "Ömürlü parça takibi tam olarak nasıl işliyor?",
+        "answer": "Su arıtma filtresi, süpürge başlığı veya pil gibi parçaları ana ürüne bağlarsın. Gün veya kullanım bazlı ömür tanımladığında Umay kalan süreyi hesaplar; değişim yaptığında tek dokunuşla tarihi günceller ve varsa yedek stoğundan 1 adet düşer."
+      },
+      {
+        "id": "scanner",
+        "question": "Barkod ve QR etiket taramak için ek uygulama gerekir mi?",
+        "answer": "Hayır. Tarayıcının yerleşik kamera desteği (BarcodeDetector ve @zxing/browser fallback) sayesinde doğrudan Umay içinden barkod ve raf QR kodlarını okutabilirsin."
+      }
+    ]
+  },
+  "footerCta": {
+    "badge": "Hemen Başla",
+    "title": "Evinin envanter defterini bugün aç.",
+    "description": "Google hesabınla saniyeler içinde giriş yap, ilk konumunu ve ürününü ekle.",
+    "loginAction": "Google ile Giriş Yap",
+    "adminAction": "Paneli Aç",
+    "copyright": "Umay © 2026 · Evin bereketi, kayıt altında.",
+    "anchors": [
+      { "href": "#nasil-calisir", "label": "Nasıl Çalışır" },
+      { "href": "#omurlu-parcalar", "label": "Ömürlü Parçalar" },
+      { "href": "#ozellikler", "label": "Özellikler" },
+      { "href": "#ekranlar", "label": "Ekranlar" },
+      { "href": "#sss", "label": "SSS" }
     ]
   }
 }

@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
+import { cn } from '@/lib/utils';
 import type { FeatureCardItem, PublicHomeCopy } from '../types';
 
 const iconMap: Record<FeatureCardItem['icon'], LucideIcon> = {
@@ -28,13 +29,22 @@ const iconMap: Record<FeatureCardItem['icon'], LucideIcon> = {
   check: CheckCircle2,
 };
 
+const dotColors = [
+  'bg-cat-1',
+  'bg-cat-2',
+  'bg-cat-3',
+  'bg-cat-4',
+  'bg-cat-5',
+  'bg-cat-6',
+] as const;
+
 export function FeatureInfoCards({
   featuresSection,
 }: {
   featuresSection: PublicHomeCopy['featuresSection'];
 }) {
   return (
-    <section className="space-y-6">
+    <section id="ozellikler" className="scroll-mt-20 space-y-6">
       <div className="mx-auto max-w-2xl space-y-2 text-center">
         <Badge variant="outline">{featuresSection.badge}</Badge>
         <h2 className="font-heading text-title sm:text-display text-text">
@@ -46,8 +56,9 @@ export function FeatureInfoCards({
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {featuresSection.cards.map((card) => {
+        {featuresSection.cards.map((card, index) => {
           const Icon = iconMap[card.icon] ?? Layers;
+          const dotColor = dotColors[index % dotColors.length];
           return (
             <Card key={card.title} className="flex flex-col justify-between">
               <CardHeader className="space-y-3">
@@ -55,7 +66,13 @@ export function FeatureInfoCards({
                   <div className="bg-surface-sunken text-text-muted flex h-10 w-10 items-center justify-center rounded-md border border-border">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
-                  <Badge variant="secondary">{card.badge}</Badge>
+                  <Badge variant="secondary" className="gap-1.5">
+                    <span
+                      className={cn('h-2 w-2 rounded-full', dotColor)}
+                      aria-hidden="true"
+                    />
+                    {card.badge}
+                  </Badge>
                 </div>
                 <div>
                   <CardTitle>{card.title}</CardTitle>

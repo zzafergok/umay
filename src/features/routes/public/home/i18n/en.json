@@ -2,14 +2,151 @@
   "badges": [
     "Home Inventory & Stock Ledger",
     "Lifecycle Parts Tracking",
-    "Barcode & QR Labels",
     "Offline-Ready PWA"
   ],
   "hero": {
-    "title": "Umay: Your home's abundance, accounted for.",
-    "description": "Track everything at home—from pantry staples and electronics to drawer cables and water purifier filters—in one calm, fast, mobile-first workspace.",
+    "title": "Your home's abundance, calmly accounted for.",
+    "description": "Track everything at home—from pantry staples and electronics to drawer cables and water purifier filters—in one calm, fast, mobile-first ledger.",
     "loginAction": "Sign in with Google",
-    "adminAction": "Open Dashboard"
+    "adminAction": "Open Dashboard",
+    "highlights": [
+      { "label": "Stock Movements", "value": "Atomic Ledger" },
+      { "label": "Barcode & QR", "value": "Camera Scan" },
+      { "label": "Offline Ready", "value": "PWA Sync" }
+    ]
+  },
+  "heroPreview": {
+    "title": "Today's Home Ledger",
+    "subtitle": "Only items needing attention stand out",
+    "liveLabel": "Interactive Preview",
+    "tabs": [
+      {
+        "id": "today",
+        "label": "Today",
+        "items": [
+          {
+            "id": "filter-1",
+            "name": "Water Purifier Carbon Filter",
+            "location": "Kitchen · Under Sink",
+            "quantity": 1,
+            "unit": "spare",
+            "statusTone": "due_soon",
+            "statusLabel": "14 days left"
+          },
+          {
+            "id": "oil-1",
+            "name": "Extra Virgin Olive Oil (5L)",
+            "location": "Pantry · Bottom Shelf",
+            "quantity": 1,
+            "unit": "tin",
+            "statusTone": "low_stock",
+            "statusLabel": "Low stock"
+          },
+          {
+            "id": "hepa-1",
+            "name": "Robot Vacuum HEPA Filter",
+            "location": "Hallway · Utility Closet",
+            "quantity": 2,
+            "unit": "pcs",
+            "statusTone": "overdue",
+            "statusLabel": "4 days overdue"
+          },
+          {
+            "id": "cable-1",
+            "name": "USB-C 2m Braided Cable",
+            "location": "Study · Drawer 2",
+            "quantity": 4,
+            "unit": "pcs"
+          }
+        ]
+      },
+      {
+        "id": "pantry",
+        "label": "Kitchen",
+        "items": [
+          {
+            "id": "coffee-1",
+            "name": "Filter Coffee (250g)",
+            "location": "Kitchen · Upper Cabinet",
+            "quantity": 2,
+            "unit": "bags"
+          },
+          {
+            "id": "oil-2",
+            "name": "Extra Virgin Olive Oil (5L)",
+            "location": "Pantry · Bottom Shelf",
+            "quantity": 1,
+            "unit": "tin",
+            "statusTone": "low_stock",
+            "statusLabel": "Low stock"
+          },
+          {
+            "id": "detergent-1",
+            "name": "Dishwasher Tablets",
+            "location": "Kitchen · Under Sink",
+            "quantity": 18,
+            "unit": "tabs"
+          }
+        ]
+      },
+      {
+        "id": "parts",
+        "label": "Parts",
+        "items": [
+          {
+            "id": "part-1",
+            "name": "Water Purifier Carbon Filter",
+            "location": "Kitchen · Purifier",
+            "quantity": 1,
+            "unit": "spare",
+            "statusTone": "due_soon",
+            "statusLabel": "14 days left"
+          },
+          {
+            "id": "part-2",
+            "name": "Robot Vacuum HEPA Filter",
+            "location": "Hallway · Vacuum",
+            "quantity": 2,
+            "unit": "spares",
+            "statusTone": "overdue",
+            "statusLabel": "4 days overdue"
+          },
+          {
+            "id": "part-3",
+            "name": "Toothbrush Replacement Head",
+            "location": "Bathroom · Mirror Cabinet",
+            "quantity": 3,
+            "unit": "heads"
+          }
+        ]
+      }
+    ],
+    "footerNote": "Try the + / − buttons to preview stock updates"
+  },
+  "howItWorksSection": {
+    "badge": "How It Works",
+    "title": "Organize Your Home in Three Steps",
+    "description": "No bloated spreadsheets—just a calm workflow built for everyday home routines.",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Map Rooms & Cabinets",
+        "description": "Build a Home > Kitchen > Upper Cabinet tree and attach custom fields per category.",
+        "meta": "Location Tree & QR Labels"
+      },
+      {
+        "step": "02",
+        "title": "Scan Barcodes or Log in One Tap",
+        "description": "Scan items with your camera and record daily consumption with atomic + / − actions.",
+        "meta": "Atomic Stock Ledger"
+      },
+      {
+        "step": "03",
+        "title": "Stay Ahead of Restocks & Maintenance",
+        "description": "Low-stock thresholds and due lifecycle parts automatically feed your shopping list.",
+        "meta": "FEFO & Lifecycle Alerts"
+      }
+    ]
   },
   "lifecycleCallout": {
     "badge": "Lifecycle Parts",
@@ -21,7 +158,19 @@
       "FEFO expiration alerts for pantry and consumables",
       "Automatic shopping list suggestions and printable QR labels"
     ],
-    "action": "Start Your Inventory →"
+    "action": "Start Your Inventory →",
+    "demoPart": {
+      "name": "Water Purifier Carbon Filter",
+      "appliance": "Kitchen · Under-Sink Purifier",
+      "statusLabel": "Due soon",
+      "remainingPercent": 18,
+      "daysRemaining": 14,
+      "metaLabel": "180-day lifespan",
+      "spareLabel": "Spare stock",
+      "spareCount": 2,
+      "replaceAction": "Mark as replaced",
+      "replacedNote": "Replacement logged, spare stock reduced by 1"
+    }
   },
   "featuresSection": {
     "badge": "Umay Features",
@@ -97,17 +246,10 @@
     ]
   },
   "quickRoutesSection": {
-    "badge": "Quick Start",
-    "title": "Explore Umay Surfaces",
+    "badge": "App Surfaces",
+    "title": "Jump Straight Into Umay",
     "description": "Sign in to start managing your home inventory right away.",
     "routes": [
-      {
-        "href": "/locations",
-        "title": "Locations",
-        "subtitle": "Home, room, and cabinet hierarchy",
-        "badge": "Places",
-        "icon": "lock"
-      },
       {
         "href": "/home",
         "title": "Dashboard",
@@ -130,12 +272,61 @@
         "icon": "sparkles"
       },
       {
+        "href": "/locations",
+        "title": "Locations",
+        "subtitle": "Home, room, and cabinet hierarchy",
+        "badge": "Places",
+        "icon": "lock"
+      },
+      {
         "href": "/shopping",
         "title": "Shopping List",
         "subtitle": "Low-stock and due-part restock suggestions",
         "badge": "List",
         "icon": "shield"
       }
+    ]
+  },
+  "faqSection": {
+    "badge": "FAQ",
+    "title": "Common Questions",
+    "description": "Key things to know before setting up your home ledger.",
+    "items": [
+      {
+        "id": "offline",
+        "question": "Does Umay work offline in a pantry or basement?",
+        "answer": "Yes. Umay is an offline-ready PWA. Recently viewed lists are cached on your device, and any stock changes made offline are queued and synced automatically once you are back online."
+      },
+      {
+        "id": "privacy",
+        "question": "Is my inventory data private?",
+        "answer": "Every item, location, and activity record is strictly isolated by your user ID (UID). Requests are validated on the server with Zod schemas, and you can export a full CSV or JSON backup anytime."
+      },
+      {
+        "id": "lifecycle",
+        "question": "How does lifecycle part tracking work?",
+        "answer": "Link consumables like water filters, vacuum brushes, or batteries to their parent appliances. Set a time or usage lifespan, and log replacements in two taps while auto-deducting from spare stock."
+      },
+      {
+        "id": "scanner",
+        "question": "Do I need a separate app to scan barcodes or QR labels?",
+        "answer": "No. Built-in camera support (BarcodeDetector with @zxing/browser fallback) lets you scan product barcodes and shelf QR labels right inside Umay."
+      }
+    ]
+  },
+  "footerCta": {
+    "badge": "Get Started",
+    "title": "Open your home's inventory ledger today.",
+    "description": "Sign in with your Google account in seconds and add your first room and item.",
+    "loginAction": "Sign in with Google",
+    "adminAction": "Open Dashboard",
+    "copyright": "Umay © 2026 · Your home's abundance, accounted for.",
+    "anchors": [
+      { "href": "#nasil-calisir", "label": "How It Works" },
+      { "href": "#omurlu-parcalar", "label": "Lifecycle Parts" },
+      { "href": "#ozellikler", "label": "Features" },
+      { "href": "#ekranlar", "label": "Surfaces" },
+      { "href": "#sss", "label": "FAQ" }
     ]
   }
 }

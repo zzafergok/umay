@@ -3,7 +3,33 @@
     "title": "Umay",
     "subtitle": "Your home's abundance, accounted for."
   },
-  "publicNav": [],
+  "publicNav": [
+    {
+      "href": "/#nasil-calisir",
+      "label": "How It Works",
+      "icon": "layers"
+    },
+    {
+      "href": "/#omurlu-parcalar",
+      "label": "Lifecycle Parts",
+      "icon": "wrench"
+    },
+    {
+      "href": "/#ozellikler",
+      "label": "Features",
+      "icon": "boxes"
+    },
+    {
+      "href": "/#ekranlar",
+      "label": "Surfaces",
+      "icon": "home"
+    },
+    {
+      "href": "/#sss",
+      "label": "FAQ",
+      "icon": "helpCircle"
+    }
+  ],
   "authNav": [
     {
       "href": "/home",

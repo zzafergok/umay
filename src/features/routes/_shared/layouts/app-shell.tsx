@@ -2,7 +2,9 @@ import { Link } from '@/components/core/link';
 import {
   Activity,
   Boxes,
+  HelpCircle,
   Home,
+  Layers,
   LogIn,
   MapPin,
   ScanLine,
@@ -29,7 +31,9 @@ import type { ShellCopy, ShellNavItem } from './types';
 const navIcons = {
   activity: Activity,
   boxes: Boxes,
+  helpCircle: HelpCircle,
   home: Home,
+  layers: Layers,
   login: LogIn,
   mapPin: MapPin,
   scanLine: ScanLine,
@@ -90,16 +94,19 @@ export function BrandMark({
 function ShellNav({
   items,
   direction = 'row',
+  className,
 }: {
   items: ShellNavItem[];
   direction?: 'row' | 'column';
+  className?: string;
 }) {
   if (items.length === 0) return null;
   return (
     <nav
       className={cn(
-        'flex gap-2',
+        'flex gap-1',
         direction === 'column' ? 'flex-col' : 'items-center',
+        className,
       )}
     >
       {items.map((item) => (
@@ -114,7 +121,7 @@ function ShellNav({
           )}
         >
           <Link href={item.href}>
-            <item.icon className="mr-2 h-4 w-4" />
+            <item.icon className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
             {item.label}
           </Link>
         </Button>
@@ -137,17 +144,20 @@ export async function PublicShell({ children }: { children: React.ReactNode }) {
   const copy = getShellCopy(locale);
 
   return (
-    <div className="bg-bg text-text min-h-screen">
+    <div className="bg-bg text-text flex min-h-screen flex-col">
       <header className="bg-surface sticky top-0 z-40 border-b border-border">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <BrandMark copy={copy.brand} />
-          <div className="flex items-center gap-3">
-            <ShellNav items={mapNavItems(copy.publicNav)} />
+          <ShellNav
+            items={mapNavItems(copy.publicNav)}
+            className="hidden lg:flex"
+          />
+          <div className="flex items-center gap-2">
             <ShellControls />
           </div>
         </div>
       </header>
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }
