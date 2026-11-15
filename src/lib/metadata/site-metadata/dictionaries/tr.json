@@ -4,11 +4,6 @@
     "description": "Evin bereketi, kayıt altında. Mutfak, elektronik eşya, kablo ve ömürlü yedek parçalar için mobil öncelikli ev envanter ve stok takip uygulaması.",
     "aiPurpose": "Umay ev envanteri ve ömürlü parça takip uygulamasının tanıtım ekranı."
   },
-  "publicLogin": {
-    "title": "Umay – Giriş Yap",
-    "description": "Umay hesabına giriş yap veya yeni hesap oluştur.",
-    "aiPurpose": "Kullanıcı giriş noktası; indekslemeden hariç tutulur."
-  },
   "authHome": {
     "title": "Umay – Ev Envanteri Paneli",
     "description": "Ev stoğu, düşük stok uyarıları ve yaklaşan parça değişimleri özeti.",

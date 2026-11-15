@@ -11,15 +11,6 @@ export const routeMetadata: Record<MetadataRouteId, RouteMetadataDescriptor> = {
       tr: trRouteMetadata.publicHome,
     },
   },
-  publicLogin: {
-    path: '/login',
-    section: 'public',
-    robots: { index: false, follow: false },
-    locale: {
-      en: enRouteMetadata.publicLogin,
-      tr: trRouteMetadata.publicLogin,
-    },
-  },
   authHome: {
     path: '/home',
     section: 'auth',

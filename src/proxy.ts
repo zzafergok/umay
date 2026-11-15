@@ -79,13 +79,6 @@ export function proxy(request: NextRequest) {
     return withLocaleHeader(request);
   }
 
-  if (pathname === '/login') {
-    if (hasSession) {
-      return redirectWithSecurity(new URL(AUTH_ENTRY, request.url));
-    }
-    return withLocaleHeader(request);
-  }
-
   if (pathname === '/') {
     return withLocaleHeader(request);
   }

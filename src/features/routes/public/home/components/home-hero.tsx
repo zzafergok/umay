@@ -1,9 +1,10 @@
 'use client';
 
-import { Shield, Lock } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import { Link } from '@/components/core/link';
+import { GoogleSignInButton } from './google-signin-button';
 import type { PublicHomeCopy } from '../types';
 
 export function HomeHero({
@@ -38,12 +39,7 @@ export function HomeHero({
 
         {/* Quick Entry Buttons */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Button asChild variant="outline" size="default">
-            <Link href="/login">
-              <Lock className="mr-1.5 h-4 w-4 text-muted-foreground" />
-              {hero.loginAction}
-            </Link>
-          </Button>
+          <GoogleSignInButton label={hero.loginAction} />
           <Button asChild variant="outline" size="default">
             <Link href="/admin">
               <Shield className="mr-1.5 h-4 w-4 text-muted-foreground" />

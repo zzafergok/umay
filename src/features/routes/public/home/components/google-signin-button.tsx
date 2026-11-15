@@ -10,8 +10,47 @@ import {
   signInWithGooglePopup,
 } from '@/lib/firebase/client';
 import { useAuthStore, type AuthUser } from '@/stores/use-auth-store';
+import { cn } from '@/lib/utils';
 
-export function GoogleSignInButton({ label }: { label: string }) {
+interface GoogleSignInButtonProps {
+  label: string;
+  size?: 'default' | 'sm' | 'lg' | 'icon';
+  variant?: 'default' | 'outline' | 'secondary' | 'ghost';
+  className?: string;
+}
+
+function isAuthUser(value: unknown): value is AuthUser {
+  if (typeof value !== 'object' || value === null) return false;
+  return (
+    'uid' in value &&
+    typeof value.uid === 'string' &&
+    'email' in value &&
+    typeof value.email === 'string' &&
+    'displayName' in value &&
+    typeof value.displayName === 'string' &&
+    'role' in value &&
+    (value.role === 'user' || value.role === 'admin')
+  );
+}
+
+function extractMessage(payload: unknown): string | null {
+  if (
+    typeof payload === 'object' &&
+    payload !== null &&
+    'message' in payload &&
+    typeof payload.message === 'string'
+  ) {
+    return payload.message;
+  }
+  return null;
+}
+
+export function GoogleSignInButton({
+  label,
+  size = 'default',
+  variant = 'default',
+  className,
+}: GoogleSignInButtonProps) {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
   const [loading, setLoading] = useState(false);
@@ -33,13 +72,7 @@ export function GoogleSignInButton({ label }: { label: string }) {
 
       const payload: unknown = await response.json();
       if (!response.ok) {
-        const msg =
-          typeof payload === 'object' &&
-          payload !== null &&
-          'message' in payload
-            ? String((payload as { message: unknown }).message)
-            : 'Google ile giriş yapılamadı.';
-        toast.error(msg);
+        toast.error(extractMessage(payload) ?? 'Google ile giriş yapılamadı.');
         return;
       }
 
@@ -47,10 +80,11 @@ export function GoogleSignInButton({ label }: { label: string }) {
         typeof payload === 'object' &&
         payload !== null &&
         'token' in payload &&
-        'user' in payload
+        typeof payload.token === 'string' &&
+        'user' in payload &&
+        isAuthUser(payload.user)
       ) {
-        const data = payload as { token: string; user: AuthUser };
-        setAuth(data.user, data.token);
+        setAuth(payload.user, payload.token);
       }
 
       toast.success('Google ile giriş başarılı');
@@ -66,10 +100,11 @@ export function GoogleSignInButton({ label }: { label: string }) {
   return (
     <Button
       type="button"
-      variant="outline"
+      size={size}
+      variant={variant}
       disabled={loading}
       onClick={handleGoogleSignIn}
-      className="w-full rounded-none font-semibold"
+      className={cn('font-semibold', className)}
     >
       <Chrome className="mr-2 h-4 w-4" aria-hidden="true" />
       {loading ? 'Bağlanıyor...' : label}

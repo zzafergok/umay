@@ -8,7 +8,7 @@
   "hero": {
     "title": "Umay: Evin bereketi, kayıt altında.",
     "description": "Mutfaktaki erzaklardan elektronik cihazlara, çekmecedeki kablolardan su arıtma filtresine kadar evdeki tüm eşyalarını, stoklarını ve değiştirilebilir yedek parçalarını tek bir sakin arayüzde takip et.",
-    "loginAction": "Giriş Yap",
+    "loginAction": "Google ile Giriş Yap",
     "adminAction": "Paneli Aç"
   },
   "lifecycleCallout": {
@@ -102,10 +102,10 @@
     "description": "Giriş yaparak ev envanterini hemen yönetmeye başla.",
     "routes": [
       {
-        "href": "/login",
-        "title": "Giriş Yap",
-        "subtitle": "Hesabına eriş veya demo ile dene",
-        "badge": "Giriş",
+        "href": "/locations",
+        "title": "Konumlar",
+        "subtitle": "Ev, oda ve dolap hiyerarşisi",
+        "badge": "Konum",
         "icon": "lock"
       },
       {

@@ -32,7 +32,6 @@ ${publicRoutes}
 
 ## Excluded Routes
 
-- /login: transactional sign-in page, noindex.
 - /home: authenticated dashboard, noindex.
 - /workspace: authenticated workspace, noindex.
 - /settings: authenticated settings, noindex.

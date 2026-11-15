@@ -63,9 +63,9 @@ export default function AuthError({
               variant="outline"
               className="h-10 rounded-none border-gunmetal font-bold uppercase tracking-wider text-titanium hover:bg-gunmetal/20"
             >
-              <Link href="/login">
+              <Link href="/">
                 <LogIn className="mr-2 h-4 w-4" />
-                Giriş Sayfası
+                Ana Sayfa
               </Link>
             </Button>
           </div>

@@ -8,7 +8,6 @@ import { getAuthHomeCopy } from '@/features/routes/auth/home/i18n';
 import { getAuthSettingsCopy } from '@/features/routes/auth/settings/i18n';
 import { getAuthWorkspaceCopy } from '@/features/routes/auth/workspace/i18n';
 import { getPublicHomeCopy } from '@/features/routes/public/home/i18n';
-import { getPublicLoginCopy } from '@/features/routes/public/login/i18n';
 import {
   enRouteMetadata,
   routeMetadata,
@@ -76,11 +75,6 @@ describe('i18n JSON Dictionaries & Copy Loaders', () => {
       expect(home.hero.title).toBeTruthy();
       expect(home.featuresSection.cards.length).toBe(6);
       expect(home.quickRoutesSection.routes.length).toBe(5);
-
-      const login = getPublicLoginCopy(locale);
-      expect(login.title).toBeTruthy();
-      expect(login.emailLabel).toBeTruthy();
-      expect(login.submitLabel).toBeTruthy();
     }
   });
 

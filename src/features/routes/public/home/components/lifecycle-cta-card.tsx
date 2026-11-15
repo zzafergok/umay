@@ -2,7 +2,6 @@
 
 import { Sparkles, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
-import { Button } from '@/components/core/button';
 import {
   Card,
   CardContent,
@@ -10,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
-import { Link } from '@/components/core/link';
+import { GoogleSignInButton } from './google-signin-button';
 import type { PublicHomeCopy } from '../types';
 
 export function LifecycleCtaCard({
@@ -41,15 +40,11 @@ export function LifecycleCtaCard({
           </div>
 
           <div className="shrink-0">
-            <Button
-              asChild
+            <GoogleSignInButton
+              label={lifecycleCallout.action}
               size="lg"
               className="w-full font-bold shadow-sm sm:w-auto"
-            >
-              <Link href="/login">
-                <span>{lifecycleCallout.action}</span>
-              </Link>
-            </Button>
+            />
           </div>
         </div>
       </CardHeader>

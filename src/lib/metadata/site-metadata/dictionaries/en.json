@@ -4,11 +4,6 @@
     "description": "Your home's abundance, accounted for. Mobile-first home inventory, stock ledger, and lifecycle spare parts tracker.",
     "aiPurpose": "Primary public overview for Umay home inventory and lifecycle parts tracking app."
   },
-  "publicLogin": {
-    "title": "Umay – Sign in",
-    "description": "Sign in or create an account to access your Umay home inventory.",
-    "aiPurpose": "Public login entry point; excluded from indexing."
-  },
   "authHome": {
     "title": "Umay – Home Inventory Dashboard",
     "description": "Overview of home stock, low stock alerts, and upcoming part replacements.",

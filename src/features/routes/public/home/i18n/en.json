@@ -8,7 +8,7 @@
   "hero": {
     "title": "Umay: Your home's abundance, accounted for.",
     "description": "Track everything at home—from pantry staples and electronics to drawer cables and water purifier filters—in one calm, fast, mobile-first workspace.",
-    "loginAction": "Sign In",
+    "loginAction": "Sign in with Google",
     "adminAction": "Open Dashboard"
   },
   "lifecycleCallout": {
@@ -102,10 +102,10 @@
     "description": "Sign in to start managing your home inventory right away.",
     "routes": [
       {
-        "href": "/login",
-        "title": "Sign In",
-        "subtitle": "Access your account or try demo mode",
-        "badge": "Auth",
+        "href": "/locations",
+        "title": "Locations",
+        "subtitle": "Home, room, and cabinet hierarchy",
+        "badge": "Places",
         "icon": "lock"
       },
       {
