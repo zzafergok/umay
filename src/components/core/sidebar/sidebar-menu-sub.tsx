@@ -48,8 +48,8 @@ export const SidebarMenuSubButton = React.forwardRef<
       data-size={size}
       data-active={isActive}
       className={cn(
-        'rounded-xs flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden px-2 text-ash outline-none ring-tulpar-blue/50 hover:bg-gunmetal/40 hover:text-white focus-visible:ring-1 active:bg-gunmetal/60 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
-        'data-[active=true]:bg-gunmetal/60 data-[active=true]:text-white',
+        'rounded-xs flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden px-2 text-ash outline-none ring-umay-blue/50 hover:bg-gunmetal/40 hover:text-titanium focus-visible:ring-1 active:bg-gunmetal/60 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+        'data-[active=true]:bg-gunmetal/60 data-[active=true]:text-titanium',
         size === 'sm' && 'text-xs',
         size === 'md' && 'text-sm',
         className,

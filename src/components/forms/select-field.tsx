@@ -64,7 +64,7 @@ export function SelectField({
         htmlFor={name}
         className="font-mono text-2xs uppercase tracking-wider text-ash"
       >
-        {label} {required && <span className="text-tulpar-blue">*</span>}
+        {label} {required && <span className="text-umay-blue">*</span>}
       </Label>
       <Controller
         name={name}
@@ -96,7 +96,7 @@ export function SelectField({
                   {selectedOption?.swatchColor && (
                     <span
                       aria-hidden="true"
-                      className="h-4 w-7 shrink-0 rounded-none border border-white/30"
+                      className="h-4 w-7 shrink-0 rounded-none border border-foreground/20"
                       style={{ backgroundColor: selectedOption.swatchColor }}
                     />
                   )}
@@ -122,7 +122,7 @@ export function SelectField({
                       {option.swatchColor && (
                         <span
                           aria-hidden="true"
-                          className="h-4 w-7 shrink-0 rounded-none border border-white/30"
+                          className="h-4 w-7 shrink-0 rounded-none border border-foreground/20"
                           style={{ backgroundColor: option.swatchColor }}
                         />
                       )}

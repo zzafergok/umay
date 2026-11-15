@@ -16,8 +16,8 @@ export const attachmentVariants = cva(
       state: {
         idle: 'border-gunmetal/40 bg-obsidian/60 hover:border-gunmetal/60',
         done: 'border-gunmetal/40 bg-obsidian/60 hover:border-gunmetal/60',
-        uploading: 'border-tulpar-blue/40 bg-tulpar-blue/5',
-        processing: 'border-tulpar-blue/40 bg-tulpar-blue/5',
+        uploading: 'border-umay-blue/40 bg-umay-blue/5',
+        processing: 'border-umay-blue/40 bg-umay-blue/5',
         error: 'border-alert-red/50 bg-alert-red/5 text-alert-red',
       },
     },

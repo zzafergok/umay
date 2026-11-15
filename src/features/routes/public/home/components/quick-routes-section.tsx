@@ -53,14 +53,14 @@ export function QuickRoutesSection({
               href={route.href}
               className="group block focus:outline-none"
             >
-              <Card className="flex items-center justify-between border-border/70 bg-card p-5 transition-all duration-200 group-hover:border-tulpar-blue/50 group-hover:shadow-sm">
+              <Card className="flex items-center justify-between border-border/70 bg-card p-5 transition-all duration-200 group-hover:border-umay-blue/50 group-hover:shadow-sm">
                 <div className="flex items-center gap-3.5">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-muted/40 text-foreground transition-colors group-hover:border-tulpar-blue/30 group-hover:text-tulpar-blue">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-muted/40 text-foreground transition-colors group-hover:border-umay-blue/30 group-hover:text-umay-blue">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-foreground transition-colors group-hover:text-tulpar-blue">
+                      <span className="text-sm font-bold text-foreground transition-colors group-hover:text-umay-blue">
                         {route.title}
                       </span>
                       <Badge
@@ -75,7 +75,7 @@ export function QuickRoutesSection({
                     </p>
                   </div>
                 </div>
-                <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground/60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-tulpar-blue" />
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground/60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-umay-blue" />
               </Card>
             </Link>
           );

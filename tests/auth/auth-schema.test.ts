@@ -3,13 +3,13 @@ import {
   adminSettingsSchema,
   loginSchema,
   userSettingsSchema,
-} from '../auth-schema';
+} from '@/lib/auth/auth-schema';
 
 describe('Auth Validation Schemas', () => {
   describe('loginSchema', () => {
     it('should validate valid user credentials', () => {
       const validData = {
-        email: 'pilot@tulpar.space',
+        email: 'pilot@umay.space',
         password: 'securePassword123',
         isAdmin: false,
       };
@@ -17,14 +17,14 @@ describe('Auth Validation Schemas', () => {
       const result = loginSchema.safeParse(validData);
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.data.email).toBe('pilot@tulpar.space');
+        expect(result.data.email).toBe('pilot@umay.space');
         expect(result.data.isAdmin).toBe(false);
       }
     });
 
     it('should default isAdmin to false when omitted', () => {
       const validData = {
-        email: 'user@tulpar.space',
+        email: 'user@umay.space',
         password: 'password123',
       };
 
@@ -52,7 +52,7 @@ describe('Auth Validation Schemas', () => {
 
     it('should reject short passwords', () => {
       const invalidData = {
-        email: 'user@tulpar.space',
+        email: 'user@umay.space',
         password: '123',
       };
 
@@ -69,7 +69,7 @@ describe('Auth Validation Schemas', () => {
   describe('userSettingsSchema', () => {
     it('should validate proper user settings', () => {
       const valid = {
-        displayName: 'Tulpar Pilot',
+        displayName: 'Umay Pilot',
         emailUpdates: true,
       };
 
@@ -91,7 +91,7 @@ describe('Auth Validation Schemas', () => {
   describe('adminSettingsSchema', () => {
     it('should validate proper admin platform configuration', () => {
       const valid = {
-        siteName: 'Tulpar Enterprise Platform',
+        siteName: 'Umay Enterprise Platform',
         maintenanceMode: true,
         allowRegistration: false,
       };
@@ -99,7 +99,7 @@ describe('Auth Validation Schemas', () => {
       const result = adminSettingsSchema.safeParse(valid);
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.data.siteName).toBe('Tulpar Enterprise Platform');
+        expect(result.data.siteName).toBe('Umay Enterprise Platform');
         expect(result.data.maintenanceMode).toBe(true);
       }
     });

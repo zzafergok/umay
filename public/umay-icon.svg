@@ -1,13 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <rect width="512" height="512" rx="96" fill="#070C18" />
+  <defs>
+    <radialGradient id="umayBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#132242" />
+      <stop offset="100%" stop-color="#070C18" />
+    </radialGradient>
+    <linearGradient id="umayRibbon" x1="112" y1="384" x2="400" y2="144" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1677FF" />
+      <stop offset="55%" stop-color="#0EA5E9" />
+      <stop offset="100%" stop-color="#14B8A6" />
+    </linearGradient>
+    <linearGradient id="umaySpark" x1="256" y1="244" x2="256" y2="332" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#umayBg)" />
   <path
-    d="M112 246L256 126L400 246V394C400 402.837 392.837 410 384 410H128C119.163 410 112 402.837 112 394V246Z"
-    stroke="#F8FAFC"
-    stroke-width="26"
+    d="M124 236C124 214 134 194 152 181L234 122C247 113 265 113 278 122L318 151V126C318 119 324 114 331 114H351C358 114 364 119 364 126V184C379 197 388 216 388 236V360C388 380 372 396 352 396H160C140 396 124 380 124 360V236Z"
+    stroke="url(#umayRibbon)"
+    stroke-width="44"
     stroke-linejoin="round"
   />
   <path
-    d="M256 198C256 198 202 252 202 296C202 325.823 226.177 350 256 350C285.823 350 310 325.823 310 296C310 269 290 242 276 228C272.5 248 262.5 258 252.5 258C245.5 258 242 248 256 198Z"
-    fill="#38BDF8"
+    d="M256 238C262 268 274 280 304 286C274 292 262 304 256 334C250 304 238 292 208 286C238 280 250 268 256 238Z"
+    fill="url(#umaySpark)"
   />
 </svg>

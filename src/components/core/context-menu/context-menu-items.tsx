@@ -23,7 +23,7 @@ export function ContextMenuItem({
       className={cn(
         menuItemBaseClassName,
         'cursor-pointer gap-2 px-2 py-1.5 text-titanium',
-        'focus:bg-gunmetal/40 focus:text-white',
+        'focus:bg-gunmetal/40 focus:text-titanium',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         'data-[inset]:pl-8',
         'data-[variant=destructive]:text-alert-red data-[variant=destructive]:focus:bg-alert-red/10 data-[variant=destructive]:focus:text-alert-red',
@@ -48,7 +48,7 @@ export function ContextMenuCheckboxItem({
       className={cn(
         menuItemBaseClassName,
         'cursor-pointer gap-2 py-1.5 pl-8 pr-2 text-titanium',
-        'focus:bg-gunmetal/40 focus:text-white',
+        'focus:bg-gunmetal/40 focus:text-titanium',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
@@ -56,7 +56,7 @@ export function ContextMenuCheckboxItem({
       checked={checked}
       {...props}
     >
-      <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center text-tulpar-blue">
+      <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center text-umay-blue">
         <ContextMenuPrimitive.ItemIndicator>
           <CheckIcon className="size-4" />
         </ContextMenuPrimitive.ItemIndicator>
@@ -77,14 +77,14 @@ export function ContextMenuRadioItem({
       className={cn(
         menuItemBaseClassName,
         'cursor-pointer gap-2 py-1.5 pl-8 pr-2 text-titanium',
-        'focus:bg-gunmetal/40 focus:text-white',
+        'focus:bg-gunmetal/40 focus:text-titanium',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
     >
-      <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center text-tulpar-blue">
+      <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center text-umay-blue">
         <ContextMenuPrimitive.ItemIndicator>
           <CircleIcon className="size-2 fill-current" />
         </ContextMenuPrimitive.ItemIndicator>

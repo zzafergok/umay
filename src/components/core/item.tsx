@@ -31,7 +31,7 @@ function ItemSeparator({
 }
 
 const itemVariants = cva(
-  'group/item flex flex-wrap items-center rounded-sm border border-transparent text-sm outline-none transition-colors duration-100 focus-visible:border-tulpar-blue focus-visible:ring-[3px] focus-visible:ring-tulpar-blue/20 [a]:transition-colors [a]:hover:bg-gunmetal/30',
+  'group/item flex flex-wrap items-center rounded-sm border border-transparent text-sm outline-none transition-colors duration-100 focus-visible:border-umay-blue focus-visible:ring-[3px] focus-visible:ring-umay-blue/20 [a]:transition-colors [a]:hover:bg-gunmetal/30',
   {
     variants: {
       variant: {
@@ -138,7 +138,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<'p'>) {
       data-slot="item-description"
       className={cn(
         'line-clamp-2 text-balance text-sm font-normal leading-normal text-ash',
-        '[&>a:hover]:text-tulpar-blue [&>a]:underline [&>a]:underline-offset-4',
+        '[&>a:hover]:text-umay-blue [&>a]:underline [&>a]:underline-offset-4',
         className,
       )}
       {...props}

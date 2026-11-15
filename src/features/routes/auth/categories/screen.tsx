@@ -35,7 +35,7 @@ import { inventoryService } from '@/services/inventory-service';
 import { useQueryClient } from '@tanstack/react-query';
 
 const COLOR_OPTIONS = [
-  { value: 'tulpar-blue', label: 'Mavi' },
+  { value: 'umay-blue', label: 'Mavi' },
   { value: 'emerald', label: 'Yeşil' },
   { value: 'amber', label: 'Kehribar' },
   { value: 'rose', label: 'Kırmızı' },
@@ -43,7 +43,7 @@ const COLOR_OPTIONS = [
 ];
 
 const DOT_CLASS: Record<string, string> = {
-  'tulpar-blue': 'bg-tulpar-blue',
+  'umay-blue': 'bg-umay-blue',
   emerald: 'bg-emerald-500',
   amber: 'bg-amber-500',
   rose: 'bg-rose-500',
@@ -137,7 +137,7 @@ export function CategoriesScreen() {
                   <CardTitle className="flex items-center gap-2 text-base">
                     <span
                       className={`h-2.5 w-2.5 rounded-full ${
-                        DOT_CLASS[cat.colorToken] ?? 'bg-tulpar-blue'
+                        DOT_CLASS[cat.colorToken] ?? 'bg-umay-blue'
                       }`}
                     />
                     <span>{cat.name}</span>
@@ -186,7 +186,7 @@ export function CategoriesScreen() {
             schema={categoryInputSchema}
             defaultValues={{
               name: '',
-              colorToken: 'tulpar-blue',
+              colorToken: 'umay-blue',
               icon: 'boxes',
               customFields: [],
             }}

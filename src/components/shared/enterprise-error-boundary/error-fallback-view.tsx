@@ -142,11 +142,11 @@ export function ErrorFallbackView({
           <p className="text-xs text-ash/70">
             Sorun devam ederse{' '}
             <a
-              href="mailto:support@tulpar.dev"
-              className="inline-flex items-center text-tulpar-blue underline hover:text-tulpar-blue/80 hover:no-underline"
+              href="mailto:support@umay.dev"
+              className="inline-flex items-center text-umay-blue underline hover:text-umay-blue/80 hover:no-underline"
             >
               <Mail className="mr-1 inline h-3 w-3" />
-              support@tulpar.dev
+              support@umay.dev
             </a>{' '}
             adresinden iletişime geçin.
           </p>

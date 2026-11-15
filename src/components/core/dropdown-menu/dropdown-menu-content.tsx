@@ -41,8 +41,8 @@ export function DropdownMenuSubTrigger({
       data-inset={inset}
       className={cn(
         'rounded-xs flex cursor-pointer select-none items-center gap-2 px-2 py-1.5 text-sm text-titanium outline-none transition-colors',
-        'focus:bg-gunmetal/40 focus:text-white',
-        'data-[state=open]:bg-gunmetal/40 data-[inset]:pl-8 data-[state=open]:text-white',
+        'focus:bg-gunmetal/40 focus:text-titanium',
+        'data-[state=open]:bg-gunmetal/40 data-[inset]:pl-8 data-[state=open]:text-titanium',
         "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ash [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}

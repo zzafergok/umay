@@ -26,6 +26,7 @@ import {
   ShoppingSuggestionsCard,
   type ShoppingSuggestion,
 } from './shopping-suggestions';
+import { ShoppingReceiptCard } from './shopping-receipt-card';
 
 export function ShoppingScreen() {
   const qc = useQueryClient();
@@ -145,6 +146,8 @@ export function ShoppingScreen() {
 
   return (
     <div className="space-y-6">
+      <ShoppingReceiptCard />
+
       <ShoppingSuggestionsCard
         suggestions={suggestions}
         onAccept={handleAcceptSuggestion}

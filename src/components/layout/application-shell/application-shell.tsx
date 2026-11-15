@@ -84,7 +84,7 @@ function ApplicationShellContent({
         )}
       </Sidebar>
 
-      <SidebarInset className="min-h-screen bg-background text-foreground antialiased selection:bg-tulpar-blue/20 selection:text-white">
+      <SidebarInset className="min-h-screen bg-background text-foreground antialiased selection:bg-umay-blue/20 selection:text-foreground">
         <ApplicationShellHeader
           active={active}
           collapsed={collapsed}

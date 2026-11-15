@@ -27,7 +27,7 @@ export async function AdminOverviewScreen() {
             <CardTitle className="text-xs uppercase tracking-widest text-ash">
               {card.label}
             </CardTitle>
-            <card.icon className="h-4 w-4 text-tulpar-blue" />
+            <card.icon className="h-4 w-4 text-umay-blue" />
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-black uppercase tracking-tight text-titanium">

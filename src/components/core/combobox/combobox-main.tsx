@@ -118,7 +118,7 @@ export function ComboboxItem({
       data-slot="combobox-item"
       className={cn(
         'rounded-xs relative flex w-full cursor-pointer select-none items-center gap-2 py-1.5 pl-2 pr-8 text-sm outline-none',
-        'data-highlighted:bg-gunmetal/50 data-highlighted:text-white',
+        'data-highlighted:bg-gunmetal/50 data-highlighted:text-titanium',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
@@ -129,7 +129,7 @@ export function ComboboxItem({
       <ComboboxPrimitive.ItemIndicator
         data-slot="combobox-item-indicator"
         render={
-          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center text-tulpar-blue" />
+          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center text-umay-blue" />
         }
       >
         <CheckIcon className="pointer-coarse:size-5 pointer-events-none size-4" />

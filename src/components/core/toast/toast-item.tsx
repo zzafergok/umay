@@ -19,7 +19,7 @@ const ToastIcon = ({ type }: { type?: ToastType }) => {
     case 'loading':
       return <Loader2 className="h-4 w-4 animate-spin text-ash" />;
     default:
-      return <Info className="h-4 w-4 text-tulpar-blue" />;
+      return <Info className="h-4 w-4 text-umay-blue" />;
   }
 };
 
@@ -32,7 +32,7 @@ const getProgressColor = (type?: ToastType): string => {
     case 'warning':
       return 'bg-amber-500';
     default:
-      return 'bg-tulpar-blue';
+      return 'bg-umay-blue';
   }
 };
 
@@ -115,7 +115,7 @@ export function ToastItem({ t }: { t: Toast }) {
                 t.action?.onClick();
                 toast.dismiss(t.id);
               }}
-              className="h-7 w-max rounded-md border-white/10 bg-white/10 px-3 text-xs font-semibold text-white hover:bg-white/15 active:scale-95"
+              className="h-7 w-max rounded-md border-gunmetal/80 bg-gunmetal/30 px-3 text-xs font-semibold text-titanium hover:bg-gunmetal/50 active:scale-95"
             >
               {t.action.label}
             </Button>

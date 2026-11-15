@@ -41,7 +41,7 @@ export const AttachmentTitle = React.forwardRef<
         size === 'default' && 'text-sm',
         size === 'sm' && 'text-xs',
         size === 'xs' && 'text-[11px]',
-        isShimmer && 'animate-pulse text-tulpar-blue',
+        isShimmer && 'animate-pulse text-umay-blue',
         state === 'error' && 'text-alert-red',
         className,
       )}

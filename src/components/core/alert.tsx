@@ -10,12 +10,12 @@ export const alertVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-obsidian/60 text-titanium border-gunmetal/40 shadow-sm [&>svg]:text-tulpar-blue',
+          'bg-obsidian/60 text-titanium border-gunmetal/40 shadow-sm [&>svg]:text-umay-blue',
         destructive:
           'bg-alert-red/10 border-alert-red/30 text-alert-red shadow-sm [&>svg]:text-alert-red *:[[data-slot=alert-description]]:text-alert-red/90',
         warning:
           'bg-warning/10 border-warning/30 text-warning shadow-sm [&>svg]:text-warning *:[[data-slot=alert-description]]:text-warning/90',
-        info: 'bg-tulpar-blue/10 border-tulpar-blue/30 text-tulpar-blue shadow-sm [&>svg]:text-tulpar-blue *:[[data-slot=alert-description]]:text-tulpar-blue/90',
+        info: 'bg-umay-blue/10 border-umay-blue/30 text-umay-blue shadow-sm [&>svg]:text-umay-blue *:[[data-slot=alert-description]]:text-umay-blue/90',
         success:
           'bg-signal-green/10 border-signal-green/30 text-signal-green shadow-sm [&>svg]:text-signal-green *:[[data-slot=alert-description]]:text-signal-green/90',
       },

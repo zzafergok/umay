@@ -68,7 +68,7 @@ const TONE_STYLES: Record<
   },
   lent: {
     container:
-      'border-tulpar-blue/35 bg-tulpar-blue/10 text-tulpar-blue',
+      'border-umay-blue/35 bg-umay-blue/10 text-umay-blue',
     Icon: Info,
   },
   discarded: {
@@ -77,7 +77,7 @@ const TONE_STYLES: Record<
   },
   info: {
     container:
-      'border-tulpar-blue/35 bg-tulpar-blue/10 text-tulpar-blue',
+      'border-umay-blue/35 bg-umay-blue/10 text-umay-blue',
     Icon: Info,
   },
 };

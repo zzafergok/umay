@@ -26,7 +26,7 @@ export function ShoppingSuggestionsCard({
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
-          <Sparkles className="h-4 w-4 text-tulpar-blue" />
+          <Sparkles className="h-4 w-4 text-umay-blue" />
           <span>Akıllı Öneriler ({suggestions.length})</span>
         </CardTitle>
       </CardHeader>

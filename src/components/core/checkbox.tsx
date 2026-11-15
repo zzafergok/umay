@@ -15,11 +15,11 @@ export const Checkbox = React.forwardRef<
     className={cn(
       'shadow-xs peer size-4 shrink-0 rounded-[4px] border border-gunmetal/80 bg-obsidian text-white outline-none transition-shadow',
       'hover:border-gunmetal hover:bg-gunmetal/20',
-      'focus-visible:border-tulpar-blue focus-visible:ring-[3px] focus-visible:ring-tulpar-blue/20',
+      'focus-visible:border-umay-blue focus-visible:ring-[3px] focus-visible:ring-umay-blue/20',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'aria-invalid:border-alert-red aria-invalid:ring-alert-red/20',
-      'data-[state=checked]:border-tulpar-blue data-[state=checked]:bg-tulpar-blue data-[state=checked]:text-white',
-      'data-[state=indeterminate]:border-tulpar-blue data-[state=indeterminate]:bg-tulpar-blue data-[state=indeterminate]:text-white',
+      'data-[state=checked]:border-umay-blue data-[state=checked]:bg-umay-blue data-[state=checked]:text-white',
+      'data-[state=indeterminate]:border-umay-blue data-[state=indeterminate]:bg-umay-blue data-[state=indeterminate]:text-white',
       className,
     )}
     {...props}

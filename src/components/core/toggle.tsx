@@ -6,14 +6,14 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 export const toggleVariants = cva(
-  'inline-flex items-center justify-center gap-2 rounded-sm font-mono text-sm font-medium transition-colors select-none cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-tulpar-blue/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-alert-red aria-invalid:ring-1 aria-invalid:ring-alert-red/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  'inline-flex items-center justify-center gap-2 rounded-sm font-mono text-sm font-medium transition-colors select-none cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-umay-blue/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-alert-red aria-invalid:ring-1 aria-invalid:ring-alert-red/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
       variant: {
         default:
-          'bg-transparent text-ash hover:bg-gunmetal/30 hover:text-white data-[state=on]:bg-gunmetal/60 data-[state=on]:text-white',
+          'bg-transparent text-ash hover:bg-gunmetal/30 hover:text-titanium data-[state=on]:bg-gunmetal/60 data-[state=on]:text-titanium',
         outline:
-          'border border-gunmetal/80 bg-transparent text-ash shadow-xs hover:bg-gunmetal/30 hover:text-white data-[state=on]:border-gunmetal data-[state=on]:bg-gunmetal/60 data-[state=on]:text-white',
+          'border border-gunmetal/80 bg-transparent text-ash shadow-xs hover:bg-gunmetal/30 hover:text-titanium data-[state=on]:border-gunmetal data-[state=on]:bg-gunmetal/60 data-[state=on]:text-titanium',
       },
       size: {
         default: 'h-9 min-w-9 px-2.5 text-sm',

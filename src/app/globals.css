@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import './typeset.css';
 
 @tailwind base;
@@ -21,7 +20,17 @@
     --card-foreground: 20 15% 10%;
     --popover: 36 20% 91%;
     --popover-foreground: 20 15% 10%;
+    --primary: 215 88% 46%;
+    --primary-50: 217 91% 97%;
+    --primary-100: 217 91% 94%;
+    --primary-200: 217 91% 86%;
+    --primary-300: 217 91% 77%;
+    --primary-400: 217 91% 68%;
     --primary-500: 215 88% 46%;
+    --primary-600: 215 88% 40%;
+    --primary-700: 215 88% 32%;
+    --primary-800: 215 88% 24%;
+    --primary-900: 215 88% 16%;
     --primary-foreground: 0 0% 100%;
     --secondary: 30 12% 80%;
     --secondary-foreground: 20 15% 10%;
@@ -42,10 +51,10 @@
     --chart-5: hsl(27 87% 67%);
 
     /* ── Umay Brand & Semantic Surface Tokens ── */
-    --tulpar-blue: 215 88% 46%;
-    --tulpar-gold: 43 85% 48%;
-    --tulpar-firuze: 174 75% 36%;
-    --tulpar-cosmic: 222 47% 12%;
+    --umay-blue: 215 88% 46%;
+    --umay-gold: 43 85% 48%;
+    --umay-firuze: 174 75% 36%;
+    --umay-cosmic: 222 47% 12%;
     --surface: 38 30% 96%;
     --surface-raised: 36 24% 93%;
     --text: 20 15% 10%;
@@ -130,19 +139,45 @@
     --ash-900: 240 2.3% 12.9%;
     --ash-950: 240 2.3% 6.4%;
 
-    /* tulpar-blue (Kök Tengri Mavisi: Base #0F4C81 / #2563EB) */
-    --tulpar-blue-50: 217 91% 97%;
-    --tulpar-blue-100: 217 91% 94%;
-    --tulpar-blue-200: 217 91% 86%;
-    --tulpar-blue-300: 217 91% 77%;
-    --tulpar-blue-400: 217 91% 68%;
-    --tulpar-blue-500: 215 88% 46%;
-    --tulpar-blue-600: 215 88% 40%;
-    --tulpar-blue-700: 215 88% 32%;
-    --tulpar-blue-800: 215 88% 24%;
-    --tulpar-blue-900: 215 88% 16%;
-    --tulpar-blue-950: 215 88% 10%;
-    --tulpar-blue: 215 88% 46%;
+    /* umay-blue (Umay Mavi: Base #0F4C81 / #2563EB) */
+    --umay-blue-50: 217 91% 97%;
+    --umay-blue-100: 217 91% 94%;
+    --umay-blue-200: 217 91% 86%;
+    --umay-blue-300: 217 91% 77%;
+    --umay-blue-400: 217 91% 68%;
+    --umay-blue-500: 215 88% 46%;
+    --umay-blue-600: 215 88% 40%;
+    --umay-blue-700: 215 88% 32%;
+    --umay-blue-800: 215 88% 24%;
+    --umay-blue-900: 215 88% 16%;
+    --umay-blue-950: 215 88% 10%;
+    --umay-blue: 215 88% 46%;
+
+    /* umay-gold (Sıcak Kehribar / Ocak Altını) */
+    --umay-gold-50: 43 90% 97%;
+    --umay-gold-100: 43 90% 92%;
+    --umay-gold-200: 43 85% 82%;
+    --umay-gold-300: 43 85% 70%;
+    --umay-gold-400: 43 85% 60%;
+    --umay-gold-500: 43 85% 50%;
+    --umay-gold-600: 43 85% 44%;
+    --umay-gold-700: 43 85% 36%;
+    --umay-gold-800: 43 85% 28%;
+    --umay-gold-900: 43 85% 18%;
+    --umay-gold-950: 43 85% 10%;
+
+    /* umay-firuze (Firuze Vurgu) */
+    --umay-firuze-50: 174 75% 97%;
+    --umay-firuze-100: 174 75% 92%;
+    --umay-firuze-200: 174 75% 80%;
+    --umay-firuze-300: 174 75% 65%;
+    --umay-firuze-400: 174 75% 50%;
+    --umay-firuze-500: 174 75% 40%;
+    --umay-firuze-600: 174 75% 34%;
+    --umay-firuze-700: 174 75% 28%;
+    --umay-firuze-800: 174 75% 22%;
+    --umay-firuze-900: 174 75% 14%;
+    --umay-firuze-950: 174 75% 8%;
 
     /* signal-green (Base: #27AE60) — slightly darker in light mode */
     --signal-green-50: 145 63.4% 97%;
@@ -232,13 +267,14 @@
   }
 
   .dark {
-    /* ── Dark Mode Semantic Variables (Tulpar Cosmic Midnight) ── */
+    /* ── Dark Mode Semantic Variables (Umay Midnight) ── */
     --background: 222 47% 5%;
     --foreground: 210 40% 98%;
     --card: 222 40% 7.5%;
     --card-foreground: 210 40% 98%;
     --popover: 222 40% 7.5%;
     --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
     --primary-500: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
     --secondary: 222 25% 15%;
@@ -266,10 +302,10 @@
     --ash: 215 18% 55%;
 
     /* ── Dark Mode: Brand & Semantic Surface Overrides ── */
-    --tulpar-blue: 217 91% 60%;
-    --tulpar-gold: 43 90% 55%;
-    --tulpar-firuze: 174 75% 45%;
-    --tulpar-cosmic: 222 47% 5%;
+    --umay-blue: 217 91% 60%;
+    --umay-gold: 43 90% 55%;
+    --umay-firuze: 174 75% 45%;
+    --umay-cosmic: 222 47% 5%;
     --surface: 222 47% 5%;
     --surface-raised: 222 40% 8%;
     --text: 210 40% 98%;
@@ -288,7 +324,7 @@
 
   html,
   body {
-    @apply bg-background font-sans text-foreground antialiased selection:bg-tulpar-blue/20;
+    @apply selection:bg-umay-blue/20 bg-background font-sans text-foreground antialiased;
   }
 }
 
@@ -334,11 +370,11 @@ input[type='number'] {
   background-size: 4rem 4rem;
 }
 
-/* FAQ assistant radial glow — adapts via --tulpar-blue */
-.tulpar-glow-radial {
+/* Assistant radial glow — adapts via --umay-blue */
+.umay-glow-radial {
   background: radial-gradient(
     circle at center,
-    hsl(var(--tulpar-blue) / 0.15) 0%,
+    hsl(var(--umay-blue) / 0.15) 0%,
     transparent 70%
   );
 }
@@ -350,7 +386,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-medium tracking-tight;
+  @apply font-display font-medium tracking-tight;
 }
 
 code {
@@ -358,9 +394,9 @@ code {
 }
 
 .glass-panel {
-  background: rgba(15, 20, 25, 0.5);
+  background: hsl(var(--obsidian) / 0.72);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid hsl(var(--gunmetal) / 0.6);
 }
 
 @keyframes marquee {

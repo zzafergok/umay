@@ -4,7 +4,7 @@ export default function RootLoading() {
   return (
     <div className="flex min-h-[60vh] w-full items-center justify-center p-8">
       <div className="flex flex-col items-center space-y-4 text-center">
-        <LoadingSpinner size="lg" className="text-tulpar-blue" />
+        <LoadingSpinner size="lg" className="text-umay-blue" />
         <div className="space-y-1">
           <p className="font-mono text-xs font-bold uppercase tracking-widest text-titanium">
             Umay Yükleniyor...

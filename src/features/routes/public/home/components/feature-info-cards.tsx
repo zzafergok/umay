@@ -61,7 +61,7 @@ export function FeatureInfoCards({
               <CardHeader className="space-y-3 p-5 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/60 bg-muted/50 text-foreground">
-                    <Icon className="h-5 w-5 text-tulpar-blue" />
+                    <Icon className="h-5 w-5 text-umay-blue" />
                   </div>
                   <Badge variant="secondary" className="text-2xs font-semibold">
                     {card.badge}
@@ -81,7 +81,7 @@ export function FeatureInfoCards({
                 <ul className="space-y-2 border-t border-border/40 pt-4 text-xs text-muted-foreground">
                   {card.points.map((point) => (
                     <li key={point} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-tulpar-blue" />
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-umay-blue" />
                       <span>{point}</span>
                     </li>
                   ))}

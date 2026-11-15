@@ -52,7 +52,7 @@ export function BottomNav({
                 className={cn(
                   'flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-sm px-2 py-1 text-[11px] font-medium transition-colors duration-150',
                   isActive
-                    ? 'text-tulpar-blue'
+                    ? 'text-umay-blue'
                     : 'text-muted-foreground hover:text-foreground',
                 )}
               >

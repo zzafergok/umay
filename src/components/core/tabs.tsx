@@ -56,11 +56,11 @@ export const TabsTrigger = React.forwardRef<
     data-slot="tabs-trigger"
     className={cn(
       'rounded-xs inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3 py-1 font-mono text-xs font-medium text-ash outline-none transition-all',
-      'hover:text-titanium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-tulpar-blue/50',
+      'hover:text-titanium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-umay-blue/50',
       'disabled:pointer-events-none disabled:opacity-50',
       '[&_svg:not([class*="size-"])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
       'group-data-[variant=default]/tabs-list:data-[state=active]:shadow-xs group-data-[variant=default]/tabs-list:data-[state=active]:bg-obsidian group-data-[variant=default]/tabs-list:data-[state=active]:text-titanium',
-      'group-data-[variant=line]/tabs-list:rounded-none group-data-[variant=line]/tabs-list:border-b-2 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:border-b-0 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:border-r-2 group-data-[variant=line]/tabs-list:border-transparent group-data-[variant=line]/tabs-list:px-2 group-data-[variant=line]/tabs-list:py-1.5 group-data-[variant=line]/tabs-list:data-[state=active]:border-tulpar-blue group-data-[variant=line]/tabs-list:data-[state=active]:text-titanium',
+      'group-data-[variant=line]/tabs-list:rounded-none group-data-[variant=line]/tabs-list:border-b-2 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:border-b-0 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:border-r-2 group-data-[variant=line]/tabs-list:border-transparent group-data-[variant=line]/tabs-list:px-2 group-data-[variant=line]/tabs-list:py-1.5 group-data-[variant=line]/tabs-list:data-[state=active]:border-umay-blue group-data-[variant=line]/tabs-list:data-[state=active]:text-titanium',
       className,
     )}
     {...props}
@@ -76,7 +76,7 @@ export const TabsContent = React.forwardRef<
     ref={ref}
     data-slot="tabs-content"
     className={cn(
-      'flex-1 font-mono text-sm text-titanium outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-tulpar-blue/50',
+      'flex-1 font-mono text-sm text-titanium outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-umay-blue/50',
       className,
     )}
     {...props}

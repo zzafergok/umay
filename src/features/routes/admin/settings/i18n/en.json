@@ -1,9 +1,9 @@
 {
   "title": "Admin settings",
-  "description": "Configuration surface for Tulpar-level controls.",
+  "description": "Configuration surface for Umay-level controls.",
   "cardTitle": "Environment",
   "appNameLabel": "Application Name",
-  "appNamePlaceholder": "Tulpar",
+  "appNamePlaceholder": "Umay",
   "maintenanceTitle": "Maintenance mode",
   "maintenanceDescription": "Disable public entrypoints.",
   "submitLabel": "Save configuration"

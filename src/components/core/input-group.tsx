@@ -26,7 +26,7 @@ export function InputGroup({
         'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3',
 
         // Focus state.
-        'has-[[data-slot=input-group-control]:focus-visible]:border-tulpar-blue has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-tulpar-blue/20',
+        'has-[[data-slot=input-group-control]:focus-visible]:border-umay-blue has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-umay-blue/20',
 
         // Error state.
         'has-[[data-slot][aria-invalid=true]]:border-alert-red has-[[data-slot][aria-invalid=true]]:ring-alert-red/20',

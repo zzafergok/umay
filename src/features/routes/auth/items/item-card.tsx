@@ -65,7 +65,7 @@ export function ItemCard({
         </div>
 
         <div className="flex items-center gap-2 truncate text-xs text-muted-foreground">
-          <span className="h-2 w-2 shrink-0 rounded-full bg-tulpar-blue" />
+          <span className="h-2 w-2 shrink-0 rounded-full bg-umay-blue" />
           <span className="truncate">
             {locationText} • {category?.name ?? 'Genel'}
           </span>

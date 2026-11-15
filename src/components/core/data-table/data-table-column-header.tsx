@@ -48,13 +48,13 @@ export function DataTableColumnHeader<TData extends RowData, TValue = unknown>({
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 text-xs text-ash hover:text-white data-[state=open]:bg-gunmetal/30"
+            className="-ml-3 h-8 text-xs text-ash hover:text-titanium data-[state=open]:bg-gunmetal/30"
           >
             <span>{title}</span>
             {isSorted === 'desc' ? (
-              <ArrowDown className="ml-2 size-3.5 text-tulpar-blue" />
+              <ArrowDown className="ml-2 size-3.5 text-umay-blue" />
             ) : isSorted === 'asc' ? (
-              <ArrowUp className="ml-2 size-3.5 text-tulpar-blue" />
+              <ArrowUp className="ml-2 size-3.5 text-umay-blue" />
             ) : (
               <ChevronsUpDown className="ml-2 size-3.5 opacity-50" />
             )}

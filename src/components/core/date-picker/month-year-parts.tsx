@@ -75,10 +75,10 @@ export function MonthYearGrid({
               className={cn(
                 'relative flex h-10 items-center justify-center px-3 text-sm font-normal',
                 'text-titanium hover:bg-gunmetal/20',
-                selected && 'bg-tulpar-blue text-white hover:bg-tulpar-blue/90',
+                selected && 'bg-umay-blue text-white hover:bg-umay-blue/90',
                 current &&
                   !selected &&
-                  'border border-tulpar-blue/20 bg-tulpar-blue/10 text-tulpar-blue',
+                  'border border-umay-blue/20 bg-umay-blue/10 text-umay-blue',
                 disabled && 'cursor-not-allowed opacity-50',
               )}
               onClick={() => !disabled && onMonthSelect(index)}
@@ -86,7 +86,7 @@ export function MonthYearGrid({
             >
               {month}
               {current && !selected && (
-                <div className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 transform rounded-full bg-tulpar-blue" />
+                <div className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 transform rounded-full bg-umay-blue" />
               )}
             </Button>
           );
@@ -125,7 +125,7 @@ export function MonthYearSidebar({ onQuickDateSelect }: MonthYearSidebarProps) {
             key={quickDate.label}
             variant="ghost"
             size="sm"
-            className="h-8 w-full justify-start px-2 text-xs font-normal hover:bg-tulpar-blue/10"
+            className="h-8 w-full justify-start px-2 text-xs font-normal hover:bg-umay-blue/10"
             onClick={() => onQuickDateSelect(quickDate)}
           >
             {quickDate.label}

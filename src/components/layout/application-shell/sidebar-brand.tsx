@@ -32,13 +32,13 @@ export function SidebarBrand({
           collapsed ? 'justify-center' : 'flex-1 gap-3'
         }`}
       >
-        <span className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-white p-0.5 shadow-sm">
+        <span className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-umay-cosmic shadow-sm">
           <Image
             src={siteMetadata.assets.logo}
             alt={`${brand.title} brand mark`}
             width={36}
             height={36}
-            className="h-full w-full object-contain"
+            className="h-full w-full object-cover"
             priority
           />
         </span>

@@ -153,7 +153,7 @@ export const DialogContent = React.forwardRef<
           {shouldShowCloseButton && (
             <DialogPrimitive.Close
               data-slot="dialog-close"
-              className="rounded-xs absolute right-4 top-4 text-ash opacity-70 transition-opacity hover:text-white hover:opacity-100 focus:outline-none disabled:pointer-events-none [&_svg]:size-4"
+              className="rounded-xs absolute right-4 top-4 text-ash opacity-70 transition-opacity hover:text-titanium hover:opacity-100 focus:outline-none disabled:pointer-events-none [&_svg]:size-4"
             >
               <XIcon />
               <span className="sr-only">Close</span>
@@ -214,7 +214,7 @@ export function DialogTitle({
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        'text-lg font-semibold leading-none tracking-tight text-white',
+        'text-lg font-semibold leading-none tracking-tight text-titanium',
         className,
       )}
       {...props}

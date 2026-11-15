@@ -69,7 +69,7 @@ export function EmptyTitle({
     <div
       data-slot="empty-title"
       className={cn(
-        'text-base font-semibold tracking-tight text-white',
+        'text-base font-semibold tracking-tight text-titanium',
         className,
       )}
       {...props}
@@ -85,7 +85,7 @@ export function EmptyDescription({
     <div
       data-slot="empty-description"
       className={cn(
-        'text-sm/relaxed text-ash [&>a:hover]:text-tulpar-blue [&>a]:underline [&>a]:underline-offset-4',
+        'text-sm/relaxed text-ash [&>a:hover]:text-umay-blue [&>a]:underline [&>a]:underline-offset-4',
         className,
       )}
       {...props}

@@ -3,7 +3,7 @@
 .typeset {
   --typeset-font-body: inherit;
   --typeset-font-heading: inherit;
-  --typeset-font-mono: inherit;
+  --typeset-font-mono: var(--font-mono), monospace;
 
   --typeset-size: 1em; /* body font-size */
   --typeset-leading: 1.75; /* line-height */
@@ -109,7 +109,7 @@
   :where(a):where(
     :not(:where(.not-typeset, [data-not-typeset], .not-typeset *))
   ) {
-  color: hsl(var(--tulpar-blue, 215 88% 46%));
+  color: hsl(var(--umay-blue, 215 88% 46%));
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: opacity 0.15s ease;

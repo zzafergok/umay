@@ -42,7 +42,7 @@ export const categoryInputSchema = z.object({
     .trim()
     .min(1, 'Kategori adı zorunludur.')
     .max(60, 'Kategori adı en fazla 60 karakter olabilir.'),
-  colorToken: z.string().trim().min(1).max(40).default('tulpar-blue'),
+  colorToken: z.string().trim().min(1).max(40).default('umay-blue'),
   icon: z.string().trim().min(1).max(40).default('boxes'),
   customFields: z.array(customFieldDefinitionSchema).max(20).default([]),
 });

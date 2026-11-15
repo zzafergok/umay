@@ -41,13 +41,13 @@ export const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = 'SidebarMenuItem';
 
 export const sidebarMenuButtonVariants = cva(
-  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-xs p-2 text-left font-mono text-sm outline-none ring-tulpar-blue/50 transition-[width,height,padding] hover:bg-gunmetal/40 hover:text-white focus-visible:ring-1 active:bg-gunmetal/60 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-gunmetal/60 data-[active=true]:font-medium data-[active=true]:text-white data-[state=open]:hover:bg-gunmetal/40 data-[state=open]:hover:text-white group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-xs p-2 text-left font-mono text-sm outline-none ring-umay-blue/50 transition-[width,height,padding] hover:bg-gunmetal/40 hover:text-titanium focus-visible:ring-1 active:bg-gunmetal/60 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-gunmetal/60 data-[active=true]:font-medium data-[active=true]:text-titanium data-[state=open]:hover:bg-gunmetal/40 data-[state=open]:hover:text-titanium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
   {
     variants: {
       variant: {
-        default: 'hover:bg-gunmetal/40 hover:text-white',
+        default: 'hover:bg-gunmetal/40 hover:text-titanium',
         outline:
-          'bg-void-black shadow-[0_0_0_1px_rgba(255,255,255,0.1)] hover:bg-gunmetal/40 hover:text-white',
+          'bg-void-black shadow-[0_0_0_1px_hsl(var(--gunmetal)/0.6)] hover:bg-gunmetal/40 hover:text-titanium',
       },
       size: {
         default: 'h-8 text-sm',
@@ -139,7 +139,7 @@ export const SidebarMenuAction = React.forwardRef<
       data-sidebar="menu-action"
       data-slot="sidebar-menu-action"
       className={cn(
-        'rounded-xs absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center p-0 text-ash outline-none transition-transform hover:bg-gunmetal/40 hover:text-white focus-visible:ring-1 focus-visible:ring-tulpar-blue/50 [&>svg]:size-4 [&>svg]:shrink-0',
+        'rounded-xs focus-visible:ring-umay-blue/50 absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center p-0 text-ash outline-none transition-transform hover:bg-gunmetal/40 hover:text-titanium focus-visible:ring-1 [&>svg]:size-4 [&>svg]:shrink-0',
         // Increases the hit area of the button on mobile.
         'after:absolute after:-inset-2 md:after:hidden',
         'peer-data-[size=sm]/menu-button:top-1',
@@ -166,7 +166,7 @@ export const SidebarMenuBadge = React.forwardRef<
     data-slot="sidebar-menu-badge"
     className={cn(
       'rounded-xs pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center px-1 font-mono text-xs font-medium tabular-nums text-ash',
-      'peer-hover/menu-button:text-white peer-data-[active=true]/menu-button:text-white',
+      'peer-hover/menu-button:text-titanium peer-data-[active=true]/menu-button:text-titanium',
       'peer-data-[size=sm]/menu-button:top-1',
       'peer-data-[size=default]/menu-button:top-1.5',
       'peer-data-[size=lg]/menu-button:top-2.5',

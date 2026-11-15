@@ -230,7 +230,7 @@ export function AuthHomeScreen() {
                   </div>
                   <div className="h-2 w-full overflow-hidden rounded-sm bg-muted">
                     <div
-                      className="h-full bg-tulpar-blue transition-all duration-200"
+                      className="h-full bg-umay-blue transition-all duration-200"
                       style={{ width: `${cat.percent}%` }}
                     />
                   </div>

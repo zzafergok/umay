@@ -201,7 +201,7 @@ export const CarouselPrevious = React.forwardRef<
       size={size}
       data-slot="carousel-previous"
       className={cn(
-        'absolute size-8 rounded-sm border-gunmetal bg-obsidian/80 text-titanium hover:bg-gunmetal/40 hover:text-white',
+        'absolute size-8 rounded-sm border-gunmetal bg-obsidian/80 text-titanium hover:bg-gunmetal/40 hover:text-titanium',
         orientation === 'horizontal'
           ? '-left-12 top-1/2 -translate-y-1/2'
           : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
@@ -231,7 +231,7 @@ export const CarouselNext = React.forwardRef<
       size={size}
       data-slot="carousel-next"
       className={cn(
-        'absolute size-8 rounded-sm border-gunmetal bg-obsidian/80 text-titanium hover:bg-gunmetal/40 hover:text-white',
+        'absolute size-8 rounded-sm border-gunmetal bg-obsidian/80 text-titanium hover:bg-gunmetal/40 hover:text-titanium',
         orientation === 'horizontal'
           ? '-right-12 top-1/2 -translate-y-1/2'
           : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',

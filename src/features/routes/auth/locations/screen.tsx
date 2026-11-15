@@ -125,7 +125,7 @@ export function LocationsScreen() {
                 <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
                   <div className="space-y-1">
                     <CardTitle className="flex items-center gap-2 text-base">
-                      <MapPin className="h-4 w-4 text-tulpar-blue" />
+                      <MapPin className="h-4 w-4 text-umay-blue" />
                       <span>{loc.name}</span>
                     </CardTitle>
                     <p className="text-xs text-muted-foreground">

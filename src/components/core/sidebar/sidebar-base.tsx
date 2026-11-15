@@ -135,7 +135,7 @@ export const SidebarTrigger = React.forwardRef<
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn('size-8 text-ash hover:text-white', className)}
+      className={cn('size-8 text-ash hover:text-titanium', className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();

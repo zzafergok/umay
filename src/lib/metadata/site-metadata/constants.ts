@@ -28,7 +28,7 @@ export const siteMetadata = {
     appleTouchIcon: '/assets/images/apple-touch-icon.png',
     android192: '/assets/images/android-chrome-192x192.png',
     android512: '/assets/images/android-chrome-512x512.png',
-    logo: '/umay-icon.svg',
+    logo: '/assets/images/umay-brand-logo.png',
     openGraph: '/assets/images/android-chrome-512x512.png',
   },
   aiSummary:

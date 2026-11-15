@@ -44,7 +44,7 @@ export const MenubarCheckboxItem = React.forwardRef<
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
-        <Check className="size-4 text-tulpar-blue" />
+        <Check className="size-4 text-umay-blue" />
       </MenubarPrimitive.ItemIndicator>
     </span>
     {children}
@@ -68,7 +68,7 @@ export const MenubarRadioItem = React.forwardRef<
   >
     <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
-        <Circle className="size-2 fill-tulpar-blue text-tulpar-blue" />
+        <Circle className="size-2 fill-umay-blue text-umay-blue" />
       </MenubarPrimitive.ItemIndicator>
     </span>
     {children}

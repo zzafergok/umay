@@ -79,7 +79,7 @@ describe('inventory repository & user isolation', () => {
     const loc = await createLocation(userA, { name: 'Mutfak', parentId: null });
     const cat = await createCategory(userA, {
       name: 'Yedek Parça',
-      colorToken: 'tulpar-blue',
+      colorToken: 'umay-blue',
       icon: 'wrench',
       customFields: [],
     });

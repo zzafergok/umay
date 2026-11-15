@@ -53,7 +53,7 @@ async function seed() {
     {
       id: 'cat_elektronik',
       name: 'Elektronik',
-      colorToken: 'tulpar-blue',
+      colorToken: 'umay-blue',
       icon: 'boxes',
       customFields: [{ key: 'seri_no', label: 'Seri No', type: 'text' }],
     },

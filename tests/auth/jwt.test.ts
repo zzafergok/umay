@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { decodeToken, signToken, verifyToken } from '../jwt';
+import { decodeToken, signToken, verifyToken } from '@/lib/auth/jwt';
 
 describe('JWT Utilities', () => {
   it('should sign and verify a valid JWT token', () => {
     const payload = {
       sub: 'usr_123',
-      email: 'pilot@tulpar.space',
+      email: 'pilot@umay.space',
       name: 'PILOT',
       role: 'user' as const,
     };
@@ -17,14 +17,14 @@ describe('JWT Utilities', () => {
     const verified = verifyToken(token);
     expect(verified).not.toBeNull();
     expect(verified?.sub).toBe('usr_123');
-    expect(verified?.email).toBe('pilot@tulpar.space');
+    expect(verified?.email).toBe('pilot@umay.space');
     expect(verified?.role).toBe('user');
   });
 
   it('should decode token payload without secret verification', () => {
     const payload = {
       sub: 'adm_999',
-      email: 'admin@tulpar.space',
+      email: 'admin@umay.space',
       name: 'ADMIN',
       role: 'admin' as const,
     };
@@ -40,7 +40,7 @@ describe('JWT Utilities', () => {
   it('should reject tampered tokens', () => {
     const payload = {
       sub: 'usr_123',
-      email: 'pilot@tulpar.space',
+      email: 'pilot@umay.space',
       name: 'PILOT',
       role: 'user' as const,
     };

@@ -25,8 +25,8 @@ export function ContextMenuSubTrigger({
       className={cn(
         menuItemBaseClassName,
         'cursor-pointer px-2 py-1.5 text-titanium',
-        'focus:bg-gunmetal/40 focus:text-white',
-        'data-[state=open]:bg-gunmetal/40 data-[inset]:pl-8 data-[state=open]:text-white',
+        'focus:bg-gunmetal/40 focus:text-titanium',
+        'data-[state=open]:bg-gunmetal/40 data-[inset]:pl-8 data-[state=open]:text-titanium',
         "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ash [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}

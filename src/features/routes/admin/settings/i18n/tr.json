@@ -1,9 +1,9 @@
 {
   "title": "Yönetici Ayarları",
-  "description": "Tulpar kontrolleri ve ortam ayarları için platform yapılandırma paneli.",
+  "description": "Umay kontrolleri ve ortam ayarları için platform yapılandırma paneli.",
   "cardTitle": "Ortam Yapılandırması",
   "appNameLabel": "Uygulama Adı",
-  "appNamePlaceholder": "Tulpar",
+  "appNamePlaceholder": "Umay",
   "maintenanceTitle": "Bakım Modu",
   "maintenanceDescription": "Genel erişim noktalarını devre dışı bırakın.",
   "submitLabel": "Yapılandırmayı Kaydet"

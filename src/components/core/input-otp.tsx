@@ -50,7 +50,7 @@ const InputOTPSlot = React.forwardRef<
       data-slot="input-otp-slot"
       className={cn(
         'shadow-xs relative flex size-9 items-center justify-center border-y border-r border-gunmetal/80 bg-void-black font-mono text-sm text-titanium transition-all first:rounded-l-sm first:border-l last:rounded-r-sm',
-        isActive && 'z-10 border-tulpar-blue ring-1 ring-tulpar-blue/50',
+        isActive && 'z-10 border-umay-blue ring-1 ring-umay-blue/50',
         'aria-invalid:border-alert-red aria-invalid:ring-1 aria-invalid:ring-alert-red/30',
         className,
       )}

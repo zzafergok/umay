@@ -94,7 +94,7 @@ export const SheetContent = React.forwardRef<
         {showCloseButton && (
           <SheetPrimitive.Close
             data-slot="sheet-close"
-            className="rounded-xs absolute right-4 top-4 text-ash opacity-70 transition-opacity hover:text-white hover:opacity-100 focus:outline-none focus:ring-1 focus:ring-tulpar-blue/50 disabled:pointer-events-none [&_svg]:size-4"
+            className="rounded-xs absolute right-4 top-4 text-ash opacity-70 transition-opacity hover:text-titanium hover:opacity-100 focus:outline-none focus:ring-1 focus:ring-umay-blue/50 disabled:pointer-events-none [&_svg]:size-4"
           >
             <XIcon />
             <span className="sr-only">Close</span>
@@ -143,7 +143,7 @@ export function SheetTitle({
     <SheetPrimitive.Title
       data-slot="sheet-title"
       className={cn(
-        'font-mono text-base font-semibold leading-none tracking-tight text-white',
+        'font-mono text-base font-semibold leading-none tracking-tight text-titanium',
         className,
       )}
       {...props}

@@ -19,7 +19,7 @@ export function AccordionExample() {
     <div className="mx-auto max-w-2xl space-y-10 p-6">
       {/* 1. Basic Accordion */}
       <section className="space-y-3">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-tulpar-blue">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-umay-blue">
           1. Basic (Single & Collapsible)
         </h3>
         <Accordion type="single" collapsible defaultValue="item-1">
@@ -35,7 +35,7 @@ export function AccordionExample() {
           <AccordionItem value="item-2">
             <AccordionTrigger>Özelleştirilebilir mi?</AccordionTrigger>
             <AccordionContent>
-              Kesinlikle. Tulpar brutalist tasarım tokenları ve Tailwind
+              Kesinlikle. Umay brutalist tasarım tokenları ve Tailwind
               sınıfları ile kolayca özelleştirilebilir.
             </AccordionContent>
           </AccordionItem>
@@ -44,7 +44,7 @@ export function AccordionExample() {
 
       {/* 2. Multiple Accordion */}
       <section className="space-y-3">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-tulpar-blue">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-umay-blue">
           2. Multiple (Çoklu Açılış)
         </h3>
         <Accordion type="multiple" defaultValue={['multi-1']}>
@@ -66,7 +66,7 @@ export function AccordionExample() {
 
       {/* 3. Disabled Item */}
       <section className="space-y-3">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-tulpar-blue">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-umay-blue">
           3. Disabled (Devre Dışı Öğe)
         </h3>
         <Accordion type="single" collapsible>
@@ -87,7 +87,7 @@ export function AccordionExample() {
 
       {/* 4. Borders Variant */}
       <section className="space-y-3">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-tulpar-blue">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-umay-blue">
           4. Borders (Kenarlıklı Varyant)
         </h3>
         <Accordion
@@ -113,7 +113,7 @@ export function AccordionExample() {
 
       {/* 5. Card Wrapped */}
       <section className="space-y-3">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-tulpar-blue">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-umay-blue">
           5. Card İçinde Kullanım
         </h3>
         <Card>
@@ -126,7 +126,7 @@ export function AccordionExample() {
             <Accordion type="single" collapsible>
               <AccordionItem value="card-1">
                 <AccordionTrigger>
-                  Tulpar bileşen mimarisi nasıldır?
+                  Umay bileşen mimarisi nasıldır?
                 </AccordionTrigger>
                 <AccordionContent>
                   Her bileşen 250 satır kuralına, modüler TypeScript mimarisine
