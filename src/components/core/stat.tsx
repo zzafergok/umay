@@ -46,17 +46,17 @@ export function Stat({
           </span>
         ) : null}
       </div>
-      <div className="flex items-baseline gap-1.5">
+      <div className="flex min-w-0 items-baseline gap-1.5">
         <span
           className={cn(
-            'font-heading text-metric tabular-nums',
+            'font-heading truncate text-xl tabular-nums sm:text-metric',
             VALUE_TONE_CLASSES[tone],
           )}
         >
           {value}
         </span>
         {unit ? (
-          <span className="text-text-muted text-caption">{unit}</span>
+          <span className="text-text-muted shrink-0 text-caption">{unit}</span>
         ) : null}
       </div>
       {hint ? (

@@ -1,75 +1,56 @@
 'use client';
 
-import { LayoutDashboard } from 'lucide-react';
-import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
-import { Card, CardContent } from '@/components/core/card';
 import { Link } from '@/components/core/link';
 import { Separator } from '@/components/core/separator';
 import { UmayMark } from '@/components/shared/umay-brand';
-import { GoogleSignInButton } from './google-signin-button';
 import type { PublicHomeCopy } from '../types';
+
+export interface HomeFooterCtaProps {
+  footerCta: PublicHomeCopy['footerCta'];
+  onNavigateTab?: (href: string) => void;
+}
 
 export function HomeFooterCta({
   footerCta,
-}: {
-  footerCta: PublicHomeCopy['footerCta'];
-}) {
+  onNavigateTab,
+}: HomeFooterCtaProps) {
   return (
-    <div className="space-y-10">
-      <Card className="bg-surface border-border">
-        <CardContent className="flex flex-col items-start justify-between gap-6 p-6 sm:p-8 lg:flex-row lg:items-center lg:p-10">
-          <div className="max-w-2xl space-y-2.5">
-            <Badge variant="default">{footerCta.badge}</Badge>
-            <h2 className="font-heading text-title sm:text-display text-text">
-              {footerCta.title}
-            </h2>
-            <p className="text-body text-text-muted">{footerCta.description}</p>
-          </div>
-
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <GoogleSignInButton
-              label={footerCta.loginAction}
-              size="lg"
-              className="w-full sm:w-auto"
-            />
-            <Button
-              asChild
-              variant="secondary"
-              size="lg"
-              className="w-full sm:w-auto"
-            >
-              <Link href="/home" prefetch={false}>
-                <LayoutDashboard
-                  className="text-text-muted mr-2 h-4 w-4"
-                  aria-hidden="true"
-                />
-                {footerCta.adminAction}
-              </Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <footer className="space-y-6 pb-4">
-        <Separator />
-        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-2.5">
-            <UmayMark className="h-5 w-5" />
-            <span className="text-text-muted text-caption">
-              {footerCta.copyright}
-            </span>
-          </div>
-
-          <nav className="flex flex-wrap items-center gap-1">
-            {footerCta.anchors.map((anchor) => (
-              <Button key={anchor.href} asChild variant="ghost" size="sm">
-                <Link href={anchor.href}>{anchor.label}</Link>
-              </Button>
-            ))}
-          </nav>
+    <footer className="space-y-4 pb-2 sm:space-y-6 sm:pb-4">
+      <Separator />
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="flex items-center gap-2.5">
+          <UmayMark className="h-5 w-5" />
+          <span className="text-text-muted text-xs">
+            Umay · Home &amp; Personal Inventory
+          </span>
         </div>
-      </footer>
-    </div>
+
+        <nav className="flex flex-wrap items-center gap-1.5 sm:gap-3">
+          {footerCta.navLinks.map((anchor) =>
+            onNavigateTab ? (
+              <Button
+                key={anchor.href}
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => onNavigateTab(anchor.href)}
+                className="text-text-muted hover:text-text h-7 px-2 text-xs"
+              >
+                {anchor.label}
+              </Button>
+            ) : (
+              <Link
+                key={anchor.href}
+                href={anchor.href}
+                className="text-text-muted hover:text-text px-1.5 py-1 text-xs transition-colors"
+              >
+                {anchor.label}
+              </Link>
+            ),
+          )}
+        </nav>
+      </div>
+    </footer>
   );
 }

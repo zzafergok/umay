@@ -1,31 +1,47 @@
 'use client';
 
 import * as React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
+import { useForm, useWatch } from 'react-hook-form';
+import { Button } from '@/components/core/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/core/dialog';
-import { Button } from '@/components/core/button';
-import { Input } from '@/components/core/input';
-import { Label } from '@/components/core/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/core/select';
 import { toast } from '@/components/core/toast';
-import type { Item, LifespanMode } from '@/features/inventory/types';
+import {
+  AmountField,
+  DateField,
+  Form,
+  SelectField,
+  SubmitButton,
+  TextField,
+} from '@/components/forms';
+import type { Item } from '@/features/inventory/types';
+import { parseAmountInput } from '@/lib/utils';
 import { inventoryService } from '@/services/inventory-service';
-import { useQueryClient } from '@tanstack/react-query';
+import { partFormSchema, type PartFormValues } from './part-form-schema';
 
 interface PartFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   items: Item[];
+}
+
+function getDefaultValues(): PartFormValues {
+  return {
+    name: '',
+    parentItemId: '__none__',
+    spareItemId: '__none__',
+    mode: 'time',
+    days: 180,
+    usageLimit: 1000,
+    usageUnit: 'litre',
+    installedDate: new Date().toISOString().slice(0, 10),
+  };
 }
 
 export function PartFormDialog({
@@ -34,176 +50,146 @@ export function PartFormDialog({
   items,
 }: PartFormDialogProps) {
   const qc = useQueryClient();
-  const [saving, setSaving] = React.useState(false);
-  const [name, setName] = React.useState('');
-  const [parentItemId, setParentItemId] = React.useState('__none__');
-  const [spareItemId, setSpareItemId] = React.useState('__none__');
-  const [mode, setMode] = React.useState<LifespanMode>('time');
-  const [days, setDays] = React.useState('180');
-  const [usageUnit, setUsageUnit] = React.useState('litre');
-  const [usageLimit, setUsageLimit] = React.useState('1000');
-  const [installedDate, setInstalledDate] = React.useState(() =>
-    new Date().toISOString().slice(0, 10),
-  );
+  const methods = useForm<PartFormValues>({
+    resolver: zodResolver(partFormSchema),
+    defaultValues: getDefaultValues(),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-    setSaving(true);
+  React.useEffect(() => {
+    if (open) methods.reset(getDefaultValues());
+  }, [open, methods]);
+
+  const mode = useWatch({ control: methods.control, name: 'mode' });
+
+  const parentOptions = [
+    { value: '__none__', label: 'Bağımsız' },
+    ...items.map((item) => ({ value: item.id, label: item.name })),
+  ];
+  const spareOptions = [
+    { value: '__none__', label: 'Yedek Bağlı Değil' },
+    ...items.map((item) => ({
+      value: item.id,
+      label: `${item.name} (${item.quantity})`,
+    })),
+  ];
+
+  const handleSubmit = async (values: PartFormValues) => {
     try {
+      const showTime = values.mode === 'time' || values.mode === 'both';
+      const showUsage = values.mode === 'usage' || values.mode === 'both';
+
       await inventoryService.createPart({
-        name: name.trim(),
-        parentItemId: parentItemId === '__none__' ? null : parentItemId,
-        spareItemId: spareItemId === '__none__' ? null : spareItemId,
+        name: values.name.trim(),
+        parentItemId:
+          values.parentItemId === '__none__' ? null : values.parentItemId,
+        spareItemId:
+          values.spareItemId === '__none__' ? null : values.spareItemId,
         lifespan: {
-          mode,
-          days: mode === 'time' || mode === 'both' ? Number(days) : undefined,
-          usageUnit:
-            mode === 'usage' || mode === 'both' ? usageUnit : undefined,
-          usageLimit:
-            mode === 'usage' || mode === 'both'
-              ? Number(usageLimit)
-              : undefined,
+          mode: values.mode,
+          days: showTime ? parseAmountInput(values.days ?? 180) : undefined,
+          usageUnit: showUsage
+            ? values.usageUnit?.trim() || 'birim'
+            : undefined,
+          usageLimit: showUsage
+            ? parseAmountInput(values.usageLimit ?? 1000)
+            : undefined,
         },
-        installedAt: new Date(`${installedDate}T12:00:00.000Z`).toISOString(),
+        installedAt: new Date(
+          `${values.installedDate}T12:00:00.000Z`,
+        ).toISOString(),
         usageCurrent: 0,
         notes: '',
       });
       await qc.invalidateQueries({ queryKey: ['inventory', 'parts'] });
       toast.success('Ömürlü parça eklendi.');
-      setName('');
       onOpenChange(false);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Parça eklenemedi.');
-    } finally {
-      setSaving(false);
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-md">
+      <DialogContent mobilePresentation="sheet" className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Yeni Ömürlü Parça</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1">
-            <Label htmlFor="part-name">Parça Adı</Label>
-            <Input
-              id="part-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Örn. Su Arıtma Karbon Filtresi"
-              required
+
+        <Form
+          schema={partFormSchema}
+          methods={methods}
+          onSubmit={handleSubmit}
+          className="min-w-0 space-y-2.5 sm:space-y-4"
+        >
+          <TextField
+            name="name"
+            label="Parça Adı"
+            placeholder="Örn. Su Arıtma Karbon Filtresi"
+            required
+          />
+
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+            <SelectField
+              name="parentItemId"
+              label="Ana Ürün"
+              options={parentOptions}
+            />
+            <SelectField
+              name="spareItemId"
+              label="Stoktaki Yedek"
+              options={spareOptions}
             />
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="space-y-1">
-              <Label>Ana Ürün</Label>
-              <Select value={parentItemId} onValueChange={setParentItemId}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__none__">Bağımsız</SelectItem>
-                  {items.map((i) => (
-                    <SelectItem key={i.id} value={i.id}>
-                      {i.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1">
-              <Label>Stoktaki Yedek</Label>
-              <Select value={spareItemId} onValueChange={setSpareItemId}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__none__">Yedek Bağlı Değil</SelectItem>
-                  {items.map((i) => (
-                    <SelectItem key={i.id} value={i.id}>
-                      {i.name} ({i.quantity})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
 
-          <div className="space-y-1">
-            <Label>Ömür Modu</Label>
-            <Select
-              value={mode}
-              onValueChange={(v) => {
-                if (v === 'time' || v === 'usage' || v === 'both') setMode(v);
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="time">Zamana Göre (Gün)</SelectItem>
-                <SelectItem value="usage">Kullanıma Göre</SelectItem>
-                <SelectItem value="both">
-                  İkisi Birden (Hangisi Önce)
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <SelectField
+            name="mode"
+            label="Ömür Modu"
+            options={[
+              { value: 'time', label: 'Zamana Göre (Gün)' },
+              { value: 'usage', label: 'Kullanıma Göre' },
+              { value: 'both', label: 'İkisi Birden (Hangisi Önce)' },
+            ]}
+          />
 
           {(mode === 'time' || mode === 'both') && (
-            <div className="space-y-1">
-              <Label htmlFor="part-days">Ömür (Gün)</Label>
-              <Input
-                id="part-days"
-                type="number"
-                min={1}
-                value={days}
-                onChange={(e) => setDays(e.target.value)}
+            <AmountField name="days" label="Ömür (Gün)" required />
+          )}
+
+          {(mode === 'usage' || mode === 'both') && (
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+              <AmountField name="usageLimit" label="Kullanım Limiti" required />
+              <TextField
+                name="usageUnit"
+                label="Birim"
+                placeholder="litre / baskı / saat"
               />
             </div>
           )}
 
-          {(mode === 'usage' || mode === 'both') && (
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label htmlFor="part-u-limit">Kullanım Limiti</Label>
-                <Input
-                  id="part-u-limit"
-                  type="number"
-                  min={1}
-                  value={usageLimit}
-                  onChange={(e) => setUsageLimit(e.target.value)}
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="part-u-unit">Birim</Label>
-                <Input
-                  id="part-u-unit"
-                  value={usageUnit}
-                  onChange={(e) => setUsageUnit(e.target.value)}
-                  placeholder="litre / baskı / saat"
-                />
-              </div>
-            </div>
-          )}
+          <DateField
+            name="installedDate"
+            label="Takılma Tarihi"
+            valueFormat="iso-date"
+            required
+          />
 
-          <div className="space-y-1">
-            <Label htmlFor="part-installed">Takılma Tarihi</Label>
-            <Input
-              id="part-installed"
-              type="date"
-              value={installedDate}
-              onChange={(e) => setInstalledDate(e.target.value)}
-            />
+          <div className="bg-surface-raised/95 sticky bottom-0 grid grid-cols-2 gap-2 border-t border-border pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+            >
+              Vazgeç
+            </Button>
+            <SubmitButton
+              isLoading={methods.formState.isSubmitting}
+              className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+            >
+              Parçayı Kaydet
+            </SubmitButton>
           </div>
-
-          <Button type="submit" disabled={saving} className="w-full">
-            {saving ? 'Kaydediliyor...' : 'Parçayı Kaydet'}
-          </Button>
-        </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

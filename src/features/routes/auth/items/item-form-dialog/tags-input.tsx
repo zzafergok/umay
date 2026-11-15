@@ -35,7 +35,7 @@ export function TagsInput({ tags, onChange }: TagsInputProps) {
     <div className="space-y-2">
       <Label
         htmlFor="item-tags-input"
-        className="font-mono text-2xs uppercase tracking-wider text-ash"
+        className="text-text-muted text-xs font-medium uppercase tracking-wider"
       >
         Etiketler (Opsiyonel)
       </Label>
@@ -51,9 +51,15 @@ export function TagsInput({ tags, onChange }: TagsInputProps) {
             }
           }}
           placeholder="Örn. acil, ofis, yedek (Enter)"
-          className="h-9 text-xs"
+          className="h-10 text-xs sm:h-9"
         />
-        <Button type="button" variant="outline" size="sm" onClick={addTag}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={addTag}
+          className="min-h-[40px] shrink-0 sm:min-h-0"
+        >
           <Plus className="mr-1 h-3.5 w-3.5" />
           Ekle
         </Button>
@@ -61,7 +67,11 @@ export function TagsInput({ tags, onChange }: TagsInputProps) {
       {tags.length > 0 ? (
         <div className="flex flex-wrap gap-1.5">
           {tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="gap-1 pr-1 text-xs">
+            <Badge
+              key={tag}
+              variant="secondary"
+              className="gap-1.5 py-1 pl-2.5 pr-1 text-xs"
+            >
               <Tag className="text-text-muted h-3 w-3" />
               <span>{tag}</span>
               <Button
@@ -70,9 +80,9 @@ export function TagsInput({ tags, onChange }: TagsInputProps) {
                 size="icon-xs"
                 onClick={() => onChange(tags.filter((t) => t !== tag))}
                 aria-label={`${tag} etiketini kaldır`}
-                className="hover:bg-danger/15 hover:text-danger h-4 w-4 rounded-full p-0"
+                className="hover:bg-danger/15 hover:text-danger h-7 w-7 rounded-full p-0 sm:h-5 sm:w-5"
               >
-                <X className="h-3 w-3" />
+                <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
               </Button>
             </Badge>
           ))}

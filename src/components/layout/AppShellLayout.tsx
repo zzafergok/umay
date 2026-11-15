@@ -75,8 +75,10 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
       footer={({ collapsed }) => <SidebarUserFooter collapsed={collapsed} />}
       headerActions={
         <>
-          <ThemeToggle />
-          <LanguageSwitcher />
+          <div className="hidden items-center gap-1.5 sm:flex">
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </div>
           <UserAccountMenu />
         </>
       }

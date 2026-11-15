@@ -127,54 +127,54 @@ export function ShoppingEditDialog({
 
   return (
     <Dialog open={Boolean(entry)} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+      <DialogContent mobilePresentation="sheet" className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Alışveriş Kalemini Düzenle</DialogTitle>
           <DialogDescription>
-            Miktar, öncelik, kategori, mağaza ve tahmini birim fiyat
-            bilgilerini güncelleyin.
+            Miktar, öncelik, kategori, mağaza ve tahmini birim fiyat bilgilerini
+            güncelleyin.
           </DialogDescription>
         </DialogHeader>
         <Form
           schema={shoppingFormSchema}
           methods={methods}
           onSubmit={handleSubmit}
-          className="space-y-4"
+          className="min-w-0 space-y-2.5 sm:space-y-4"
         >
           <TextField
             name="freeText"
             label="Ürün Adı"
-            inputClassName="text-body"
+            inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px] sm:text-body"
             required
           />
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             <TextField
               name="qty"
               label="Miktar"
               type="number"
               min={0.1}
               step="any"
-              inputClassName="text-body tabular-nums"
+              inputClassName="h-9 min-h-[38px] text-sm tabular-nums sm:h-11 sm:min-h-[44px] sm:text-body"
               required
             />
             <SelectField
               name="unit"
               label="Birim"
-              triggerClassName="text-body"
+              triggerClassName="h-9 min-h-[38px] w-full text-sm sm:h-11 sm:min-h-[44px] sm:text-body"
               options={unitOptions}
             />
             <SelectField
               name="priority"
               label="Öncelik"
-              triggerClassName="text-body"
+              triggerClassName="h-9 min-h-[38px] w-full text-sm sm:h-11 sm:min-h-[44px] sm:text-body"
               options={SHOPPING_PRIORITY_OPTIONS}
             />
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
             <SelectField
               name="category"
               label="Kategori"
-              triggerClassName="text-body"
+              triggerClassName="h-9 min-h-[38px] w-full text-sm sm:h-11 sm:min-h-[44px] sm:text-body"
               allowNone
               noneLabel="Kategori seçilmedi"
               placeholder="Kategori seçin"
@@ -183,38 +183,44 @@ export function ShoppingEditDialog({
             <SelectField
               name="itemId"
               label="Ev Stoğu ile Eşleştir"
-              triggerClassName="text-body"
+              triggerClassName="h-9 min-h-[38px] w-full text-sm sm:h-11 sm:min-h-[44px] sm:text-body"
               options={itemOptions}
               {...getLinkedItemFieldMeta(itemOptions.length > 0)}
             />
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
             <TextField
               name="store"
               label="Mağaza / Market"
               placeholder="Örn. Migros"
-              inputClassName="text-body"
+              inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px] sm:text-body"
             />
             <AmountField
               name="estimatedPrice"
               label={`Tahmini Birim Fiyat (${currency})`}
               placeholder="0,00"
-              inputClassName="text-body font-medium tabular-nums"
+              inputClassName="h-9 min-h-[38px] text-sm font-medium tabular-nums sm:h-11 sm:min-h-[44px] sm:text-body"
             />
           </div>
           <TextField
             name="note"
             label="Not"
             placeholder="Ek açıklama"
-            inputClassName="text-body"
+            inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px] sm:text-body"
           />
-          <DialogFooter className="gap-2 sm:gap-2">
-            <Button type="button" variant="outline" onClick={onClose}>
+          <DialogFooter className="bg-surface-raised/95 sticky bottom-0 grid grid-cols-2 gap-2 border-t border-border pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:gap-2 sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+            >
               İptal
             </Button>
             <SubmitButton
               loadingText="Kaydediliyor..."
               icon={<Save className="h-4 w-4" />}
+              className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
             >
               Değişiklikleri Kaydet
             </SubmitButton>

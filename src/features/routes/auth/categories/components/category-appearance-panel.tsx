@@ -76,10 +76,10 @@ export function CategoryAppearancePanel({
       </div>
 
       <div className="space-y-2">
-        <p className="font-mono text-2xs uppercase tracking-wider text-ash">
+        <p className="font-mono text-2xs uppercase tracking-wider text-text-muted">
           Kategori İkonu
         </p>
-        <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-5">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-1.5">
           {CATEGORY_ICON_OPTIONS.map((opt) => {
             const Icon = opt.icon;
             const active = icon === opt.value;
@@ -91,7 +91,7 @@ export function CategoryAppearancePanel({
                 size="sm"
                 onClick={() => onIconChange(opt.value)}
                 className={cn(
-                  'justify-start gap-1.5 px-2 text-xs',
+                  'min-h-[40px] justify-start gap-1.5 px-2.5 text-xs sm:min-h-0 sm:px-2',
                   active && 'border-accent ring-1 ring-accent',
                 )}
               >

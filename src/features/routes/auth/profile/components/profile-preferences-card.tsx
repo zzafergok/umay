@@ -178,7 +178,7 @@ export function ProfilePreferencesCard({
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label className="font-mono text-2xs uppercase tracking-wider text-ash">
+            <Label className="text-text-muted font-mono text-2xs uppercase tracking-wider">
               {copy.themeLabel}
             </Label>
             <div
@@ -197,7 +197,7 @@ export function ProfilePreferencesCard({
                     aria-checked={selected}
                     variant={selected ? 'primary' : 'secondary'}
                     onClick={() => setTheme(id)}
-                    className="justify-center gap-1.5 px-2"
+                    className="min-h-[40px] justify-center gap-1.5 px-2 sm:min-h-0"
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                     <span className="truncate">{label}</span>

@@ -3,6 +3,7 @@
 import { ExternalLink, ImageIcon } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Card, CardContent } from '@/components/core/card';
+import { Link } from '@/components/core/link';
 import { QuantityStepper } from '@/components/core/quantity-stepper';
 import { InfoTooltip } from '@/components/shared/info-tooltip';
 import { MIN_QUANTITY_TOOLTIP } from '@/features/inventory/constants';
@@ -70,17 +71,17 @@ export function ItemDetailOverview({
           {item.photos.length > 0 ? (
             <div className="flex flex-wrap gap-2 border-t border-border pt-3">
               {item.photos.map((url, idx) => (
-                <a
+                <Link
                   key={`${url}-${idx}`}
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-surface-sunken/50 inline-flex items-center gap-1.5 rounded-sm border border-border px-2.5 py-1 text-xs font-medium transition-colors hover:border-accent"
+                  className="bg-surface-sunken/50 inline-flex min-h-[36px] items-center gap-1.5 rounded-sm border border-border px-2.5 py-1 text-xs font-medium transition-colors hover:border-accent"
                 >
                   <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" />
                   <span>Fotoğraf #{idx + 1}</span>
                   <ExternalLink className="h-3 w-3 text-muted-foreground" />
-                </a>
+                </Link>
               ))}
             </div>
           ) : null}

@@ -120,27 +120,47 @@ export function AuthHomeScreen() {
   }, [categories, items]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center gap-2">
-        <Button asChild size="sm" variant="primary">
+    <div className="space-y-5 md:space-y-6">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+        <Button
+          asChild
+          size="sm"
+          variant="primary"
+          className="min-h-[44px] sm:min-h-0"
+        >
           <Link href="/items?new=1">
             <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />
             Ürün ekle
           </Link>
         </Button>
-        <Button asChild size="sm" variant="secondary">
+        <Button
+          asChild
+          size="sm"
+          variant="secondary"
+          className="min-h-[44px] sm:min-h-0"
+        >
           <Link href="/scan">
             <ScanLine className="mr-1.5 h-4 w-4" aria-hidden="true" />
             Barkod tara
           </Link>
         </Button>
-        <Button asChild size="sm" variant="secondary">
+        <Button
+          asChild
+          size="sm"
+          variant="secondary"
+          className="min-h-[44px] sm:min-h-0"
+        >
           <Link href="/parts">
             <Wrench className="mr-1.5 h-4 w-4" aria-hidden="true" />
             Parçalar
           </Link>
         </Button>
-        <Button asChild size="sm" variant="secondary">
+        <Button
+          asChild
+          size="sm"
+          variant="secondary"
+          className="min-h-[44px] sm:min-h-0"
+        >
           <Link href="/shopping">
             <ShoppingCart className="mr-1.5 h-4 w-4" aria-hidden="true" />
             Alışveriş
@@ -148,7 +168,7 @@ export function AuthHomeScreen() {
         </Button>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 lg:gap-3">
         <Stat
           label="Toplam ürün"
           value={items.length}

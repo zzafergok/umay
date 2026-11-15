@@ -26,10 +26,10 @@ export function CategoryPresetsBar({
           <Button
             key={tpl.id}
             type="button"
-            size="xs"
+            size="sm"
             variant="outline"
             onClick={() => onApplyTemplate(tpl)}
-            className="h-7 gap-1.5 text-xs"
+            className="min-h-[38px] gap-1.5 text-xs sm:h-7 sm:min-h-0"
           >
             <span>{tpl.data.name}</span>
             <Badge variant="secondary" className="px-1 py-0 text-[10px]">

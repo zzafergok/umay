@@ -61,27 +61,48 @@ function ItemFormBody({
       schema={itemFormSchema}
       methods={formState.methods}
       onSubmit={formState.handleSubmit}
-      className="space-y-4"
+      className="min-w-0 space-y-2.5 sm:space-y-4"
     >
       <Tabs value={formState.activeTab} onValueChange={formState.setActiveTab}>
-        <TabsList className="w-full justify-start overflow-x-auto">
-          <TabsTrigger value="basic" className="text-xs">
-            1. Temel &amp; Stok
+        <TabsList className="grid h-auto w-full grid-cols-3 gap-1 p-1">
+          <TabsTrigger
+            value="basic"
+            className="min-w-0 px-1.5 py-1.5 text-[11px] sm:px-3 sm:text-xs"
+          >
+            <span className="truncate sm:hidden">1. Temel</span>
+            <span className="hidden truncate sm:inline">
+              1. Temel &amp; Stok
+            </span>
           </TabsTrigger>
-          <TabsTrigger value="technical" className="gap-1.5 text-xs">
-            <span>2. Teknik &amp; Özel Alanlar</span>
+          <TabsTrigger
+            value="technical"
+            className="min-w-0 gap-1 px-1.5 py-1.5 text-[11px] sm:gap-1.5 sm:px-3 sm:text-xs"
+          >
+            <span className="truncate sm:hidden">2. Teknik</span>
+            <span className="hidden truncate sm:inline">
+              2. Teknik &amp; Özel Alanlar
+            </span>
             {customFieldCount > 0 ? (
-              <Badge variant="secondary" className="px-1.5 py-0 text-[10px]">
+              <Badge
+                variant="secondary"
+                className="shrink-0 px-1 py-0 text-[10px] sm:px-1.5"
+              >
                 {customFieldCount}
               </Badge>
             ) : null}
           </TabsTrigger>
-          <TabsTrigger value="purchase" className="text-xs">
-            3. Satın Alma &amp; Tarihler
+          <TabsTrigger
+            value="purchase"
+            className="min-w-0 px-1.5 py-1.5 text-[11px] sm:px-3 sm:text-xs"
+          >
+            <span className="truncate sm:hidden">3. Satın Alma</span>
+            <span className="hidden truncate sm:inline">
+              3. Satın Alma &amp; Tarihler
+            </span>
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="basic" className="pt-2">
+        <TabsContent value="basic" className="pt-1.5 sm:pt-2">
           <ItemBasicTab
             categoryOptions={categoryOptions}
             locationOptions={locationOptions}
@@ -89,7 +110,7 @@ function ItemFormBody({
           />
         </TabsContent>
 
-        <TabsContent value="technical" className="pt-2">
+        <TabsContent value="technical" className="pt-1.5 sm:pt-2">
           <ItemTechnicalTab
             activeCategory={formState.activeCategory}
             customValues={formState.customValues}
@@ -100,7 +121,7 @@ function ItemFormBody({
           />
         </TabsContent>
 
-        <TabsContent value="purchase" className="pt-2">
+        <TabsContent value="purchase" className="pt-1.5 sm:pt-2">
           <ItemPurchaseTab
             activeCategory={formState.activeCategory}
             photos={formState.photos}
@@ -110,15 +131,21 @@ function ItemFormBody({
         </TabsContent>
       </Tabs>
 
-      <div className="flex flex-col-reverse gap-2 border-t border-border pt-3 sm:flex-row sm:justify-end">
+      <div className="bg-surface-raised/95 sticky bottom-0 z-10 grid grid-cols-2 gap-2 border-t border-border pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
         <Button
           type="button"
           variant="outline"
           onClick={() => onOpenChange(false)}
+          className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
         >
           Vazgeç
         </Button>
-        <SubmitButton isLoading={formState.saving}>Kaydet</SubmitButton>
+        <SubmitButton
+          isLoading={formState.saving}
+          className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+        >
+          Kaydet
+        </SubmitButton>
       </div>
     </Form>
   );
@@ -134,7 +161,7 @@ export function ItemFormDialog({
 }: ItemFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] w-[calc(100vw-1.5rem)] max-w-3xl overflow-y-auto sm:max-w-3xl">
+      <DialogContent mobilePresentation="sheet" className="sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>
             {editItem ? 'Ürünü Düzenle' : 'Yeni Ürün Ekle'}

@@ -57,7 +57,7 @@ export function StandardCardGrid({
         </div>
 
         {actions && actions.length > 0 && (
-          <div className="flex shrink-0 items-center gap-1 opacity-30 transition-opacity duration-200 group-hover:opacity-100">
+          <div className="flex shrink-0 items-center gap-1.5 opacity-100 transition-opacity duration-200 md:opacity-40 md:group-hover:opacity-100">
             {actions.map((action, idx) => (
               <Button
                 key={idx}
@@ -68,14 +68,14 @@ export function StandardCardGrid({
                   action.onClick(e);
                 }}
                 className={cn(
-                  'text-text-muted h-7 w-7 rounded-md border border-border bg-transparent',
+                  'text-text-muted h-10 w-10 rounded-md border border-border bg-transparent md:h-8 md:w-8',
                   action.variant === 'destructive' || action.variant === 'rose'
                     ? 'hover:border-danger/40 hover:bg-danger-subtle hover:text-danger'
                     : 'hover:bg-accent-subtle hover:border-accent/40 hover:text-accent',
                 )}
                 title={action.label}
               >
-                <action.icon className="h-3 w-3" />
+                <action.icon className="h-4 w-4 md:h-3.5 md:w-3.5" />
               </Button>
             ))}
           </div>

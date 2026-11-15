@@ -66,11 +66,11 @@ export function ItemStockPanel({
             disabled={isBusy || item.quantity <= 0}
             onClick={() => onAdjustStock(item, -1)}
             aria-label={`${item.name} stok azalt (-1)`}
-            className="h-8 w-8 rounded-sm"
+            className="h-10 w-10 rounded-sm md:h-8 md:w-8"
           >
             <Minus className="h-3.5 w-3.5" aria-hidden="true" />
           </Button>
-          <span className="h-4 w-px bg-border" aria-hidden="true" />
+          <span className="h-5 w-px bg-border md:h-4" aria-hidden="true" />
           <Button
             type="button"
             variant="ghost"
@@ -78,7 +78,7 @@ export function ItemStockPanel({
             disabled={isBusy}
             onClick={() => onAdjustStock(item, 1)}
             aria-label={`${item.name} stok artır (+1)`}
-            className="h-8 w-8 rounded-sm"
+            className="h-10 w-10 rounded-sm md:h-8 md:w-8"
           >
             <Plus className="h-3.5 w-3.5" aria-hidden="true" />
           </Button>

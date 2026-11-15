@@ -6,6 +6,7 @@ export interface PageHeaderProps {
   badge?: ReactNode;
   actions?: ReactNode;
   breadcrumbs?: ReactNode;
+  hideMobileTitle?: boolean;
   className?: string;
   children?: ReactNode;
 }

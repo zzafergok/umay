@@ -100,13 +100,13 @@ export function ThemeSelectorCard({
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="space-y-2">
-          <Label className="font-mono text-2xs uppercase tracking-wider text-ash">
+          <Label className="text-text-muted font-mono text-2xs uppercase tracking-wider">
             {copy.themeLabel}
           </Label>
           <div
             role="radiogroup"
             aria-label={copy.themeLabel}
-            className="grid grid-cols-3 gap-2"
+            className="grid grid-cols-3 gap-1.5 sm:gap-2"
           >
             {themeOptions.map(({ id, label, Icon }) => {
               const isSelected = activeTheme === id;
@@ -121,10 +121,10 @@ export function ThemeSelectorCard({
                     if (isSelected) return;
                     void switchThemeWithTransition(id, setTheme, event);
                   }}
-                  className="justify-center gap-2"
+                  className="min-h-[42px] justify-center gap-1.5 px-2 sm:min-h-0 sm:gap-2"
                 >
                   <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  <span>{label}</span>
+                  <span className="truncate">{label}</span>
                 </Button>
               );
             })}

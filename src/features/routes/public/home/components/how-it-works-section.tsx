@@ -4,46 +4,50 @@ import { Badge } from '@/components/core/badge';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
 import type { PublicHomeCopy } from '../types';
 
-export function HowItWorksSection({
-  howItWorksSection,
-}: {
-  howItWorksSection: PublicHomeCopy['howItWorksSection'];
-}) {
+export interface HowItWorksSectionProps {
+  howItWorks: PublicHomeCopy['howItWorks'];
+}
+
+export function HowItWorksSection({ howItWorks }: HowItWorksSectionProps) {
   return (
-    <section id="nasil-calisir" className="scroll-mt-20 space-y-6">
-      <div className="mx-auto max-w-2xl space-y-2 text-center">
-        <Badge variant="outline">{howItWorksSection.badge}</Badge>
-        <h2 className="font-heading text-title sm:text-display text-text">
-          {howItWorksSection.title}
+    <section id="nasil-calisir" className="scroll-mt-20 space-y-4 sm:space-y-6">
+      <div className="max-w-2xl space-y-2">
+        <Badge variant="outline">{howItWorks.badge}</Badge>
+        <h2 className="text-text text-xl font-semibold tracking-tight sm:text-3xl">
+          {howItWorks.title}
         </h2>
-        <p className="text-body-sm text-text-muted">
-          {howItWorksSection.description}
+        <p className="text-text-muted text-sm leading-relaxed sm:text-base">
+          {howItWorks.description}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {howItWorksSection.steps.map((item) => (
-          <Card key={item.step} className="flex flex-col justify-between">
-            <CardHeader className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="bg-accent-subtle rounded-sm px-2 py-0.5 font-mono text-caption font-semibold tabular-nums text-accent">
-                  {item.step}
+      <div className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 scrollbar-hide sm:-mx-6 sm:scroll-px-6 sm:px-6 md:mx-0 md:grid md:scroll-px-0 md:grid-cols-3 md:gap-4 md:overflow-visible md:px-0 md:pb-0">
+        {howItWorks.steps.map((step) => (
+          <Card
+            key={step.stepNumber}
+            className="w-[82%] shrink-0 snap-start border-border sm:w-[60%] md:w-auto"
+          >
+            <CardHeader className="space-y-2.5 pb-2">
+              <div className="flex items-center justify-between gap-2">
+                <span className="bg-accent-subtle inline-flex h-8 w-8 items-center justify-center rounded-lg font-mono text-xs font-semibold text-accent">
+                  {step.stepNumber}
                 </span>
-                <span className="text-text-muted text-caption">
-                  {item.meta}
-                </span>
+                <Badge variant="outline" className="text-[11px]">
+                  {step.moduleTag}
+                </Badge>
               </div>
-              <CardTitle className="font-heading text-title text-text">
-                {item.title}
-              </CardTitle>
+              <CardTitle className="text-base">{step.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-body-sm text-text-muted">{item.description}</p>
+              <CardDescription className="text-text-muted text-sm leading-relaxed">
+                {step.description}
+              </CardDescription>
             </CardContent>
           </Card>
         ))}

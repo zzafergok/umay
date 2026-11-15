@@ -1,6 +1,11 @@
 'use client';
 
-import { Card, CardHeader, CardTitle } from '@/components/core/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/card';
 import {
   Table,
   TableBody,
@@ -23,43 +28,69 @@ export function ItemMovementsCard({ movements, unit }: ItemMovementsCardProps) {
       <CardHeader>
         <CardTitle className="text-base">Stok Hareket Geçmişi</CardTitle>
       </CardHeader>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Tarih</TableHead>
-            <TableHead>İşlem</TableHead>
-            <TableHead className="text-right">Değişim</TableHead>
-            <TableHead className="text-right">Son Miktar</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {movements.length === 0 ? (
-            <TableRow>
-              <TableCell
-                colSpan={4}
-                className="text-center text-muted-foreground"
+
+      {movements.length === 0 ? (
+        <CardContent className="text-text-muted py-6 text-center text-sm">
+          Henüz stok hareketi yok.
+        </CardContent>
+      ) : (
+        <>
+          <CardContent className="space-y-2.5 pt-0 md:hidden">
+            {movements.map((mov) => (
+              <div
+                key={mov.id}
+                className="bg-surface-sunken/50 flex items-center justify-between gap-3 rounded-lg border border-border/80 px-3 py-2.5"
               >
-                Henüz stok hareketi yok.
-              </TableCell>
-            </TableRow>
-          ) : (
-            movements.map((mov) => (
-              <TableRow key={mov.id}>
-                <TableCell className="text-xs text-muted-foreground">
-                  {new Date(mov.at).toLocaleString('tr-TR')}
-                </TableCell>
-                <TableCell>{mov.reason || mov.type}</TableCell>
-                <TableCell className="text-right font-mono tabular-nums">
-                  {mov.delta > 0 ? `+${mov.delta}` : mov.delta}
-                </TableCell>
-                <TableCell className="text-right font-mono tabular-nums">
-                  {mov.quantityAfter} {unit}
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+                <div className="min-w-0 space-y-0.5">
+                  <p className="text-text truncate text-sm font-medium">
+                    {mov.reason || mov.type}
+                  </p>
+                  <p className="text-text-muted text-xs">
+                    {new Date(mov.at).toLocaleString('tr-TR')}
+                  </p>
+                </div>
+                <div className="shrink-0 text-right font-mono text-xs tabular-nums">
+                  <p className="text-text font-semibold">
+                    {mov.delta > 0 ? `+${mov.delta}` : mov.delta}
+                  </p>
+                  <p className="text-text-muted">
+                    {mov.quantityAfter} {unit}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+
+          <div className="hidden overflow-x-auto md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Tarih</TableHead>
+                  <TableHead>İşlem</TableHead>
+                  <TableHead className="text-right">Değişim</TableHead>
+                  <TableHead className="text-right">Son Miktar</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {movements.map((mov) => (
+                  <TableRow key={mov.id}>
+                    <TableCell className="text-xs text-muted-foreground">
+                      {new Date(mov.at).toLocaleString('tr-TR')}
+                    </TableCell>
+                    <TableCell>{mov.reason || mov.type}</TableCell>
+                    <TableCell className="text-right font-mono tabular-nums">
+                      {mov.delta > 0 ? `+${mov.delta}` : mov.delta}
+                    </TableCell>
+                    <TableCell className="text-right font-mono tabular-nums">
+                      {mov.quantityAfter} {unit}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      )}
     </Card>
   );
 }

@@ -119,13 +119,22 @@ export function ItemDetailBody({
       </DialogHeader>
 
       <Tabs defaultValue="overview" className="mt-1">
-        <TabsList className="w-full justify-start overflow-x-auto">
-          <TabsTrigger value="overview" className="text-xs">
+        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 p-1">
+          <TabsTrigger
+            value="overview"
+            className="min-w-0 truncate px-2 py-1.5 text-xs"
+          >
             Genel &amp; Özellikler
           </TabsTrigger>
-          <TabsTrigger value="movements" className="gap-1.5 text-xs">
-            <span>Stok Hareketleri</span>
-            <Badge variant="secondary" className="px-1.5 py-0 text-[10px]">
+          <TabsTrigger
+            value="movements"
+            className="min-w-0 gap-1.5 px-2 py-1.5 text-xs"
+          >
+            <span className="truncate">Stok Hareketleri</span>
+            <Badge
+              variant="secondary"
+              className="shrink-0 px-1.5 py-0 text-[10px]"
+            >
               {movements.length}
             </Badge>
           </TabsTrigger>
@@ -145,12 +154,13 @@ export function ItemDetailBody({
         </TabsContent>
       </Tabs>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+      <div className="bg-surface-raised/95 sticky bottom-0 z-10 mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 backdrop-blur-md sm:static sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
         <div className="flex flex-wrap items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => state.setQrOpen(true)}
+            className="min-h-[40px] sm:min-h-0"
           >
             <QrCode className="mr-1.5 h-4 w-4" />
             QR Etiket
@@ -159,6 +169,7 @@ export function ItemDetailBody({
             variant="destructive"
             size="sm"
             onClick={() => state.setDeleteOpen(true)}
+            className="min-h-[40px] sm:min-h-0"
           >
             <Trash2 className="mr-1.5 h-4 w-4" />
             Sil
@@ -169,10 +180,16 @@ export function ItemDetailBody({
             variant="outline"
             size="sm"
             onClick={() => onOpenChange(false)}
+            className="min-h-[40px] sm:min-h-0"
           >
             Kapat
           </Button>
-          <Button variant="primary" size="sm" onClick={state.handleOpenEdit}>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={state.handleOpenEdit}
+            className="min-h-[40px] sm:min-h-0"
+          >
             <Pencil className="mr-1.5 h-4 w-4" />
             Düzenle
           </Button>

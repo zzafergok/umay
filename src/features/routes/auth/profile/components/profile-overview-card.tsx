@@ -113,14 +113,15 @@ export function ProfileOverviewCard({
               <p className="text-body-sm text-text-muted truncate">
                 {currentUser.email}
               </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-text-subtle font-mono text-caption">
+              <div className="flex items-start gap-2 sm:items-center">
+                <span className="text-text-subtle min-w-0 flex-1 break-all font-mono text-caption">
                   {copy.accountIdLabel}: {currentUser.id}
                 </span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon-xs"
+                  className="h-9 w-9 shrink-0 sm:h-7 sm:w-7"
                   onClick={() => void handleCopyAccountId()}
                   aria-label={copy.copyIdLabel}
                   title={copy.copyIdLabel}
@@ -138,28 +139,44 @@ export function ProfileOverviewCard({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 lg:shrink-0">
-            <Button asChild variant="secondary" size="sm">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center lg:shrink-0">
+            <Button
+              asChild
+              variant="secondary"
+              size="sm"
+              className="min-h-[42px] sm:min-h-0"
+            >
               <Link href="/activity">
                 <Activity className="mr-1.5 h-4 w-4" aria-hidden="true" />
                 <span>{copy.activityLink}</span>
               </Link>
             </Button>
-            <Button asChild variant="secondary" size="sm">
+            <Button
+              asChild
+              variant="secondary"
+              size="sm"
+              className="min-h-[42px] sm:min-h-0"
+            >
               <Link href="/settings">
                 <Settings className="mr-1.5 h-4 w-4" aria-hidden="true" />
                 <span>{copy.settingsLink}</span>
               </Link>
             </Button>
-            <LogoutButton size="sm" variant="outline" />
+            <LogoutButton
+              size="sm"
+              variant="outline"
+              className="col-span-2 min-h-[42px] sm:col-span-1 sm:min-h-0"
+            />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 border-t border-border pt-5 sm:grid-cols-3 lg:grid-cols-5">
-          {statItems.map(({ label, value, Icon }) => (
+        <div className="grid grid-cols-2 gap-2.5 border-t border-border pt-5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5">
+          {statItems.map(({ label, value, Icon }, index) => (
             <div
               key={label}
-              className="bg-surface-sunken flex items-center gap-3 rounded-md border border-border px-4 py-3"
+              className={`bg-surface-sunken flex min-w-0 items-center gap-3 rounded-md border border-border px-3 py-3 sm:px-4 ${
+                index === statItems.length - 1 ? 'col-span-2 sm:col-span-1' : ''
+              }`}
             >
               <span className="bg-surface flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border">
                 <Icon className="text-text-muted h-4 w-4" aria-hidden="true" />

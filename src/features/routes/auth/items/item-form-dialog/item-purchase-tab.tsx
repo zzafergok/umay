@@ -39,8 +39,8 @@ export function ItemPurchaseTab({
   );
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <div className="space-y-2.5 sm:space-y-4">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
         <AmountField
           name="purchasePrice"
           label={
@@ -49,20 +49,24 @@ export function ItemPurchaseTab({
               : 'Satın Alma Fiyatı'
           }
           placeholder="0,00"
+          inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px]"
         />
         <SelectField
           name="currency"
           label="Para Birimi"
           options={CURRENCY_OPTIONS}
+          triggerClassName="h-9 min-h-[38px] w-full sm:h-11 sm:min-h-[44px]"
         />
         <TextField
           name="store"
           label="Mağaza / Tedarikçi"
           placeholder="Örn. Amazon, Bauhaus"
+          className="col-span-2 sm:col-span-1"
+          inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px]"
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
         <DateField
           name="purchaseDate"
           label="Satın Alma Tarihi"
@@ -88,13 +92,14 @@ export function ItemPurchaseTab({
           }
           valueFormat="iso-date"
           placeholder="Tarih seçiniz"
+          className="col-span-2 sm:col-span-1"
         />
       </div>
 
-      <div className="space-y-2 rounded-md border border-border p-3">
+      <div className="space-y-2 rounded-md border border-border p-2.5 sm:p-3">
         <Label
           htmlFor="item-photo-upload"
-          className="font-mono text-2xs uppercase tracking-wider text-ash"
+          className="text-text-muted font-mono text-2xs uppercase tracking-wider"
         >
           Ürün Fotoğrafları
         </Label>
@@ -110,18 +115,18 @@ export function ItemPurchaseTab({
             {photos.map((url, idx) => (
               <div
                 key={`${url}-${idx}`}
-                className="bg-surface-sunken flex items-center gap-1.5 rounded-sm border border-border px-2 py-1 text-xs"
+                className="bg-surface-sunken flex min-h-[40px] items-center gap-1.5 rounded-sm border border-border py-1 pl-2.5 pr-1 text-xs"
               >
                 <span>Fotoğraf #{idx + 1}</span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon-xs"
-                  className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
+                  className="text-danger/80 hover:bg-danger-subtle hover:text-danger h-8 w-8"
                   onClick={() => setDeletePhotoIndex(idx)}
                   aria-label={`Fotoğraf ${idx + 1} kaldır`}
                 >
-                  <Trash2 className="h-3 w-3" aria-hidden="true" />
+                  <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                 </Button>
               </div>
             ))}

@@ -1,332 +1,359 @@
 {
-  "badges": [
-    "Home Inventory & Stock Ledger",
-    "Lifecycle Parts Tracking",
-    "Offline-Ready PWA"
-  ],
   "hero": {
-    "title": "Your home's abundance, calmly accounted for.",
-    "description": "Track everything at home—from pantry staples and electronics to drawer cables and water purifier filters—in one calm, fast, mobile-first ledger.",
+    "badge": "Personal & Home Inventory",
+    "title": "Every product, lifecycle part, and receipt in one structured workspace.",
+    "description": "Adjust stock atomically, track filter and battery lifetimes, and scan shopping receipts with AI into your checklist. Try the interactive screen flow below—every view mirrors the real app inside.",
     "loginAction": "Sign in with Google",
-    "adminAction": "Open Dashboard",
+    "exploreAction": "Explore Screens",
     "highlights": [
-      { "label": "Stock Movements", "value": "Atomic Ledger" },
-      { "label": "Barcode & QR", "value": "Camera Scan" },
-      { "label": "Offline Ready", "value": "PWA Sync" }
+      "Atomic -1 / +1 stock & 30-day expiry / warranty tracking",
+      "AI Receipt Assistant powered by OpenRouter vision models",
+      "Item QR label printing, barcode scan & offline sync queue"
     ]
   },
   "heroPreview": {
-    "title": "Today's Home Ledger",
-    "subtitle": "Only items needing attention stand out",
-    "liveLabel": "Interactive Preview",
-    "tabs": [
-      {
-        "id": "today",
-        "label": "Today",
-        "items": [
-          {
-            "id": "filter-1",
-            "name": "Water Purifier Carbon Filter",
-            "location": "Kitchen · Under Sink",
-            "quantity": 1,
-            "unit": "spare",
-            "statusTone": "due_soon",
-            "statusLabel": "14 days left"
-          },
-          {
-            "id": "oil-1",
-            "name": "Extra Virgin Olive Oil (5L)",
-            "location": "Pantry · Bottom Shelf",
-            "quantity": 1,
-            "unit": "tin",
-            "statusTone": "low_stock",
-            "statusLabel": "Low stock"
-          },
-          {
-            "id": "hepa-1",
-            "name": "Robot Vacuum HEPA Filter",
-            "location": "Hallway · Utility Closet",
-            "quantity": 2,
-            "unit": "pcs",
-            "statusTone": "overdue",
-            "statusLabel": "4 days overdue"
-          },
-          {
-            "id": "cable-1",
-            "name": "USB-C 2m Braided Cable",
-            "location": "Study · Drawer 2",
-            "quantity": 4,
-            "unit": "pcs"
-          }
-        ]
+    "badge": "Live Screen Preview",
+    "title": "Synchronized flow across the real app screens",
+    "description": "Adjusting stock in the Items tab immediately updates Dashboard counters and Shopping suggestions.",
+    "routeNote": "Sample data · Connects to your isolated account data after sign-in",
+    "tabs": {
+      "home": "Dashboard",
+      "items": "Items",
+      "shopping": "Shopping"
+    },
+    "homeView": {
+      "statsLabels": {
+        "totalItems": "Total Items",
+        "lowStock": "Low Stock",
+        "dueParts": "Parts Due",
+        "openShopping": "Shopping Open"
       },
-      {
-        "id": "pantry",
-        "label": "Kitchen",
-        "items": [
-          {
-            "id": "coffee-1",
-            "name": "Filter Coffee (250g)",
-            "location": "Kitchen · Upper Cabinet",
-            "quantity": 2,
-            "unit": "bags"
-          },
-          {
-            "id": "oil-2",
-            "name": "Extra Virgin Olive Oil (5L)",
-            "location": "Pantry · Bottom Shelf",
-            "quantity": 1,
-            "unit": "tin",
-            "statusTone": "low_stock",
-            "statusLabel": "Low stock"
-          },
-          {
-            "id": "detergent-1",
-            "name": "Dishwasher Tablets",
-            "location": "Kitchen · Under Sink",
-            "quantity": 18,
-            "unit": "tabs"
-          }
-        ]
+      "attentionTitle": "Needs attention today",
+      "duePartsBaseCount": 1,
+      "duePartRow": {
+        "id": "part-brita",
+        "kind": "part",
+        "title": "Brita Maxtra+ Water Filter",
+        "subtitle": "Pitcher Filter · 4 days overdue",
+        "status": "overdue",
+        "statusLabel": "Overdue"
       },
-      {
-        "id": "parts",
-        "label": "Parts",
-        "items": [
-          {
-            "id": "part-1",
-            "name": "Water Purifier Carbon Filter",
-            "location": "Kitchen · Purifier",
-            "quantity": 1,
-            "unit": "spare",
-            "statusTone": "due_soon",
-            "statusLabel": "14 days left"
-          },
-          {
-            "id": "part-2",
-            "name": "Robot Vacuum HEPA Filter",
-            "location": "Hallway · Vacuum",
-            "quantity": 2,
-            "unit": "spares",
-            "statusTone": "overdue",
-            "statusLabel": "4 days overdue"
-          },
-          {
-            "id": "part-3",
-            "name": "Toothbrush Replacement Head",
-            "location": "Bathroom · Mirror Cabinet",
-            "quantity": 3,
-            "unit": "heads"
-          }
-        ]
-      }
-    ],
-    "footerNote": "Try the + / − buttons to preview stock updates"
+      "itemLowFallbackSubtitle": "Detected automatically from Items",
+      "itemOkBanner": "No critical low-stock items right now. Lower any item's stock in the Items tab to see live triggers."
+    },
+    "itemsView": {
+      "componentRef": "Quick Stock & Item Card Flow",
+      "minPrefix": "Min:",
+      "targetPrefix": "Target:",
+      "expiryPrefix": "Exp:",
+      "expiryDaysUnit": "d",
+      "detailLabel": "Details",
+      "editLabel": "Edit",
+      "lowStockHint": "Low-stock rule triggered · Dashboard & Shopping suggestion added",
+      "rows": [
+        {
+          "id": "item-usb-c",
+          "name": "Anker USB-C Braided Cable",
+          "categoryName": "Cables & Accessories",
+          "categoryColor": "--cat-1",
+          "categoryIcon": "cable",
+          "brand": "Anker",
+          "locationPath": "Home > Study > Cable Drawer",
+          "unit": "pcs",
+          "quantity": 2,
+          "minQuantity": 2,
+          "targetQuantity": 4,
+          "customFields": [
+            { "label": "Connector", "value": "USB-C" },
+            { "label": "Length", "value": "2 m" }
+          ],
+          "statusGoodLabel": "Healthy",
+          "statusLowLabel": "Low stock",
+          "statusOutLabel": "Out of stock"
+        },
+        {
+          "id": "item-filter-pack",
+          "name": "Brita Maxtra+ Spare Cartridge",
+          "categoryName": "Kitchen & Pantry",
+          "categoryColor": "--cat-3",
+          "categoryIcon": "utensils",
+          "brand": "Brita",
+          "locationPath": "Home > Kitchen > Under Sink",
+          "unit": "pcs",
+          "quantity": 3,
+          "minQuantity": 2,
+          "targetQuantity": 4,
+          "expiresInDays": 18,
+          "customFields": [{ "label": "Series", "value": "Maxtra+" }],
+          "statusGoodLabel": "Healthy",
+          "statusLowLabel": "Low stock",
+          "statusOutLabel": "Out of stock"
+        }
+      ]
+    },
+    "shoppingView": {
+      "receiptCardTitle": "AI Receipt Assistant",
+      "receiptCardBadge": "OpenRouter Vision",
+      "receiptFileName": "grocery-receipt-nov-15.jpg",
+      "receiptSummary": "3 line items extracted · Ready to add to list",
+      "receiptAddAction": "Add to Shopping List",
+      "receiptAddedAction": "Added to List",
+      "receiptLines": [
+        {
+          "id": "rec-1",
+          "name": "Dishwasher Tablets",
+          "quantityText": "1 box"
+        },
+        {
+          "id": "rec-2",
+          "name": "Microfiber Cleaning Cloth",
+          "quantityText": "3 pcs"
+        }
+      ],
+      "smartSuggestionsTitle": "Smart Suggestions",
+      "lowStockSuggestionReason": "Quantity fell below minimum threshold",
+      "duePartSuggestionTitle": "Brita Maxtra+ Water Filter",
+      "duePartSuggestionReason": "Replacement cycle overdue · auto suggestion",
+      "listTitle": "Shopping Checklist",
+      "pendingBadge": "Pending",
+      "boughtBadge": "Bought",
+      "initialRows": [
+        {
+          "id": "shop-hepa",
+          "title": "Dyson V15 HEPA Filter",
+          "source": "auto_part_due",
+          "sourceLabel": "Part due",
+          "checked": false
+        }
+      ]
+    }
   },
-  "howItWorksSection": {
-    "badge": "How It Works",
-    "title": "Organize Your Home in Three Steps",
-    "description": "No bloated spreadsheets—just a calm workflow built for everyday home routines.",
+  "howItWorks": {
+    "badge": "3-Step Workflow",
+    "title": "Real day-to-day flow from setup to replenishment",
+    "description": "Once signed in, the core modules feed each other in this exact sequence.",
     "steps": [
       {
-        "step": "01",
-        "title": "Map Rooms & Cabinets",
-        "description": "Build a Home > Kitchen > Upper Cabinet tree and attach custom fields per category.",
-        "meta": "Location Tree & QR Labels"
+        "stepNumber": "01",
+        "title": "Seed Category Presets & Location Tree",
+        "description": "Install 5 built-in presets (Cables, Electronics, Kitchen, Spare Parts, Health) in one click and build your home room-shelf hierarchy.",
+        "moduleTag": "Categories & Locations"
       },
       {
-        "step": "02",
-        "title": "Scan Barcodes or Log in One Tap",
-        "description": "Scan items with your camera and record daily consumption with atomic + / − actions.",
-        "meta": "Atomic Stock Ledger"
+        "stepNumber": "02",
+        "title": "Track Items & Link Lifecycle Parts",
+        "description": "Adjust stock atomically with -1 / +1, print item QR labels or scan barcodes, and link filters or batteries to spare stock items.",
+        "moduleTag": "Items · Parts · Scan"
       },
       {
-        "step": "03",
-        "title": "Stay Ahead of Restocks & Maintenance",
-        "description": "Low-stock thresholds and due lifecycle parts automatically feed your shopping list.",
-        "meta": "FEFO & Lifecycle Alerts"
+        "stepNumber": "03",
+        "title": "Review Dashboard & Scan Receipts with AI",
+        "description": "Catch overdue parts and low stock on your dashboard, or upload a receipt photo to extract items straight into your shopping list.",
+        "moduleTag": "Dashboard & Shopping"
       }
     ]
   },
   "lifecycleCallout": {
-    "badge": "Lifecycle Parts",
-    "title": "Never Miss a Filter, Battery, or Maintenance Cycle",
-    "description": "Water purifier filters, toothbrush heads, robot vacuum brushes, or printer cartridges—track remaining lifespan by time or usage, mark replaced in two taps, and auto-deduct from spare stock.",
-    "features": [
-      "Remaining lifespan bar by time or usage (liters, prints, hours)",
-      "2-tap replacement log with automatic spare stock deduction",
-      "FEFO expiration alerts for pantry and consumables",
-      "Automatic shopping list suggestions and printable QR labels"
-    ],
-    "action": "Start Your Inventory →",
-    "demoPart": {
-      "name": "Water Purifier Carbon Filter",
-      "appliance": "Kitchen · Under-Sink Purifier",
-      "statusLabel": "Due soon",
-      "remainingPercent": 18,
-      "daysRemaining": 14,
-      "metaLabel": "180-day lifespan",
-      "spareLabel": "Spare stock",
-      "spareCount": 2,
-      "replaceAction": "Mark as replaced",
-      "replacedNote": "Replacement logged, spare stock reduced by 1"
-    }
+    "badge": "Lifecycle Part Tracking",
+    "title": "Automatic spare-stock deduction when a part is replaced.",
+    "description": "Every lifecycle part on the Parts screen tracks remaining days and a semantic progress bar. Confirming \"Mark Replaced\" deducts 1 from any linked spare stock item and records cost and notes.",
+    "samplePartName": "Brita Maxtra+ Filter Cartridge",
+    "sampleParentItem": "Kitchen Pitcher · Home > Kitchen",
+    "spareStockNote": "Automatically deducts 1 from linked spare item stock",
+    "replaceHint": "Tip: Inside the app, the Replace dialog also lets you log cost and maintenance notes.",
+    "dueStatus": "Due soon",
+    "replacedStatus": "Healthy",
+    "remainingDaysLabel": "Remaining Life",
+    "remainingDueText": "6 days left (30-day cycle)",
+    "remainingReplacedText": "30 days reset (fresh cycle)",
+    "percentDue": 18,
+    "percentReplaced": 100,
+    "replaceDemoAction": "Mark Replaced",
+    "resetDemoAction": "Reset Demo"
   },
   "featuresSection": {
-    "badge": "Umay Features",
-    "title": "Calm, Fast, and Reliable Home Tracking",
-    "description": "Everything you need at your fingertips without visual clutter.",
+    "badge": "Implemented Modules",
+    "title": "Every highlight maps to a working screen inside",
+    "description": "No conceptual mockups—every capability showcased here corresponds to an active screen and workflow after login.",
     "cards": [
       {
-        "icon": "layers",
-        "badge": "Stock Ledger",
-        "title": "Atomic Stock Movements",
-        "description": "Every addition, deduction, and consumption is recorded in a ledger so quantities never drift.",
-        "points": [
-          "One-tap + / − and consume actions",
-          "Low-stock threshold and smart restock suggestions",
-          "Expiration and warranty countdowns"
+        "id": "panel-atomic",
+        "title": "Dashboard & Atomic Stock Control",
+        "description": "Daily summary metrics for total items, low stock, due parts, and open shopping with modal Details/Edit/Delete workflows.",
+        "badge": "Live Summary",
+        "icon": "sparkles",
+        "categoryToken": 1,
+        "highlights": [
+          "Instant -1 / +1 adjustments in card and table views",
+          "30-day expiration (SKT) & warranty alerts"
         ]
       },
       {
-        "icon": "palette",
-        "badge": "Lifecycle",
-        "title": "Replaceable Parts Management",
-        "description": "Track filters, batteries, and consumables linked to their parent appliances.",
-        "points": [
-          "OK / Due Soon / Overdue status indicators",
-          "Planned vs actual lifespan and cost tracking",
-          "Automatic spare part stock deduction"
+        "id": "lifecycle-parts",
+        "title": "Lifecycle Parts & Replacement Logs",
+        "description": "Filter by All, Overdue, Due Soon, and Healthy tabs; deduct linked spare stock automatically when logging replacements.",
+        "badge": "Maintenance",
+        "icon": "wrench",
+        "categoryToken": 2,
+        "highlights": [
+          "Optional replacement cost and maintenance notes",
+          "Full replacement timeline on each part detail page"
         ]
       },
       {
-        "icon": "layout",
-        "badge": "Locations & Categories",
-        "title": "Rooms, Cabinets & Custom Fields",
-        "description": "Find anything quickly with a hierarchical location tree and category-specific fields.",
-        "points": [
-          "Home > Kitchen > Upper Cabinet hierarchy",
-          "Custom fields for cable length, connector, serial no",
-          "Instant search via Ctrl/⌘+K command palette"
+        "id": "ai-receipt",
+        "title": "AI Receipt Assistant & Smart Shopping",
+        "description": "Analyze receipt photos with OpenRouter vision models, extract line items, and merge with low-stock or part-due suggestions.",
+        "badge": "OpenRouter AI",
+        "icon": "receipt",
+        "categoryToken": 3,
+        "highlights": [
+          "Free-only vision model toggle & receipt preview",
+          "One-click add from smart restock suggestions"
         ]
       },
       {
-        "icon": "shield",
-        "badge": "Barcode & QR",
-        "title": "Scan, Find, or Print Labels",
-        "description": "Scan barcodes with your camera for quick stock updates or print QR labels for shelves.",
-        "points": [
-          "BarcodeDetector with @zxing/browser fallback",
-          "Printable QR labels for shelves, boxes, and items",
-          "Instant stock increase or deduction from scans"
+        "id": "category-presets",
+        "title": "Category Presets & Custom Fields",
+        "description": "Apply 5 starter presets in one click or define custom text, number, select, date, URL, and boolean schemas per category.",
+        "badge": "5 Presets",
+        "icon": "tags",
+        "categoryToken": 4,
+        "highlights": [
+          "Summary custom fields surfaced directly on item cards",
+          "Synchronized category icons & 6 semantic color tokens"
         ]
       },
       {
-        "icon": "globe",
-        "badge": "Offline PWA",
-        "title": "Works Even in the Pantry",
-        "description": "Cached lists stay readable offline and pending writes sync automatically when back online.",
-        "points": [
-          "Mobile-first thumb-friendly bottom navigation",
-          "Light and dark theme support",
-          "Turkish and English localization"
+        "id": "scan-locations",
+        "title": "Barcode / Item QR & Location Tree",
+        "description": "Scan barcodes or item QR codes via camera or manual input to open item modals directly; generate printable item QR labels.",
+        "badge": "Scan & Tree",
+        "icon": "scan",
+        "categoryToken": 5,
+        "highlights": [
+          "Unknown barcodes prefill a new item form automatically",
+          "Nested room-shelf-drawer hierarchy with item counts"
         ]
       },
       {
-        "icon": "check",
-        "badge": "Secure by Default",
-        "title": "Your Data Stays Yours",
-        "description": "All records are strictly scoped to your user ID and protected with server-side sessions.",
-        "points": [
-          "Server-side session and uid isolation",
-          "Client and server Zod validation",
-          "Full activity log and transparent history"
+        "id": "settings-security",
+        "title": "Density, Themes & User Isolation",
+        "description": "Switch between Compact and Detailed view density, Light/Dark/System themes, TR/EN locale, and resilient offline mutation queueing.",
+        "badge": "Personal Vault",
+        "icon": "sliders",
+        "categoryToken": 6,
+        "highlights": [
+          "All records strictly isolated per authenticated account",
+          "Activity audit trail & permanent account deletion"
         ]
       }
     ]
   },
   "quickRoutesSection": {
-    "badge": "App Surfaces",
-    "title": "Jump Straight Into Umay",
-    "description": "Sign in to start managing your home inventory right away.",
+    "badge": "App Screens",
+    "title": "Real workspaces unlocked right after sign-in",
+    "description": "Every application workspace is protected by session verification. Sign in to jump straight to any of the 8 workspaces below.",
+    "authRequiredBadge": "Sign-in required",
+    "openAction": "Sign in to Open",
     "routes": [
       {
-        "href": "/home",
+        "id": "dashboard",
         "title": "Dashboard",
-        "subtitle": "Today's priorities and stock summary",
-        "badge": "Panel",
-        "icon": "user"
+        "description": "Needs-attention feed, inventory summary metrics, and category breakdown.",
+        "icon": "dashboard"
       },
       {
-        "href": "/items",
-        "title": "Items & Stock",
-        "subtitle": "Kitchen, electronics, cables & home goods",
-        "badge": "Stock",
-        "icon": "globe"
+        "id": "items",
+        "title": "Items",
+        "description": "Card/table views, -1/+1 stock controls, SKT tracking, item QR & detail modals.",
+        "icon": "package"
       },
       {
-        "href": "/parts",
+        "id": "parts",
         "title": "Lifecycle Parts",
-        "subtitle": "Filters, batteries & replacement schedule",
-        "badge": "Parts",
-        "icon": "sparkles"
+        "description": "Overdue and due-soon filters, replacement logging, and spare stock link.",
+        "icon": "wrench"
       },
       {
-        "href": "/locations",
+        "id": "shopping",
+        "title": "Shopping & AI Receipt",
+        "description": "AI Receipt Assistant, smart restock suggestions, and prioritized checklist.",
+        "icon": "shopping"
+      },
+      {
+        "id": "locations",
         "title": "Locations",
-        "subtitle": "Home, room, and cabinet hierarchy",
-        "badge": "Places",
-        "icon": "lock"
+        "description": "Nested room, shelf, and drawer hierarchy with live per-location item counts.",
+        "icon": "mapPin"
       },
       {
-        "href": "/shopping",
-        "title": "Shopping List",
-        "subtitle": "Low-stock and due-part restock suggestions",
-        "badge": "List",
-        "icon": "shield"
+        "id": "categories",
+        "title": "Categories",
+        "description": "5 one-click starter presets and custom field schemas (text, number, select, date).",
+        "icon": "tags"
+      },
+      {
+        "id": "scan",
+        "title": "Barcode & QR Scan",
+        "description": "Camera or manual barcode/QR lookup to open or create items.",
+        "icon": "scan"
+      },
+      {
+        "id": "activity",
+        "title": "Activity",
+        "description": "Chronological audit trail of stock changes, part replacements, and purchases.",
+        "icon": "history"
       }
     ]
   },
   "faqSection": {
     "badge": "FAQ",
-    "title": "Common Questions",
-    "description": "Key things to know before setting up your home ledger.",
+    "title": "Clear answers about how Umay works",
+    "description": "Details on access protection, AI receipt scanning, QR/barcode support, and appearance preferences.",
     "items": [
       {
-        "id": "offline",
-        "question": "Does Umay work offline in a pantry or basement?",
-        "answer": "Yes. Umay is an offline-ready PWA. Recently viewed lists are cached on your device, and any stock changes made offline are queued and synced automatically once you are back online."
+        "id": "auth-guard",
+        "question": "Why do app screens require signing in first?",
+        "answer": "All inventory, lifecycle parts, shopping lists, and preferences belong strictly to your signed-in account. Unauthenticated or expired requests redirect cleanly back here, while valid sessions resume on your last visited app screen."
       },
       {
-        "id": "privacy",
-        "question": "Is my inventory data private?",
-        "answer": "Every item, location, and activity record is strictly isolated by your user ID (UID), and all requests are validated on the server with session checks and Zod schemas."
+        "id": "ai-receipt",
+        "question": "How does the AI Receipt Assistant work?",
+        "answer": "Inside the Shopping screen, you can upload a receipt image and analyze it with OpenRouter vision models (with an optional free-models-only toggle) to extract raw text and structured items directly into your shopping list."
       },
       {
-        "id": "lifecycle",
-        "question": "How does lifecycle part tracking work?",
-        "answer": "Link consumables like water filters, vacuum brushes, or batteries to their parent appliances. Set a time or usage lifespan, and log replacements in two taps while auto-deducting from spare stock."
+        "id": "qr-barcode",
+        "question": "What do QR labels and barcode scanning support?",
+        "answer": "Each item's detail modal lets you generate and print a dedicated item QR label. Scanning a barcode or QR code in Barcode & QR Scan opens the matching item modal immediately, or prefills a new item form if unmatched."
       },
       {
-        "id": "scanner",
-        "question": "Do I need a separate app to scan barcodes or QR labels?",
-        "answer": "No. Built-in camera support (BarcodeDetector with @zxing/browser fallback) lets you scan product barcodes and shelf QR labels right inside Umay."
+        "id": "offline-settings",
+        "question": "How do view density, theme switching, and offline mode behave?",
+        "answer": "In Settings, you can switch Light/Dark/System themes, TR/EN locale, Compact/Detailed density, currency, and default units. Stock or form changes made offline are queued in your browser and synced once reconnected."
       }
     ]
   },
   "footerCta": {
-    "badge": "Get Started",
-    "title": "Open your home's inventory ledger today.",
-    "description": "Sign in with your Google account in seconds and add your first room and item.",
-    "loginAction": "Sign in with Google",
-    "adminAction": "Open Dashboard",
-    "copyright": "Umay © 2026 · Your home's abundance, accounted for.",
-    "anchors": [
-      { "href": "#nasil-calisir", "label": "How It Works" },
-      { "href": "#omurlu-parcalar", "label": "Lifecycle Parts" },
-      { "href": "#ozellikler", "label": "Features" },
-      { "href": "#ekranlar", "label": "Surfaces" },
-      { "href": "#sss", "label": "FAQ" }
+    "navLinks": [
+      { "label": "How It Works", "href": "#nasil-calisir" },
+      { "label": "Lifecycle Parts", "href": "#omurlu-parcalar" },
+      { "label": "Features", "href": "#ozellikler" },
+      { "label": "Screens", "href": "#ekranlar" },
+      { "label": "FAQ", "href": "#sss" }
     ]
+  },
+  "mobileShell": {
+    "navAriaLabel": "Mobile primary navigation",
+    "tabs": {
+      "start": "Start",
+      "preview": "Preview",
+      "features": "Features",
+      "screens": "Screens"
+    },
+    "openPreviewCta": "Try Live Preview",
+    "openScreensCta": "Browse All Screens",
+    "screensCountLabel": "8 Workspaces",
+    "featuresExpandHint": "Every module opens directly once you sign in."
   }
 }

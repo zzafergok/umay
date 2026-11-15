@@ -113,17 +113,29 @@ function CategoryFormBody({
         className="space-y-4"
       >
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full justify-start overflow-x-auto">
-            <TabsTrigger value="general" className="text-xs">
+          <TabsList className="grid h-auto w-full grid-cols-2 gap-1 p-1 sm:grid-cols-4">
+            <TabsTrigger
+              value="general"
+              className="min-w-0 truncate px-2 py-1.5 text-[11px] sm:text-xs"
+            >
               1. Genel &amp; Görünüm
             </TabsTrigger>
-            <TabsTrigger value="defaults" className="text-xs">
+            <TabsTrigger
+              value="defaults"
+              className="min-w-0 truncate px-2 py-1.5 text-[11px] sm:text-xs"
+            >
               2. Ürün Ayarları
             </TabsTrigger>
-            <TabsTrigger value="fields" className="text-xs">
+            <TabsTrigger
+              value="fields"
+              className="min-w-0 truncate px-2 py-1.5 text-[11px] sm:text-xs"
+            >
               3. Özel Alanlar ({watchedFields.length})
             </TabsTrigger>
-            <TabsTrigger value="preview" className="text-xs">
+            <TabsTrigger
+              value="preview"
+              className="min-w-0 truncate px-2 py-1.5 text-[11px] sm:text-xs"
+            >
               4. Önizleme
             </TabsTrigger>
           </TabsList>
@@ -173,15 +185,19 @@ function CategoryFormBody({
           </TabsContent>
         </Tabs>
 
-        <div className="flex flex-col-reverse gap-2 border-t border-border pt-3 sm:flex-row sm:justify-end">
+        <div className="bg-surface/95 sticky bottom-0 z-10 grid grid-cols-2 gap-2 border-t border-border pt-2.5 backdrop-blur sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
           <Button
             type="button"
             variant="outline"
+            className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
             onClick={() => onOpenChange(false)}
           >
             Vazgeç
           </Button>
-          <SubmitButton isLoading={saving}>
+          <SubmitButton
+            isLoading={saving}
+            className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+          >
             {dialogState.mode === 'edit'
               ? 'Değişiklikleri Kaydet'
               : 'Kategoriyi Kaydet'}
@@ -205,7 +221,10 @@ export function CategoryFormDialog({
 
   return (
     <Dialog open={dialogState.open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-3xl">
+      <DialogContent
+        mobilePresentation="sheet"
+        className="max-h-[90dvh] overflow-y-auto sm:max-w-3xl"
+      >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>

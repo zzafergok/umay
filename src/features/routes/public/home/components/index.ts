@@ -7,4 +7,6 @@ export * from './feature-info-cards';
 export * from './quick-routes-section';
 export * from './faq-section';
 export * from './home-footer-cta';
+export * from './public-mobile-dock';
+export * from './public-mobile-shell-view';
 export * from './public-home-client';

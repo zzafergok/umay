@@ -30,18 +30,18 @@ export function ItemTechnicalTab({
   const customFields = activeCategory?.customFields ?? [];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2.5 sm:space-y-4">
       {activeCategory && customFields.length > 0 ? (
-        <div className="bg-surface-sunken/30 space-y-3 rounded-md border border-border p-3">
+        <div className="bg-surface-sunken/30 space-y-2.5 rounded-md border border-border p-2.5 sm:space-y-3 sm:p-3">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-text-muted text-xs font-semibold uppercase tracking-wider">
+            <p className="text-text-muted truncate text-xs font-semibold uppercase tracking-wider">
               {activeCategory.name} Özel Alanları
             </p>
-            <Badge variant="secondary" className="text-[11px]">
+            <Badge variant="secondary" className="shrink-0 text-[11px]">
               {customFields.length} alan
             </Badge>
           </div>
-          <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-1 sm:gap-3">
             {customFields.map((field) => (
               <CustomFieldInput
                 key={field.key}
@@ -54,17 +54,18 @@ export function ItemTechnicalTab({
           </div>
         </div>
       ) : (
-        <p className="text-text-muted rounded-md border border-dashed border-border p-3 text-xs">
+        <p className="text-text-muted rounded-md border border-dashed border-border p-2.5 text-xs sm:p-3">
           Seçili kategoride henüz özel alan tanımlı değil. Kategoriler
           sayfasından bu kategoriye özel inputlar ekleyebilirsiniz.
         </p>
       )}
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
         <TextField
           name="model"
           label={defaults?.trackBrandModel ? 'Model (Önerilen)' : 'Model'}
           placeholder="Örn. PowerLine III"
+          inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px]"
         />
         <TextField
           name="serialNumber"
@@ -74,6 +75,7 @@ export function ItemTechnicalTab({
               : 'Seri Numarası'
           }
           placeholder="Örn. SN-2026-001"
+          inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px]"
         />
       </div>
 

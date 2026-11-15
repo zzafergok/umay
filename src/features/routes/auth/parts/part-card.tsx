@@ -2,7 +2,7 @@
 
 import { RefreshCw } from 'lucide-react';
 import { Button } from '@/components/core/button';
-import { Card, CardContent } from '@/components/core/card';
+import { Card, CardContent, CardTitle } from '@/components/core/card';
 import { Link } from '@/components/core/link';
 import { LifecycleProgressBar } from '@/components/core/progress';
 import { StatusPill, type StatusTone } from '@/components/core/status-pill';
@@ -48,9 +48,7 @@ export function PartCard({
     <Card>
       <CardContent className="space-y-3">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-heading text-title text-text line-clamp-1">
-            {part.name}
-          </h3>
+          <CardTitle className="line-clamp-1 text-base">{part.name}</CardTitle>
           {pill ? <StatusPill tone={pill.tone} label={pill.label} /> : null}
         </div>
 
@@ -84,7 +82,12 @@ export function PartCard({
             <RefreshCw className="mr-1.5 h-4 w-4" aria-hidden="true" />
             Değiştirildi
           </Button>
-          <Button asChild size="sm" variant="ghost">
+          <Button
+            asChild
+            size="sm"
+            variant="ghost"
+            className="min-h-[44px] md:min-h-0"
+          >
             <Link href={`/parts/${part.id}`}>Geçmiş</Link>
           </Button>
         </div>

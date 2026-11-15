@@ -110,7 +110,7 @@ export function CategoryItemDefaultsPanel({
             placeholder="Örn. adet, paket, lt"
             className="h-9 text-xs"
           />
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1.5 sm:gap-1">
             {UNIT_SUGGESTIONS.map((unit) => (
               <Button
                 key={unit}
@@ -118,7 +118,7 @@ export function CategoryItemDefaultsPanel({
                 size="xs"
                 variant={value.defaultUnit === unit ? 'default' : 'outline'}
                 onClick={() => onChange({ ...value, defaultUnit: unit })}
-                className="h-6 px-2 text-[11px]"
+                className="min-h-[36px] px-2.5 text-xs sm:h-6 sm:min-h-0 sm:px-2 sm:text-[11px]"
               >
                 {unit}
               </Button>

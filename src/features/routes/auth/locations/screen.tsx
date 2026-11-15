@@ -130,7 +130,10 @@ export function LocationsScreen() {
         <p className="text-sm text-muted-foreground">
           Oda, dolap ve çekmece hiyerarşisini yönet.
         </p>
-        <Button onClick={() => setOpen(true)}>
+        <Button
+          onClick={() => setOpen(true)}
+          className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
+        >
           <Plus className="mr-1.5 h-4 w-4" />
           Konum Ekle
         </Button>
@@ -157,27 +160,27 @@ export function LocationsScreen() {
             return (
               <Card key={loc.id}>
                 <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
-                  <div className="space-y-1">
+                  <div className="min-w-0 flex-1 space-y-1">
                     <CardTitle className="flex items-center gap-2 text-base">
-                      <MapPin className="text-umay-blue h-4 w-4" />
-                      <span>{loc.name}</span>
+                      <MapPin className="text-umay-blue h-4 w-4 shrink-0" />
+                      <span className="truncate">{loc.name}</span>
                     </CardTitle>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="break-words text-xs text-muted-foreground">
                       {loc.path.join(' > ')}
                     </p>
                   </div>
-                  <Badge variant="outline" className="tabular-nums">
+                  <Badge variant="outline" className="shrink-0 tabular-nums">
                     {itemCount} ürün
                   </Badge>
                 </CardHeader>
-                <CardContent className="flex items-center justify-between pt-2">
-                  <span className="truncate text-xs text-muted-foreground">
+                <CardContent className="flex items-center justify-between gap-2 pt-2">
+                  <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
                     {loc.note || 'Not yok'}
                   </span>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
+                    className="text-danger/80 hover:bg-danger-subtle hover:text-danger h-10 w-10 shrink-0 sm:h-8 sm:w-8"
                     aria-label={`${loc.name} konumunu sil`}
                     onClick={() => setDeleteTarget(loc)}
                   >
@@ -191,7 +194,7 @@ export function LocationsScreen() {
       )}
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent mobilePresentation="sheet">
           <DialogHeader>
             <DialogTitle>Yeni Konum Ekle</DialogTitle>
           </DialogHeader>
@@ -211,6 +214,7 @@ export function LocationsScreen() {
               name="parentId"
               label="Üst Konum"
               options={parentOptions}
+              triggerClassName="w-full [&>span]:truncate"
             />
             <TextField
               name="note"

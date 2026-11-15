@@ -9,7 +9,7 @@ import { CompactFilterSelect } from './compact-filter-select';
 import type { ItemsFilterToolbarProps } from './types';
 
 const COMPACT_FILTER_BASE =
-  'h-7 min-h-[28px] rounded-sm px-2.5 text-caption font-medium transition-colors';
+  'h-9 min-h-[36px] md:h-7 md:min-h-[28px] rounded-sm px-2.5 text-caption font-medium transition-colors';
 const ACTIVE_FILTER_CLASS = cn(
   COMPACT_FILTER_BASE,
   'bg-accent-subtle text-accent hover:bg-accent-subtle/80 hover:text-accent',
@@ -89,7 +89,7 @@ export function ItemsFilterToolbar({
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Ürün, marka, barkod veya etiket ara..."
             aria-label="Ürün, marka, barkod veya etiket ara"
-            className="text-body-sm h-9 min-h-[36px] flex-1 border-0 bg-transparent px-0 py-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="text-body-sm h-10 min-h-[40px] flex-1 border-0 bg-transparent px-0 py-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 md:h-9 md:min-h-[36px]"
           />
           {search && (
             <Button
@@ -98,7 +98,7 @@ export function ItemsFilterToolbar({
               size="icon-xs"
               onClick={() => onSearchChange('')}
               aria-label="Aramayı temizle"
-              className="text-text-muted hover:text-text size-6 shrink-0 rounded-sm"
+              className="text-text-muted hover:text-text size-9 shrink-0 rounded-sm md:size-6"
             >
               <X className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
@@ -167,7 +167,7 @@ export function ItemsFilterToolbar({
               onClick={handleResetFilters}
               aria-label="Tüm filtreleri temizle"
               title="Filtreleri temizle"
-              className="text-text-muted hover:bg-surface hover:text-text size-7 shrink-0 rounded-sm"
+              className="text-text-muted hover:bg-surface hover:text-text size-9 shrink-0 rounded-sm md:size-7"
             >
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
@@ -175,7 +175,7 @@ export function ItemsFilterToolbar({
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center justify-end gap-2">
+      <div className="hidden shrink-0 items-center justify-end gap-2 md:flex">
         <div
           role="group"
           aria-label="Görünüm modu"

@@ -146,8 +146,8 @@ export async function PublicShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="bg-bg text-text flex min-h-screen flex-col">
-      <header className="bg-surface sticky top-0 z-40 border-b border-border">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <header className="bg-surface/95 sticky top-0 z-40 border-b border-border backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-16 lg:gap-4 lg:px-8">
           <BrandMark copy={copy.brand} />
           <ShellNav
             items={mapNavItems(copy.publicNav)}

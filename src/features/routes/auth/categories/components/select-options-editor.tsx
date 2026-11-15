@@ -38,12 +38,13 @@ export function SelectOptionsEditor({
     onChange((prev) => ({
       ...prev,
       options: prev.options.filter((o) => o !== option),
-      defaultValue: prev.defaultValue === option ? undefined : prev.defaultValue,
+      defaultValue:
+        prev.defaultValue === option ? undefined : prev.defaultValue,
     }));
   };
 
   return (
-    <div className="space-y-3 rounded-md border border-border bg-surface p-3">
+    <div className="bg-surface space-y-3 rounded-md border border-border p-3">
       <div className="space-y-1.5">
         <Label htmlFor="cf-draft-option" className="text-xs">
           Liste Seçenekleri
@@ -64,7 +65,13 @@ export function SelectOptionsEditor({
             placeholder="Örn. USB-C (Enter ile ekle)"
             className="h-9 text-xs"
           />
-          <Button type="button" variant="outline" size="sm" onClick={addOption}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="min-h-[38px] sm:min-h-0"
+            onClick={addOption}
+          >
             <Plus className="mr-1 h-3.5 w-3.5" />
             Ekle
           </Button>
@@ -75,7 +82,11 @@ export function SelectOptionsEditor({
         <div className="space-y-2">
           <div className="flex flex-wrap gap-1.5">
             {draft.options.map((opt) => (
-              <Badge key={opt} variant="secondary" className="gap-1 pr-1 text-xs">
+              <Badge
+                key={opt}
+                variant="secondary"
+                className="gap-1 py-1 pr-1 text-xs sm:py-0.5"
+              >
                 <span>{opt}</span>
                 <Button
                   type="button"
@@ -83,9 +94,9 @@ export function SelectOptionsEditor({
                   size="icon-xs"
                   onClick={() => removeOption(opt)}
                   aria-label={`${opt} seçeneğini kaldır`}
-                  className="h-4 w-4 rounded-full p-0 hover:bg-danger/15 hover:text-danger"
+                  className="hover:bg-danger/15 hover:text-danger h-7 w-7 rounded-full p-0 sm:h-5 sm:w-5"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                 </Button>
               </Badge>
             ))}
@@ -107,7 +118,10 @@ export function SelectOptionsEditor({
                 }))
               }
             >
-              <SelectTrigger id="cf-draft-default-select" className="h-9 text-xs">
+              <SelectTrigger
+                id="cf-draft-default-select"
+                className="h-9 text-xs"
+              >
                 <SelectValue placeholder="Varsayılan yok" />
               </SelectTrigger>
               <SelectContent>
@@ -124,7 +138,7 @@ export function SelectOptionsEditor({
           </div>
         </div>
       ) : (
-        <p className="text-xs text-text-muted">
+        <p className="text-text-muted text-xs">
           En az bir seçenek ekleyin (örn. USB-C, Lightning, HDMI).
         </p>
       )}

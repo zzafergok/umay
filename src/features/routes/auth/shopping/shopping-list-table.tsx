@@ -35,6 +35,7 @@ import type {
 import { formatCurrency } from '@/lib/utils';
 import { ShoppingListRow } from './shopping-list-row';
 import { ShoppingListToolbar } from './shopping-list-toolbar';
+import { ShoppingMobileCards } from './shopping-mobile-cards';
 import type {
   ShoppingPriorityFilter,
   ShoppingStatusFilter,
@@ -170,7 +171,18 @@ export function ShoppingListTable({
           </Empty>
         ) : (
           <>
-            <div className="overflow-hidden rounded-md border border-border">
+            <ShoppingMobileCards
+              entries={filteredList}
+              itemMap={itemMap}
+              categoryMap={categoryMap}
+              currency={currency}
+              onToggleDone={onToggleDone}
+              onAdjustQty={onAdjustQty}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+
+            <div className="hidden overflow-hidden rounded-md border border-border md:block">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -200,12 +212,12 @@ export function ShoppingListTable({
               </Table>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 text-caption text-text-muted">
+            <div className="text-text-muted flex flex-wrap items-center justify-between gap-2 text-caption">
               <span className="font-mono tabular-nums">
                 Gösterilen: {filteredList.length} / {list.length} kalem
               </span>
               {filteredEstimatedTotal > 0 && (
-                <span className="font-mono tabular-nums text-text">
+                <span className="text-text font-mono tabular-nums">
                   Listelenen tahmini tutar:{' '}
                   {formatCurrency(filteredEstimatedTotal, {
                     currency,

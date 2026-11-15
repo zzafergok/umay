@@ -108,7 +108,7 @@ export function StandardCardList({
                 action.onClick(e);
               }}
               className={cn(
-                'bg-surface-sunken text-text-muted h-8 w-8 rounded-md border border-border',
+                'bg-surface-sunken text-text-muted h-10 w-10 rounded-md border border-border md:h-8 md:w-8',
                 action.variant === 'destructive' || action.variant === 'rose'
                   ? 'hover:border-danger/40 hover:bg-danger-subtle hover:text-danger'
                   : 'hover:bg-accent-subtle hover:border-accent/40 hover:text-accent',

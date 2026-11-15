@@ -1,13 +1,13 @@
 'use client';
 
 import {
-  Layers,
-  Palette,
-  LayoutDashboard,
-  ShieldCheck,
-  Globe2,
-  CheckCircle2,
-  type LucideIcon,
+  Check,
+  Receipt,
+  ScanLine,
+  SlidersHorizontal,
+  Sparkles,
+  Tags,
+  Wrench,
 } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import {
@@ -17,77 +17,92 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
-import { cn } from '@/lib/utils';
-import type { FeatureCardItem, PublicHomeCopy } from '../types';
+import type {
+  FeatureIconKey,
+  FeatureInfoCardItem,
+  PublicHomeCopy,
+} from '../types';
 
-const iconMap: Record<FeatureCardItem['icon'], LucideIcon> = {
-  layers: Layers,
-  palette: Palette,
-  layout: LayoutDashboard,
-  shield: ShieldCheck,
-  globe: Globe2,
-  check: CheckCircle2,
+export interface FeatureInfoCardsProps {
+  featuresSection: PublicHomeCopy['featuresSection'];
+}
+
+const ICON_MAP: Record<FeatureIconKey, typeof Sparkles> = {
+  sparkles: Sparkles,
+  wrench: Wrench,
+  receipt: Receipt,
+  tags: Tags,
+  scan: ScanLine,
+  sliders: SlidersHorizontal,
 };
 
-const dotColors = [
-  'bg-cat-1',
-  'bg-cat-2',
-  'bg-cat-3',
-  'bg-cat-4',
-  'bg-cat-5',
-  'bg-cat-6',
-] as const;
+const TOKEN_CSS: Record<FeatureInfoCardItem['categoryToken'], string> = {
+  1: '--cat-1',
+  2: '--cat-2',
+  3: '--cat-3',
+  4: '--cat-4',
+  5: '--cat-5',
+  6: '--cat-6',
+};
 
-export function FeatureInfoCards({
-  featuresSection,
-}: {
-  featuresSection: PublicHomeCopy['featuresSection'];
-}) {
+export function FeatureInfoCards({ featuresSection }: FeatureInfoCardsProps) {
   return (
-    <section id="ozellikler" className="scroll-mt-20 space-y-6">
-      <div className="mx-auto max-w-2xl space-y-2 text-center">
+    <section id="ozellikler" className="scroll-mt-20 space-y-4 sm:space-y-6">
+      <div className="max-w-2xl space-y-2">
         <Badge variant="outline">{featuresSection.badge}</Badge>
-        <h2 className="font-heading text-title sm:text-display text-text">
+        <h2 className="text-text text-xl font-semibold tracking-tight sm:text-3xl">
           {featuresSection.title}
         </h2>
-        <p className="text-body-sm text-text-muted">
+        <p className="text-text-muted text-sm leading-relaxed sm:text-base">
           {featuresSection.description}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {featuresSection.cards.map((card, index) => {
-          const Icon = iconMap[card.icon] ?? Layers;
-          const dotColor = dotColors[index % dotColors.length];
+      <div className="grid gap-3.5 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {featuresSection.cards.map((card) => {
+          const Icon = ICON_MAP[card.icon];
+          const cssVar = TOKEN_CSS[card.categoryToken];
+
           return (
-            <Card key={card.title} className="flex flex-col justify-between">
-              <CardHeader className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="bg-surface-sunken text-text-muted flex h-10 w-10 items-center justify-center rounded-md border border-border">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
+            <Card key={card.id} className="flex flex-col border-border">
+              <CardHeader className="space-y-2.5 pb-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border"
+                    style={{
+                      backgroundColor: `rgb(var(${cssVar}) / 0.14)`,
+                      borderColor: `rgb(var(${cssVar}) / 0.35)`,
+                      color: `rgb(var(${cssVar}))`,
+                    }}
+                  >
+                    <Icon className="h-4 w-4" aria-hidden="true" />
                   </div>
-                  <Badge variant="secondary" className="gap-1.5">
-                    <span
-                      className={cn('h-2 w-2 rounded-full', dotColor)}
-                      aria-hidden="true"
-                    />
-                    {card.badge}
-                  </Badge>
+                  {card.badge && (
+                    <Badge variant="secondary" className="text-[11px]">
+                      {card.badge}
+                    </Badge>
+                  )}
                 </div>
-                <div>
-                  <CardTitle>{card.title}</CardTitle>
-                  <CardDescription className="mt-1">
+                <div className="space-y-1">
+                  <CardTitle className="text-base">{card.title}</CardTitle>
+                  <CardDescription className="text-text-muted text-sm leading-relaxed">
                     {card.description}
                   </CardDescription>
                 </div>
               </CardHeader>
 
-              <CardContent>
-                <ul className="text-text-muted space-y-2 border-t border-border pt-3 text-caption">
-                  {card.points.map((point) => (
-                    <li key={point} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                      <span>{point}</span>
+              <CardContent className="mt-auto border-t border-border/70 pt-3">
+                <ul className="space-y-1.5">
+                  {card.highlights.map((highlight) => (
+                    <li
+                      key={highlight}
+                      className="text-text-muted flex items-start gap-2 text-xs"
+                    >
+                      <Check
+                        className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent"
+                        aria-hidden="true"
+                      />
+                      <span>{highlight}</span>
                     </li>
                   ))}
                 </ul>

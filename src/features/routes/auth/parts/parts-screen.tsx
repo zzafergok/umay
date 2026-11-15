@@ -44,9 +44,9 @@ export function PartsScreen() {
   }, [data?.parts, statusFilter]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-2">
+    <div className="space-y-5 md:space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="bg-surface-sunken grid w-full grid-cols-4 gap-1 rounded-xl border border-border p-1 sm:flex sm:w-auto sm:flex-wrap sm:gap-1.5">
           {(
             [
               { key: 'all', label: 'Tümü' },
@@ -57,15 +57,21 @@ export function PartsScreen() {
           ).map((tab) => (
             <Button
               key={tab.key}
+              type="button"
               size="sm"
-              variant={statusFilter === tab.key ? 'default' : 'outline'}
+              variant={statusFilter === tab.key ? 'default' : 'ghost'}
               onClick={() => setStatusFilter(tab.key)}
+              className="min-h-[40px] truncate px-2 text-xs sm:min-h-0 sm:px-3"
             >
               {tab.label}
             </Button>
           ))}
         </div>
-        <Button onClick={() => setFormOpen(true)}>
+        <Button
+          type="button"
+          onClick={() => setFormOpen(true)}
+          className="min-h-[44px] w-full shrink-0 sm:min-h-0 sm:w-auto"
+        >
           <Plus className="mr-1.5 h-4 w-4" />
           Parça Ekle
         </Button>

@@ -41,11 +41,11 @@ export function AmountField({
     typeof error?.message === 'string' ? error.message : undefined;
 
   return (
-    <div className={cn('space-y-1.5 sm:space-y-2', className)}>
-      <div className="flex min-h-4 items-center gap-1">
+    <div className={cn('min-w-0 space-y-1 sm:space-y-2', className)}>
+      <div className="flex min-h-4 min-w-0 items-center gap-1">
         <Label
           htmlFor={name}
-          className="font-mono text-2xs uppercase tracking-wider text-ash"
+          className="text-text-muted truncate font-mono text-2xs uppercase tracking-wider"
         >
           {label} {required && <span className="text-umay-blue">*</span>}
         </Label>

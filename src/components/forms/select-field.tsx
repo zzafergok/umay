@@ -63,10 +63,10 @@ export function SelectField({
   const isDisabled = disabled || isSubmitting;
 
   return (
-    <div className={cn('space-y-1.5 sm:space-y-2', className)}>
+    <div className={cn('min-w-0 space-y-1 sm:space-y-2', className)}>
       <Label
         htmlFor={name}
-        className="font-mono text-2xs uppercase tracking-wider text-ash"
+        className="text-text-muted block truncate font-mono text-2xs uppercase tracking-wider"
       >
         {label} {required && <span className="text-umay-blue">*</span>}
       </Label>
@@ -110,7 +110,7 @@ export function SelectField({
                       style={{ backgroundColor: selectedOption.swatchColor }}
                     />
                   )}
-                  <span className="text-left leading-snug">
+                  <span className="truncate text-left leading-snug">
                     {selectedOption?.label ??
                       (allowNone && !field.value ? noneLabel : placeholder)}
                   </span>

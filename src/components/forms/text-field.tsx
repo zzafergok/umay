@@ -65,14 +65,15 @@ export function TextField({
   return (
     <div
       className={cn(
-        hideLabel ? 'space-y-0' : 'space-y-1.5 sm:space-y-2',
+        'min-w-0',
+        hideLabel ? 'space-y-0' : 'space-y-1 sm:space-y-2',
         className,
       )}
     >
       <Label
         htmlFor={name}
         className={cn(
-          'font-mono text-2xs uppercase tracking-wider text-ash',
+          'text-text-muted block truncate font-mono text-2xs uppercase tracking-wider',
           hideLabel && 'sr-only',
           labelClassName,
         )}

@@ -124,10 +124,11 @@ export function CategoryCard({
           )}
         </div>
 
-        <div className="flex items-center justify-end gap-1 border-t border-border pt-2">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-border pt-2">
           <Button
             variant="ghost"
             size="sm"
+            className="min-h-[40px] flex-1 sm:min-h-0 sm:flex-none"
             onClick={() => onEdit(category)}
             aria-label={`${category.name} kategorisini düzenle`}
           >
@@ -137,6 +138,7 @@ export function CategoryCard({
           <Button
             variant="ghost"
             size="icon-sm"
+            className="h-10 w-10 sm:h-8 sm:w-8"
             onClick={() => onDuplicate(category)}
             aria-label={`${category.name} kategorisini çoğalt`}
           >
@@ -145,7 +147,7 @@ export function CategoryCard({
           <Button
             variant="ghost"
             size="icon-sm"
-            className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
+            className="h-10 w-10 text-danger/80 hover:bg-danger-subtle hover:text-danger sm:h-8 sm:w-8"
             aria-label={`${category.name} kategorisini sil`}
             onClick={() => onDelete(category.id)}
           >

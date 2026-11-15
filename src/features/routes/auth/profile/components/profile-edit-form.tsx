@@ -92,7 +92,7 @@ export function ProfileEditForm({ initialUser, copy }: ProfileEditFormProps) {
           <div className="space-y-1.5">
             <Label
               htmlFor="profile-email-readonly"
-              className="font-mono text-2xs uppercase tracking-wider text-ash"
+              className="text-text-muted font-mono text-2xs uppercase tracking-wider"
             >
               {copy.emailLabel}
             </Label>
@@ -111,6 +111,7 @@ export function ProfileEditForm({ initialUser, copy }: ProfileEditFormProps) {
             isLoading={updateProfileMutation.isPending}
             loadingText={copy.loadingLabel}
             disableIfNoChanges
+            className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
             icon={<Save className="h-4 w-4" aria-hidden="true" />}
           >
             {copy.submitLabel}

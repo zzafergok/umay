@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Plus, Search, Sparkles, Tags } from 'lucide-react';
+import { Plus, Search, Sparkles, Tags, X } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import {
   Empty,
@@ -101,14 +101,17 @@ export function CategoriesScreen() {
           Kategorilere özel teknik alanlar, ürün varsayılanları ve takip
           kuralları tanımla.
         </p>
-        <Button onClick={openCreate}>
+        <Button
+          onClick={openCreate}
+          className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
+        >
           <Plus className="mr-1.5 h-4 w-4" />
           Kategori Ekle
         </Button>
       </div>
 
       {categories.length > 0 ? (
-        <InputGroup className="max-w-md">
+        <InputGroup className="w-full max-w-md">
           <InputGroupAddon align="inline-start">
             <Search className="text-text-muted h-4 w-4" />
           </InputGroupAddon>
@@ -118,6 +121,20 @@ export function CategoriesScreen() {
             placeholder="Kategori veya özel alan ara..."
             className="text-sm"
           />
+          {search ? (
+            <InputGroupAddon align="inline-end">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-xs"
+                className="h-9 w-9 sm:h-7 sm:w-7"
+                onClick={() => setSearch('')}
+                aria-label="Aramayı temizle"
+              >
+                <X className="h-3.5 w-3.5" />
+              </Button>
+            </InputGroupAddon>
+          ) : null}
         </InputGroup>
       ) : null}
 

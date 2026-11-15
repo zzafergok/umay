@@ -43,18 +43,24 @@ export function QuickToolsCard({ copy }: QuickToolsCardProps) {
         <CardDescription>{copy.description}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col justify-between gap-4">
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
           {tools.map(({ href, label, Icon }) => (
-            <Button key={href} asChild variant="secondary" size="sm">
+            <Button
+              key={href}
+              asChild
+              variant="secondary"
+              size="sm"
+              className="min-h-[42px] justify-start sm:min-h-0"
+            >
               <Link href={href}>
-                <Icon className="mr-1.5 h-4 w-4" aria-hidden="true" />
-                <span>{label}</span>
+                <Icon className="mr-1.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="truncate">{label}</span>
               </Link>
             </Button>
           ))}
         </div>
 
-        <div className="bg-surface-sunken flex items-center justify-between gap-3 rounded-md border border-border px-3.5 py-2.5">
+        <div className="bg-surface-sunken hidden items-center justify-between gap-3 rounded-md border border-border px-3.5 py-2.5 md:flex">
           <p className="text-text-muted text-caption leading-relaxed">
             {copy.shortcutHint}
           </p>

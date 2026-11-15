@@ -1,80 +1,96 @@
 'use client';
 
 import {
-  Globe2,
-  Sparkles,
-  User,
-  Shield,
-  Lock,
   ArrowUpRight,
-  type LucideIcon,
+  History,
+  LayoutDashboard,
+  Lock,
+  MapPin,
+  Package,
+  ScanLine,
+  ShoppingCart,
+  Tags,
+  Wrench,
 } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Card } from '@/components/core/card';
 import { Link } from '@/components/core/link';
-import type { PublicHomeCopy, QuickRouteItem } from '../types';
+import type { PublicHomeCopy, QuickRouteIconKey } from '../types';
 
-const routeIconMap: Record<QuickRouteItem['icon'], LucideIcon> = {
-  globe: Globe2,
-  sparkles: Sparkles,
-  user: User,
-  shield: Shield,
-  lock: Lock,
+export interface QuickRoutesSectionProps {
+  quickRoutesSection: PublicHomeCopy['quickRoutesSection'];
+  onRequireSignIn?: () => void;
+}
+
+const ROUTE_ICON_MAP: Record<QuickRouteIconKey, typeof LayoutDashboard> = {
+  dashboard: LayoutDashboard,
+  package: Package,
+  wrench: Wrench,
+  shopping: ShoppingCart,
+  mapPin: MapPin,
+  tags: Tags,
+  scan: ScanLine,
+  history: History,
 };
 
 export function QuickRoutesSection({
   quickRoutesSection,
-}: {
-  quickRoutesSection: PublicHomeCopy['quickRoutesSection'];
-}) {
+  onRequireSignIn,
+}: QuickRoutesSectionProps) {
   return (
-    <section id="ekranlar" className="scroll-mt-20 space-y-6">
-      <div className="mx-auto max-w-2xl space-y-2 text-center">
+    <section id="ekranlar" className="scroll-mt-20 space-y-4 sm:space-y-6">
+      <div className="max-w-2xl space-y-2">
         <Badge variant="outline">{quickRoutesSection.badge}</Badge>
-        <h2 className="font-heading text-title sm:text-display text-text">
+        <h2 className="text-text text-xl font-semibold tracking-tight sm:text-3xl">
           {quickRoutesSection.title}
         </h2>
-        <p className="text-body-sm text-text-muted">
+        <p className="text-text-muted text-sm leading-relaxed sm:text-base">
           {quickRoutesSection.description}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:grid-cols-4">
         {quickRoutesSection.routes.map((route) => {
-          const Icon = routeIconMap[route.icon] ?? Globe2;
+          const Icon = ROUTE_ICON_MAP[route.icon];
+
           return (
             <Link
-              key={route.href}
-              href={route.href}
-              prefetch={false}
-              className="focus-visible:ring-offset-bg group block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              key={route.id}
+              href="#hero"
+              onClick={() => onRequireSignIn?.()}
+              className="group block h-full"
             >
               <Card
                 interactive
-                className="flex flex-row items-center justify-between p-4"
+                className="flex h-full flex-col justify-between border-border p-3 sm:p-4"
               >
-                <div className="flex min-w-0 items-center gap-3">
-                  <div className="bg-surface-sunken text-text-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border transition-colors group-hover:text-accent">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
+                <div className="space-y-2.5 sm:space-y-3">
+                  <div className="bg-surface-sunken text-text group-hover:bg-accent-subtle flex h-8 w-8 items-center justify-center rounded-lg transition-colors group-hover:text-accent sm:h-9 sm:w-9">
+                    <Icon className="h-4 w-4" aria-hidden="true" />
                   </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-body-sm text-text truncate font-medium group-hover:text-accent">
-                        {route.title}
-                      </span>
-                      <Badge variant="secondary" size="sm">
-                        {route.badge}
-                      </Badge>
-                    </div>
-                    <p className="text-text-muted mt-0.5 truncate text-caption">
-                      {route.subtitle}
+
+                  <div className="space-y-1">
+                    <h3 className="text-text text-xs font-semibold sm:text-sm">
+                      {route.title}
+                    </h3>
+                    <p className="text-text-muted line-clamp-2 text-[11px] leading-relaxed sm:line-clamp-none sm:text-xs">
+                      {route.description}
                     </p>
                   </div>
                 </div>
-                <ArrowUpRight
-                  className="text-text-muted h-4 w-4 shrink-0 group-hover:text-accent"
-                  aria-hidden="true"
-                />
+
+                <div className="text-text-muted mt-3 flex items-center justify-between gap-1 border-t border-border/70 pt-2 text-[10px] sm:mt-4 sm:pt-2.5 sm:text-[11px]">
+                  <span className="inline-flex items-center gap-1 truncate">
+                    <Lock className="h-3 w-3 shrink-0" aria-hidden="true" />
+                    <span className="truncate">
+                      {quickRoutesSection.authRequiredBadge}
+                    </span>
+                  </span>
+                  <span className="hidden shrink-0 items-center gap-1 font-medium transition-colors group-hover:text-accent sm:inline-flex">
+                    {quickRoutesSection.openAction}
+                    <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                  </span>
+                </div>
               </Card>
             </Link>
           );

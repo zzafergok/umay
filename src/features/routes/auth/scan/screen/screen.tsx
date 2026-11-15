@@ -1,9 +1,14 @@
 'use client';
 
 import * as React from 'react';
-import { Camera, CameraOff, Plus, Search } from 'lucide-react';
+import { Camera, CameraOff, Plus, Search, X } from 'lucide-react';
 import { Button } from '@/components/core/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/card';
 import { Input } from '@/components/core/input';
 import type { Item } from '@/features/inventory/types';
 import { ItemDetailDialog } from '@/features/routes/auth/items/item-detail-dialog';
@@ -42,11 +47,14 @@ export function ScanScreen() {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">Kamera ile Barkod / QR Tara</CardTitle>
+        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <CardTitle className="text-base">
+            Kamera ile Barkod / QR Tara
+          </CardTitle>
           <Button
             size="sm"
             variant={scanning ? 'destructive' : 'default'}
+            className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
             onClick={() => setScanning((s) => !s)}
           >
             {scanning ? (
@@ -67,7 +75,7 @@ export function ScanScreen() {
             <div className="overflow-hidden rounded-sm border border-border bg-black">
               <video
                 ref={videoRef}
-                className="aspect-video w-full object-cover"
+                className="aspect-[4/3] w-full object-cover sm:aspect-video"
                 muted
                 playsInline
               />
@@ -80,8 +88,20 @@ export function ScanScreen() {
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="Barkod veya QR kod girin..."
-                className="pl-9"
+                className="min-h-[44px] pl-9 pr-10 sm:min-h-0"
               />
+              {code ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-xs"
+                  className="absolute right-1.5 top-1/2 h-8 w-8 -translate-y-1/2 sm:h-7 sm:w-7"
+                  onClick={() => setCode('')}
+                  aria-label="Kodu temizle"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </Button>
+              ) : null}
             </div>
           </div>
         </CardContent>
@@ -90,17 +110,20 @@ export function ScanScreen() {
       {code.trim() ? (
         matchedItem ? (
           <Card>
-            <CardContent className="flex flex-wrap items-center justify-between gap-3 p-5">
-              <div>
-                <h3 className="text-base font-semibold">{matchedItem.name}</h3>
-                <p className="text-sm text-muted-foreground tabular-nums">
+            <CardContent className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <div className="min-w-0">
+                <p className="truncate text-base font-semibold">
+                  {matchedItem.name}
+                </p>
+                <p className="text-sm tabular-nums text-muted-foreground">
                   Mevcut: {matchedItem.quantity} {matchedItem.unit}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:items-center">
                 <Button
                   size="sm"
                   variant="outline"
+                  className="min-h-[44px] sm:min-h-0"
                   disabled={matchedItem.quantity <= 0 || moveMutation.isPending}
                   onClick={() =>
                     moveMutation.mutate({
@@ -115,6 +138,7 @@ export function ScanScreen() {
                 </Button>
                 <Button
                   size="sm"
+                  className="min-h-[44px] sm:min-h-0"
                   disabled={moveMutation.isPending}
                   onClick={() =>
                     moveMutation.mutate({
@@ -130,6 +154,7 @@ export function ScanScreen() {
                 <Button
                   size="sm"
                   variant="ghost"
+                  className="min-h-[44px] sm:min-h-0"
                   onClick={() => setDetailOpen(true)}
                 >
                   Detay
@@ -137,6 +162,7 @@ export function ScanScreen() {
                 <Button
                   size="sm"
                   variant="outline"
+                  className="min-h-[44px] sm:min-h-0"
                   onClick={() => {
                     setEditItem(matchedItem);
                     setFormOpen(true);
@@ -149,13 +175,14 @@ export function ScanScreen() {
           </Card>
         ) : (
           <Card>
-            <CardContent className="flex flex-wrap items-center justify-between gap-3 p-5">
-              <p className="text-sm text-muted-foreground">
+            <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <p className="min-w-0 break-words text-sm text-muted-foreground">
                 <span className="font-mono text-foreground">{code}</span>{' '}
                 barkoduna sahip ürün bulunamadı.
               </p>
               <Button
                 size="sm"
+                className="min-h-[44px] w-full shrink-0 sm:min-h-0 sm:w-auto"
                 onClick={() => {
                   setEditItem(undefined);
                   setFormOpen(true);

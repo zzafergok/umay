@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
+import { Link } from '@/components/core/link';
 import { ITEM_TYPE_OPTIONS } from '@/features/inventory/constants';
 import type { Category, Item } from '@/features/inventory/types';
 import { formatCustomFieldValue } from '@/features/inventory/utils';
@@ -116,7 +117,7 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
                   {field.type === 'url' &&
                   typeof raw === 'string' &&
                   raw.startsWith('http') ? (
-                    <a
+                    <Link
                       href={raw}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -124,7 +125,7 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
                     >
                       <span className="break-all">{raw}</span>
                       <ExternalLink className="h-3 w-3 shrink-0" />
-                    </a>
+                    </Link>
                   ) : (
                     <p className="text-text text-sm font-medium">{formatted}</p>
                   )}

@@ -68,6 +68,7 @@ export interface DialogContentProps extends React.ComponentProps<
   dismissible?: boolean;
   showCloseButton?: boolean;
   hideCloseButton?: boolean;
+  mobilePresentation?: 'center' | 'sheet';
 }
 
 export const DialogContent = React.forwardRef<
@@ -81,6 +82,7 @@ export const DialogContent = React.forwardRef<
       dismissible = true,
       showCloseButton = true,
       hideCloseButton = false,
+      mobilePresentation = 'center',
       onEscapeKeyDown,
       onPointerDownOutside,
       onFocusOutside,
@@ -99,6 +101,11 @@ export const DialogContent = React.forwardRef<
       isPortalledFormControl(target) ||
       isInsideDialogContent(target, contentRef.current);
 
+    const presentationClasses =
+      mobilePresentation === 'sheet'
+        ? 'inset-x-0 bottom-0 top-auto translate-x-0 translate-y-0 max-h-[94dvh] w-full max-w-full rounded-t-[24px] rounded-b-none gap-2.5 p-3.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:inset-x-auto sm:bottom-auto sm:left-[50%] sm:top-[50%] sm:max-h-[calc(100dvh-2rem)] sm:w-[calc(100%-2rem)] sm:max-w-lg sm:translate-x-[-50%] sm:translate-y-[-50%] sm:gap-4 sm:rounded-2xl sm:p-6'
+        : 'left-[50%] top-[50%] max-h-[calc(100dvh-2rem)] w-[calc(100%-1.5rem)] max-w-[calc(100%-1.5rem)] translate-x-[-50%] translate-y-[-50%] rounded-2xl sm:w-[calc(100%-2rem)] sm:max-w-lg sm:p-6';
+
     return (
       <DialogPortal data-slot="dialog-portal">
         <DialogOverlay />
@@ -110,7 +117,8 @@ export const DialogContent = React.forwardRef<
             pointerEvents: 'auto',
           }}
           className={cn(
-            'dark:border-border-strong bg-surface-raised text-text shadow-float ring-text/[0.04] fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl border border-border p-5 outline-none ring-1 duration-200 dark:ring-white/[0.06] sm:max-w-lg sm:p-6',
+            'dark:border-border-strong bg-surface-raised text-text shadow-float ring-text/[0.04] fixed z-50 grid min-w-0 grid-cols-1 gap-3 overflow-y-auto overflow-x-hidden border border-border p-4 outline-none ring-1 duration-200 dark:ring-white/[0.06] sm:gap-4',
+            presentationClasses,
             'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             className,
           )}
@@ -152,7 +160,7 @@ export const DialogContent = React.forwardRef<
           {shouldShowCloseButton && (
             <DialogPrimitive.Close
               data-slot="dialog-close"
-              className="text-text-muted hover:bg-surface-sunken hover:text-text focus-visible:ring-offset-surface-raised absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none [&_svg]:size-4"
+              className="text-text-muted hover:bg-surface-sunken hover:text-text focus-visible:ring-offset-surface-raised absolute right-3 top-3 inline-flex size-10 items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none sm:right-4 sm:top-4 sm:size-8 sm:rounded-sm [&_svg]:size-4"
             >
               <XIcon />
               <span className="sr-only">Kapat</span>

@@ -69,7 +69,8 @@ export function DeleteAccountDialog({
       <DialogContent
         dismissible={!isPending}
         showCloseButton={!isPending}
-        className="bg-surface-raised max-w-[460px] gap-0 overflow-hidden rounded-2xl border-border p-0 sm:max-w-[460px] sm:p-0"
+        mobilePresentation="sheet"
+        className="bg-surface-raised gap-0 overflow-hidden border-border p-0 sm:max-w-[460px] sm:p-0"
       >
         <DialogHeader className="flex-row items-start gap-3 space-y-0 px-5 pb-4 pr-11 pt-5 text-left">
           <div className="border-danger/20 bg-danger-subtle text-danger ring-danger/[0.07] mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border ring-4">

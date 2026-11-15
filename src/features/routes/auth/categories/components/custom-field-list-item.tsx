@@ -31,7 +31,7 @@ export function CustomFieldListItem({
 }: CustomFieldListItemProps) {
   return (
     <div
-      className={`flex flex-wrap items-center justify-between gap-2 rounded-md border px-3 py-2 transition-colors ${
+      className={`flex flex-col gap-3 rounded-md border px-3 py-2.5 transition-colors sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:py-2 ${
         isEditing
           ? 'bg-accent-subtle/40 border-accent'
           : 'bg-surface-sunken/50 border-border'
@@ -72,11 +72,12 @@ export function CustomFieldListItem({
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-0.5">
+      <div className="grid w-full shrink-0 grid-cols-5 gap-1.5 border-t border-border/60 pt-2 sm:flex sm:w-auto sm:items-center sm:gap-0.5 sm:border-t-0 sm:pt-0">
         <Button
           type="button"
           variant="ghost"
           size="icon-xs"
+          className="h-9 w-full sm:h-7 sm:w-7"
           disabled={index === 0}
           onClick={onMoveUp}
           aria-label={`${field.label} alanını yukarı taşı`}
@@ -87,6 +88,7 @@ export function CustomFieldListItem({
           type="button"
           variant="ghost"
           size="icon-xs"
+          className="h-9 w-full sm:h-7 sm:w-7"
           disabled={index === total - 1}
           onClick={onMoveDown}
           aria-label={`${field.label} alanını aşağı taşı`}
@@ -97,6 +99,7 @@ export function CustomFieldListItem({
           type="button"
           variant="ghost"
           size="icon-xs"
+          className="h-9 w-full sm:h-7 sm:w-7"
           onClick={onEdit}
           aria-label={`${field.label} alanını düzenle`}
         >
@@ -106,6 +109,7 @@ export function CustomFieldListItem({
           type="button"
           variant="ghost"
           size="icon-xs"
+          className="h-9 w-full sm:h-7 sm:w-7"
           onClick={onDuplicate}
           aria-label={`${field.label} alanını çoğalt`}
         >
@@ -115,7 +119,7 @@ export function CustomFieldListItem({
           type="button"
           variant="ghost"
           size="icon-xs"
-          className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
+          className="h-9 w-full text-danger/80 hover:bg-danger-subtle hover:text-danger sm:h-7 sm:w-7"
           onClick={onRemove}
           aria-label={`${field.label} alanını sil`}
         >

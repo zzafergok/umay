@@ -30,15 +30,26 @@ export function AccountActionsCard({ copy }: AccountActionsCardProps) {
         </div>
         <CardDescription>{copy.accountSectionDescription}</CardDescription>
       </CardHeader>
-      <CardContent className="mt-auto flex flex-wrap items-center gap-2.5">
-        <Button asChild variant="secondary" size="sm">
+      <CardContent className="mt-auto grid grid-cols-1 gap-2.5 sm:flex sm:flex-wrap sm:items-center">
+        <Button
+          asChild
+          variant="secondary"
+          size="sm"
+          className="min-h-[44px] sm:min-h-0"
+        >
           <Link href="/profile">
             <UserRound className="mr-1.5 h-4 w-4" aria-hidden="true" />
             <span>{copy.openProfileLabel}</span>
           </Link>
         </Button>
-        <LogoutButton size="sm" variant="outline" />
-        <DeleteAccountButton />
+        <LogoutButton
+          size="sm"
+          variant="outline"
+          className="min-h-[44px] sm:min-h-0"
+        />
+        <div className="border-t border-border pt-2 sm:border-t-0 sm:pt-0">
+          <DeleteAccountButton className="min-h-[44px] w-full sm:min-h-0 sm:w-auto" />
+        </div>
       </CardContent>
     </Card>
   );

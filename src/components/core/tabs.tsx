@@ -14,7 +14,7 @@ export const Tabs = React.forwardRef<
     data-orientation={orientation}
     orientation={orientation}
     className={cn(
-      'group/tabs flex flex-col gap-2 data-[orientation=vertical]:flex-row',
+      'group/tabs flex min-w-0 max-w-full flex-col gap-2 data-[orientation=vertical]:flex-row',
       className,
     )}
     {...props}
@@ -37,7 +37,7 @@ export const TabsList = React.forwardRef<
     data-slot="tabs-list"
     data-variant={variant}
     className={cn(
-      'group/tabs-list bg-surface-sunken text-text-muted inline-flex h-10 w-fit items-center justify-center rounded-md border border-border p-1 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col',
+      'group/tabs-list bg-surface-sunken text-text-muted inline-flex h-10 w-fit min-w-0 max-w-full items-center justify-center rounded-md border border-border p-1 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col',
       variant === 'line' &&
         'gap-1 rounded-md border-0 border-b border-border bg-transparent p-0 group-data-[orientation=vertical]/tabs:border-b-0 group-data-[orientation=vertical]/tabs:border-r group-data-[orientation=vertical]/tabs:border-border',
       className,

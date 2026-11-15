@@ -1,22 +1,33 @@
 'use client';
 
 import * as React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, CheckCircle2, Trash2 } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 import { Button } from '@/components/core/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
-import { Input } from '@/components/core/input';
-import { Label } from '@/components/core/label';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/card';
 import { Link } from '@/components/core/link';
 import { Progress } from '@/components/core/progress';
 import { Stat } from '@/components/core/stat';
 import { StatusPill } from '@/components/core/status-pill';
 import { toast } from '@/components/core/toast';
+import { AmountField, Form, SubmitButton } from '@/components/forms';
 import { DeleteConfirmationDialog } from '@/components/shared/delete-confirmation-dialog';
+import {
+  partUsageSchema,
+  type PartUsageValues,
+} from '@/features/routes/auth/parts/part-form-schema';
 import { ReplacePartDialog } from '@/features/routes/auth/parts/replace-part-dialog';
 import { usePartQuery } from '@/hooks/use-inventory-hooks';
 import { computePartHealth } from '@/lib/lifecycle';
+import { parseAmountInput } from '@/lib/utils';
 import { inventoryService } from '@/services/inventory-service';
 import { PartLogsCard } from './part-logs-card';
 
@@ -26,7 +37,17 @@ export function PartDetailScreen({ id }: { id: string }) {
   const { data, isLoading } = usePartQuery(id);
   const [replaceOpen, setReplaceOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
-  const [usageDraft, setUsageDraft] = React.useState<string | null>(null);
+
+  const usageForm = useForm<PartUsageValues>({
+    resolver: zodResolver(partUsageSchema),
+    defaultValues: { usageCurrent: 0 },
+  });
+
+  React.useEffect(() => {
+    if (data?.part) {
+      usageForm.reset({ usageCurrent: data.part.usageCurrent ?? 0 });
+    }
+  }, [data?.part, usageForm]);
 
   if (isLoading) {
     return <p className="text-sm text-muted-foreground">Yükleniyor...</p>;
@@ -36,7 +57,6 @@ export function PartDetailScreen({ id }: { id: string }) {
   }
 
   const { part, logs } = data;
-  const usageInput = usageDraft ?? String(part.usageCurrent ?? 0);
   const health = computePartHealth(part);
   const totalCost = logs.reduce((acc, l) => acc + (l.cost ?? 0), 0);
 
@@ -51,11 +71,10 @@ export function PartDetailScreen({ id }: { id: string }) {
         )
       : null;
 
-  const handleUpdateUsage = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleUpdateUsage = async (values: PartUsageValues) => {
     try {
       await inventoryService.updatePart(part.id, {
-        usageCurrent: Math.max(0, Number(usageInput) || 0),
+        usageCurrent: Math.max(0, parseAmountInput(values.usageCurrent)),
       });
       await qc.invalidateQueries({ queryKey: ['inventory', 'parts'] });
       toast.success('Kullanım güncellendi.');
@@ -77,16 +96,25 @@ export function PartDetailScreen({ id }: { id: string }) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Button asChild variant="ghost" size="sm">
+    <div className="space-y-5 md:space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className="min-h-[44px] w-fit sm:min-h-0"
+        >
           <Link href="/parts">
             <ArrowLeft className="mr-1.5 h-4 w-4" />
             Parçalara Dön
           </Link>
         </Button>
-        <div className="flex items-center gap-2">
-          <Button size="sm" onClick={() => setReplaceOpen(true)}>
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+          <Button
+            size="sm"
+            onClick={() => setReplaceOpen(true)}
+            className="min-h-[44px] sm:min-h-0"
+          >
             <CheckCircle2 className="mr-1.5 h-4 w-4" />
             Değiştirildi
           </Button>
@@ -94,6 +122,7 @@ export function PartDetailScreen({ id }: { id: string }) {
             size="sm"
             variant="destructive"
             onClick={() => setDeleteOpen(true)}
+            className="min-h-[44px] sm:min-h-0"
           >
             <Trash2 className="mr-1.5 h-4 w-4" />
             Sil
@@ -103,7 +132,7 @@ export function PartDetailScreen({ id }: { id: string }) {
 
       <Card>
         <CardHeader className="flex flex-row items-start justify-between gap-3">
-          <div className="space-y-1">
+          <div className="min-w-0 space-y-1">
             <CardTitle className="text-xl">{part.name}</CardTitle>
             <p className="text-sm text-muted-foreground">
               Takılma: {new Date(part.installedAt).toLocaleDateString('tr-TR')}
@@ -137,32 +166,30 @@ export function PartDetailScreen({ id }: { id: string }) {
           </div>
 
           {part.lifespan.mode !== 'time' && (
-            <form
+            <Form
+              schema={partUsageSchema}
+              methods={usageForm}
               onSubmit={handleUpdateUsage}
-              className="flex flex-wrap items-end gap-2 pt-2"
+              className="flex flex-col gap-2 pt-2 sm:flex-row sm:items-end"
             >
-              <div className="space-y-1">
-                <Label htmlFor="usage-input">
-                  Mevcut Kullanım ({part.lifespan.usageUnit ?? 'birim'})
-                </Label>
-                <Input
-                  id="usage-input"
-                  type="number"
-                  min={0}
-                  value={usageInput}
-                  onChange={(e) => setUsageDraft(e.target.value)}
-                  className="w-40 tabular-nums"
-                />
-              </div>
-              <Button type="submit" variant="outline">
+              <AmountField
+                name="usageCurrent"
+                label={`Mevcut Kullanım (${part.lifespan.usageUnit ?? 'birim'})`}
+                className="w-full sm:w-48"
+              />
+              <SubmitButton
+                variant="outline"
+                isLoading={usageForm.formState.isSubmitting}
+                className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
+              >
                 Kullanımı Güncelle
-              </Button>
-            </form>
+              </SubmitButton>
+            </Form>
           )}
         </CardContent>
       </Card>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
         <Stat label="Toplam Değişim" value={logs.length} />
         <Stat
           label="Gerçekleşen Ort. Ömür"
@@ -173,7 +200,11 @@ export function PartDetailScreen({ id }: { id: string }) {
               : undefined
           }
         />
-        <Stat label="Toplam Maliyet" value={`${totalCost} TRY`} />
+        <Stat
+          label="Toplam Maliyet"
+          value={`${totalCost} TRY`}
+          className="col-span-2 sm:col-span-1"
+        />
       </div>
 
       <PartLogsCard logs={logs} />

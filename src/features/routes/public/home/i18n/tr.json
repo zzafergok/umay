@@ -1,332 +1,359 @@
 {
-  "badges": [
-    "Ev Envanteri & Stok Defteri",
-    "Ömürlü Parça Takibi",
-    "Çevrimdışı Hazır PWA"
-  ],
   "hero": {
-    "title": "Evin bereketi, sakin bir düzende kayıt altında.",
-    "description": "Mutfaktaki erzaklardan elektronik cihazlara, çekmecedeki kablolardan su arıtma filtresine kadar evdeki tüm eşyalarını, stoklarını ve ömürlü yedek parçalarını tek bir defterde takip et.",
+    "badge": "Kişisel & Ev Envanteri",
+    "title": "Evinizdeki her ürün, ömürlü parça ve fiş tek düzenli panelde.",
+    "description": "Stok adetlerini atomik olarak takip edin, filtre ve batarya ömürlerini izleyin, alışveriş fişlerini yapay zekâ ile okuyup listeye aktarın. Aşağıdaki önizlemede uygulama içindeki gerçek ekran akışını deneyebilirsiniz.",
     "loginAction": "Google ile Giriş Yap",
-    "adminAction": "Paneli Aç",
+    "exploreAction": "Ekranları İncele",
     "highlights": [
-      { "label": "Stok Hareketi", "value": "Atomik Defter" },
-      { "label": "Barkod & QR", "value": "Kamera ile Tara" },
-      { "label": "Çevrimdışı", "value": "PWA Eşitleme" }
+      "Atomik -1 / +1 stok & 30 günlük SKT / garanti takibi",
+      "OpenRouter destekli AI Fiş Analiz Asistanı",
+      "Ürün QR etiketi, barkod tarama & çevrimdışı kuyruk"
     ]
   },
   "heroPreview": {
-    "title": "Bugünün Ev Defteri",
-    "subtitle": "Yalnızca dikkat gerektiren kalemler öne çıkar",
-    "liveLabel": "Etkileşimli Önizleme",
-    "tabs": [
-      {
-        "id": "today",
-        "label": "Bugün",
-        "items": [
-          {
-            "id": "filter-1",
-            "name": "Su Arıtma Karbon Filtresi",
-            "location": "Mutfak · Tezgah Altı",
-            "quantity": 1,
-            "unit": "yedek",
-            "statusTone": "due_soon",
-            "statusLabel": "14 gün kaldı"
-          },
-          {
-            "id": "oil-1",
-            "name": "Sızma Zeytinyağı (5L)",
-            "location": "Kiler · Alt Raf",
-            "quantity": 1,
-            "unit": "teneke",
-            "statusTone": "low_stock",
-            "statusLabel": "Düşük stok"
-          },
-          {
-            "id": "hepa-1",
-            "name": "Robot Süpürge HEPA Filtre",
-            "location": "Antre · Temizlik Dolabı",
-            "quantity": 2,
-            "unit": "adet",
-            "statusTone": "overdue",
-            "statusLabel": "4 gün gecikti"
-          },
-          {
-            "id": "cable-1",
-            "name": "USB-C 2m Örgülü Kablo",
-            "location": "Çalışma Odası · Çekmece 2",
-            "quantity": 4,
-            "unit": "adet"
-          }
-        ]
+    "badge": "Gerçek Ekran Önizlemesi",
+    "title": "İçerideki ekranlarla birebir bağlantılı akış",
+    "description": "Ürünler sekmesinde stoğu düşürdüğünüzde Panel özetleri ve Alışveriş önerileri anında güncellenir.",
+    "routeNote": "Örnek veriler · Giriş yaptıktan sonra kendi hesabınızdaki gerçek verilere geçer",
+    "tabs": {
+      "home": "Panel",
+      "items": "Ürünler",
+      "shopping": "Alışveriş"
+    },
+    "homeView": {
+      "statsLabels": {
+        "totalItems": "Toplam Ürün",
+        "lowStock": "Düşük Stok",
+        "dueParts": "Bakım Bekleyen",
+        "openShopping": "Alışveriş Listesi"
       },
-      {
-        "id": "pantry",
-        "label": "Mutfak",
-        "items": [
-          {
-            "id": "coffee-1",
-            "name": "Filtre Kahve (250g)",
-            "location": "Mutfak · Üst Dolap",
-            "quantity": 2,
-            "unit": "paket"
-          },
-          {
-            "id": "oil-2",
-            "name": "Sızma Zeytinyağı (5L)",
-            "location": "Kiler · Alt Raf",
-            "quantity": 1,
-            "unit": "teneke",
-            "statusTone": "low_stock",
-            "statusLabel": "Düşük stok"
-          },
-          {
-            "id": "detergent-1",
-            "name": "Bulaşık Makinesi Tableti",
-            "location": "Mutfak · Tezgah Altı",
-            "quantity": 18,
-            "unit": "tablet"
-          }
-        ]
+      "attentionTitle": "Bugün ilgilenmen gerekenler",
+      "duePartsBaseCount": 1,
+      "duePartRow": {
+        "id": "part-brita",
+        "kind": "part",
+        "title": "Brita Maxtra+ Su Filtresi",
+        "subtitle": "Sürahi Filtresi · 4 gün gecikti",
+        "status": "overdue",
+        "statusLabel": "Gecikti"
       },
-      {
-        "id": "parts",
-        "label": "Parçalar",
-        "items": [
-          {
-            "id": "part-1",
-            "name": "Su Arıtma Karbon Filtresi",
-            "location": "Mutfak · Arıtma Cihazı",
-            "quantity": 1,
-            "unit": "yedek",
-            "statusTone": "due_soon",
-            "statusLabel": "14 gün kaldı"
-          },
-          {
-            "id": "part-2",
-            "name": "Robot Süpürge HEPA Filtre",
-            "location": "Antre · Süpürge",
-            "quantity": 2,
-            "unit": "yedek",
-            "statusTone": "overdue",
-            "statusLabel": "4 gün gecikti"
-          },
-          {
-            "id": "part-3",
-            "name": "Diş Fırçası Yedek Başlık",
-            "location": "Banyo · Ayna Dolabı",
-            "quantity": 3,
-            "unit": "başlık"
-          }
-        ]
-      }
-    ],
-    "footerNote": "+ / − butonlarıyla stok önizlemesini deneyebilirsin"
+      "itemLowFallbackSubtitle": "Ürünler ekranından otomatik algılandı",
+      "itemOkBanner": "Şu an kritik düşük stoklu ürün yok. Ürünler sekmesinden stoğu azaltıp canlı tetiklenmeyi görebilirsiniz."
+    },
+    "itemsView": {
+      "componentRef": "Hızlı Stok & Ürün Kartı Akışı",
+      "minPrefix": "Min:",
+      "targetPrefix": "Hedef:",
+      "expiryPrefix": "SKT:",
+      "expiryDaysUnit": "gün",
+      "detailLabel": "Detay",
+      "editLabel": "Düzenle",
+      "lowStockHint": "Düşük stok uyarısı tetiklendi · Panel & Alışveriş önerisi eklendi",
+      "rows": [
+        {
+          "id": "item-usb-c",
+          "name": "Anker USB-C Örgülü Kablo",
+          "categoryName": "Kablo & Aksesuar",
+          "categoryColor": "--cat-1",
+          "categoryIcon": "cable",
+          "brand": "Anker",
+          "locationPath": "Ev > Çalışma Odası > Kablo Çekmecesi",
+          "unit": "adet",
+          "quantity": 2,
+          "minQuantity": 2,
+          "targetQuantity": 4,
+          "customFields": [
+            { "label": "Konnektör", "value": "USB-C" },
+            { "label": "Uzunluk", "value": "2 m" }
+          ],
+          "statusGoodLabel": "İyi",
+          "statusLowLabel": "Düşük stok",
+          "statusOutLabel": "Tükendi"
+        },
+        {
+          "id": "item-filter-pack",
+          "name": "Brita Maxtra+ Yedek Kartuş",
+          "categoryName": "Mutfak & Kiler",
+          "categoryColor": "--cat-3",
+          "categoryIcon": "utensils",
+          "brand": "Brita",
+          "locationPath": "Ev > Mutfak > Tezgah Altı",
+          "unit": "adet",
+          "quantity": 3,
+          "minQuantity": 2,
+          "targetQuantity": 4,
+          "expiresInDays": 18,
+          "customFields": [{ "label": "Seri", "value": "Maxtra+" }],
+          "statusGoodLabel": "İyi",
+          "statusLowLabel": "Düşük stok",
+          "statusOutLabel": "Tükendi"
+        }
+      ]
+    },
+    "shoppingView": {
+      "receiptCardTitle": "AI Fiş Analiz Asistanı",
+      "receiptCardBadge": "OpenRouter Vision",
+      "receiptFileName": "market-fisi-15-kasim.jpg",
+      "receiptSummary": "3 kalem ayrıştırıldı · Doğrudan listeye aktarılabilir",
+      "receiptAddAction": "Alışveriş Listesine Ekle",
+      "receiptAddedAction": "Listeye Eklendi",
+      "receiptLines": [
+        {
+          "id": "rec-1",
+          "name": "Bulaşık Makinesi Tableti",
+          "quantityText": "1 kutu"
+        },
+        {
+          "id": "rec-2",
+          "name": "Mikrofiber Temizlik Bezi",
+          "quantityText": "3 adet"
+        }
+      ],
+      "smartSuggestionsTitle": "Akıllı Öneriler",
+      "lowStockSuggestionReason": "Stok eşik değerinin altına düştü",
+      "duePartSuggestionTitle": "Brita Maxtra+ Su Filtresi",
+      "duePartSuggestionReason": "Bakım döngüsü gecikti · otomatik öneri",
+      "listTitle": "Alışveriş Listesi",
+      "pendingBadge": "Bekliyor",
+      "boughtBadge": "Alındı",
+      "initialRows": [
+        {
+          "id": "shop-hepa",
+          "title": "Dyson V15 HEPA Filtre",
+          "source": "auto_part_due",
+          "sourceLabel": "Parça önerisi",
+          "checked": false
+        }
+      ]
+    }
   },
-  "howItWorksSection": {
-    "badge": "Nasıl Çalışır?",
-    "title": "Üç Adımda Evinin Düzenini Kur",
-    "description": "Karmaşık tablolar yok; gerçek ev rutinine uyan sade ve hızlı bir akış.",
+  "howItWorks": {
+    "badge": "3 Adımda Düzen",
+    "title": "Kurulumdan günlük kontrole gerçek iş akışı",
+    "description": "Uygulamaya giriş yaptıktan sonra kullandığınız temel modüller aynı sırayla birbirini besler.",
     "steps": [
       {
-        "step": "01",
-        "title": "Oda ve Dolapları Tanımla",
-        "description": "Ev > Mutfak > Üst Dolap gibi hiyerarşik konum ağacını kur, kategorilere özel alanlar ekle.",
-        "meta": "Konum Ağacı & QR Etiket"
+        "stepNumber": "01",
+        "title": "Hazır Kategori & Konum Ağacı Kurun",
+        "description": "Kategoriler ekranında tek tıkla hazır 5 şablonu (Kablo, Elektronik, Mutfak, Yedek Parça, Sağlık) yükleyin ve ağaç yapısında konumlarınızı oluşturun.",
+        "moduleTag": "Kategoriler & Konumlar"
       },
       {
-        "step": "02",
-        "title": "Barkod Okut veya Tek Dokunuşla Ekle",
-        "description": "Kamera ile barkodu tara, erzak ve eşyalarını kaydet; günlük tüketimi tek dokunuşla düş.",
-        "meta": "Atomik Stok Defteri"
+        "stepNumber": "02",
+        "title": "Ürünleri ve Ömürlü Parçaları Bağlayın",
+        "description": "Ürün kartlarından -1 / +1 stok güncelleyin, barkod veya ürün QR etiketi basın, filtre/batarya gibi parçaları yedek ürünlere bağlayın.",
+        "moduleTag": "Ürünler · Parçalar · Tarama"
       },
       {
-        "step": "03",
-        "title": "Eksikler ve Bakımlar Kendiliğinden Gelsin",
-        "description": "Minimum stok eşiği veya parça ömrü dolduğunda otomatik alışveriş listesi ve uyarı al.",
-        "meta": "FEFO & Ömür Takibi"
+        "stepNumber": "03",
+        "title": "Panelde Görün, AI Fiş ile Tamamlayın",
+        "description": "Panelde bugün ilgilenmeniz gerekenleri görün; alışveriş fişinizi AI Fiş Analiz Asistanı ile tarayıp eksikleri tek tıkla listeye ekleyin.",
+        "moduleTag": "Panel & Alışveriş"
       }
     ]
   },
   "lifecycleCallout": {
     "badge": "Ömürlü Parça Takibi",
-    "title": "Filtreleri, Pilleri ve Bakım Zamanlarını Unutma",
-    "description": "Su arıtma filtresi, diş fırçası başlığı, robot süpürge fırçası veya yazıcı kartuşu... Zamana veya kullanıma göre ömür hesapla, tek dokunuşla değiştirdiğini işaretle ve yedek stoğundan otomatik düş.",
-    "features": [
-      "Zamana veya kullanıma göre (litre, baskı, saat) kalan ömür çubuğu",
-      "2 dokunuşla değişim kaydı ve yedek stoktan otomatik düşüm",
-      "Son kullanma tarihi (SKT) yaklaşanlar için FEFO uyarısı",
-      "Otomatik alışveriş listesi ve QR raf etiketi yazdırma"
-    ],
-    "action": "Envanterine Başla →",
-    "demoPart": {
-      "name": "Su Arıtma Karbon Filtresi",
-      "appliance": "Mutfak · Tezgah Altı Arıtma",
-      "statusLabel": "Yaklaşıyor",
-      "remainingPercent": 18,
-      "daysRemaining": 14,
-      "metaLabel": "180 günlük ömür",
-      "spareLabel": "Yedek stok",
-      "spareCount": 2,
-      "replaceAction": "Değiştirildi olarak işaretle",
-      "replacedNote": "Değişim kaydedildi, yedek stok 1 azaldı"
-    }
+    "title": "Değişim günü geldiğinde yedek stoktan otomatik düşüm.",
+    "description": "Ömürlü Parçalar ekranında her parça kalan gün ve yüzde ilerleme çubuğuyla izlenir. \"Değiştirildi\" onayında bağlı yedek ürün stoğundan 1 adet düşülür, maliyet ve bakım geçmişi kaydedilir.",
+    "samplePartName": "Brita Maxtra+ Filtre Kartuşu",
+    "sampleParentItem": "Mutfak Sürahisi · Ev > Mutfak",
+    "spareStockNote": "Bağlı yedek ürün varsa stoktan otomatik 1 adet düşülür",
+    "replaceHint": "İpucu: İçerideki Değiştirildi diyaloğunda maliyet ve not da ekleyebilirsiniz.",
+    "dueStatus": "Yaklaşıyor",
+    "replacedStatus": "Güncellendi",
+    "remainingDaysLabel": "Kalan Ömür",
+    "remainingDueText": "6 gün kaldı (30 gün döngü)",
+    "remainingReplacedText": "30 gün yenilendi (yeni döngü)",
+    "percentDue": 18,
+    "percentReplaced": 100,
+    "replaceDemoAction": "Değiştirildi",
+    "resetDemoAction": "Önceki Duruma Dön"
   },
   "featuresSection": {
-    "badge": "Umay Özellikleri",
-    "title": "Evin İçin Sakin, Hızlı ve Güvenilir Takip",
-    "description": "İhtiyacın olan her şey elinin altında; gereksiz görsel karmaşa yok.",
+    "badge": "Güncel Modüller",
+    "title": "Uygulama içinde gerçekten çalışan her özellik",
+    "description": "Tanıtımda gördüğünüz tüm başlıklar, giriş yaptığınızda karşınıza çıkan aktif ekran ve işlevlere karşılık gelir.",
     "cards": [
       {
-        "icon": "layers",
-        "badge": "Stok Defteri",
-        "title": "Atomik Stok Hareketleri",
-        "description": "Her artırma, azaltma ve tüketim işlemi tarihçeye yazılır; miktar tutarsızlığı olmaz.",
-        "points": [
-          "Tek dokunuşla + / − ve tüketim eylemi",
-          "Düşük stok eşiği ve otomatik alışveriş önerisi",
-          "SKT ve garanti bitiş sayacı"
+        "id": "panel-atomic",
+        "title": "Panel & Atomik Stok Kontrolü",
+        "description": "Toplam ürün, düşük stok, bakım bekleyen parça ve açık alışveriş sayılarıyla günlük özet; Detay/Düzenle/Sil modalları.",
+        "badge": "Canlı Özet",
+        "icon": "sparkles",
+        "categoryToken": 1,
+        "highlights": [
+          "Kart ve tablo görünümünden -1 / +1 hızlı stok",
+          "30 günlük SKT ve garanti bitişi uyarıları"
         ]
       },
       {
-        "icon": "palette",
-        "badge": "Ömür Döngüsü",
-        "title": "Değiştirilebilir Parça Yönetimi",
-        "description": "Ana ürüne bağlı filtre, pil ve sarf malzemelerinin ömrünü takip et.",
-        "points": [
-          "Yeşil / Yaklaşıyor / Gecikti durum rozetleri",
-          "Planlanan vs gerçekleşen ömür ve maliyet analizi",
-          "Yedek parça stoktan otomatik düşüm"
+        "id": "lifecycle-parts",
+        "title": "Ömürlü Parçalar & Değişim Günlüğü",
+        "description": "Tümü, Geciken, Yaklaşan ve İyi sekmeleriyle parça sağlığını izleyin; değişim kaydında otomatik yedek stok düşümü yapın.",
+        "badge": "Bakım Döngüsü",
+        "icon": "wrench",
+        "categoryToken": 2,
+        "highlights": [
+          "Değişim maliyeti ve bakım notu kaydı",
+          "Parça detayında geçmiş değişim zaman çizelgesi"
         ]
       },
       {
-        "icon": "layout",
-        "badge": "Konum & Kategori",
-        "title": "Oda, Dolap ve Özel Alanlar",
-        "description": "Hiyerarşik konum ağacı ve kategoriye özel teknik alanlarla aradığını hemen bul.",
-        "points": [
-          "Ev > Mutfak > Üst Dolap şeklinde konum hiyerarşisi",
-          "Kablo uzunluğu, konnektör, seri no gibi özel alanlar",
-          "Ctrl/⌘+K komut paleti ile anında arama"
+        "id": "ai-receipt",
+        "title": "AI Fiş Analiz Asistanı & Alışveriş",
+        "description": "OpenRouter destekli görsel modellerle fiş fotoğrafından ürün kalemlerini ayrıştırın ve akıllı önerilerle birleştirin.",
+        "badge": "OpenRouter AI",
+        "icon": "receipt",
+        "categoryToken": 3,
+        "highlights": [
+          "Ücretsiz model filtresi & fiş önizleme",
+          "Düşük stok ve parça önerilerinden otomatik liste"
         ]
       },
       {
-        "icon": "shield",
-        "badge": "Barkod & QR",
-        "title": "Tara, Bul veya Etiket Bas",
-        "description": "Kamerayla barkod okutarak hızlı stok girişi yap veya raflar için QR etiket yazdır.",
-        "points": [
-          "BarcodeDetector + tarayıcı fallback desteği",
-          "Raf, kutu ve ürün için yazdırılabilir QR etiketler",
-          "Barkod ile anında stok artırma veya düşme"
+        "id": "category-presets",
+        "title": "Hazır Kategori Şablonları & Özel Alanlar",
+        "description": "5 hazır şablonu tek tıkla kurun veya metin, sayı, seçim, tarih, URL ve anahtar tipinde kategoriye özel alanlar tanımlayın.",
+        "badge": "5 Şablon",
+        "icon": "tags",
+        "categoryToken": 4,
+        "highlights": [
+          "Özel alanların ürün kartında özet gösterimi",
+          "Kategori ikonu ve 6 renk tokenı senkronizasyonu"
         ]
       },
       {
-        "icon": "globe",
-        "badge": "Çevrimdışı PWA",
-        "title": "Kilerde İnternet Çekmese de Çalışır",
-        "description": "Son okunan listeler cihazında saklanır; çevrimdışı işlemler bağlantı gelince eşitlenir.",
-        "points": [
-          "Mobil öncelikli tek elle kullanım ve alt gezinme",
-          "Koyu ve açık tema desteği",
-          "Türkçe ve İngilizce arayüz"
+        "id": "scan-locations",
+        "title": "Barkod / Ürün QR & Konum Ağacı",
+        "description": "Kamera veya elle barkod okutup doğrudan ürün detayını açın; her ürün için yazdırılabilir QR etiketi üretin.",
+        "badge": "Tarama & Konum",
+        "icon": "scan",
+        "categoryToken": 5,
+        "highlights": [
+          "Eşleşmeyen barkoddan ön-doldurulmuş ürün ekleme",
+          "Çok katmanlı konum hiyerarşisi ve ürün sayaçları"
         ]
       },
       {
-        "icon": "check",
-        "badge": "Güvenli Altyapı",
-        "title": "Verin Yalnızca Sana Özel",
-        "description": "Tüm kayıtlar kullanıcı kimliğinle izole edilir ve güvenli oturumla korunur.",
-        "points": [
-          "Sunucu tarafı oturum ve kullanıcı izolasyonu",
-          "Zod ile istemci ve sunucu veri doğrulaması",
-          "Tam faaliyet günlüğü ve şeffaf geçmiş"
+        "id": "settings-security",
+        "title": "Yoğunluk, Tema & Hesap İzolasyonu",
+        "description": "Kompakt/Detaylı görünüm yoğunluğu, Açık/Koyu/Sistem tema geçişi, TR/EN dil ve çevrimdışı işlem kuyruğu tek ayar panelinde.",
+        "badge": "Kişisel Alan",
+        "icon": "sliders",
+        "categoryToken": 6,
+        "highlights": [
+          "Her kullanıcının verisi kendi hesabında izole",
+          "Hareket geçmişi günlüğü ve kalıcı hesap silme"
         ]
       }
     ]
   },
   "quickRoutesSection": {
     "badge": "Uygulama Ekranları",
-    "title": "Umay Ekranlarına Doğrudan Geç",
-    "description": "Giriş yaparak ev envanterini hemen yönetmeye başla.",
+    "title": "Giriş yaptığınızda açılan gerçek çalışma alanları",
+    "description": "Tüm uygulama ekranları oturum korumalıdır. Giriş yaptıktan sonra yan menüden aşağıdaki 8 çalışma alanına doğrudan geçebilirsiniz.",
+    "authRequiredBadge": "Giriş gerekir",
+    "openAction": "Giriş Yaparak Aç",
     "routes": [
       {
-        "href": "/home",
-        "title": "Kontrol Paneli",
-        "subtitle": "Bugün ilgilenmen gerekenler ve özet",
-        "badge": "Panel",
-        "icon": "user"
+        "id": "dashboard",
+        "title": "Panel",
+        "description": "Bugün ilgilenmen gerekenler, özet metrikler ve kategori dağılımı.",
+        "icon": "dashboard"
       },
       {
-        "href": "/items",
-        "title": "Ürünler & Stok",
-        "subtitle": "Mutfak, elektronik, kablo ve genel eşya",
-        "badge": "Stok",
-        "icon": "globe"
+        "id": "items",
+        "title": "Ürünler",
+        "description": "Kart/tablo görünümü, -1/+1 stok, SKT takibi, QR etiket ve Detay/Düzenle modalları.",
+        "icon": "package"
       },
       {
-        "href": "/parts",
+        "id": "parts",
         "title": "Ömürlü Parçalar",
-        "subtitle": "Filtreler, piller ve değişim takvimi",
-        "badge": "Parça",
-        "icon": "sparkles"
+        "description": "Geciken/yaklaşan filtre ve parçalar, değişim kaydı ve yedek stok bağlantısı.",
+        "icon": "wrench"
       },
       {
-        "href": "/locations",
+        "id": "shopping",
+        "title": "Alışveriş & AI Fiş",
+        "description": "AI Fiş Analiz Asistanı, otomatik stok/parça önerileri ve öncelikli liste.",
+        "icon": "shopping"
+      },
+      {
+        "id": "locations",
         "title": "Konumlar",
-        "subtitle": "Ev, oda ve dolap hiyerarşisi",
-        "badge": "Konum",
-        "icon": "lock"
+        "description": "Ev, oda, dolap ve çekmece ağaç hiyerarşisi ile konum bazlı ürün sayımı.",
+        "icon": "mapPin"
       },
       {
-        "href": "/shopping",
-        "title": "Alışveriş Listesi",
-        "subtitle": "Düşük stok ve geciken parça önerileri",
-        "badge": "Liste",
-        "icon": "shield"
+        "id": "categories",
+        "title": "Kategoriler",
+        "description": "Hazır 5 kategori şablonu ve metin/sayı/seçim/tarih özel alan tanımları.",
+        "icon": "tags"
+      },
+      {
+        "id": "scan",
+        "title": "Barkod & QR Tarama",
+        "description": "Kamera veya elle barkod/QR okutarak ürün bulma ya da yeni ürün ekleme.",
+        "icon": "scan"
+      },
+      {
+        "id": "activity",
+        "title": "Hareketler",
+        "description": "Stok artış/azalışları, parça değişimleri ve alışveriş hareket kayıtları.",
+        "icon": "history"
       }
     ]
   },
   "faqSection": {
-    "badge": "Sık Sorulan Sorular",
-    "title": "Merak Edilenler",
-    "description": "Umay'ı kullanmaya başlamadan önce bilmek isteyeceğin temel noktalar.",
+    "badge": "Sıkça Sorulanlar",
+    "title": "Umay’ın çalışma şekli hakkında net yanıtlar",
+    "description": "Özellik kapsamı, giriş koruması, yapay zekâ fiş tarama ve veri güvenliği hakkında bilmeniz gerekenler.",
     "items": [
       {
-        "id": "offline",
-        "question": "Kilerde veya bodrumda internet çekmezse kullanabilir miyim?",
-        "answer": "Evet. Umay çevrimdışı hazır bir PWA olarak çalışır. Son görüntülediğin listeler cihazında saklanır; internet yokken yaptığın stok hareketleri kuyruğa alınır ve bağlantı geldiğinde otomatik eşitlenir."
+        "id": "auth-guard",
+        "question": "Giriş yapmadan bu ekranlara neden doğrudan geçemiyorum?",
+        "answer": "Tüm envanter, parça, alışveriş, ayar ve profil verileri kullanıcı oturumunuza bağlıdır. Giriş yapmamış veya oturum süresi dolmuş istekler otomatik olarak bu ana sayfaya yönlendirilir; geçerli oturumunuz varsa bir sonraki açılışta en son kaldığınız uygulama ekranına devam edersiniz."
       },
       {
-        "id": "privacy",
-        "question": "Verilerim güvende mi, başkaları görebilir mi?",
-        "answer": "Tüm envanter, konum ve faaliyet kayıtların yalnızca senin kullanıcı kimliğinle (UID) izole edilir; tüm istekler sunucu tarafında oturum ve Zod şemalarıyla doğrulanır."
+        "id": "ai-receipt",
+        "question": "AI Fiş Analiz Asistanı hangi modelleri kullanıyor ve ne üretiyor?",
+        "answer": "Alışveriş ekranındaki asistan, yüklediğiniz fiş görselini OpenRouter vision modelleriyle (isteğe bağlı yalnızca ücretsiz modeller filtresiyle) okuyup ham metin ile ayrıştırılmış kalem listesi çıkarır ve tek tıkla alışveriş listenize ekler."
       },
       {
-        "id": "lifecycle",
-        "question": "Ömürlü parça takibi tam olarak nasıl işliyor?",
-        "answer": "Su arıtma filtresi, süpürge başlığı veya pil gibi parçaları ana ürüne bağlarsın. Gün veya kullanım bazlı ömür tanımladığında Umay kalan süreyi hesaplar; değişim yaptığında tek dokunuşla tarihi günceller ve varsa yedek stoğundan 1 adet düşer."
+        "id": "qr-barcode",
+        "question": "QR ve barkod desteği neleri kapsıyor?",
+        "answer": "Her ürün için detay modalı üzerinden yazdırılabilir QR etiketi oluşturabilirsiniz. Barkod & QR Tarama ekranından kamera veya elle kod okuttuğunuzda kayıtlı ürünün Detay/Düzenle modalı açılır; eşleşme yoksa barkod ön-doldurulmuş yeni ürün formu açılır."
       },
       {
-        "id": "scanner",
-        "question": "Barkod ve QR etiket taramak için ek uygulama gerekir mi?",
-        "answer": "Hayır. Tarayıcının yerleşik kamera desteği (BarcodeDetector ve @zxing/browser fallback) sayesinde doğrudan Umay içinden barkod ve raf QR kodlarını okutabilirsin."
+        "id": "offline-settings",
+        "question": "Görünüm tercihleri ve çevrimdışı kullanım nasıl çalışır?",
+        "answer": "Ayarlar ekranından Açık/Koyu/Sistem tema, TR/EN dil, Kompakt/Detaylı görünüm yoğunluğu, para birimi ve varsayılan birimi seçebilirsiniz. Bağlantı kesildiğinde yapılan stok ve form değişiklikleri tarayıcı kuyruğunda tutulur ve çevrimiçi olunca eşitlenir."
       }
     ]
   },
   "footerCta": {
-    "badge": "Hemen Başla",
-    "title": "Evinin envanter defterini bugün aç.",
-    "description": "Google hesabınla saniyeler içinde giriş yap, ilk konumunu ve ürününü ekle.",
-    "loginAction": "Google ile Giriş Yap",
-    "adminAction": "Paneli Aç",
-    "copyright": "Umay © 2026 · Evin bereketi, kayıt altında.",
-    "anchors": [
-      { "href": "#nasil-calisir", "label": "Nasıl Çalışır" },
-      { "href": "#omurlu-parcalar", "label": "Ömürlü Parçalar" },
-      { "href": "#ozellikler", "label": "Özellikler" },
-      { "href": "#ekranlar", "label": "Ekranlar" },
-      { "href": "#sss", "label": "SSS" }
+    "navLinks": [
+      { "label": "Nasıl Çalışır", "href": "#nasil-calisir" },
+      { "label": "Ömürlü Parçalar", "href": "#omurlu-parcalar" },
+      { "label": "Özellikler", "href": "#ozellikler" },
+      { "label": "Ekranlar", "href": "#ekranlar" },
+      { "label": "SSS", "href": "#sss" }
     ]
+  },
+  "mobileShell": {
+    "navAriaLabel": "Mobil ana gezinme",
+    "tabs": {
+      "start": "Başla",
+      "preview": "Önizle",
+      "features": "Özellikler",
+      "screens": "Ekranlar"
+    },
+    "openPreviewCta": "Canlı Önizlemeyi Dene",
+    "openScreensCta": "Tüm Ekranları Gör",
+    "screensCountLabel": "8 Çalışma Alanı",
+    "featuresExpandHint": "Giriş yaptığınızda bu modüller doğrudan açılır."
   }
 }

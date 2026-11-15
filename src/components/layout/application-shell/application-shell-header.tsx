@@ -4,10 +4,7 @@ import { type ReactNode } from 'react';
 import { Menu, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import { cn } from '@/lib/utils';
-import {
-  SHELL_TOPBAR_HEIGHT_CLASS,
-  type ApplicationShellNavItem,
-} from './types';
+import { type ApplicationShellNavItem } from './types';
 
 interface ApplicationShellHeaderProps {
   active?: ApplicationShellNavItem;
@@ -27,8 +24,7 @@ export function ApplicationShellHeader({
   return (
     <header
       className={cn(
-        'bg-surface sticky top-0 z-30 flex shrink-0 items-center justify-between gap-3 border-b border-border px-4 sm:px-6 lg:px-8',
-        SHELL_TOPBAR_HEIGHT_CLASS,
+        'bg-surface/80 dark:bg-surface/75 sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border px-3 backdrop-blur-xl sm:px-6 md:h-16 lg:px-8',
       )}
     >
       <div className="flex min-w-0 flex-1 items-center gap-3">

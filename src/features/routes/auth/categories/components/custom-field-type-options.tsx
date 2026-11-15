@@ -75,7 +75,7 @@ export function CustomFieldTypeOptions({
             />
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-1">
           <span className="mr-1 text-[11px] text-text-muted">Hızlı birim:</span>
           {NUMBER_UNIT_SUGGESTIONS.map((unit) => (
             <Button
@@ -89,7 +89,7 @@ export function CustomFieldTypeOptions({
                   unit: prev.unit === unit ? '' : unit,
                 }))
               }
-              className="h-6 px-2 text-[11px]"
+              className="min-h-[36px] px-2.5 text-xs sm:h-6 sm:min-h-0 sm:px-2 sm:text-[11px]"
             >
               {unit}
             </Button>

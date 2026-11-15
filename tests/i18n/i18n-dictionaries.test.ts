@@ -67,7 +67,12 @@ describe('i18n JSON Dictionaries & Copy Loaders', () => {
       const home = getPublicHomeCopy(locale);
       expect(home.hero.title).toBeTruthy();
       expect(home.featuresSection.cards.length).toBe(6);
-      expect(home.quickRoutesSection.routes.length).toBe(5);
+      expect(home.quickRoutesSection.routes.length).toBe(8);
+      expect(home.heroPreview.itemsView.rows.length).toBe(2);
+      expect(home.mobileShell.tabs.start).toBeTruthy();
+      expect(home.mobileShell.tabs.preview).toBeTruthy();
+      expect(home.mobileShell.tabs.features).toBeTruthy();
+      expect(home.mobileShell.tabs.screens).toBeTruthy();
     }
   });
 

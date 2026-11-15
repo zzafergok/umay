@@ -129,15 +129,34 @@ export function ItemsScreen() {
           ))}
         </div>
       ) : (
-        <ItemsTableView
-          items={state.filtered}
-          locationMap={state.locationMap}
-          onAdjustStock={state.handleAdjustStock}
-          onDetail={(target) => state.openDetailModal(target.id)}
-          onEdit={state.openEditModal}
-          onDelete={state.setDeleteTarget}
-          pendingItemId={state.pendingItemId}
-        />
+        <>
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+            {state.filtered.map((item) => (
+              <ItemCard
+                key={item.id}
+                item={item}
+                category={state.categoryMap.get(item.categoryId)}
+                location={state.locationMap.get(item.locationId)}
+                onAdjustStock={state.handleAdjustStock}
+                onDetail={(target) => state.openDetailModal(target.id)}
+                onEdit={state.openEditModal}
+                onDelete={state.setDeleteTarget}
+                isBusy={state.pendingItemId === item.id}
+              />
+            ))}
+          </div>
+          <div className="hidden md:block">
+            <ItemsTableView
+              items={state.filtered}
+              locationMap={state.locationMap}
+              onAdjustStock={state.handleAdjustStock}
+              onDetail={(target) => state.openDetailModal(target.id)}
+              onEdit={state.openEditModal}
+              onDelete={state.setDeleteTarget}
+              pendingItemId={state.pendingItemId}
+            />
+          </div>
+        </>
       )}
 
       <ItemDetailDialog

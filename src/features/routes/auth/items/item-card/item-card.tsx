@@ -168,16 +168,18 @@ export function ItemCard({
             size="sm"
             variant="secondary"
             onClick={() => onDetail(item)}
+            className="min-h-[40px] md:min-h-0"
           >
             <Eye className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
             Detay
           </Button>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <Button
               type="button"
               size="sm"
               variant="ghost"
               onClick={() => onEdit(item)}
+              className="min-h-[40px] md:min-h-0"
             >
               <Pencil className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
               Düzenle
@@ -186,7 +188,7 @@ export function ItemCard({
               type="button"
               size="icon-sm"
               variant="ghost"
-              className="text-danger/80 hover:bg-danger-subtle hover:text-danger"
+              className="text-danger/80 hover:bg-danger-subtle hover:text-danger h-10 w-10 md:h-9 md:w-9"
               aria-label={`${item.name} ürününü sil`}
               onClick={() => onDelete(item)}
             >

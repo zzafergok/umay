@@ -9,16 +9,17 @@ export function PageHeader({
   badge,
   actions,
   breadcrumbs,
+  hideMobileTitle = false,
   className,
   children,
 }: PageHeaderProps) {
   return (
-    <div className={cn('flex flex-col gap-3', className)}>
+    <div className={cn('flex flex-col gap-2 md:gap-3', className)}>
       {breadcrumbs && (
         <div className="text-text-muted text-caption">{breadcrumbs}</div>
       )}
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div className="space-y-1">
+      <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between md:gap-3">
+        <div className="space-y-0.5 md:space-y-1">
           {badge && (
             <div>
               {typeof badge === 'string' ? (
@@ -28,7 +29,12 @@ export function PageHeader({
               )}
             </div>
           )}
-          <h1 className="font-heading text-display-sm sm:text-display text-text">
+          <h1
+            className={cn(
+              'font-heading text-display-sm sm:text-display text-text',
+              hideMobileTitle && 'sr-only md:not-sr-only',
+            )}
+          >
             {title}
           </h1>
           {description && (
