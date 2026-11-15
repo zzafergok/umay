@@ -23,7 +23,7 @@ describe('i18n JSON Dictionaries & Copy Loaders', () => {
     for (const locale of locales) {
       const copy = getShellCopy(locale);
       expect(copy).toBeDefined();
-      expect(copy.brand.title).toBe('Tulpar');
+      expect(copy.brand.title).toBe('Umay');
       expect(copy.authNav.length).toBeGreaterThan(0);
       expect(copy.adminNav.length).toBeGreaterThan(0);
       expect(copy.preferenceControls?.themeLight).toBeTruthy();

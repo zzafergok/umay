@@ -8,7 +8,7 @@ export interface JWTPayload {
 }
 
 const JWT_SECRET =
-  process.env.JWT_SECRET || 'tulpar-secret-key-change-in-production';
+  process.env.JWT_SECRET || 'umay-secret-key-change-in-production';
 
 function base64UrlEncode(str: string): string {
   return btoa(str)

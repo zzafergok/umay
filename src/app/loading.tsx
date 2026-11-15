@@ -7,7 +7,7 @@ export default function RootLoading() {
         <LoadingSpinner size="lg" className="text-tulpar-blue" />
         <div className="space-y-1">
           <p className="font-mono text-xs font-bold uppercase tracking-widest text-titanium">
-            Tulpar Yükleniyor...
+            Umay Yükleniyor...
           </p>
           <p className="font-mono text-[10px] text-ash">
             Lütfen bekleyiniz • Initializing application surface

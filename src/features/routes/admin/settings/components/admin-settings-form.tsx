@@ -36,7 +36,7 @@ export function AdminSettingsForm({ copy }: AdminSettingsFormProps) {
     <Form
       schema={adminSettingsSchema}
       defaultValues={{
-        siteName: 'Tulpar Platform',
+        siteName: 'Umay',
         maintenanceMode: false,
         allowRegistration: true,
       }}

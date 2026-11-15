@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <path
+    d="M10 30L32 12L54 30V52C54 53.1046 53.1046 54 52 54H12C10.8954 54 10 53.1046 10 52V30Z"
+    stroke="currentColor"
+    stroke-width="4"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M32 23C32 23 24 31 24 37.5C24 41.9183 27.5817 45.5 32 45.5C36.4183 45.5 40 41.9183 40 37.5C40 33.5 37 29.5 35 27.5C34.5 30.5 33 32 31.5 32C30.5 32 30 30.5 32 23Z"
+    fill="currentColor"
+  />
+</svg>

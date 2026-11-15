@@ -44,7 +44,7 @@ export const useAuthStore = create<AuthState>()(
         })),
     }),
     {
-      name: 'tulpar-auth-storage',
+      name: 'umay-auth-storage',
       partialize: (state) => ({
         user: state.user,
         token: state.token,

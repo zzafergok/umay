@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createAdminSession, createSession } from '@/lib/auth/session';
 import { signToken } from '@/lib/auth/jwt';
 import { loginSchema } from '@/lib/auth/auth-schema';
+import { signInWithFirebasePassword } from '@/lib/auth/firebase-identity';
 
 export async function POST(request: NextRequest) {
   try {
-    const rawBody = await request.json();
+    const rawBody: unknown = await request.json();
     const parseResult = loginSchema.safeParse(rawBody);
 
     if (!parseResult.success) {
@@ -20,21 +21,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { email, isAdmin } = parseResult.data;
+    const { email, password, isAdmin } = parseResult.data;
+    const identity = await signInWithFirebasePassword(email, password);
+    if (!identity) {
+      return NextResponse.json(
+        { message: 'E-posta veya şifre hatalı.' },
+        { status: 401 },
+      );
+    }
 
-    // Role simulation
     const role = isAdmin ? 'admin' : 'user';
-    const name = email.split('@')[0].toUpperCase();
-    const userId = isAdmin ? 'admin_123' : 'user_456';
+    const name = identity.displayName || email.split('@')[0];
 
     const token = signToken({
-      sub: userId,
-      email,
+      sub: identity.uid,
+      email: identity.email,
       name,
       role,
     });
 
-    // Set secure HTTP-Only session cookie on server
     if (isAdmin) {
       await createAdminSession(token);
     } else {
@@ -46,8 +51,8 @@ export async function POST(request: NextRequest) {
         message: 'Giriş başarılı',
         token,
         user: {
-          id: userId,
-          email,
+          id: identity.uid,
+          email: identity.email,
           name,
           role,
         },

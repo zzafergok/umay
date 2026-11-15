@@ -1,25 +1,24 @@
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   process.env.SITE_URL ??
-  'https://tulpar.dev';
+  'https://umay.app';
 
 export const siteMetadata = {
-  name: 'Tulpar',
-  legalName: 'Tulpar Next.js Uygulama Şablonu ve Kültür Temeli',
+  name: 'Umay',
+  legalName: 'Umay',
   description:
-    'Geliştiricilere kadim Türk kültürü ve renk kozmolojisini öğretirken modern Next.js 16 mimarisini sunan domain-independent kurumsal uygulama şablonu.',
+    'Evin bereketi, kayıt altında. Mutfak, elektronik eşya, kablo ve ömürlü yedek parçalar için mobil öncelikli ev envanter ve stok takip uygulaması.',
   url: new URL(siteUrl),
-  creator: 'Tulpar',
-  publisher: 'Tulpar',
+  creator: 'Umay',
+  publisher: 'Umay',
   keywords: [
-    'Tulpar',
-    'Next.js template',
-    'Next.js 16 starter kit',
-    'Turkish culture showcase',
-    'application shell',
-    'admin dashboard',
-    'authenticated workspace',
-    'cultural knowledge cards',
+    'Umay',
+    'ev envanteri',
+    'stok takibi',
+    'ömürlü parça',
+    'home inventory',
+    'stock tracking',
+    'PWA',
   ],
   assets: {
     icon16: '/assets/images/favicon-16x16.png',
@@ -29,9 +28,9 @@ export const siteMetadata = {
     appleTouchIcon: '/assets/images/apple-touch-icon.png',
     android192: '/assets/images/android-chrome-192x192.png',
     android512: '/assets/images/android-chrome-512x512.png',
-    logo: '/assets/images/tulpar-brand-mark.jpeg',
-    openGraph: '/assets/images/tulpar-open-graph.jpeg',
+    logo: '/umay-icon.svg',
+    openGraph: '/assets/images/android-chrome-512x512.png',
   },
   aiSummary:
-    'Tulpar is an enterprise-grade Next.js 16 application template and starter kit featuring an educational Turkic culture and AI prompt studio showcase alongside public, authenticated, and admin shells.',
+    'Umay is a mobile-first home inventory, stock ledger, and lifecycle-aware spare parts tracking PWA built on Next.js App Router and Firebase.',
 } as const;

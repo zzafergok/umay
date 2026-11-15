@@ -1,0 +1,55 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model & Access Architecture
+// ===============================================================
+//
+// Application: Umay (Home Inventory & Lifecycle Parts Tracking)
+//
+// All user-scoped data lives under /users/{uid}/... in the following
+// subcollections:
+//   - /users/{uid}/locations/{locationId}
+//   - /users/{uid}/categories/{categoryId}
+//   - /users/{uid}/items/{itemId}
+//   - /users/{uid}/parts/{partId}
+//   - /users/{uid}/replacementLogs/{logId}
+//   - /users/{uid}/stockMovements/{movementId}
+//   - /users/{uid}/shoppingList/{entryId}
+//   - /users/{uid}/notifications/{notificationId}
+//   - /users/{uid}/activityLogs/{logId}
+//   - /users/{uid}/settings/{settingId}
+//
+// Access Architecture:
+//   All client requests go through Next.js Route Handlers using
+//   `firebase-admin` (Admin SDK), which bypasses Security Rules and
+//   enforces authentication, ownership scoping, and Zod validation on
+//   the server. Direct client-side Firestore SDK access is therefore
+//   locked down by default.
+//
+//   If direct client-side Firestore SDK access is ever introduced in
+//   the future, do NOT simply enable `isOwner(uid)` on `{document=**}`:
+//   add explicit per-collection match blocks with strict schema, type,
+//   size-limit, and immutability validator functions for both `create`
+//   and `update`.
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // User-Scoped Data (/users/{uid}/...)
+    // ===============================================================
+    // Locked down for direct client access; all reads and writes are
+    // performed server-side via Next.js Route Handlers (firebase-admin).
+    match /users/{uid}/{document=**} {
+      allow read, write: if false;
+    }
+
+    // ===============================================================
+    // Default Deny (All Other Paths)
+    // ===============================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

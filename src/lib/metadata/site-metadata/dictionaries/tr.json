@@ -1,52 +1,52 @@
 {
   "publicHome": {
-    "title": "Next.js 16 Kurumsal Uygulama Şablonu & Mimari Altyapı",
-    "description": "Çoklu uygulama kabukları, tipli formlar, özel core bileşenler ve Türk kültür vitrini içeren kurumsal Next.js 16 şablonu.",
-    "aiPurpose": "Tulpar kurumsal uygulama şablonunun mimari yapısını ve kabuklarını özetleyen AI tanıtım ekranı."
+    "title": "Umay – Ev Envanteri",
+    "description": "Evin bereketi, kayıt altında. Mutfak, elektronik eşya, kablo ve ömürlü yedek parçalar için mobil öncelikli ev envanter ve stok takip uygulaması.",
+    "aiPurpose": "Umay ev envanteri ve ömürlü parça takip uygulamasının tanıtım ekranı."
   },
   "publicCulture": {
-    "title": "Türk Kültür & Mitoloji Atlası",
-    "description": "40+ kadim Türk kültür kartı, Göktürk renk kozmolojisi ve Yapay Zeka (AI Prompt) stüdyosu içeren eğitici vitrin.",
-    "aiPurpose": "Halka açık eğitici Türk kültürü ve yapay zeka prompt üretim stüdyosu vitrini."
+    "title": "Umay – Tasarım & Bileşen Rehberi",
+    "description": "Umay tasarım sistemi ve arayüz bileşenleri.",
+    "aiPurpose": "Dahili tasarım sistemi vitrini."
   },
   "publicLogin": {
-    "title": "Giriş Yap",
-    "description": "Kullanıcı hesap erişimi için giriş arayüzü.",
-    "aiPurpose": "Genel giriş noktası; işlemsel olduğu için indekslemeden hariç tutulur."
+    "title": "Umay – Giriş Yap",
+    "description": "Umay hesabına giriş yap veya yeni hesap oluştur.",
+    "aiPurpose": "Kullanıcı giriş noktası; indekslemeden hariç tutulur."
   },
   "authHome": {
-    "title": "Kontrol Paneli Özeti",
-    "description": "Gelecekteki ürün modülleri için örnek veriler içeren korumalı kontrol paneli özeti.",
+    "title": "Umay – Ev Envanteri Paneli",
+    "description": "Ev stoğu, düşük stok uyarıları ve yaklaşan parça değişimleri özeti.",
     "aiPurpose": "Kullanıcı kontrol paneli rotası; indeksleme için hedeflenmemiştir."
   },
   "authWorkspace": {
-    "title": "Çalışma Alanı",
-    "description": "Korumalı genel veri listesi ve modüler kayıt çalışma alanı.",
-    "aiPurpose": "Dahili kayıtlar için çalışma alanı rotası; genel AI keşfinden hariç tutulur."
+    "title": "Umay – Çalışma Alanı",
+    "description": "Korumalı envanter çalışma alanı.",
+    "aiPurpose": "Dahili kayıtlar için çalışma alanı rotası."
   },
   "authSettings": {
-    "title": "Hesap Ayarları",
-    "description": "Tulpar uygulama kabuğu için korumalı hesap düzeyi ayarlar.",
-    "aiPurpose": "Kullanıcı ayarlar rotası; indeksleme ve AI keşif listelerinden hariç tutulur."
+    "title": "Umay – Ayarlar",
+    "description": "Umay uygulama tercihleri, yedekleme ve hesap ayarları.",
+    "aiPurpose": "Kullanıcı ayarlar rotası."
   },
   "adminLogin": {
-    "title": "Yönetici Girişi",
-    "description": "Tulpar kabuğu yönetim erişimi için yönetici giriş arayüzü.",
-    "aiPurpose": "Yönetim giriş rotası; indeksleme ve AI keşfinden engellenir."
+    "title": "Umay – Yönetici Girişi",
+    "description": "Umay yönetim erişimi için giriş arayüzü.",
+    "aiPurpose": "Yönetim giriş rotası."
   },
   "adminOverview": {
-    "title": "Yönetim Özeti",
-    "description": "Kullanıcılar, ayarlar ve platform durumu için korumalı yönetim paneli.",
-    "aiPurpose": "Korumalı yönetici genel bakış rotası; arama motorları için hedeflenmemiştir."
+    "title": "Umay – Yönetim Özeti",
+    "description": "Sistem ve veri yönetimi özeti.",
+    "aiPurpose": "Korumalı yönetici genel bakış rotası."
   },
   "adminUsers": {
-    "title": "Kullanıcı Yönetimi",
-    "description": "Yönetici paneli kullanıcı ve yetkilendirme listesi.",
-    "aiPurpose": "Kimlik verisini modellediği için indekslenmeyen korumalı kullanıcı rotası."
+    "title": "Umay – Kullanıcılar",
+    "description": "Kullanıcı ve yetkilendirme listesi.",
+    "aiPurpose": "Korumalı kullanıcı rotası."
   },
   "adminSettings": {
-    "title": "Yönetici Ayarları",
-    "description": "Tulpar platform düzeyindeki kontroller için korumalı yapılandırma arayüzü.",
-    "aiPurpose": "Korumalı yönetici yapılandırma rotası; indeksleme ve AI keşfinden engellenir."
+    "title": "Umay – Sistem Ayarları",
+    "description": "Umay sistem düzeyindeki yapılandırma arayüzü.",
+    "aiPurpose": "Korumalı yönetici yapılandırma rotası."
   }
 }

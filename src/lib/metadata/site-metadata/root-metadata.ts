@@ -8,8 +8,8 @@ export function buildRootMetadata(
 ): Metadata {
   const title =
     locale === 'tr'
-      ? 'Tulpar | Next.js Uygulama Şablonu & Türk Kültür Atlası'
-      : 'Tulpar | Next.js Application Template & Culture Atlas';
+      ? 'Umay – Ev Envanteri'
+      : 'Umay – Home Inventory';
 
   return {
     metadataBase: siteMetadata.url,

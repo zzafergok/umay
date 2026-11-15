@@ -1,15 +1,13 @@
 /**
- * Intentionally non-sensitive credentials shown in Tulpar's template forms.
- * The demo login endpoint accepts any schema-valid credentials; these values
- * make the starter flows immediately explorable after installation.
+ * Non-sensitive demo credentials for local development when ALLOW_DEMO_AUTH=true.
  */
 export const demoLoginCredentials = {
   admin: {
-    email: 'admin@tulpar.space',
+    email: 'admin@umay.app',
     password: 'securePassword123',
   },
   user: {
-    email: 'pilot@tulpar.space',
+    email: 'ev@umay.app',
     password: 'securePassword123',
   },
 } as const;

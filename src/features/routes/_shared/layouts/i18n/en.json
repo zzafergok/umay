@@ -1,26 +1,62 @@
 {
   "brand": {
-    "title": "Tulpar",
-    "subtitle": "Next.js Template & Culture Atlas"
+    "title": "Umay",
+    "subtitle": "Your home's abundance, accounted for."
   },
   "publicNav": [],
   "authNav": [
     {
       "href": "/home",
-      "label": "Home",
-      "subtitle": "Dashboard overview",
+      "label": "Dashboard",
+      "subtitle": "Overview & priorities",
       "icon": "home"
     },
     {
-      "href": "/workspace",
-      "label": "Workspace",
-      "subtitle": "Items & modules",
+      "href": "/items",
+      "label": "Items",
+      "subtitle": "Stock & inventory",
+      "icon": "boxes"
+    },
+    {
+      "href": "/parts",
+      "label": "Parts",
+      "subtitle": "Lifecycle spare parts",
       "icon": "wrench"
+    },
+    {
+      "href": "/shopping",
+      "label": "Shopping",
+      "subtitle": "Restock & suggestions",
+      "icon": "shoppingCart"
+    },
+    {
+      "href": "/locations",
+      "label": "Locations",
+      "subtitle": "Rooms & cabinets",
+      "icon": "mapPin"
+    },
+    {
+      "href": "/categories",
+      "label": "Categories",
+      "subtitle": "Custom field templates",
+      "icon": "tags"
+    },
+    {
+      "href": "/scan",
+      "label": "Scan",
+      "subtitle": "Barcode & QR scanner",
+      "icon": "scanLine"
+    },
+    {
+      "href": "/activity",
+      "label": "Activity",
+      "subtitle": "Stock & change log",
+      "icon": "activity"
     },
     {
       "href": "/settings",
       "label": "Settings",
-      "subtitle": "Preferences & account",
+      "subtitle": "Preferences & backup",
       "icon": "settings"
     }
   ],
@@ -40,21 +76,21 @@
     {
       "href": "/admin/settings",
       "label": "Settings",
-      "subtitle": "Platform settings",
+      "subtitle": "System settings",
       "icon": "settings"
     }
   ],
   "authHeader": {
-    "title": "Auth Area",
-    "subtitle": "Protected application area"
+    "title": "Umay Inventory",
+    "subtitle": "Your home's abundance, accounted for."
   },
   "adminHeader": {
     "title": "Admin Area",
-    "subtitle": "Management control area",
+    "subtitle": "System & data management",
     "manageLabel": "Manage"
   },
   "loading": "Loading...",
-  "footer": "Tulpar Template © 2026",
+  "footer": "Umay © 2026",
   "preferenceControls": {
     "themeLight": "Switch to light theme",
     "themeDark": "Switch to dark theme",

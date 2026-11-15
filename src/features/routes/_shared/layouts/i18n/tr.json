@@ -1,26 +1,62 @@
 {
   "brand": {
-    "title": "Tulpar",
-    "subtitle": "Next.js Şablonu & Kültür Atlası"
+    "title": "Umay",
+    "subtitle": "Evin bereketi, kayıt altında."
   },
   "publicNav": [],
   "authNav": [
     {
       "href": "/home",
-      "label": "Ana Sayfa",
-      "subtitle": "Kontrol paneli özeti",
+      "label": "Panel",
+      "subtitle": "Özet ve öncelikler",
       "icon": "home"
     },
     {
-      "href": "/workspace",
-      "label": "Çalışma Alanı",
-      "subtitle": "Öğeler ve modüller",
+      "href": "/items",
+      "label": "Ürünler",
+      "subtitle": "Stok ve envanter",
+      "icon": "boxes"
+    },
+    {
+      "href": "/parts",
+      "label": "Parçalar",
+      "subtitle": "Ömürlü yedek parçalar",
       "icon": "wrench"
+    },
+    {
+      "href": "/shopping",
+      "label": "Alışveriş",
+      "subtitle": "Eksik ve öneriler",
+      "icon": "shoppingCart"
+    },
+    {
+      "href": "/locations",
+      "label": "Konumlar",
+      "subtitle": "Oda ve dolap ağacı",
+      "icon": "mapPin"
+    },
+    {
+      "href": "/categories",
+      "label": "Kategoriler",
+      "subtitle": "Özel alan şablonları",
+      "icon": "tags"
+    },
+    {
+      "href": "/scan",
+      "label": "Tara",
+      "subtitle": "Barkod ve QR okuyucu",
+      "icon": "scanLine"
+    },
+    {
+      "href": "/activity",
+      "label": "Faaliyet",
+      "subtitle": "Hareket ve işlem günlüğü",
+      "icon": "activity"
     },
     {
       "href": "/settings",
       "label": "Ayarlar",
-      "subtitle": "Hesap ve tercihler",
+      "subtitle": "Tercihler ve yedekleme",
       "icon": "settings"
     }
   ],
@@ -40,21 +76,21 @@
     {
       "href": "/admin/settings",
       "label": "Ayarlar",
-      "subtitle": "Platform ayarları",
+      "subtitle": "Sistem ayarları",
       "icon": "settings"
     }
   ],
   "authHeader": {
-    "title": "Kullanıcı Alanı",
-    "subtitle": "Korumalı uygulama alanı"
+    "title": "Umay Envanter",
+    "subtitle": "Evin bereketi, kayıt altında."
   },
   "adminHeader": {
-    "title": "Yönetici Alanı",
-    "subtitle": "Yönetim ve kontrol alanı",
+    "title": "Yönetim Alanı",
+    "subtitle": "Sistem ve veri yönetimi",
     "manageLabel": "Yönet"
   },
   "loading": "Yükleniyor...",
-  "footer": "Tulpar Şablonu © 2026",
+  "footer": "Umay © 2026",
   "preferenceControls": {
     "themeLight": "Açık temaya geç",
     "themeDark": "Koyu temaya geç",

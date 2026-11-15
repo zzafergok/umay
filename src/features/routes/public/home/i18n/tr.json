@@ -1,139 +1,139 @@
 {
   "badges": [
-    "Next.js 16 Kurumsal Başlangıç Şablonu",
-    "Katı TypeScript (Sıfır any)",
-    "Çoklu Kabuk Mimarisi",
-    "30+ Özel Core Bileşen"
+    "Ev Envanteri & Stok Defteri",
+    "Ömürlü Parça Takibi",
+    "Barkod & QR Etiket",
+    "Çevrimdışı Hazır PWA"
   ],
   "hero": {
-    "title": "Tulpar: Kurumsal Next.js 16 Uygulama Şablonu",
-    "description": "Modern, ölçeklenebilir ve kurumsal düzeyde web uygulamaları geliştirmek için tasarlanmış referans mimari. Modüler uygulama kabukları (Public, Auth, Admin), tip güvenli formlar, Radix UI tabanlı özel core bileşenler ve eğitici kadim Türk kültürü atlası.",
+    "title": "Umay: Evin bereketi, kayıt altında.",
+    "description": "Mutfaktaki erzaklardan elektronik cihazlara, çekmecedeki kablolardan su arıtma filtresine kadar evdeki tüm eşyalarını, stoklarını ve değiştirilebilir yedek parçalarını tek bir sakin arayüzde takip et.",
     "loginAction": "Giriş Yap",
-    "adminAction": "Yönetici Alanı"
+    "adminAction": "Paneli Aç"
   },
   "cultureCallout": {
-    "badge": "Kültür & Mitoloji Atlası",
-    "title": "Tulpar ve Kadim Türk Kültürünü Keşfedin",
-    "description": "Geliştiricilere ilham vermek amacıyla hazırlanmış 40+ otantik kültürel sembol, Göktürk 4 yön renk kozmolojisi, efsanevi varlıklar ve Midjourney / DALL-E / Gemini için hazır Yapay Zeka (AI Prompt) üretim stüdyosu.",
+    "badge": "Ömürlü Parça Takibi",
+    "title": "Filtreleri, Pilleri ve Bakım Zamanlarını Unutma",
+    "description": "Su arıtma filtresi, diş fırçası başlığı, robot süpürge fırçası veya yazıcı kartuşu... Zamana veya kullanıma göre ömür hesapla, tek dokunuşla değiştirdiğini işaretle ve yedek stoğundan otomatik düş.",
     "features": [
-      "16 Kozmoloji & Sanat Rengi (Ak, Kara, Gök, Kızıl, Sarı vb.)",
-      "10 Doğa, Ağaç & Çiçek Motifi (Hayat Ağacı, Lale, Gül vb.)",
-      "14 Hayvan & Savaşçı Totemi (Bozkurt, Tulpar, Kartal vb.)",
-      "6 Mitolojik Varlık (Şahmeran, Hüma, Zümrüdüanka vb.)"
+      "Zamana veya kullanıma göre (litre, baskı, saat) kalan ömür çubuğu",
+      "2 dokunuşla değişim kaydı ve yedek stoktan otomatik düşüm",
+      "Son kullanma tarihi (SKT) yaklaşanlar için FEFO uyarısı",
+      "Otomatik alışveriş listesi ve QR raf etiketi yazdırma"
     ],
-    "action": "Kültür ve Mitoloji Atlasını Aç →"
+    "action": "Envanterine Başla →"
   },
   "featuresSection": {
-    "badge": "Mimari Özellikler",
-    "title": "Kurumsal Seviye Mimari & Teknik Altyapı",
-    "description": "Tulpar şablonu, canlı ortamda (production) kanıtlanmış mühendislik kalıplarını ve modern kurumsal web standartlarını bir arada sunar.",
+    "badge": "Umay Özellikleri",
+    "title": "Evin İçin Sakin, Hızlı ve Güvenilir Takip",
+    "description": "İhtiyacın olan her şey elinin altında; gereksiz karmaşa yok.",
     "cards": [
       {
         "icon": "layers",
-        "badge": "App Router & React 19",
-        "title": "Modern Çekirdek Mimari",
-        "description": "Next.js 16 App Router altyapısı ile Server ve Client Components ayrımı en üst düzeyde optimize edilmiştir.",
+        "badge": "Stok Defteri",
+        "title": "Atomik Stok Hareketleri",
+        "description": "Her artırma, azaltma ve tüketim işlemi tarihçeye yazılır; miktar tutarsızlığı olmaz.",
         "points": [
-          "Route grupları: (public), (auth), (admin)",
-          "Statik ve dinamik Metadata API entegrasyonu",
-          "Otomatik sitemap, robots.txt ve llms.txt çıktısı"
+          "Tek dokunuşla + / − ve tüketim eylemi",
+          "Düşük stok eşiği ve otomatik alışveriş önerisi",
+          "SKT ve garanti bitiş sayacı"
         ]
       },
       {
         "icon": "palette",
-        "badge": "Zero-Primitive Standard",
-        "title": "30+ Özel Core Bileşen",
-        "description": "Ham HTML primitifleri yerine tam tip güvenli, Radix UI tabanlı erişilebilir özel bileşen kütüphanesi.",
+        "badge": "Ömür Döngüsü",
+        "title": "Değiştirilebilir Parça Yönetimi",
+        "description": "Ana ürüne bağlı filtre, pil ve sarf malzemelerinin ömrünü takip et.",
         "points": [
-          "Button, Input, Select, Table, Dialog, Drawer, Card",
-          "Modern Date Picker, Tabs, Accordion ve Slider",
-          "WCAG standartlarında klavye ve ekran okuyucu uyumu"
+          "Yeşil / Yaklaşıyor / Gecikti durum rozetleri",
+          "Planlanan vs gerçekleşen ömür ve maliyet analizi",
+          "Yedek parça stoktan otomatik düşüm"
         ]
       },
       {
         "icon": "layout",
-        "badge": "Multi-Shell System",
-        "title": "3 Ayrı Uygulama Kabuğu",
-        "description": "Farklı erişim katmanları ve kullanıcı rolleri için bağımsız tasarlanmış uygulama kabukları.",
+        "badge": "Konum & Kategori",
+        "title": "Oda, Dolap ve Özel Alanlar",
+        "description": "Hiyerarşik konum ağacı ve kategoriye özel teknik alanlarla aradığını hemen bul.",
         "points": [
-          "Public Shell: Ziyaretçiler için genel vitrin ve tanıtım",
-          "Auth Shell: Giriş yapmış kullanıcılar için çalışma alanı (/home, /workspace)",
-          "Admin Shell: İleri düzey yönetim ve izleme paneli"
+          "Ev > Mutfak > Üst Dolap şeklinde konum hiyerarşisi",
+          "Kablo uzunluğu, konnektör, seri no gibi özel alanlar",
+          "Ctrl/⌘+K komut paleti ile anında arama"
         ]
       },
       {
         "icon": "shield",
-        "badge": "TypeScript Strict",
-        "title": "Sıfır \"any\" & Katı Doğrulama",
-        "description": "Tip güvenliği ve veri bütünlüğü istemci ve sunucu sınırlarında en katı kurallarla garanti altına alınmıştır.",
+        "badge": "Barkod & QR",
+        "title": "Tara, Bul veya Etiket Bas",
+        "description": "Kamerayla barkod okutarak hızlı stok girişi yap veya raflar için QR etiket yazdır.",
         "points": [
-          "İstemci ve sunucu doğrulaması için Zod şemaları",
-          "React Hook Form ile entegre form yönetimi",
-          "250 satır dosya sınırı ve modüler klasör düzeni"
+          "BarcodeDetector + tarayıcı fallback desteği",
+          "Raf, kutu ve ürün için yazdırılabilir QR etiketler",
+          "CSV ve JSON tam yedekleme dışa/içe aktarma"
         ]
       },
       {
         "icon": "globe",
-        "badge": "i18n & Theme",
-        "title": "Çoklu Dil & Tema Sistemi",
-        "description": "Kullanıcı tercihlerini kesintisiz saklayan ve yöneten altyapı.",
+        "badge": "Çevrimdışı PWA",
+        "title": "Kilerde İnternet Çekmese de Çalışır",
+        "description": "Son okunan listeler cihazında saklanır; çevrimdışı işlemler bağlantı gelince eşitlenir.",
         "points": [
-          "Türkçe ve İngilizce eksiksiz yerelleştirme (i18n)",
-          "Koyu ve Açık temalar arasında anında geçiş",
-          "Cookie tabanlı sunucu ve istemci durum senkronizasyonu"
+          "Mobil öncelikli tek elle kullanım ve alt gezinme",
+          "Koyu ve açık tema desteği",
+          "Türkçe ve İngilizce arayüz"
         ]
       },
       {
         "icon": "check",
-        "badge": "Production Ready",
-        "title": "Performans & Güvenlik",
-        "description": "Canlıya almaya hazır güvenlik başlıkları, hata sınırları ve Core Web Vitals iyileştirmeleri.",
+        "badge": "Güvenli Altyapı",
+        "title": "Verin Yalnızca Sana Özel",
+        "description": "Tüm kayıtlar kullanıcı kimliğinle izole edilir ve güvenli oturumla korunur.",
         "points": [
-          "Core Web Vitals optimizasyonları (LCP, CLS, INP)",
-          "Güvenli CSP, HSTS ve XSS koruma başlıkları",
-          "Kurumsal Error Boundary ve kurtarma mekanizmaları"
+          "Sunucu tarafı oturum ve kullanıcı izolasyonu",
+          "Zod ile istemci ve sunucu veri doğrulaması",
+          "Tam faaliyet günlüğü ve şeffaf geçmiş"
         ]
       }
     ]
   },
   "quickRoutesSection": {
-    "badge": "Hızlı Gezinme",
-    "title": "Şablon Rotalarını Keşfedin",
-    "description": "Tulpar içinde hazır gelen tüm uygulama ekranlarına doğrudan ulaşın.",
+    "badge": "Hızlı Başlangıç",
+    "title": "Umay Ekranlarına Geç",
+    "description": "Giriş yaparak ev envanterini hemen yönetmeye başla.",
     "routes": [
       {
-        "href": "/culture",
-        "title": "Kültür & Mitoloji Atlası",
-        "subtitle": "40+ Kültür kartı ve Yapay Zeka prompt stüdyosu",
-        "badge": "Vitrin",
-        "icon": "sparkles"
-      },
-      {
         "href": "/login",
-        "title": "Kullanıcı Girişi",
-        "subtitle": "Kimlik doğrulama ve giriş formu",
-        "badge": "Public",
+        "title": "Giriş Yap",
+        "subtitle": "Hesabına eriş veya demo ile dene",
+        "badge": "Giriş",
         "icon": "lock"
       },
       {
         "href": "/home",
-        "title": "Kullanıcı Paneli",
-        "subtitle": "Korumalı kontrol paneli alanı",
-        "badge": "Auth",
+        "title": "Kontrol Paneli",
+        "subtitle": "Bugün ilgilenmen gerekenler ve özet",
+        "badge": "Panel",
         "icon": "user"
       },
       {
-        "href": "/workspace",
-        "title": "Çalışma Alanı (Kayıtlar)",
-        "subtitle": "Modüler veri ve öğe yönetimi",
-        "badge": "Auth",
+        "href": "/items",
+        "title": "Ürünler & Stok",
+        "subtitle": "Mutfak, elektronik, kablo ve genel eşya",
+        "badge": "Stok",
         "icon": "globe"
       },
       {
-        "href": "/admin",
-        "title": "Admin Yönetim Paneli",
-        "subtitle": "Yönetici istatistikleri ve kontrolleri",
-        "badge": "Admin",
+        "href": "/parts",
+        "title": "Ömürlü Parçalar",
+        "subtitle": "Filtreler, piller ve değişim takvimi",
+        "badge": "Parça",
+        "icon": "sparkles"
+      },
+      {
+        "href": "/shopping",
+        "title": "Alışveriş Listesi",
+        "subtitle": "Düşük stok ve geciken parça önerileri",
+        "badge": "Liste",
         "icon": "shield"
       }
     ]

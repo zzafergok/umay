@@ -1,139 +1,139 @@
 {
   "badges": [
-    "Next.js 16 Enterprise Starter",
-    "TypeScript Strict (Zero any)",
-    "Multi-Shell Architecture",
-    "30+ Custom Core Components"
+    "Home Inventory & Stock Ledger",
+    "Lifecycle Parts Tracking",
+    "Barcode & QR Labels",
+    "Offline-Ready PWA"
   ],
   "hero": {
-    "title": "Tulpar: Enterprise Next.js 16 Application Template",
-    "description": "A reference architecture engineered for building modern, scalable, and enterprise-ready web applications. Features modular application shells (Public, Auth, Admin), typed forms, Radix UI custom core components, and an educational Turkic culture atlas.",
+    "title": "Umay: Your home's abundance, accounted for.",
+    "description": "Track everything at home—from pantry staples and electronics to drawer cables and water purifier filters—in one calm, fast, mobile-first workspace.",
     "loginAction": "Sign In",
-    "adminAction": "Admin Area"
+    "adminAction": "Open Dashboard"
   },
   "cultureCallout": {
-    "badge": "Culture & Mythology Atlas",
-    "title": "Discover Tulpar & Ancient Turkic Culture",
-    "description": "Designed to inspire developers with 40+ authentic cultural symbols, Göktürk 4-direction color cosmology, legendary creatures, and an AI image prompt studio optimized for Midjourney, DALL-E, and Gemini.",
+    "badge": "Lifecycle Parts",
+    "title": "Never Miss a Filter, Battery, or Maintenance Cycle",
+    "description": "Water purifier filters, toothbrush heads, robot vacuum brushes, or printer cartridges—track remaining lifespan by time or usage, mark replaced in two taps, and auto-deduct from spare stock.",
     "features": [
-      "16 Cosmology & Art Colors (Ak, Kara, Gök, Kızıl, Sarı, etc.)",
-      "10 Nature, Tree & Floral Motifs (Tree of Life, Tulip, Rose, etc.)",
-      "14 Animals & Warrior Totems (Gray Wolf, Tulpar, Eagle, etc.)",
-      "6 Mythological Beings (Shahmaran, Huma, Phoenix/Simurgh, etc.)"
+      "Remaining lifespan bar by time or usage (liters, prints, hours)",
+      "2-tap replacement log with automatic spare stock deduction",
+      "FEFO expiration alerts for pantry and consumables",
+      "Automatic shopping list suggestions and printable QR labels"
     ],
-    "action": "Open Culture & Mythology Atlas →"
+    "action": "Start Your Inventory →"
   },
   "featuresSection": {
-    "badge": "Architectural Features",
-    "title": "Enterprise Architecture & Technical Foundations",
-    "description": "The Tulpar template combines production-proven engineering patterns with modern enterprise web standards.",
+    "badge": "Umay Features",
+    "title": "Calm, Fast, and Reliable Home Tracking",
+    "description": "Everything you need at your fingertips without visual clutter.",
     "cards": [
       {
         "icon": "layers",
-        "badge": "App Router & React 19",
-        "title": "Modern Core Architecture",
-        "description": "Maximized optimization between Server and Client Components powered by the Next.js 16 App Router.",
+        "badge": "Stock Ledger",
+        "title": "Atomic Stock Movements",
+        "description": "Every addition, deduction, and consumption is recorded in a ledger so quantities never drift.",
         "points": [
-          "Route groups: (public), (auth), (admin)",
-          "Static and dynamic Metadata API integration",
-          "Automated sitemap, robots.txt, and llms.txt generation"
+          "One-tap + / − and consume actions",
+          "Low-stock threshold and smart restock suggestions",
+          "Expiration and warranty countdowns"
         ]
       },
       {
         "icon": "palette",
-        "badge": "Zero-Primitive Standard",
-        "title": "30+ Custom Core Components",
-        "description": "Accessible, typed custom component system built with Radix UI instead of raw HTML primitives.",
+        "badge": "Lifecycle",
+        "title": "Replaceable Parts Management",
+        "description": "Track filters, batteries, and consumables linked to their parent appliances.",
         "points": [
-          "Button, Input, Select, Table, Dialog, Drawer, Card",
-          "Modern Date Picker, Tabs, Accordion, and Slider",
-          "Strict WCAG keyboard and screen reader accessibility"
+          "OK / Due Soon / Overdue status indicators",
+          "Planned vs actual lifespan and cost tracking",
+          "Automatic spare part stock deduction"
         ]
       },
       {
         "icon": "layout",
-        "badge": "Multi-Shell System",
-        "title": "3 Distinct Application Shells",
-        "description": "Independent shell layouts configured for varying access tiers and user roles.",
+        "badge": "Locations & Categories",
+        "title": "Rooms, Cabinets & Custom Fields",
+        "description": "Find anything quickly with a hierarchical location tree and category-specific fields.",
         "points": [
-          "Public Shell: General public showcase and landings",
-          "Auth Shell: Authenticated user workspace (/home, /workspace)",
-          "Admin Shell: Advanced management and monitoring dashboard"
+          "Home > Kitchen > Upper Cabinet hierarchy",
+          "Custom fields for cable length, connector, serial no",
+          "Instant search via Ctrl/⌘+K command palette"
         ]
       },
       {
         "icon": "shield",
-        "badge": "TypeScript Strict",
-        "title": "Zero \"any\" & Strict Validation",
-        "description": "Type safety and data integrity enforced across client and server boundaries.",
+        "badge": "Barcode & QR",
+        "title": "Scan, Find, or Print Labels",
+        "description": "Scan barcodes with your camera for quick stock updates or print QR labels for shelves.",
         "points": [
-          "Zod schemas for both client and server validation",
-          "React Hook Form integrated form management",
-          "250-line file limit and modular folder architecture"
+          "BarcodeDetector with @zxing/browser fallback",
+          "Printable QR labels for shelves, boxes, and items",
+          "Full CSV & JSON export and import"
         ]
       },
       {
         "icon": "globe",
-        "badge": "i18n & Theme",
-        "title": "Multi-Language & Theme System",
-        "description": "Seamless infrastructure for handling persistent user preferences.",
+        "badge": "Offline PWA",
+        "title": "Works Even in the Pantry",
+        "description": "Cached lists stay readable offline and pending writes sync automatically when back online.",
         "points": [
-          "Full English and Turkish localization (i18n)",
-          "Instant switching between Dark and Light themes",
-          "Cookie-backed server and client state synchronization"
+          "Mobile-first thumb-friendly bottom navigation",
+          "Light and dark theme support",
+          "Turkish and English localization"
         ]
       },
       {
         "icon": "check",
-        "badge": "Production Ready",
-        "title": "Performance & Security",
-        "description": "Production-ready security headers, error boundaries, and Core Web Vitals optimizations.",
+        "badge": "Secure by Default",
+        "title": "Your Data Stays Yours",
+        "description": "All records are strictly scoped to your user ID and protected with server-side sessions.",
         "points": [
-          "Core Web Vitals tuning (LCP, CLS, INP)",
-          "Secure CSP, HSTS, and XSS protection headers",
-          "Enterprise Error Boundaries & recovery fallbacks"
+          "Server-side session and uid isolation",
+          "Client and server Zod validation",
+          "Full activity log and transparent history"
         ]
       }
     ]
   },
   "quickRoutesSection": {
-    "badge": "Quick Navigation",
-    "title": "Explore Template Routes",
-    "description": "Jump directly to any of the pre-configured application surfaces in Tulpar.",
+    "badge": "Quick Start",
+    "title": "Explore Umay Surfaces",
+    "description": "Sign in to start managing your home inventory right away.",
     "routes": [
       {
-        "href": "/culture",
-        "title": "Culture & Mythology Atlas",
-        "subtitle": "40+ Cultural cards & AI prompt studio",
-        "badge": "Showcase",
-        "icon": "sparkles"
-      },
-      {
         "href": "/login",
-        "title": "User Login",
-        "subtitle": "Authentication and sign-in form",
-        "badge": "Public",
+        "title": "Sign In",
+        "subtitle": "Access your account or try demo mode",
+        "badge": "Auth",
         "icon": "lock"
       },
       {
         "href": "/home",
-        "title": "User Dashboard",
-        "subtitle": "Protected dashboard area",
-        "badge": "Auth",
+        "title": "Dashboard",
+        "subtitle": "Today's priorities and stock summary",
+        "badge": "Panel",
         "icon": "user"
       },
       {
-        "href": "/workspace",
-        "title": "Workspace (Records)",
-        "subtitle": "Modular data and item management",
-        "badge": "Auth",
+        "href": "/items",
+        "title": "Items & Stock",
+        "subtitle": "Kitchen, electronics, cables & home goods",
+        "badge": "Stock",
         "icon": "globe"
       },
       {
-        "href": "/admin",
-        "title": "Admin Management",
-        "subtitle": "Administrator statistics and controls",
-        "badge": "Admin",
+        "href": "/parts",
+        "title": "Lifecycle Parts",
+        "subtitle": "Filters, batteries & replacement schedule",
+        "badge": "Parts",
+        "icon": "sparkles"
+      },
+      {
+        "href": "/shopping",
+        "title": "Shopping List",
+        "subtitle": "Low-stock and due-part restock suggestions",
+        "badge": "List",
         "icon": "shield"
       }
     ]

@@ -93,7 +93,7 @@ function ApplicationShellContent({
           onToggleCollapsed={toggleSidebar}
         />
 
-        <div className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
+        <div className="min-w-0 flex-1 p-4 pb-20 sm:p-6 sm:pb-20 lg:p-8 lg:pb-8">
           <div className="space-y-6">
             {active && !hidePageHeader && (
               <PageHeader
@@ -107,7 +107,7 @@ function ApplicationShellContent({
         </div>
 
         <ApplicationShellFooter placement="content">
-          {contentFooter ?? 'Tulpar © 2026'}
+          {contentFooter ?? 'Umay © 2026'}
         </ApplicationShellFooter>
       </SidebarInset>
     </>

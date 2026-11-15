@@ -8,7 +8,9 @@ import {
   CardTitle,
 } from '@/components/core/card';
 import { Link } from '@/components/core/link';
+import { Separator } from '@/components/core/separator';
 import { getCurrentLocale } from '@/lib/i18n/server-locale';
+import { GoogleSignInButton } from './components/google-signin-button';
 import { PublicLoginForm } from './components/public-login-form';
 import { getPublicLoginCopy } from './i18n';
 
@@ -28,13 +30,29 @@ export async function PublicLoginScreen() {
         <CardContent className="space-y-4">
           <PublicLoginForm copy={copy} />
 
+          <div className="flex items-center gap-3">
+            <Separator className="flex-1" />
+            <span className="text-xs uppercase text-muted-foreground">
+              {locale === 'en' ? 'or' : 'veya'}
+            </span>
+            <Separator className="flex-1" />
+          </div>
+
+          <GoogleSignInButton
+            label={
+              locale === 'en'
+                ? 'Continue with Google'
+                : 'Google ile Devam Et'
+            }
+          />
+
           <Button
             asChild
-            variant="outline"
-            className="w-full rounded-none font-bold uppercase tracking-widest"
+            variant="ghost"
+            className="w-full rounded-none text-xs uppercase tracking-widest text-muted-foreground"
           >
             <Link href="/admin/login">
-              <Shield className="mr-2 h-4 w-4" />
+              <Shield className="mr-2 h-3.5 w-3.5" />
               {copy.adminLoginLabel}
             </Link>
           </Button>

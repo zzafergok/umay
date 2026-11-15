@@ -1,10 +1,10 @@
 {
   "title": "Settings",
-  "description": "Account-level controls for the Tulpar shell.",
-  "cardTitle": "Profile",
+  "description": "Umay application preferences, reminders, and data backup.",
+  "cardTitle": "Profile & Preferences",
   "displayNameLabel": "Display name",
-  "displayNamePlaceholder": "Tulpar User",
-  "updatesTitle": "Tulpar updates",
-  "updatesDescription": "Receive platform and culture atlas notifications.",
+  "displayNamePlaceholder": "Homeowner",
+  "updatesTitle": "Part & Stock Reminders",
+  "updatesDescription": "Show upcoming part replacement and low-stock notifications.",
   "submitLabel": "Save settings"
 }

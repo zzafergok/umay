@@ -1,0 +1,96 @@
+import { z } from 'zod';
+
+const isoDateOrDatetime = z
+  .string()
+  .trim()
+  .refine(
+    (val) => !Number.isNaN(Date.parse(val)),
+    'Geçerli bir tarih giriniz.',
+  );
+
+export const partLifespanSchema = z
+  .object({
+    mode: z.enum(['time', 'usage', 'both']),
+    days: z.number().int().min(1).max(36500).optional(),
+    usageUnit: z.string().trim().min(1).max(30).optional(),
+    usageLimit: z.number().positive().max(10000000).optional(),
+  })
+  .refine(
+    (val) => {
+      if (val.mode === 'time') return typeof val.days === 'number';
+      if (val.mode === 'usage') return typeof val.usageLimit === 'number';
+      return typeof val.days === 'number' || typeof val.usageLimit === 'number';
+    },
+    { message: 'Ömür modu için gün veya kullanım limiti belirtilmelidir.' },
+  );
+
+export const partInputSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, 'Parça adı zorunludur.')
+    .max(120, 'Parça adı en fazla 120 karakter olabilir.'),
+  parentItemId: z.string().trim().nullable().default(null),
+  spareItemId: z.string().trim().nullable().default(null),
+  lifespan: partLifespanSchema,
+  installedAt: isoDateOrDatetime,
+  usageCurrent: z.number().min(0).max(10000000).default(0),
+  reminderLeadDays: z.number().int().min(0).max(180).default(7),
+  notes: z.string().trim().max(1000).default(''),
+});
+
+export const partReplaceInputSchema = z.object({
+  replacedAt: isoDateOrDatetime.optional(),
+  cost: z.number().min(0).max(10000000).optional(),
+  note: z.string().trim().max(500).optional(),
+  deductSpare: z.boolean().default(true),
+});
+
+export const partUsageInputSchema = z.object({
+  usageCurrent: z.number().min(0).max(10000000),
+});
+
+export const stockMovementInputSchema = z.object({
+  itemId: z.string().trim().min(1, 'Ürün kimliği zorunludur.'),
+  type: z.enum([
+    'in',
+    'out',
+    'adjust',
+    'consume',
+    'replace_part',
+    'discard',
+  ]),
+  delta: z
+    .number({ invalid_type_error: 'Değişim miktarı sayı olmalıdır.' })
+    .refine((v) => v !== 0, 'Miktar değişimi 0 olamaz.'),
+  reason: z.string().trim().max(240).optional(),
+  relatedPartId: z.string().trim().optional(),
+});
+
+export const shoppingItemInputSchema = z
+  .object({
+    itemId: z.string().trim().nullable().default(null),
+    freeText: z.string().trim().max(120).optional(),
+    qty: z.number().positive('Miktar 0 dan büyük olmalıdır.').max(100000),
+    unit: z.string().trim().max(24).optional(),
+    source: z
+      .enum(['auto_low_stock', 'auto_part_due', 'manual'])
+      .default('manual'),
+    done: z.boolean().default(false),
+  })
+  .refine((val) => Boolean(val.itemId || val.freeText), {
+    message: 'Ürün veya serbest metin belirtilmelidir.',
+  });
+
+export const userSettingsInputSchema = z.object({
+  currency: z.enum(['TRY', 'USD', 'EUR']).default('TRY'),
+  dateFormat: z.enum(['dd.MM.yyyy', 'yyyy-MM-dd']).default('dd.MM.yyyy'),
+  defaultReminderLeadDays: z.number().int().min(1).max(90).default(7),
+  notifyInApp: z.boolean().default(true),
+});
+
+export type PartInput = z.infer<typeof partInputSchema>;
+export type PartReplaceInput = z.infer<typeof partReplaceInputSchema>;
+export type StockMovementInput = z.infer<typeof stockMovementInputSchema>;
+export type ShoppingItemInput = z.infer<typeof shoppingItemInputSchema>;
+export type UserSettingsInput = z.infer<typeof userSettingsInputSchema>;

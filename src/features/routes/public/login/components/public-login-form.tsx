@@ -7,6 +7,7 @@ import { Form, SubmitButton, TextField } from '@/components/forms';
 import { toast } from '@/components/core/toast';
 import { loginSchema, type LoginFormData } from '@/lib/auth/auth-schema';
 import { demoLoginCredentials } from '@/lib/auth/demo-credentials';
+import { useAuthStore, type AuthUser } from '@/stores/use-auth-store';
 import type { PublicLoginCopy } from '../types';
 
 interface PublicLoginFormProps {
@@ -15,6 +16,7 @@ interface PublicLoginFormProps {
 
 export function PublicLoginForm({ copy }: PublicLoginFormProps) {
   const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (data: LoginFormData) => {
@@ -26,11 +28,19 @@ export function PublicLoginForm({ copy }: PublicLoginFormProps) {
         body: JSON.stringify({ ...data, isAdmin: false }),
       });
 
-      const result = (await response.json()) as { message?: string };
+      const result = (await response.json()) as {
+        message?: string;
+        token?: string;
+        user?: AuthUser;
+      };
 
       if (!response.ok) {
         toast.error(result.message ?? 'Giriş yapılamadı');
         return;
+      }
+
+      if (result.user && result.token) {
+        setAuth(result.user, result.token);
       }
 
       toast.success(result.message ?? 'Giriş başarılı');

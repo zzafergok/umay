@@ -14,7 +14,7 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set(
     'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=()',
+    'camera=(self), microphone=(), geolocation=()',
   );
   response.headers.set('X-XSS-Protection', '1; mode=block');
   return response;
@@ -88,6 +88,7 @@ export function proxy(request: NextRequest) {
 
   if (
     pathname === '/' ||
+    pathname === '/design' ||
     pathname === '/culture' ||
     pathname.startsWith('/culture/')
   ) {

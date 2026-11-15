@@ -1,10 +1,10 @@
 {
-  "title": "Hesap Ayarları",
-  "description": "Tulpar uygulama kabuğu için hesap düzeyinde tercihler.",
-  "cardTitle": "Profil Bilgileri",
+  "title": "Ayarlar",
+  "description": "Umay uygulama tercihleri, bildirimler ve veri yedekleme.",
+  "cardTitle": "Profil ve Tercihler",
   "displayNameLabel": "Görünen Ad",
-  "displayNamePlaceholder": "Tulpar Kullanıcısı",
-  "updatesTitle": "Tulpar Güncellemeleri",
-  "updatesDescription": "Kültür atlası ve platform bildirimlerini alın.",
+  "displayNamePlaceholder": "Ev Sahibi",
+  "updatesTitle": "Parça ve Stok Hatırlatıcıları",
+  "updatesDescription": "Yaklaşan parça değişimleri ve düşük stok bildirimlerini göster.",
   "submitLabel": "Ayarları Kaydet"
 }
