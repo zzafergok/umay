@@ -24,6 +24,7 @@ interface TextFieldProps {
   placeholder?: string;
   autoComplete?: string;
   inputClassName?: string;
+  labelClassName?: string;
   type?: 'text' | 'email' | 'password' | 'url' | 'tel' | 'number';
 }
 
@@ -43,6 +44,7 @@ export function TextField({
   description,
   autoComplete,
   inputClassName,
+  labelClassName,
   type = 'text',
   required = false,
 }: TextFieldProps) {
@@ -72,6 +74,7 @@ export function TextField({
         className={cn(
           'font-mono text-2xs uppercase tracking-wider text-ash',
           hideLabel && 'sr-only',
+          labelClassName,
         )}
       >
         {label} {required && <span className="text-umay-blue">*</span>}

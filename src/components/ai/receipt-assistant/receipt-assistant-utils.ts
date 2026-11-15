@@ -1,5 +1,17 @@
+import { z } from 'zod';
 import type { OpenRouterModelsQueryParams } from '@/lib/ai/openrouter';
 import { ApiError } from '@/lib/api';
+
+export const receiptAssistantFormSchema = z.object({
+  promptHint: z
+    .string()
+    .max(300, 'Ek not en fazla 300 karakter olabilir.')
+    .optional(),
+});
+
+export type ReceiptAssistantFormValues = z.infer<
+  typeof receiptAssistantFormSchema
+>;
 
 export const OPENROUTER_MODELS_QUERY_KEY = [
   'ai',

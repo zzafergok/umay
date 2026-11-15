@@ -24,6 +24,7 @@ interface SelectFieldProps {
   label: string;
   required?: boolean;
   className?: string;
+  triggerClassName?: string;
   disabled?: boolean;
   noneLabel?: string;
   allowNone?: boolean;
@@ -38,6 +39,7 @@ export function SelectField({
   options,
   disabled,
   className,
+  triggerClassName,
   description,
   required = false,
   allowNone = false,
@@ -90,7 +92,11 @@ export function SelectField({
             >
               <SelectTrigger
                 id={name}
-                className={cn('text-xs', error && 'border-alert-red/50')}
+                className={cn(
+                  'text-xs',
+                  triggerClassName,
+                  error && 'border-alert-red/50',
+                )}
               >
                 <div className="flex min-w-0 items-center gap-2">
                   {selectedOption?.swatchColor && (
@@ -100,8 +106,9 @@ export function SelectField({
                       style={{ backgroundColor: selectedOption.swatchColor }}
                     />
                   )}
-                  <span className="truncate">
-                    {selectedOption?.label ?? placeholder}
+                  <span className="text-left leading-snug">
+                    {selectedOption?.label ??
+                      (allowNone && !field.value ? noneLabel : placeholder)}
                   </span>
                 </div>
               </SelectTrigger>
@@ -126,7 +133,7 @@ export function SelectField({
                           style={{ backgroundColor: option.swatchColor }}
                         />
                       )}
-                      <span className="truncate">{option.label}</span>
+                      <span className="leading-snug">{option.label}</span>
                     </span>
                   </SelectItem>
                 ))}

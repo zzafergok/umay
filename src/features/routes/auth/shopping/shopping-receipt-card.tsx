@@ -4,8 +4,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ReceiptAssistant } from '@/components/ai/receipt-assistant';
 import { toast } from '@/components/core/toast';
 import type { OpenRouterModelsQueryParams } from '@/lib/ai/openrouter';
-import type { ReceiptLineItem } from '@/lib/ai/receipt-analyzer';
+import type {
+  ReceiptAnalysisResult,
+  ReceiptLineItem,
+} from '@/lib/ai/receipt-analyzer';
 import { inventoryService } from '@/services/inventory-service';
+import { formatShoppingUnit } from './shopping-utils';
 
 const SHOPPING_VISION_TEXT_MODEL_QUERY: OpenRouterModelsQueryParams = {
   input_modalities: 'text,image',
@@ -13,10 +17,27 @@ const SHOPPING_VISION_TEXT_MODEL_QUERY: OpenRouterModelsQueryParams = {
   endpoints: '/api/v1/chat/completions',
 };
 
+function resolveUnitPrice(item: ReceiptLineItem): number | undefined {
+  if (typeof item.unitPrice === 'number' && item.unitPrice > 0) {
+    return Number(item.unitPrice.toFixed(2));
+  }
+  if (
+    typeof item.totalPrice === 'number' &&
+    item.totalPrice > 0 &&
+    item.quantity > 0
+  ) {
+    return Number((item.totalPrice / item.quantity).toFixed(2));
+  }
+  return undefined;
+}
+
 export function ShoppingReceiptCard() {
   const qc = useQueryClient();
 
-  const handleApplyItems = async (items: ReceiptLineItem[]) => {
+  const handleApplyItems = async (
+    items: ReceiptLineItem[],
+    analysis: ReceiptAnalysisResult,
+  ) => {
     try {
       await Promise.all(
         items.map((item) =>
@@ -24,8 +45,12 @@ export function ShoppingReceiptCard() {
             itemId: null,
             freeText: item.normalizedName || item.name,
             qty: Math.max(1, Math.round(item.quantity || 1)),
-            unit: item.unit || 'adet',
-            source: 'manual',
+            unit: formatShoppingUnit(item.unit),
+            category: item.categoryHint?.trim() || undefined,
+            priority: 'normal',
+            estimatedPrice: resolveUnitPrice(item),
+            store: analysis.merchantName?.trim() || undefined,
+            source: 'receipt_ai',
             done: false,
           }),
         ),

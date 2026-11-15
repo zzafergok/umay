@@ -68,7 +68,7 @@ export function ReceiptResultMeta({ analysis }: ReceiptResultMetaProps) {
           label={getConfidenceLabel(analysis.confidence)}
           className="text-2xs"
         />
-        <div className="ml-auto flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5 sm:ml-auto">
           {analysis.provider && (
             <Badge variant="outline" size="sm" className="font-mono text-2xs">
               {analysis.provider}
@@ -77,7 +77,7 @@ export function ReceiptResultMeta({ analysis }: ReceiptResultMetaProps) {
           <Badge
             variant="outline"
             size="sm"
-            className="font-mono text-compact text-ash"
+            className="max-w-full truncate font-mono text-compact text-ash"
           >
             {analysis.modelUsed}
           </Badge>
@@ -94,7 +94,7 @@ export function ReceiptResultMeta({ analysis }: ReceiptResultMetaProps) {
       </div>
 
       {hasFinancialBreakdown && (
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-compact text-ash tabular-nums">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-compact tabular-nums text-ash">
           {analysis.subtotal !== null && (
             <span>
               Ara Toplam:{' '}

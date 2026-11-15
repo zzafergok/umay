@@ -1,25 +1,23 @@
 'use client';
 
 import * as React from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { toast } from '@/components/core/toast';
+import type { OpenRouterModelsQueryParams } from '@/lib/ai/openrouter';
+import type {
+  ReceiptAnalysisResult,
+  ReceiptLineItem,
+} from '@/lib/ai/receipt-analyzer';
 import { compressImageFile } from '@/lib/utils/image-compress';
 import { aiReceiptService } from '@/services/ai-receipt-service';
-import type {
-  OpenRouterModel,
-  OpenRouterModelsQueryParams,
-} from '@/lib/ai/openrouter';
 import {
-  filterAndSortReceiptModels,
-  pickDefaultReceiptModelId,
-  type ReceiptAnalysisResult,
-  type ReceiptLineItem,
-} from '@/lib/ai/receipt-analyzer';
-import {
-  getOpenRouterModelsQueryKey,
   isMissingApiKeyError,
   readFileAsDataUrl,
+  receiptAssistantFormSchema,
+  type ReceiptAssistantFormValues,
 } from './receipt-assistant-utils';
+import { useReceiptModels } from './use-receipt-models';
 
 export function useReceiptAssistant(options: {
   modelQuery?: OpenRouterModelsQueryParams;
@@ -30,54 +28,19 @@ export function useReceiptAssistant(options: {
     analysis: ReceiptAnalysisResult,
   ) => void | Promise<void>;
 }) {
-  const queryClient = useQueryClient();
-  const modelsQueryKey = React.useMemo(
-    () => getOpenRouterModelsQueryKey(options.modelQuery),
-    [options.modelQuery],
-  );
-  const modelsQuery = useQuery({
-    queryKey: modelsQueryKey,
-    queryFn: () => aiReceiptService.listModels(false, options.modelQuery),
-    staleTime: 1000 * 60 * 10,
+  const modelState = useReceiptModels({
+    modelQuery: options.modelQuery,
+    defaultFreeOnly: options.defaultFreeOnly,
   });
 
-  const rawModels: OpenRouterModel[] = React.useMemo(
-    () => (Array.isArray(modelsQuery.data?.data) ? modelsQuery.data.data : []),
-    [modelsQuery.data],
-  );
-
-  const [freeOnly, setFreeOnly] = React.useState(
-    options.defaultFreeOnly ?? false,
-  );
-  const models = React.useMemo(
-    () => filterAndSortReceiptModels(rawModels, { freeOnly }),
-    [rawModels, freeOnly],
-  );
-
-  const defaultModelId = React.useMemo(
-    () => pickDefaultReceiptModelId(rawModels),
-    [rawModels],
-  );
-
-  const [selectedModelId, setSelectedModelId] = React.useState<string>('');
-  const effectiveModelId = React.useMemo(() => {
-    if (selectedModelId && models.some((m) => m.id === selectedModelId)) {
-      return selectedModelId;
-    }
-    if (defaultModelId && models.some((m) => m.id === defaultModelId)) {
-      return defaultModelId;
-    }
-    return models[0]?.id ?? '';
-  }, [selectedModelId, models, defaultModelId]);
-
-  const selectedModel = React.useMemo(
-    () => models.find((m) => m.id === effectiveModelId) ?? null,
-    [models, effectiveModelId],
-  );
+  const formMethods = useForm<ReceiptAssistantFormValues>({
+    resolver: zodResolver(receiptAssistantFormSchema),
+    defaultValues: { promptHint: '' },
+    mode: 'onChange',
+  });
 
   const [imageDataUrl, setImageDataUrl] = React.useState<string>('');
   const [fileName, setFileName] = React.useState<string>('');
-  const [promptHint, setPromptHint] = React.useState<string>('');
   const [analysis, setAnalysis] = React.useState<ReceiptAnalysisResult | null>(
     null,
   );
@@ -108,11 +71,17 @@ export function useReceiptAssistant(options: {
     }
   };
 
-  const handleAnalyze = async () => {
+  const handleAnalyze = async (values?: ReceiptAssistantFormValues) => {
     if (!imageDataUrl) {
       setErrorMessage('Lütfen önce bir fiş görseli seçin.');
       return;
     }
+
+    const promptHint = (
+      values?.promptHint ??
+      formMethods.getValues('promptHint') ??
+      ''
+    ).trim();
 
     setIsAnalyzing(true);
     setErrorMessage(null);
@@ -120,8 +89,8 @@ export function useReceiptAssistant(options: {
     try {
       const result = await aiReceiptService.analyzeReceipt({
         imageDataUrl,
-        modelId: effectiveModelId || undefined,
-        promptHint: promptHint.trim() || undefined,
+        modelId: modelState.selectedModelId || undefined,
+        promptHint: promptHint || undefined,
       });
 
       setIsConfigured(true);
@@ -186,45 +155,18 @@ export function useReceiptAssistant(options: {
   const reset = () => {
     setImageDataUrl('');
     setFileName('');
-    setPromptHint('');
+    formMethods.reset({ promptHint: '' });
     setAnalysis(null);
     setSelectedIndices(new Set());
     setErrorMessage(null);
   };
 
-  const [isRefreshingModels, setIsRefreshingModels] = React.useState(false);
-
-  const refreshModels = async () => {
-    setIsRefreshingModels(true);
-    try {
-      const fresh = await aiReceiptService.listModels(true, options.modelQuery);
-      queryClient.setQueryData(modelsQueryKey, fresh);
-      toast.success('OpenRouter model listesi güncellendi.');
-    } catch {
-      toast.error('Model listesi yenilenemedi.');
-    } finally {
-      setIsRefreshingModels(false);
-    }
-  };
-
   return {
-    models,
-    totalCatalogCount: modelsQuery.data?.total_count ?? rawModels.length,
-    freeOnly,
-    setFreeOnly,
-    defaultModelId,
+    formMethods,
+    ...modelState,
     isConfigured,
-    isLoadingModels: modelsQuery.isLoading,
-    modelsLoadError: modelsQuery.isError,
-    isRefreshingModels,
-    refreshModels,
-    selectedModelId: effectiveModelId,
-    selectedModel,
-    setSelectedModelId,
     imageDataUrl,
     fileName,
-    promptHint,
-    setPromptHint,
     analysis,
     selectedIndices,
     isAnalyzing,

@@ -59,11 +59,48 @@ export function ReceiptModelSelector({
     : null;
 
   return (
-    <div className="space-y-1.5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <Label htmlFor="receipt-model-select">OpenRouter Vision Modeli</Label>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
+    <div className="min-w-0 space-y-1.5">
+      <Label htmlFor="receipt-model-select" className="block">
+        OpenRouter Vision Modeli
+      </Label>
+
+      <div className="flex items-center gap-2">
+        <Select
+          value={selectedModelId}
+          onValueChange={onSelectModel}
+          disabled={isLoadingModels}
+        >
+          <SelectTrigger id="receipt-model-select" className="min-w-0 flex-1">
+            <SelectValue placeholder="Model seçin" />
+          </SelectTrigger>
+          <SelectContent>
+            {models.map((model) => (
+              <SelectItem key={model.id} value={model.id}>
+                {model.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="bg-surface-sunken shrink-0"
+          onClick={onRefreshModels}
+          disabled={isRefreshingModels}
+          aria-label="Model listesini yenile"
+          title="Model listesini yenile"
+        >
+          <RefreshCw
+            className={`h-4 w-4 ${isRefreshingModels ? 'animate-spin' : ''}`}
+          />
+        </Button>
+      </div>
+
+      <div className="space-y-1.5 pt-0.5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
             <Switch
               id="receipt-free-only-switch"
               size="sm"
@@ -88,82 +125,70 @@ export function ReceiptModelSelector({
             }
             className="text-2xs"
           />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="h-6 w-6"
-            onClick={onRefreshModels}
-            disabled={isRefreshingModels}
-            aria-label="Model listesini yenile"
-          >
-            <RefreshCw
-              className={`h-3.5 w-3.5 ${
-                isRefreshingModels ? 'animate-spin' : ''
-              }`}
-            />
-          </Button>
         </div>
-      </div>
 
-      <Select
-        value={selectedModelId}
-        onValueChange={onSelectModel}
-        disabled={isLoadingModels}
-      >
-        <SelectTrigger id="receipt-model-select">
-          <SelectValue placeholder="Model seçin" />
-        </SelectTrigger>
-        <SelectContent>
-          {models.map((model) => (
-            <SelectItem key={model.id} value={model.id}>
-              {model.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      {selectedModel && (
-        <div className="space-y-1 pt-0.5">
-          <div className="flex flex-wrap items-center gap-1.5">
-            {selectedModel.id === defaultModelId && (
-              <Badge variant="secondary" size="sm" className="text-2xs">
-                Varsayılan
-              </Badge>
-            )}
-            {pricingLabel && (
-              <Badge variant="outline" size="sm" className="font-mono text-2xs">
-                {pricingLabel}
-              </Badge>
-            )}
-            {contextLabel && (
-              <Badge variant="outline" size="sm" className="font-mono text-2xs">
-                {contextLabel}
-              </Badge>
-            )}
-            {supportsStructuredOutputs(selectedModel) && (
-              <Badge variant="outline" size="sm" className="font-mono text-2xs">
-                Structured
-              </Badge>
-            )}
-            {supportsJsonObject(selectedModel) && (
-              <Badge variant="outline" size="sm" className="font-mono text-2xs">
-                JSON
-              </Badge>
-            )}
-            {supportsReasoningOutput(selectedModel) && (
-              <Badge variant="outline" size="sm" className="font-mono text-2xs">
-                Reasoning
-              </Badge>
+        {selectedModel && (
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {selectedModel.id === defaultModelId && (
+                <Badge variant="secondary" size="sm" className="text-2xs">
+                  Varsayılan
+                </Badge>
+              )}
+              {pricingLabel && (
+                <Badge
+                  variant="outline"
+                  size="sm"
+                  className="font-mono text-2xs"
+                >
+                  {pricingLabel}
+                </Badge>
+              )}
+              {contextLabel && (
+                <Badge
+                  variant="outline"
+                  size="sm"
+                  className="font-mono text-2xs"
+                >
+                  {contextLabel}
+                </Badge>
+              )}
+              {supportsStructuredOutputs(selectedModel) && (
+                <Badge
+                  variant="outline"
+                  size="sm"
+                  className="font-mono text-2xs"
+                >
+                  Structured
+                </Badge>
+              )}
+              {supportsJsonObject(selectedModel) && (
+                <Badge
+                  variant="outline"
+                  size="sm"
+                  className="font-mono text-2xs"
+                >
+                  JSON
+                </Badge>
+              )}
+              {supportsReasoningOutput(selectedModel) && (
+                <Badge
+                  variant="outline"
+                  size="sm"
+                  className="font-mono text-2xs"
+                >
+                  Reasoning
+                </Badge>
+              )}
+            </div>
+            {selectedModel.description && (
+              <p className="line-clamp-2 text-2xs text-ash">
+                {selectedModel.description}
+              </p>
             )}
           </div>
-          {selectedModel.description && (
-            <p className="line-clamp-2 text-2xs text-ash">
-              {selectedModel.description}
-            </p>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

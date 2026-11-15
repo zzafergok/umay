@@ -13,6 +13,7 @@ interface AmountFieldProps {
   label: string;
   required?: boolean;
   className?: string;
+  inputClassName?: string;
   disabled?: boolean;
   placeholder?: string;
   description?: string;
@@ -23,6 +24,7 @@ export function AmountField({
   label,
   disabled,
   className,
+  inputClassName,
   placeholder,
   description,
   required = false,
@@ -64,6 +66,7 @@ export function AmountField({
             error={errorMessage}
             className={cn(
               'text-xs font-bold',
+              inputClassName,
               errorMessage && 'border-alert-red/50',
             )}
           />

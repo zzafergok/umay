@@ -16,6 +16,7 @@ import type {
   PartInput,
   PartReplaceInput,
   ShoppingItemInput,
+  ShoppingItemPatchInput,
   StockMovementInput,
   UserSettingsInput,
 } from '@/features/inventory/schemas';
@@ -93,7 +94,7 @@ export const inventoryService = {
   listShopping: () => apiClient.get<ShoppingListItem[]>('/inventory/shopping'),
   createShopping: (data: ShoppingItemInput) =>
     apiClient.post<ShoppingListItem>('/inventory/shopping', data),
-  updateShopping: (id: string, data: { qty?: number; done?: boolean }) =>
+  updateShopping: (id: string, data: ShoppingItemPatchInput) =>
     apiClient.patch<ShoppingListItem>(`/inventory/shopping/${id}`, data),
   deleteShopping: (id: string) =>
     apiClient.delete<{ ok: boolean }>(`/inventory/shopping/${id}`),

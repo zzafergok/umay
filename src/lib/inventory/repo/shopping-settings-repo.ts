@@ -1,11 +1,21 @@
-import type { ShoppingListItem, UserSettings } from '@/features/inventory/types';
+import type {
+  ShoppingListItem,
+  UserSettings,
+} from '@/features/inventory/types';
 import type {
   ShoppingItemInput,
+  ShoppingItemPatchInput,
   UserSettingsInput,
 } from '@/features/inventory/schemas';
 import { getAdminFirestore, isFirebaseConfigured } from '@/lib/firebase/admin';
 import { getUserVault } from '@/lib/inventory/memory-store';
 import { InventoryRepoError, newId } from './errors';
+
+function omitUndefined<T extends object>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => value !== undefined),
+  ) as T;
+}
 
 function userCol(uid: string, name: string) {
   return getAdminFirestore().collection('users').doc(uid).collection(name);
@@ -30,12 +40,14 @@ export async function createShoppingItem(
   input: ShoppingItemInput,
 ): Promise<ShoppingListItem> {
   const now = new Date().toISOString();
-  const entry: ShoppingListItem = {
+  const entry = omitUndefined<ShoppingListItem>({
     id: newId('shp'),
     ...input,
+    priority: input.priority ?? 'normal',
+    boughtAt: input.done ? now : undefined,
     createdAt: now,
     updatedAt: now,
-  };
+  });
   if (!isFirebaseConfigured()) {
     getUserVault(uid).shoppingList.set(entry.id, entry);
     return entry;
@@ -47,17 +59,35 @@ export async function createShoppingItem(
 export async function updateShoppingItem(
   uid: string,
   id: string,
-  input: Partial<ShoppingItemInput>,
+  input: ShoppingItemPatchInput,
 ): Promise<ShoppingListItem> {
   const all = await listShoppingItems(uid);
   const current = all.find((s) => s.id === id);
-  if (!current) throw new InventoryRepoError(404, 'Alışveriş öğesi bulunamadı.');
+  if (!current)
+    throw new InventoryRepoError(404, 'Alışveriş öğesi bulunamadı.');
 
-  const updated: ShoppingListItem = {
+  const now = new Date().toISOString();
+  const { estimatedPrice, ...rest } = input;
+  const nextEstimatedPrice =
+    estimatedPrice === null
+      ? undefined
+      : estimatedPrice !== undefined
+        ? estimatedPrice
+        : current.estimatedPrice;
+  const nextBoughtAt =
+    input.done === true
+      ? (current.boughtAt ?? now)
+      : input.done === false
+        ? undefined
+        : current.boughtAt;
+
+  const updated = omitUndefined<ShoppingListItem>({
     ...current,
-    ...input,
-    updatedAt: new Date().toISOString(),
-  };
+    ...rest,
+    estimatedPrice: nextEstimatedPrice,
+    boughtAt: nextBoughtAt,
+    updatedAt: now,
+  });
   if (!isFirebaseConfigured()) {
     getUserVault(uid).shoppingList.set(id, updated);
     return updated;
@@ -72,12 +102,14 @@ export async function deleteShoppingItem(
 ): Promise<void> {
   if (!isFirebaseConfigured()) {
     const deleted = getUserVault(uid).shoppingList.delete(id);
-    if (!deleted) throw new InventoryRepoError(404, 'Alışveriş öğesi bulunamadı.');
+    if (!deleted)
+      throw new InventoryRepoError(404, 'Alışveriş öğesi bulunamadı.');
     return;
   }
   const ref = userCol(uid, 'shoppingList').doc(id);
   const doc = await ref.get();
-  if (!doc.exists) throw new InventoryRepoError(404, 'Alışveriş öğesi bulunamadı.');
+  if (!doc.exists)
+    throw new InventoryRepoError(404, 'Alışveriş öğesi bulunamadı.');
   await ref.delete();
 }
 

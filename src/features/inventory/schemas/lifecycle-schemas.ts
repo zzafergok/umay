@@ -59,20 +59,44 @@ export const stockMovementInputSchema = z.object({
   relatedPartId: z.string().trim().optional(),
 });
 
+export const shoppingPrioritySchema = z.enum(['low', 'normal', 'high']);
+
 export const shoppingItemInputSchema = z
   .object({
     itemId: z.string().trim().nullable().default(null),
     freeText: z.string().trim().max(120).optional(),
     qty: z.number().positive('Miktar 0 dan büyük olmalıdır.').max(100000),
     unit: z.string().trim().max(24).optional(),
+    category: z.string().trim().max(60).optional(),
+    priority: shoppingPrioritySchema.optional(),
+    estimatedPrice: z.number().min(0).max(10000000).optional(),
+    store: z.string().trim().max(80).optional(),
+    note: z.string().trim().max(240).optional(),
     source: z
-      .enum(['auto_low_stock', 'auto_part_due', 'manual'])
+      .enum(['auto_low_stock', 'auto_part_due', 'manual', 'receipt_ai'])
       .default('manual'),
     done: z.boolean().default(false),
   })
   .refine((val) => Boolean(val.itemId || val.freeText), {
     message: 'Ürün veya serbest metin belirtilmelidir.',
   });
+
+export const shoppingItemPatchSchema = z.object({
+  itemId: z.string().trim().nullable().optional(),
+  freeText: z.string().trim().max(120).optional(),
+  qty: z
+    .number()
+    .positive('Miktar 0 dan büyük olmalıdır.')
+    .max(100000)
+    .optional(),
+  unit: z.string().trim().max(24).optional(),
+  category: z.string().trim().max(60).optional(),
+  priority: shoppingPrioritySchema.optional(),
+  estimatedPrice: z.number().min(0).max(10000000).nullable().optional(),
+  store: z.string().trim().max(80).optional(),
+  note: z.string().trim().max(240).optional(),
+  done: z.boolean().optional(),
+});
 
 export const userSettingsInputSchema = z.object({
   currency: z.enum(['TRY', 'USD', 'EUR']).default('TRY'),
@@ -83,4 +107,5 @@ export type PartInput = z.infer<typeof partInputSchema>;
 export type PartReplaceInput = z.infer<typeof partReplaceInputSchema>;
 export type StockMovementInput = z.infer<typeof stockMovementInputSchema>;
 export type ShoppingItemInput = z.infer<typeof shoppingItemInputSchema>;
+export type ShoppingItemPatchInput = z.infer<typeof shoppingItemPatchSchema>;
 export type UserSettingsInput = z.infer<typeof userSettingsInputSchema>;

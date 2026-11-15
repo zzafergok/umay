@@ -67,7 +67,7 @@ export function ReceiptResultView({
       <ReceiptResultMeta analysis={analysis} />
 
       <Tabs defaultValue={analysis.items.length > 0 ? 'items' : 'raw'}>
-        <TabsList>
+        <TabsList className="max-w-full justify-start overflow-x-auto scrollbar-hide">
           <TabsTrigger value="items">
             <ListChecks className="h-3.5 w-3.5" />
             Kalemler ({analysis.items.length})
@@ -155,12 +155,13 @@ export function ReceiptResultView({
               </Table>
 
               {canApply && onApplySelected && (
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <span className="font-mono text-compact tabular-nums text-ash">
                     {selectedIndices.size} / {analysis.items.length} ürün seçili
                   </span>
                   <Button
                     size="sm"
+                    className="w-full sm:w-auto"
                     onClick={onApplySelected}
                     disabled={isApplying || selectedIndices.size === 0}
                   >

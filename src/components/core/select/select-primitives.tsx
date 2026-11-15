@@ -18,18 +18,18 @@ export const SelectTrigger = React.forwardRef<
     ref={ref}
     data-slot="select-trigger"
     className={cn(
-      'flex h-11 min-h-[44px] w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border bg-surface-sunken px-3 py-2 text-body text-text outline-none transition-colors duration-150',
-      'placeholder:text-text-subtle focus:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
+      'bg-surface-sunken text-body text-text flex h-auto min-h-[44px] w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border px-3 py-2 outline-none transition-colors duration-150',
+      'placeholder:text-text-subtle focus-visible:ring-offset-bg focus:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'aria-invalid:border-danger aria-invalid:focus-visible:ring-danger',
-      '[&>span]:line-clamp-1',
+      '[&>span]:text-left [&>span]:leading-snug',
       className,
     )}
     {...props}
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="size-4 shrink-0 text-text-muted" />
+      <ChevronDown className="text-text-muted size-4 shrink-0" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -43,7 +43,7 @@ export const SelectScrollUpButton = React.forwardRef<
     ref={ref}
     data-slot="select-scroll-up-button"
     className={cn(
-      'flex cursor-default items-center justify-center py-1 text-text-muted',
+      'text-text-muted flex cursor-default items-center justify-center py-1',
       className,
     )}
     {...props}
@@ -61,7 +61,7 @@ export const SelectScrollDownButton = React.forwardRef<
     ref={ref}
     data-slot="select-scroll-down-button"
     className={cn(
-      'flex cursor-default items-center justify-center py-1 text-text-muted',
+      'text-text-muted flex cursor-default items-center justify-center py-1',
       className,
     )}
     {...props}
@@ -107,7 +107,7 @@ export const SelectContent = React.forwardRef<
           ref={ref}
           data-slot="select-content"
           className={cn(
-            'relative z-[10000] max-h-96 min-w-[8rem] overflow-hidden rounded-md border border-border dark:border-border-strong bg-surface-raised p-1 text-text shadow-float outline-none',
+            'dark:border-border-strong bg-surface-raised text-text shadow-float relative z-[10000] max-h-96 min-w-[8rem] overflow-hidden rounded-md border border-border p-1 outline-none',
             'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             position === 'popper' &&
               'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
@@ -166,7 +166,7 @@ export const SelectLabel = React.forwardRef<
     ref={ref}
     data-slot="select-label"
     className={cn(
-      'py-1.5 pl-8 pr-2 text-caption font-semibold text-text-muted',
+      'text-text-muted py-1.5 pl-8 pr-2 text-caption font-semibold',
       className,
     )}
     {...props}
@@ -182,7 +182,7 @@ export const SelectItem = React.forwardRef<
     ref={ref}
     data-slot="select-item"
     className={cn(
-      'relative flex min-h-[36px] w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-7 pr-2 text-body-sm text-text outline-none transition-colors duration-150',
+      'text-body-sm text-text relative flex min-h-[36px] w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-7 pr-2 outline-none transition-colors duration-150',
       'focus:bg-accent-subtle focus:text-text data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
       className,
     )}
@@ -194,7 +194,7 @@ export const SelectItem = React.forwardRef<
       </SelectPrimitive.ItemIndicator>
     </span>
 
-    <SelectPrimitive.ItemText className="min-w-0 flex-1 truncate">
+    <SelectPrimitive.ItemText className="min-w-0 flex-1 leading-snug">
       {children}
     </SelectPrimitive.ItemText>
     {endAdornment && (

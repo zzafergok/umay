@@ -19,9 +19,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
-import { Input } from '@/components/core/input';
-import { Label } from '@/components/core/label';
-import { Spinner } from '@/components/core/spinner';
+import { Form, SubmitButton, TextField } from '@/components/forms';
+import { receiptAssistantFormSchema } from './receipt-assistant-utils';
+import { ReceiptImageField } from './receipt-image-field';
 import { ReceiptModelSelector } from './receipt-model-selector';
 import { ReceiptResultView } from './receipt-result-view';
 import type { ReceiptAssistantProps } from './types';
@@ -38,6 +38,7 @@ export function ReceiptAssistant({
   defaultFreeOnly = false,
 }: ReceiptAssistantProps) {
   const [expanded, setExpanded] = React.useState(defaultExpanded);
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const state = useReceiptAssistant({
     modelQuery,
     defaultFreeOnly,
@@ -45,12 +46,19 @@ export function ReceiptAssistant({
     onApplyItems,
   });
 
+  const handleReset = () => {
+    state.reset();
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <Card>
-      <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0 pb-3">
-        <div className="space-y-1">
+      <CardHeader className="flex flex-col gap-3 space-y-0 pb-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1 space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <ReceiptText className="text-umay-blue h-4 w-4" />
+            <ReceiptText className="text-umay-blue h-4 w-4 shrink-0" />
             <CardTitle className="font-display text-base">{title}</CardTitle>
             <Badge variant="secondary" size="sm" className="font-mono">
               {state.freeOnly ? 'Ücretsiz Modeller' : 'Tüm Vision Modeller'} (
@@ -62,8 +70,10 @@ export function ReceiptAssistant({
           </CardDescription>
         </div>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
+          className="shrink-0"
           onClick={() => setExpanded((prev) => !prev)}
           aria-expanded={expanded}
         >
@@ -93,85 +103,85 @@ export function ReceiptAssistant({
             </Alert>
           )}
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <Label htmlFor="receipt-image-input">Fiş Görseli</Label>
-              <Input
-                id="receipt-image-input"
-                type="file"
-                accept="image/*"
-                capture="environment"
-                onChange={state.handleFileChange}
+          <Form
+            schema={receiptAssistantFormSchema}
+            methods={state.formMethods}
+            onSubmit={state.handleAnalyze}
+            className="space-y-4"
+          >
+            <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+              <ReceiptImageField
+                fileInputRef={fileInputRef}
+                fileName={state.fileName}
+                onFileChange={state.handleFileChange}
               />
-              {state.fileName && (
-                <p className="truncate font-mono text-compact text-ash">
-                  Seçilen dosya: {state.fileName}
-                </p>
-              )}
+
+              <ReceiptModelSelector
+                models={state.models}
+                totalCatalogCount={state.totalCatalogCount}
+                freeOnly={state.freeOnly}
+                onFreeOnlyChange={state.setFreeOnly}
+                defaultModelId={state.defaultModelId}
+                selectedModelId={state.selectedModelId}
+                selectedModel={state.selectedModel}
+                isLoadingModels={state.isLoadingModels}
+                modelsLoadError={state.modelsLoadError}
+                isRefreshingModels={state.isRefreshingModels}
+                onSelectModel={state.setSelectedModelId}
+                onRefreshModels={state.refreshModels}
+              />
             </div>
 
-            <ReceiptModelSelector
-              models={state.models}
-              totalCatalogCount={state.totalCatalogCount}
-              freeOnly={state.freeOnly}
-              onFreeOnlyChange={state.setFreeOnly}
-              defaultModelId={state.defaultModelId}
-              selectedModelId={state.selectedModelId}
-              selectedModel={state.selectedModel}
-              isLoadingModels={state.isLoadingModels}
-              modelsLoadError={state.modelsLoadError}
-              isRefreshingModels={state.isRefreshingModels}
-              onSelectModel={state.setSelectedModelId}
-              onRefreshModels={state.refreshModels}
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="receipt-prompt-hint">Ek Not (İsteğe Bağlı)</Label>
-            <Input
-              id="receipt-prompt-hint"
-              value={state.promptHint}
-              onChange={(e) => state.setPromptHint(e.target.value)}
+            <TextField
+              name="promptHint"
+              label="Ek Not (İsteğe Bağlı)"
               placeholder="Örn. Sadece temizlik ve gıda ürünlerini listele"
+              maxLength={300}
+              className="space-y-1.5"
+              labelClassName="font-sans text-body-sm font-medium normal-case tracking-normal text-text"
+              inputClassName="text-body"
             />
-          </div>
 
-          {state.imageDataUrl && (
-            <div className="flex flex-wrap items-center gap-3">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={state.imageDataUrl}
-                alt="Yüklenen fiş önizlemesi"
-                className="h-24 w-24 rounded-sm border border-gunmetal/40 object-cover"
-              />
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  onClick={state.handleAnalyze}
-                  disabled={state.isAnalyzing}
-                >
-                  {state.isAnalyzing ? (
-                    <>
-                      <Spinner className="mr-2 h-4 w-4" />
-                      Analiz Ediliyor...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="mr-2 h-4 w-4" />
-                      Fişi Analiz Et
-                    </>
-                  )}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={state.reset}
-                  disabled={state.isAnalyzing}
-                >
-                  <RotateCcw className="mr-1.5 h-4 w-4" />
-                  Temizle
-                </Button>
+            {state.imageDataUrl && (
+              <div className="bg-surface-sunken/50 flex flex-col gap-3 rounded-md border border-border p-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={state.imageDataUrl}
+                    alt="Yüklenen fiş önizlemesi"
+                    className="h-16 w-16 shrink-0 rounded-sm border border-border object-cover sm:h-20 sm:w-20"
+                  />
+                  <div className="min-w-0 space-y-0.5">
+                    <p className="text-body-sm text-text truncate font-medium">
+                      {state.fileName}
+                    </p>
+                    <p className="text-text-muted text-caption">
+                      Görsel analize hazır
+                    </p>
+                  </div>
+                </div>
+                <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
+                  <SubmitButton
+                    isLoading={state.isAnalyzing}
+                    loadingText="Analiz Ediliyor..."
+                    icon={<Sparkles className="h-4 w-4" />}
+                  >
+                    Fişi Analiz Et
+                  </SubmitButton>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full sm:w-auto"
+                    onClick={handleReset}
+                    disabled={state.isAnalyzing}
+                  >
+                    <RotateCcw className="mr-1.5 h-4 w-4" />
+                    Temizle
+                  </Button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </Form>
 
           {state.errorMessage && (
             <Alert variant="destructive">

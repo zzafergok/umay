@@ -1,5 +1,39 @@
 # Umay – Uygulama Planı (`tasks/todo.md`)
 
+## Faz 20 – Detaylı ve Profesyonel Alışveriş Listesi Tasarımı (İnceleme Özeti)
+
+### Yapılan Değişiklikler
+- **Veri Modeli, Şema & Kalıcılık**: [lifecycle.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/types/lifecycle.ts), [lifecycle-schemas.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/inventory/schemas/lifecycle-schemas.ts), [shopping-settings-repo.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/inventory/repo/shopping-settings-repo.ts), [route.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/app/api/inventory/shopping/[id]/route.ts) ve [inventory-service.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/services/inventory-service.ts) güncellendi; `category`, `priority` (`high` | `normal` | `low`), `estimatedPrice`, `store`, `note`, `boughtAt`, `source: 'receipt_ai'` ve `PATCH` şema doğrulaması ile `undefined` temizliği (`omitUndefined`) eklendi.
+- **Özet KPI & Yardımcılar**: [constants.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/constants.ts), [shopping-utils.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-utils.ts) ve [shopping-summary-stats.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-summary-stats.tsx) ile birim/öncelik/kategori sabitleri, toplam tutar/filtreleme/sıralama ve 4 kartlı `Stat` özet şeridi oluşturuldu.
+- **Detaylı Ekleme & Düzenleme**: [shopping-form-schema.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-form-schema.ts), [shopping-add-form.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-add-form.tsx) ve [shopping-edit-dialog.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-edit-dialog.tsx) dosyalarında `Form`, `TextField`, `SelectField`, `AmountField`, `SubmitButton`, `zod` ve `react-hook-form` ile hızlı ekleme + açılabilir detay alanları ve modal düzenleme akışı kuruldu.
+- **Profesyonel Tablo, Araç Çubuğu, Öneriler & Fiş Entegrasyonu**: [shopping-list-toolbar.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-list-toolbar.tsx), [shopping-list-row.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-list-row.tsx), [shopping-list-table.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-list-table.tsx), [shopping-suggestions.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-suggestions.tsx), [shopping-receipt-card.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-receipt-card.tsx), [use-shopping-screen.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/use-shopping-screen.ts) ve [screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/screen.tsx) ile durum sekmeleri, arama, öncelik filtresi, alınanları temizleme, satır içi `-`/`+` miktar kontrolü, envanter stoğuna işleme, önerileri toplu ekleme ve fiş kalemlerini zengin alanlarla aktarma eklendi.
+- **Testler**: [shopping.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/inventory/shopping.test.ts) genişletildi.
+
+### Doğrulama Sonuçları
+- Tüm shopping route ve test dosyaları 250 satır sınırının altında (en yüksek: `use-shopping-screen.ts`, 246 satır).
+- `npm run type-check`: 0 hata.
+- `npm run lint`: 0 hata, 0 uyarı.
+- `npm test`: 14 test dosyası, 104 test geçti.
+- `npm run metadata:check`: Başarılı (`All app routes expose metadata.`).
+- `npm run build`: Next.js 16.4.6 Turbopack production build başarılı (36/36 statik sayfa üretildi).
+
+---
+
+## Faz 19 – Fiş Analiz Asistanı ve Alışveriş Formu Responsive & Hizalı Düzeni (İnceleme Özeti)
+
+- **İki Kolonlu Form Hizalaması (`ReceiptImageField`, `ReceiptModelSelector`, `ReceiptAssistant`):**
+  - `ReceiptModelSelector` ([receipt-model-selector.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/ai/receipt-assistant/receipt-model-selector.tsx)) içindeki `size="icon"` (`44px`) yenileme butonunun etiket satırını büyüterek iki kolon arasında oluşturduğu dikey hiza kayması giderildi: etiket satırı yalnızca `OpenRouter Vision Modeli` başlığına indirgendi, yenileme butonu `SelectTrigger` ile aynı `44px` (`h-11`) satırına alındı ve `Sadece Ücretsiz` anahtarı + durum rozeti + model rozetleri seçim alanının altında düzenli bir meta satırına yerleştirildi.
+  - `Fiş Görseli` alanı [receipt-image-field.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/ai/receipt-assistant/receipt-image-field.tsx) bileşenine ayrılarak `SelectTrigger` ile birebir aynı `44px` (`h-11 min-h-[44px]`) yükseklik, `truncate` destekli dosya adı gösterimi ve tek tıkla değiştirme tetikleyicisi sağlandı; altındaki mükerrer dosya adı satırı kaldırıldı.
+  - Grid kırılımı `grid-cols-1 items-start gap-4 md:grid-cols-2` olarak güncellendi; `ReceiptAssistant` ([receipt-assistant.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/ai/receipt-assistant/receipt-assistant.tsx), [use-receipt-assistant.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/ai/receipt-assistant/use-receipt-assistant.ts), [use-receipt-models.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/ai/receipt-assistant/use-receipt-models.ts)) `Form` + `zod` (`receiptAssistantFormSchema`) + `TextField` (`labelClassName` desteğiyle [text-field.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/forms/text-field.tsx)) + `SubmitButton` akışına geçirildi ve yüklenen görsel önizleme/aksiyon alanı mobilde tam genişlikte, masaüstünde sağa hizalı kart satırı olarak düzenlendi.
+- **Sonuç Görünümü & Alışveriş Manuel Ekleme Formu:**
+  - [receipt-result-meta.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/ai/receipt-assistant/receipt-result-meta.tsx) (`sm:ml-auto`, `max-w-full truncate`) ve [receipt-result-view.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/components/ai/receipt-assistant/receipt-result-view.tsx) (`TabsList` yatay taşma koruması ve mobilde yığılan aksiyon barı) dar ekranlar için düzenlendi.
+  - [shopping-add-form.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/shopping-add-form.tsx) ve [screen.tsx](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/features/routes/auth/shopping/screen.tsx) içindeki manuel ürün ekleme formu `Form` + `zod` şemasıyla mobilde hizalı iki satırlı, masaüstünde tek satırlı düzene geçirildi.
+- **Doğrulama:**
+  - Değiştirilen/eklenen tüm dosyalar `<= 250` satır (`wc -l`, en uzun dosya 225 satır).
+  - `npm run type-check`, `npm run lint`, `npm test` (13 dosya, 102 test), `npm run metadata:check` ve `npm run build` sıfır hatayla geçti.
+
+---
+
 ## Faz 18 – OpenRouter OpenAPI Spesifikasyonuna Tam Uyum (İnceleme Özeti)
 
 - **OpenAPI Tip Tanımları (`src/lib/ai/openrouter/model-types.ts`, `types.ts`):**

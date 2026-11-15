@@ -54,7 +54,10 @@ export interface StockMovement {
   at: string;
 }
 
-export type ShoppingSource = 'auto_low_stock' | 'auto_part_due' | 'manual';
+export type ShoppingSource =
+  'auto_low_stock' | 'auto_part_due' | 'manual' | 'receipt_ai';
+
+export type ShoppingPriority = 'low' | 'normal' | 'high';
 
 export interface ShoppingListItem {
   id: string;
@@ -62,8 +65,14 @@ export interface ShoppingListItem {
   freeText?: string;
   qty: number;
   unit?: string;
+  category?: string;
+  priority?: ShoppingPriority;
+  estimatedPrice?: number;
+  store?: string;
+  note?: string;
   source: ShoppingSource;
   done: boolean;
+  boughtAt?: string;
   createdAt: string;
   updatedAt: string;
 }
