@@ -68,6 +68,17 @@ export function ReceiptResultMeta({ analysis }: ReceiptResultMetaProps) {
           label={getConfidenceLabel(analysis.confidence)}
           className="text-2xs"
         />
+        {typeof analysis.imageCount === 'number' && analysis.imageCount > 1 && (
+          <Badge variant="secondary" size="sm" className="font-mono text-2xs">
+            {analysis.imageCount} parça birleştirildi
+          </Badge>
+        )}
+        {typeof analysis.deduplicatedCount === 'number' &&
+          analysis.deduplicatedCount > 0 && (
+            <Badge variant="outline" size="sm" className="font-mono text-2xs">
+              {analysis.deduplicatedCount} mükerrer elendi
+            </Badge>
+          )}
         <div className="flex flex-wrap items-center gap-1.5 sm:ml-auto">
           {analysis.provider && (
             <Badge variant="outline" size="sm" className="font-mono text-2xs">

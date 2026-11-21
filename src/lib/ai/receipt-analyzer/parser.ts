@@ -1,3 +1,4 @@
+import { repairTruncatedReceiptJson } from './json-repair';
 import {
   isRecord,
   normalizeConfidence,
@@ -41,9 +42,7 @@ export function extractJsonFromModelText(rawContent: string): string | null {
 function unwrapReceiptContainer(
   parsed: unknown,
 ): Record<string, unknown> | null {
-  if (Array.isArray(parsed)) {
-    return { items: parsed };
-  }
+  if (Array.isArray(parsed)) return { items: parsed };
   if (!isRecord(parsed)) return null;
 
   for (const wrapperKey of ['receipt', 'data', 'result', 'analysis']) {
@@ -56,58 +55,49 @@ function unwrapReceiptContainer(
 }
 
 function normalizeReceiptItem(item: Record<string, unknown>) {
-  const name =
-    toOptionalString(
-      pickFirst(item, [
-        'name',
-        'productName',
-        'product_name',
-        'title',
-        'description',
-        'item',
-      ]),
-    ) ?? 'Ürün';
-  const normalizedName =
-    toOptionalString(
-      pickFirst(item, [
-        'normalizedName',
-        'normalized_name',
-        'cleanName',
-        'clean_name',
-      ]),
-    ) ?? '';
-  const quantity =
-    toOptionalNumber(pickFirst(item, ['quantity', 'qty', 'count'])) ?? 1;
-  const unit = toOptionalString(pickFirst(item, ['unit', 'uom'])) ?? 'adet';
-  const unitPrice = toOptionalNumber(
-    pickFirst(item, ['unitPrice', 'unit_price', 'price']),
-  );
-  const totalPrice = toOptionalNumber(
-    pickFirst(item, [
-      'totalPrice',
-      'total_price',
-      'lineTotal',
-      'line_total',
-      'total',
-      'amount',
-    ]),
-  );
-  const categoryHint = toOptionalString(
-    pickFirst(item, ['categoryHint', 'category_hint', 'category']),
-  );
-  const vatRate = normalizeVatRate(
-    pickFirst(item, ['vatRate', 'vat_rate', 'taxRate', 'tax_rate']),
-  );
-
   return {
-    name,
-    normalizedName,
-    quantity,
-    unit,
-    unitPrice,
-    totalPrice,
-    categoryHint,
-    vatRate,
+    name:
+      toOptionalString(
+        pickFirst(item, [
+          'name',
+          'productName',
+          'product_name',
+          'title',
+          'description',
+          'item',
+        ]),
+      ) ?? 'Ürün',
+    normalizedName:
+      toOptionalString(
+        pickFirst(item, [
+          'normalizedName',
+          'normalized_name',
+          'cleanName',
+          'clean_name',
+        ]),
+      ) ?? '',
+    quantity:
+      toOptionalNumber(pickFirst(item, ['quantity', 'qty', 'count'])) ?? 1,
+    unit: toOptionalString(pickFirst(item, ['unit', 'uom'])) ?? 'adet',
+    unitPrice: toOptionalNumber(
+      pickFirst(item, ['unitPrice', 'unit_price', 'price']),
+    ),
+    totalPrice: toOptionalNumber(
+      pickFirst(item, [
+        'totalPrice',
+        'total_price',
+        'lineTotal',
+        'line_total',
+        'total',
+        'amount',
+      ]),
+    ),
+    categoryHint: toOptionalString(
+      pickFirst(item, ['categoryHint', 'category_hint', 'category']),
+    ),
+    vatRate: normalizeVatRate(
+      pickFirst(item, ['vatRate', 'vat_rate', 'taxRate', 'tax_rate']),
+    ),
   };
 }
 
@@ -121,7 +111,6 @@ function normalizeRawReceiptObject(
     'products',
   ]);
   const rawItems = Array.isArray(rawItemsCandidate) ? rawItemsCandidate : [];
-  const normalizedItems = rawItems.filter(isRecord).map(normalizeReceiptItem);
 
   return {
     rawText:
@@ -184,7 +173,7 @@ function normalizeRawReceiptObject(
     paymentMethod: toOptionalString(
       pickFirst(raw, ['paymentMethod', 'payment_method', 'payment']),
     ),
-    items: normalizedItems,
+    items: rawItems.filter(isRecord).map(normalizeReceiptItem),
     notes: toOptionalString(pickFirst(raw, ['notes', 'note', 'summary'])),
     confidence: normalizeConfidence(pickFirst(raw, ['confidence'])),
   };
@@ -197,11 +186,11 @@ export function parseReceiptModelResponse(rawContent: string): {
   const jsonCandidate = extractJsonFromModelText(rawContent);
   if (jsonCandidate) {
     try {
-      const parsedUnknown: unknown = JSON.parse(jsonCandidate);
-      const container = unwrapReceiptContainer(parsedUnknown);
+      const container = unwrapReceiptContainer(JSON.parse(jsonCandidate));
       if (container) {
-        const normalized = normalizeRawReceiptObject(container);
-        const validated = receiptModelOutputSchema.safeParse(normalized);
+        const validated = receiptModelOutputSchema.safeParse(
+          normalizeRawReceiptObject(container),
+        );
         if (validated.success) {
           return {
             data: {
@@ -213,7 +202,30 @@ export function parseReceiptModelResponse(rawContent: string): {
         }
       }
     } catch {
-      // Fall through to raw text fallback below
+      // Fall through to truncated JSON repair below
+    }
+  }
+
+  const repairedContainer = repairTruncatedReceiptJson(rawContent);
+  if (repairedContainer) {
+    const validated = receiptModelOutputSchema.safeParse(
+      normalizeRawReceiptObject(repairedContainer),
+    );
+    if (validated.success) {
+      return {
+        data: {
+          ...validated.data,
+          rawText:
+            validated.data.rawText ||
+            validated.data.items
+              .map(
+                (item) =>
+                  `${item.name}${item.totalPrice !== null ? ` ${item.totalPrice}` : ''}`,
+              )
+              .join('\n'),
+        },
+        parsedFromJson: true,
+      };
     }
   }
 

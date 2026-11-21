@@ -17,7 +17,7 @@ export function InputGroup({
       role="group"
       className={cn(
         'group/input-group bg-surface-sunken text-text relative flex w-full items-center rounded-md border border-border outline-none transition-[color,box-shadow]',
-        'min-h-[44px] min-w-0 has-[>textarea]:h-auto',
+        'min-h-[40px] min-w-0 has-[>textarea]:h-auto md:min-h-[36px]',
 
         // Variants based on alignment.
         'has-[>[data-align=inline-start]]:[&>input]:pl-2',

@@ -132,14 +132,16 @@ export function ReplacePartDialog({ part, onClose }: ReplacePartDialogProps) {
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={onClose}
-              className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+              className="w-full sm:w-auto"
             >
               İptal
             </Button>
             <SubmitButton
+              size="sm"
               isLoading={replaceMutation.isPending}
-              className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+              className="w-full sm:w-auto"
             >
               Onayla
             </SubmitButton>

@@ -1,15 +1,9 @@
 'use client';
 
-import { ShoppingCart } from 'lucide-react';
+import { Plus, ShoppingCart } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/core/card';
+import { Card, CardContent } from '@/components/core/card';
 import {
   Empty,
   EmptyContent,
@@ -63,6 +57,7 @@ interface ShoppingListTableProps {
   onEdit: (entry: ShoppingListItem) => void;
   onDelete: (id: string) => void;
   onClearDone: () => void;
+  onAddClick?: () => void;
 }
 
 export function ShoppingListTable({
@@ -86,6 +81,7 @@ export function ShoppingListTable({
   onEdit,
   onDelete,
   onClearDone,
+  onAddClick,
 }: ShoppingListTableProps) {
   const filteredEstimatedTotal = filteredList.reduce((sum, entry) => {
     if (typeof entry.estimatedPrice === 'number' && entry.estimatedPrice > 0) {
@@ -96,37 +92,27 @@ export function ShoppingListTable({
 
   return (
     <Card>
-      <CardHeader className="pb-3">
+      <CardContent className="space-y-4 pt-4 sm:pt-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="space-y-1">
-            <CardTitle className="font-display text-base">
-              Alışveriş Listesi
-            </CardTitle>
-            <CardDescription className="text-caption">
-              Kalemleri işaretleyin, miktarları doğrudan güncelleyin veya detay
-              düzenleyin.
-            </CardDescription>
+          <div className="min-w-0 flex-1">
+            <ShoppingListToolbar
+              summary={summary}
+              statusFilter={statusFilter}
+              priorityFilter={priorityFilter}
+              searchQuery={searchQuery}
+              isClearingDone={isClearingDone}
+              onStatusChange={onStatusChange}
+              onPriorityChange={onPriorityChange}
+              onSearchChange={onSearchChange}
+              onClearDone={onClearDone}
+            />
           </div>
-          {summary.totalCount > 0 && (
-            <Badge variant="secondary" className="font-mono tabular-nums">
+          {summary.totalCount > 0 ? (
+            <Badge variant="secondary" className="shrink-0 font-mono tabular-nums">
               {summary.pendingCount} alınacak · {summary.doneCount} alındı
             </Badge>
-          )}
+          ) : null}
         </div>
-      </CardHeader>
-
-      <CardContent className="space-y-4">
-        <ShoppingListToolbar
-          summary={summary}
-          statusFilter={statusFilter}
-          priorityFilter={priorityFilter}
-          searchQuery={searchQuery}
-          isClearingDone={isClearingDone}
-          onStatusChange={onStatusChange}
-          onPriorityChange={onPriorityChange}
-          onSearchChange={onSearchChange}
-          onClearDone={onClearDone}
-        />
 
         {isLoading ? (
           <div className="space-y-2">
@@ -140,12 +126,20 @@ export function ShoppingListTable({
               <EmptyMedia variant="icon">
                 <ShoppingCart />
               </EmptyMedia>
-              <EmptyTitle>Alışveriş listen henüz boş</EmptyTitle>
+              <EmptyTitle>Bu listede henüz ürün yok</EmptyTitle>
               <EmptyDescription>
-                Yukarıdaki formdan detaylı ürün ekleyebilir, fiş tarayabilir
-                veya düşük stok önerilerini listene aktarabilirsin.
+                Manuel ürün ekleyebilir, fiş tarayabilir veya düşük stok
+                önerilerini aktarabilirsin.
               </EmptyDescription>
             </EmptyHeader>
+            {onAddClick ? (
+              <EmptyContent>
+                <Button size="sm" onClick={onAddClick}>
+                  <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />
+                  Ürün Ekle
+                </Button>
+              </EmptyContent>
+            ) : null}
           </Empty>
         ) : filteredList.length === 0 ? (
           <Empty className="border">

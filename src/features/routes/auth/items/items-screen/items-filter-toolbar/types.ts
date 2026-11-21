@@ -10,6 +10,7 @@ export interface ItemsFilterToolbarProps {
   onSearchChange: (value: string) => void;
   viewMode: 'grid' | 'table';
   onToggleViewMode: () => void;
+  showCreateButton?: boolean;
   onCreateClick: () => void;
   lowStockOnly: boolean;
   onToggleLowStock: () => void;

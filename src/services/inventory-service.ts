@@ -5,6 +5,7 @@ import type {
   Location,
   Part,
   ReplacementLog,
+  ShoppingList,
   ShoppingListItem,
   StockMovement,
   UserSettings,
@@ -17,6 +18,8 @@ import type {
   PartReplaceInput,
   ShoppingItemInput,
   ShoppingItemPatchInput,
+  ShoppingListInput,
+  ShoppingListPatchInput,
   StockMovementInput,
   UserSettingsInput,
 } from '@/features/inventory/schemas';
@@ -91,7 +94,21 @@ export const inventoryService = {
       suggestShopping: boolean;
     }>(`/inventory/parts/${id}/replace`, data),
 
-  listShopping: () => apiClient.get<ShoppingListItem[]>('/inventory/shopping'),
+  listShoppingLists: () =>
+    apiClient.get<ShoppingList[]>('/inventory/shopping-lists'),
+  getShoppingList: (id: string) =>
+    apiClient.get<ShoppingList>(`/inventory/shopping-lists/${id}`),
+  createShoppingList: (data: ShoppingListInput) =>
+    apiClient.post<ShoppingList>('/inventory/shopping-lists', data),
+  updateShoppingList: (id: string, data: ShoppingListPatchInput) =>
+    apiClient.patch<ShoppingList>(`/inventory/shopping-lists/${id}`, data),
+  deleteShoppingList: (id: string) =>
+    apiClient.delete<{ ok: boolean }>(`/inventory/shopping-lists/${id}`),
+
+  listShopping: (listId?: string) =>
+    apiClient.get<ShoppingListItem[]>('/inventory/shopping', {
+      params: listId ? { listId } : undefined,
+    }),
   createShopping: (data: ShoppingItemInput) =>
     apiClient.post<ShoppingListItem>('/inventory/shopping', data),
   updateShopping: (id: string, data: ShoppingItemPatchInput) =>

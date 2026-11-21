@@ -4,6 +4,12 @@ import type {
   ReceiptLineItem,
 } from '@/lib/ai/receipt-analyzer';
 
+export interface ReceiptImageEntry {
+  id: string;
+  name: string;
+  dataUrl: string;
+}
+
 export interface ReceiptAssistantProps {
   onApplyItems?: (
     items: ReceiptLineItem[],
@@ -14,6 +20,7 @@ export interface ReceiptAssistantProps {
   title?: string;
   description?: string;
   defaultExpanded?: boolean;
+  embedded?: boolean;
   modelQuery?: OpenRouterModelsQueryParams;
   defaultFreeOnly?: boolean;
 }

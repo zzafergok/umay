@@ -7,6 +7,7 @@ import {
   type OpenRouterModel,
 } from '@/lib/ai/openrouter';
 import {
+  countReceiptModelsByPricing,
   filterAndSortReceiptModels,
   isFreeOpenRouterModel,
   isVisionTextModel,
@@ -14,6 +15,24 @@ import {
 } from '@/lib/ai/receipt-analyzer';
 
 const originalEnv = process.env;
+
+const makeVisionModel = (
+  id: string,
+  overrides: Partial<OpenRouterModel> = {},
+): OpenRouterModel => ({
+  id,
+  name: id,
+  context_length: 1000000,
+  architecture: {
+    modality: 'text+image->text',
+    input_modalities: ['text', 'image'],
+    output_modalities: ['text'],
+  },
+  pricing: { prompt: '0', completion: '0' },
+  endpoints: ['/api/v1/chat/completions'],
+  supported_parameters: ['temperature', 'structured_outputs', 'response_format'],
+  ...overrides,
+});
 
 describe('OpenRouter raw models client & app-level catalog filtering', () => {
   beforeEach(() => {
@@ -30,30 +49,21 @@ describe('OpenRouter raw models client & app-level catalog filtering', () => {
     process.env.OPENROUTER_API_KEY = 'sk-or-test-key';
     const rawPayload = {
       data: [
-        {
-          id: 'inclusionai/ling-3.2-flash:free',
+        makeVisionModel('inclusionai/ling-3.2-flash:free', {
           name: 'inclusionAI: Ling 3.2 Flash (free)',
-          context_length: 1048576,
-          architecture: {
-            input_modalities: ['text', 'image'],
-            output_modalities: ['text'],
+          benchmarks: {
+            artificial_analysis: {
+              intelligence_index: 50,
+              coding_index: null,
+              agentic_index: null,
+            },
           },
-          pricing: { prompt: '0', completion: '0' },
-          endpoints: ['/api/v1/chat/completions'],
-          supported_parameters: ['structured_outputs', 'response_format'],
-          benchmarks: { artificial_analysis: { intelligence_index: 50 } },
-        },
-        {
-          id: 'google/gemini-4-hydrogen:batch',
+        }),
+        makeVisionModel('google/gemini-4-hydrogen:batch', {
           name: 'Google: Gemini 4 Hydrogen (batch)',
-          context_length: 1048576,
-          architecture: {
-            input_modalities: ['text', 'image'],
-            output_modalities: ['text'],
-          },
           pricing: { prompt: '0.00000075', completion: '0.00000375' },
           endpoints: ['/api/v1/batches'],
-        },
+        }),
       ],
       total_count: 470,
       links: { next: null },
@@ -80,36 +90,18 @@ describe('OpenRouter raw models client & app-level catalog filtering', () => {
   });
 
   it('filters vision+chat+free models in app catalog layer while preserving full model objects', () => {
-    const freeVisionChat: OpenRouterModel = {
-      id: 'nvidia/nemotron-3.5-super-vl:free',
-      name: 'NVIDIA: Nemotron 3.5 Super VL (free)',
-      context_length: 1000000,
-      architecture: {
-        modality: 'text+image->text',
-        input_modalities: ['text', 'image'],
-        output_modalities: ['text'],
-      },
-      pricing: { prompt: '0', completion: '0' },
-      endpoints: ['/api/v1/chat/completions'],
-      supported_parameters: ['structured_outputs', 'response_format'],
-    };
-
-    const paidBatchOnly: OpenRouterModel = {
-      ...freeVisionChat,
-      id: 'google/gemini-4-hydrogen:batch',
+    const freeVisionChat = makeVisionModel('nvidia/nemotron-3.5-super-vl:free');
+    const paidBatchOnly = makeVisionModel('google/gemini-4-hydrogen:batch', {
       pricing: { prompt: '0.0000015', completion: '0.0000075' },
       endpoints: ['/api/v1/batches'],
-    };
-
-    const freeTextOnly: OpenRouterModel = {
-      ...freeVisionChat,
-      id: 'baidu/ernie-5.5-flash-preview:free',
+    });
+    const freeTextOnly = makeVisionModel('baidu/ernie-5.5-flash-preview:free', {
       architecture: {
         modality: 'text->text',
         input_modalities: ['text'],
         output_modalities: ['text'],
       },
-    };
+    });
 
     expect(isVisionTextModel(freeVisionChat)).toBe(true);
     expect(isFreeOpenRouterModel(freeVisionChat)).toBe(true);
@@ -125,6 +117,42 @@ describe('OpenRouter raw models client & app-level catalog filtering', () => {
       'nvidia/nemotron-3.5-super-vl:free',
     );
   });
+
+  it('excludes video/image generators, aliases, scaledown stubs, and -1 routers while supporting all/free/paid filter modes', () => {
+    const freeOcr = makeVisionModel('nvidia/nemotron-3.5-super-vl:free');
+    const paidOcr = makeVisionModel('google/gemini-4-hydrogen', {
+      pricing: { prompt: '0.0000015', completion: '0.0000075' },
+    });
+    const videoGen = makeVisionModel('google/gemini-omni-1.2-flash', {
+      pricing: { prompt: '0.0000015', completion: '0.000009' },
+      architecture: { input_modalities: ['text', 'image', 'video'], output_modalities: ['text', 'video'] },
+      endpoints: ['/api/v1/chat/completions', '/api/v1/videos'],
+    });
+    const imageGen = makeVisionModel('google/gemini-nano-banana-2.1', {
+      pricing: { prompt: '0.0000015', completion: '0.0000075' },
+      architecture: { input_modalities: ['text', 'image'], output_modalities: ['image', 'text'] },
+      endpoints: ['/api/v1/chat/completions', '/api/v1/images'],
+    });
+    const aliasModel = makeVisionModel('~unbiased/pareto-latest', {
+      architecture: { input_modalities: ['text', 'image'], output_modalities: ['text'], tokenizer: 'Router' },
+    });
+    const scaledownStub = makeVisionModel('scaledown/extract', { supported_parameters: ['max_tokens'] });
+    const dynamicRouter = makeVisionModel('openrouter/auto-code', { pricing: { prompt: '-1', completion: '-1' } });
+
+    const rawList = [freeOcr, paidOcr, videoGen, imageGen, aliasModel, scaledownStub, dynamicRouter];
+
+    expect(countReceiptModelsByPricing(rawList)).toEqual({ all: 2, free: 1, paid: 1 });
+    expect(filterAndSortReceiptModels(rawList, { pricingFilter: 'all' }).map((m) => m.id)).toEqual([
+      'nvidia/nemotron-3.5-super-vl:free',
+      'google/gemini-4-hydrogen',
+    ]);
+    expect(filterAndSortReceiptModels(rawList, { pricingFilter: 'free' }).map((m) => m.id)).toEqual([
+      'nvidia/nemotron-3.5-super-vl:free',
+    ]);
+    expect(filterAndSortReceiptModels(rawList, { pricingFilter: 'paid' }).map((m) => m.id)).toEqual([
+      'google/gemini-4-hydrogen',
+    ]);
+  });
 });
 
 describe('OpenRouter chat completions client', () => {
@@ -139,7 +167,6 @@ describe('OpenRouter chat completions client', () => {
 
   it('throws OpenRouterApiError when OPENROUTER_API_KEY is missing', async () => {
     delete process.env.OPENROUTER_API_KEY;
-
     await expect(
       createOpenRouterChatCompletion({
         model: 'nvidia/nemotron-3.5-super-vl:free',
@@ -154,23 +181,17 @@ describe('OpenRouter chat completions client', () => {
 
   it('detects OpenRouter error payload even on HTTP 200 OK', async () => {
     process.env.OPENROUTER_API_KEY = 'sk-or-test-key';
-
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(
         new Response(
           JSON.stringify({
-            error: {
-              code: 429,
-              message: 'Rate limit exceeded',
-              metadata: { provider_name: 'DeepInfra' },
-            },
+            error: { code: 429, message: 'Rate limit exceeded', metadata: { provider_name: 'DeepInfra' } },
           }),
           { status: 200, headers: { 'Content-Type': 'application/json' } },
         ),
       ),
     );
-
     await expect(
       createOpenRouterChatCompletion({
         model: 'nvidia/nemotron-3.5-super-vl:free',
@@ -191,18 +212,8 @@ describe('OpenRouter chat completions client', () => {
           object: 'chat.completion',
           created: 1794591958,
           model: 'nvidia/nemotron-3.5-super-vl:free',
-          choices: [
-            {
-              index: 0,
-              message: { role: 'assistant', content: '{"ok":true}' },
-              finish_reason: 'stop',
-            },
-          ],
-          usage: {
-            prompt_tokens: 10,
-            completion_tokens: 5,
-            total_tokens: 15,
-          },
+          choices: [{ index: 0, message: { role: 'assistant', content: '{"ok":true}' }, finish_reason: 'stop' }],
+          usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 },
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } },
       ),

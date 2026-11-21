@@ -5,9 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from '@/components/core/toast';
 import type { OpenRouterModelsQueryParams } from '@/lib/ai/openrouter';
-import type {
-  ReceiptAnalysisResult,
-  ReceiptLineItem,
+import {
+  MAX_RECEIPT_IMAGES,
+  type ReceiptAnalysisResult,
+  type ReceiptLineItem,
 } from '@/lib/ai/receipt-analyzer';
 import { compressImageFile } from '@/lib/utils/image-compress';
 import { aiReceiptService } from '@/services/ai-receipt-service';
@@ -17,6 +18,7 @@ import {
   receiptAssistantFormSchema,
   type ReceiptAssistantFormValues,
 } from './receipt-assistant-utils';
+import type { ReceiptImageEntry } from './types';
 import { useReceiptModels } from './use-receipt-models';
 
 export function useReceiptAssistant(options: {
@@ -39,8 +41,7 @@ export function useReceiptAssistant(options: {
     mode: 'onChange',
   });
 
-  const [imageDataUrl, setImageDataUrl] = React.useState<string>('');
-  const [fileName, setFileName] = React.useState<string>('');
+  const [images, setImages] = React.useState<ReceiptImageEntry[]>([]);
   const [analysis, setAnalysis] = React.useState<ReceiptAnalysisResult | null>(
     null,
   );
@@ -55,25 +56,62 @@ export function useReceiptAssistant(options: {
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const fileList = event.target.files;
+    if (!fileList || fileList.length === 0) return;
+    const files = Array.from(fileList);
+    event.target.value = '';
 
     setErrorMessage(null);
     setAnalysis(null);
 
+    const remainingSlots = MAX_RECEIPT_IMAGES - images.length;
+    if (remainingSlots <= 0) {
+      toast.error(
+        `Tek seferde en fazla ${MAX_RECEIPT_IMAGES} fiş fotoğrafı yükleyebilirsiniz.`,
+      );
+      return;
+    }
+
+    const toProcess = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      toast.info(
+        `En fazla ${MAX_RECEIPT_IMAGES} görsel desteklendiği için ilk ${remainingSlots} fotoğraf eklendi.`,
+      );
+    }
+
     try {
-      const compressed = await compressImageFile(file, 1600, 0.85);
-      const dataUrl = await readFileAsDataUrl(compressed);
-      setImageDataUrl(dataUrl);
-      setFileName(file.name);
+      const processed = await Promise.all(
+        toProcess.map(async (file, idx) => {
+          const compressed = await compressImageFile(file, 1600, 0.85);
+          const dataUrl = await readFileAsDataUrl(compressed);
+          return {
+            id: `${Date.now()}-${idx}-${file.name}`,
+            name: file.name,
+            dataUrl,
+          };
+        }),
+      );
+
+      setImages((prev) => {
+        const existingDataUrls = new Set(prev.map((img) => img.dataUrl));
+        const uniqueNew = processed.filter(
+          (item) => !existingDataUrls.has(item.dataUrl),
+        );
+        return [...prev, ...uniqueNew].slice(0, MAX_RECEIPT_IMAGES);
+      });
     } catch {
-      setErrorMessage('Fiş görseli hazırlanırken bir hata oluştu.');
+      setErrorMessage('Fiş görselleri hazırlanırken bir hata oluştu.');
     }
   };
 
+  const removeImage = (id: string) => {
+    setImages((prev) => prev.filter((img) => img.id !== id));
+    setAnalysis(null);
+  };
+
   const handleAnalyze = async (values?: ReceiptAssistantFormValues) => {
-    if (!imageDataUrl) {
-      setErrorMessage('Lütfen önce bir fiş görseli seçin.');
+    if (images.length === 0) {
+      setErrorMessage('Lütfen önce en az bir fiş görseli seçin.');
       return;
     }
 
@@ -87,8 +125,10 @@ export function useReceiptAssistant(options: {
     setErrorMessage(null);
 
     try {
+      const imageDataUrls = images.map((img) => img.dataUrl);
       const result = await aiReceiptService.analyzeReceipt({
-        imageDataUrl,
+        imageDataUrl: imageDataUrls[0],
+        imageDataUrls,
         modelId: modelState.selectedModelId || undefined,
         promptHint: promptHint || undefined,
       });
@@ -99,7 +139,11 @@ export function useReceiptAssistant(options: {
         new Set(result.analysis.items.map((_, index) => index)),
       );
       options.onAnalyzed?.(result.analysis);
-      toast.success('Fiş analizi tamamlandı.');
+      toast.success(
+        images.length > 1
+          ? `${images.length} fiş parçası birleştirilerek analiz edildi.`
+          : 'Fiş analizi tamamlandı.',
+      );
     } catch (error) {
       if (isMissingApiKeyError(error)) {
         setIsConfigured(false);
@@ -153,8 +197,7 @@ export function useReceiptAssistant(options: {
   };
 
   const reset = () => {
-    setImageDataUrl('');
-    setFileName('');
+    setImages([]);
     formMethods.reset({ promptHint: '' });
     setAnalysis(null);
     setSelectedIndices(new Set());
@@ -165,14 +208,14 @@ export function useReceiptAssistant(options: {
     formMethods,
     ...modelState,
     isConfigured,
-    imageDataUrl,
-    fileName,
+    images,
     analysis,
     selectedIndices,
     isAnalyzing,
     isApplying,
     errorMessage,
     handleFileChange,
+    removeImage,
     handleAnalyze,
     toggleItem,
     toggleAllItems,

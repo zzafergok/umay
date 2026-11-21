@@ -43,6 +43,9 @@ export function PartsScreen() {
       .sort((a, b) => order[a.status] - order[b.status]);
   }, [data?.parts, statusFilter]);
 
+  const totalPartsCount = data?.parts?.length ?? 0;
+  const hasParts = !isLoading && totalPartsCount > 0;
+
   return (
     <div className="space-y-5 md:space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -67,19 +70,21 @@ export function PartsScreen() {
             </Button>
           ))}
         </div>
-        <Button
-          type="button"
-          onClick={() => setFormOpen(true)}
-          className="min-h-[44px] w-full shrink-0 sm:min-h-0 sm:w-auto"
-        >
-          <Plus className="mr-1.5 h-4 w-4" />
-          Parça Ekle
-        </Button>
+        {hasParts ? (
+          <Button
+            type="button"
+            onClick={() => setFormOpen(true)}
+            className="min-h-[44px] w-full shrink-0 sm:min-h-0 sm:w-auto"
+          >
+            <Plus className="mr-1.5 h-4 w-4" />
+            Parça Ekle
+          </Button>
+        ) : null}
       </div>
 
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Parçalar yükleniyor...</p>
-      ) : parts.length === 0 ? (
+      ) : totalPartsCount === 0 ? (
         <Empty className="border">
           <EmptyHeader>
             <EmptyMedia variant="icon">
@@ -92,7 +97,29 @@ export function PartsScreen() {
           </EmptyHeader>
           <EmptyContent>
             <Button size="sm" onClick={() => setFormOpen(true)}>
+              <Plus className="mr-1.5 h-4 w-4" />
               Parça Ekle
+            </Button>
+          </EmptyContent>
+        </Empty>
+      ) : parts.length === 0 ? (
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Wrench />
+            </EmptyMedia>
+            <EmptyTitle>Bu filtrede parça yok</EmptyTitle>
+            <EmptyDescription>
+              Seçili durum filtresine uyan parça bulunamadı.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setStatusFilter('all')}
+            >
+              Tümünü Göster
             </Button>
           </EmptyContent>
         </Empty>

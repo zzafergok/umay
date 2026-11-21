@@ -59,8 +59,18 @@ export type ShoppingSource =
 
 export type ShoppingPriority = 'low' | 'normal' | 'high';
 
+export interface ShoppingList {
+  id: string;
+  name: string;
+  description?: string;
+  store?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ShoppingListItem {
   id: string;
+  listId?: string;
   itemId: string | null;
   freeText?: string;
   qty: number;

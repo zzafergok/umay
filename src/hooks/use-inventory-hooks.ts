@@ -12,6 +12,7 @@ import type {
   Location,
   Part,
   ReplacementLog,
+  ShoppingList,
   ShoppingListItem,
   StockMovement,
   UserSettings,
@@ -84,11 +85,29 @@ export function usePartQuery(id: string) {
   );
 }
 
-export function useShoppingQuery() {
-  return useApiQuery<ShoppingListItem[]>(
-    ['inventory', 'shopping'],
-    '/inventory/shopping',
+export function useShoppingListsQuery() {
+  return useApiQuery<ShoppingList[]>(
+    ['inventory', 'shopping-lists'],
+    '/inventory/shopping-lists',
     {},
+    CACHE_STRATEGIES.SHORT,
+  );
+}
+
+export function useShoppingListQuery(id: string) {
+  return useApiQuery<ShoppingList>(
+    ['inventory', 'shopping-lists', id],
+    `/inventory/shopping-lists/${id}`,
+    {},
+    CACHE_STRATEGIES.REALTIME,
+  );
+}
+
+export function useShoppingQuery(listId?: string) {
+  return useApiQuery<ShoppingListItem[]>(
+    listId ? ['inventory', 'shopping', listId] : ['inventory', 'shopping'],
+    '/inventory/shopping',
+    { params: listId ? { listId } : undefined },
     CACHE_STRATEGIES.SHORT,
   );
 }

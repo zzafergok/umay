@@ -131,18 +131,20 @@ function ItemFormBody({
         </TabsContent>
       </Tabs>
 
-      <div className="bg-surface-raised/95 sticky bottom-0 z-10 grid grid-cols-2 gap-2 border-t border-border pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
+      <div className="sticky bottom-0 z-10 grid grid-cols-2 gap-2 border-t border-border bg-surface-raised/95 pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
         <Button
           type="button"
           variant="outline"
+          size="sm"
           onClick={() => onOpenChange(false)}
-          className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+          className="w-full sm:w-auto"
         >
           Vazgeç
         </Button>
         <SubmitButton
+          size="sm"
           isLoading={formState.saving}
-          className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+          className="w-full sm:w-auto"
         >
           Kaydet
         </SubmitButton>

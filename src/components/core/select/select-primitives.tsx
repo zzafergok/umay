@@ -18,11 +18,11 @@ export const SelectTrigger = React.forwardRef<
     ref={ref}
     data-slot="select-trigger"
     className={cn(
-      'bg-surface-sunken text-body text-text flex h-auto min-h-[44px] w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border px-3 py-2 outline-none transition-colors duration-150',
+      'bg-surface-sunken text-body-sm text-text flex h-10 min-h-[40px] w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border px-3 py-1.5 outline-none transition-colors duration-150 md:h-9 md:min-h-[36px]',
       'placeholder:text-text-subtle focus-visible:ring-offset-bg focus:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'aria-invalid:border-danger aria-invalid:focus-visible:ring-danger',
-      '[&>span]:text-left [&>span]:leading-snug',
+      '[&>span]:min-w-0 [&>span]:flex-1 [&>span]:truncate [&>span]:text-left [&>span]:leading-snug',
       className,
     )}
     {...props}
@@ -143,7 +143,7 @@ export const SelectContent = React.forwardRef<
           <SelectPrimitive.Viewport
             data-slot="select-viewport"
             className={cn(
-              'p-1',
+              'max-w-full overflow-x-hidden p-1',
               position === 'popper' &&
                 'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]',
             )}
@@ -182,7 +182,7 @@ export const SelectItem = React.forwardRef<
     ref={ref}
     data-slot="select-item"
     className={cn(
-      'text-body-sm text-text relative flex min-h-[36px] w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-7 pr-2 outline-none transition-colors duration-150',
+      'text-body-sm text-text relative flex min-h-[36px] w-full max-w-full cursor-pointer select-none items-center overflow-hidden rounded-sm py-1.5 pl-7 pr-2 outline-none transition-colors duration-150',
       'focus:bg-accent-subtle focus:text-text data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
       className,
     )}
@@ -194,11 +194,11 @@ export const SelectItem = React.forwardRef<
       </SelectPrimitive.ItemIndicator>
     </span>
 
-    <SelectPrimitive.ItemText className="min-w-0 flex-1 leading-snug">
-      {children}
-    </SelectPrimitive.ItemText>
+    <span className="min-w-0 flex-1 truncate leading-snug">
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    </span>
     {endAdornment && (
-      <span aria-hidden="true" className="ml-auto shrink-0 pl-3">
+      <span aria-hidden="true" className="ml-auto flex shrink-0 items-center pl-2">
         {endAdornment}
       </span>
     )}

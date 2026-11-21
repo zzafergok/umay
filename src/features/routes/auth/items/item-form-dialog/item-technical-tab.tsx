@@ -41,7 +41,7 @@ export function ItemTechnicalTab({
               {customFields.length} alan
             </Badge>
           </div>
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-1 sm:gap-3">
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3">
             {customFields.map((field) => (
               <CustomFieldInput
                 key={field.key}
@@ -60,12 +60,11 @@ export function ItemTechnicalTab({
         </p>
       )}
 
-      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <TextField
           name="model"
           label={defaults?.trackBrandModel ? 'Model (Önerilen)' : 'Model'}
           placeholder="Örn. PowerLine III"
-          inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px]"
         />
         <TextField
           name="serialNumber"
@@ -75,7 +74,6 @@ export function ItemTechnicalTab({
               : 'Seri Numarası'
           }
           placeholder="Örn. SN-2026-001"
-          inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px]"
         />
       </div>
 

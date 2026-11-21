@@ -30,6 +30,7 @@ export function ItemsFilterToolbar({
   onSearchChange,
   viewMode,
   onToggleViewMode,
+  showCreateButton = true,
   onCreateClick,
   lowStockOnly,
   onToggleLowStock,
@@ -207,16 +208,18 @@ export function ItemsFilterToolbar({
           })}
         </div>
 
-        <Button
-          type="button"
-          variant="primary"
-          size="sm"
-          onClick={onCreateClick}
-          className="h-10 min-h-[40px] px-3.5"
-        >
-          <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />
-          Ürün ekle
-        </Button>
+        {showCreateButton ? (
+          <Button
+            type="button"
+            variant="primary"
+            size="sm"
+            onClick={onCreateClick}
+            className="h-10 min-h-[40px] px-3.5"
+          >
+            <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />
+            Ürün ekle
+          </Button>
+        ) : null}
       </div>
     </div>
   );

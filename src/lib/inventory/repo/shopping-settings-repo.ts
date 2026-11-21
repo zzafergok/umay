@@ -23,16 +23,19 @@ function userCol(uid: string, name: string) {
 
 export async function listShoppingItems(
   uid: string,
+  listId?: string,
 ): Promise<ShoppingListItem[]> {
   if (!isFirebaseConfigured()) {
-    return Array.from(getUserVault(uid).shoppingList.values()).sort((a, b) =>
-      b.createdAt.localeCompare(a.createdAt),
+    const all = Array.from(getUserVault(uid).shoppingList.values()).sort(
+      (a, b) => b.createdAt.localeCompare(a.createdAt),
     );
+    return listId ? all.filter((item) => item.listId === listId) : all;
   }
   const snap = await userCol(uid, 'shoppingList').get();
-  return snap.docs
+  const all = snap.docs
     .map((d) => ({ ...(d.data() as ShoppingListItem), id: d.id }))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return listId ? all.filter((item) => item.listId === listId) : all;
 }
 
 export async function createShoppingItem(

@@ -6,7 +6,6 @@ import {
   ChevronDown,
   ChevronUp,
   ReceiptText,
-  RotateCcw,
   Sparkles,
 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/core/alert';
@@ -20,6 +19,7 @@ import {
   CardTitle,
 } from '@/components/core/card';
 import { Form, SubmitButton, TextField } from '@/components/forms';
+import { cn } from '@/lib/utils';
 import { receiptAssistantFormSchema } from './receipt-assistant-utils';
 import { ReceiptImageField } from './receipt-image-field';
 import { ReceiptModelSelector } from './receipt-model-selector';
@@ -32,12 +32,13 @@ export function ReceiptAssistant({
   onAnalyzed,
   applyLabel,
   title = 'AI Fiş Analiz Asistanı',
-  description = 'Alışveriş fişi fotoğrafını yükleyin; OpenRouter vision modelleri ile metne çevirip kalemleri otomatik çıkarın.',
+  description = 'Uzun fişleri tek veya birden fazla parça fotoğraf olarak yükleyin; kesişen mükerrer satırlar otomatik elenir.',
   defaultExpanded = false,
+  embedded = false,
   modelQuery,
   defaultFreeOnly = false,
 }: ReceiptAssistantProps) {
-  const [expanded, setExpanded] = React.useState(defaultExpanded);
+  const [expanded, setExpanded] = React.useState(defaultExpanded || embedded);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const state = useReceiptAssistant({
     modelQuery,
@@ -53,6 +54,132 @@ export function ReceiptAssistant({
     }
   };
 
+  const isExpanded = embedded || expanded;
+  const imageCount = state.images.length;
+  const filterBadgeLabel =
+    state.pricingFilter === 'free'
+      ? 'Ücretsiz OCR Modeller'
+      : state.pricingFilter === 'paid'
+        ? 'Ücretli OCR Modeller'
+        : 'Uyumlu OCR Modeller';
+
+  const bodyNode = (
+    <div className={cn('min-w-0 space-y-3.5', !embedded && 'space-y-4')}>
+      {embedded ? (
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-text-muted text-xs">{description}</p>
+          <Badge variant="secondary" size="sm" className="shrink-0 font-mono">
+            {filterBadgeLabel} ({state.models.length})
+          </Badge>
+        </div>
+      ) : null}
+
+      {!state.isConfigured && (
+        <Alert variant="warning">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>OpenRouter API Anahtarı Eksik</AlertTitle>
+          <AlertDescription>
+            Fiş analizi için <code className="font-mono">.env</code> dosyasına{' '}
+            <code className="font-mono">OPENROUTER_API_KEY</code> tanımlayın.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <Form
+        schema={receiptAssistantFormSchema}
+        methods={state.formMethods}
+        onSubmit={state.handleAnalyze}
+        className="space-y-3.5"
+      >
+        <div
+          className={cn(
+            'grid grid-cols-1 items-start gap-3.5',
+            !embedded && 'md:grid-cols-2 md:gap-4',
+          )}
+        >
+          <ReceiptImageField
+            fileInputRef={fileInputRef}
+            images={state.images}
+            isAnalyzing={state.isAnalyzing}
+            onFileChange={state.handleFileChange}
+            onRemoveImage={state.removeImage}
+            onClearAll={handleReset}
+          />
+
+          <ReceiptModelSelector
+            models={state.models}
+            modelCounts={state.modelCounts}
+            pricingFilter={state.pricingFilter}
+            onPricingFilterChange={state.setPricingFilter}
+            defaultModelId={state.defaultModelId}
+            selectedModelId={state.selectedModelId}
+            selectedModel={state.selectedModel}
+            isLoadingModels={state.isLoadingModels}
+            modelsLoadError={state.modelsLoadError}
+            isRefreshingModels={state.isRefreshingModels}
+            onSelectModel={state.setSelectedModelId}
+            onRefreshModels={state.refreshModels}
+          />
+        </div>
+
+        <TextField
+          name="promptHint"
+          label="Ek Not (İsteğe Bağlı)"
+          placeholder="Örn. Sadece temizlik ve gıda ürünlerini listele"
+          maxLength={300}
+          className="space-y-1.5"
+          labelClassName="font-sans text-body-sm font-medium normal-case tracking-normal text-text"
+        />
+
+        {imageCount > 0 && (
+          <div className="flex flex-col gap-2 border-t border-border/70 pt-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-text-muted text-caption">
+              {imageCount > 1
+                ? `${imageCount} fiş parçası birleştirilip mükerrer satırlar elenecek`
+                : 'Fiş görseli analize hazır'}
+            </p>
+            <SubmitButton
+              size="sm"
+              isLoading={state.isAnalyzing}
+              loadingText="Analiz Ediliyor..."
+              icon={<Sparkles className="h-3.5 w-3.5" />}
+              className="w-full sm:w-auto"
+            >
+              {imageCount > 1
+                ? `Birleştir & Analiz Et (${imageCount})`
+                : 'Fişi Analiz Et'}
+            </SubmitButton>
+          </div>
+        )}
+      </Form>
+
+      {state.errorMessage && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Analiz Hatası</AlertTitle>
+          <AlertDescription>{state.errorMessage}</AlertDescription>
+        </Alert>
+      )}
+
+      {state.analysis && (
+        <ReceiptResultView
+          analysis={state.analysis}
+          selectedIndices={state.selectedIndices}
+          onToggleItem={state.toggleItem}
+          onToggleAll={state.toggleAllItems}
+          onApplySelected={state.handleApplySelected}
+          applyLabel={applyLabel}
+          isApplying={state.isApplying}
+          canApply={Boolean(onApplyItems)}
+        />
+      )}
+    </div>
+  );
+
+  if (embedded) {
+    return bodyNode;
+  }
+
   return (
     <Card>
       <CardHeader className="flex flex-col gap-3 space-y-0 pb-3 sm:flex-row sm:items-start sm:justify-between">
@@ -61,8 +188,7 @@ export function ReceiptAssistant({
             <ReceiptText className="text-umay-blue h-4 w-4 shrink-0" />
             <CardTitle className="font-display text-base">{title}</CardTitle>
             <Badge variant="secondary" size="sm" className="font-mono">
-              {state.freeOnly ? 'Ücretsiz Modeller' : 'Tüm Vision Modeller'} (
-              {state.models.length})
+              {filterBadgeLabel} ({state.models.length})
             </Badge>
           </div>
           <CardDescription className="text-caption">
@@ -89,122 +215,7 @@ export function ReceiptAssistant({
         </Button>
       </CardHeader>
 
-      {expanded && (
-        <CardContent className="space-y-4">
-          {!state.isConfigured && (
-            <Alert variant="warning">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>OpenRouter API Anahtarı Eksik</AlertTitle>
-              <AlertDescription>
-                Fiş analizi için <code className="font-mono">.env</code>{' '}
-                dosyasına <code className="font-mono">OPENROUTER_API_KEY</code>{' '}
-                tanımlayın.
-              </AlertDescription>
-            </Alert>
-          )}
-
-          <Form
-            schema={receiptAssistantFormSchema}
-            methods={state.formMethods}
-            onSubmit={state.handleAnalyze}
-            className="space-y-4"
-          >
-            <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
-              <ReceiptImageField
-                fileInputRef={fileInputRef}
-                fileName={state.fileName}
-                onFileChange={state.handleFileChange}
-              />
-
-              <ReceiptModelSelector
-                models={state.models}
-                totalCatalogCount={state.totalCatalogCount}
-                freeOnly={state.freeOnly}
-                onFreeOnlyChange={state.setFreeOnly}
-                defaultModelId={state.defaultModelId}
-                selectedModelId={state.selectedModelId}
-                selectedModel={state.selectedModel}
-                isLoadingModels={state.isLoadingModels}
-                modelsLoadError={state.modelsLoadError}
-                isRefreshingModels={state.isRefreshingModels}
-                onSelectModel={state.setSelectedModelId}
-                onRefreshModels={state.refreshModels}
-              />
-            </div>
-
-            <TextField
-              name="promptHint"
-              label="Ek Not (İsteğe Bağlı)"
-              placeholder="Örn. Sadece temizlik ve gıda ürünlerini listele"
-              maxLength={300}
-              className="space-y-1.5"
-              labelClassName="font-sans text-body-sm font-medium normal-case tracking-normal text-text"
-              inputClassName="text-body"
-            />
-
-            {state.imageDataUrl && (
-              <div className="bg-surface-sunken/50 flex flex-col gap-3 rounded-md border border-border p-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex min-w-0 items-center gap-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={state.imageDataUrl}
-                    alt="Yüklenen fiş önizlemesi"
-                    className="h-16 w-16 shrink-0 rounded-sm border border-border object-cover sm:h-20 sm:w-20"
-                  />
-                  <div className="min-w-0 space-y-0.5">
-                    <p className="text-body-sm text-text truncate font-medium">
-                      {state.fileName}
-                    </p>
-                    <p className="text-text-muted text-caption">
-                      Görsel analize hazır
-                    </p>
-                  </div>
-                </div>
-                <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
-                  <SubmitButton
-                    isLoading={state.isAnalyzing}
-                    loadingText="Analiz Ediliyor..."
-                    icon={<Sparkles className="h-4 w-4" />}
-                  >
-                    Fişi Analiz Et
-                  </SubmitButton>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full sm:w-auto"
-                    onClick={handleReset}
-                    disabled={state.isAnalyzing}
-                  >
-                    <RotateCcw className="mr-1.5 h-4 w-4" />
-                    Temizle
-                  </Button>
-                </div>
-              </div>
-            )}
-          </Form>
-
-          {state.errorMessage && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Analiz Hatası</AlertTitle>
-              <AlertDescription>{state.errorMessage}</AlertDescription>
-            </Alert>
-          )}
-
-          {state.analysis && (
-            <ReceiptResultView
-              analysis={state.analysis}
-              selectedIndices={state.selectedIndices}
-              onToggleItem={state.toggleItem}
-              onToggleAll={state.toggleAllItems}
-              onApplySelected={state.handleApplySelected}
-              applyLabel={applyLabel}
-              isApplying={state.isApplying}
-              canApply={Boolean(onApplyItems)}
-            />
-          )}
-        </CardContent>
-      )}
+      {isExpanded && <CardContent>{bodyNode}</CardContent>}
     </Card>
   );
 }

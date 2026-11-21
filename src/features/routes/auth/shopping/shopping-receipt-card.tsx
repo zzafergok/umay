@@ -31,7 +31,15 @@ function resolveUnitPrice(item: ReceiptLineItem): number | undefined {
   return undefined;
 }
 
-export function ShoppingReceiptCard() {
+export function ShoppingReceiptCard({
+  listId,
+  onApplied,
+  embedded = false,
+}: {
+  listId?: string;
+  onApplied?: () => void;
+  embedded?: boolean;
+}) {
   const qc = useQueryClient();
 
   const handleApplyItems = async (
@@ -42,6 +50,7 @@ export function ShoppingReceiptCard() {
       await Promise.all(
         items.map((item) =>
           inventoryService.createShopping({
+            listId: listId && listId !== 'unassigned' ? listId : undefined,
             itemId: null,
             freeText: item.normalizedName || item.name,
             qty: Math.max(1, Math.round(item.quantity || 1)),
@@ -57,6 +66,7 @@ export function ShoppingReceiptCard() {
       );
       await qc.invalidateQueries({ queryKey: ['inventory', 'shopping'] });
       toast.success(`${items.length} ürün alışveriş listesine eklendi.`);
+      onApplied?.();
     } catch {
       toast.error('Fiş ürünleri listeye eklenirken hata oluştu.');
     }
@@ -68,6 +78,7 @@ export function ShoppingReceiptCard() {
       applyLabel="Seçilenleri Alışveriş Listesine Ekle"
       modelQuery={SHOPPING_VISION_TEXT_MODEL_QUERY}
       defaultFreeOnly
+      embedded={embedded}
     />
   );
 }

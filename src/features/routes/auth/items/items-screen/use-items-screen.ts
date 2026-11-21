@@ -150,6 +150,7 @@ export function useItemsScreen() {
 
   return {
     isLoading,
+    totalCount: items.length,
     categories,
     locations,
     filtered,

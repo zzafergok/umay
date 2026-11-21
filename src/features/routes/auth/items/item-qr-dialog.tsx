@@ -56,7 +56,7 @@ export function ItemQrDialog({
               variant="outline"
               size="sm"
               onClick={() => window.print()}
-              className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
+              className="w-full sm:w-auto"
             >
               Etiketi Yazdır
             </Button>

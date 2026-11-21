@@ -11,29 +11,21 @@ import {
   CardTitle,
 } from '@/components/core/card';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/core/dialog';
-import {
   Empty,
+  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from '@/components/core/empty';
-import { Form, SelectField, SubmitButton, TextField } from '@/components/forms';
 import { toast } from '@/components/core/toast';
 import { DeleteConfirmationDialog } from '@/components/shared/delete-confirmation-dialog';
-import {
-  locationInputSchema,
-  type LocationInput,
-} from '@/features/inventory/schemas';
+import type { LocationInput } from '@/features/inventory/schemas';
 import type { Location } from '@/features/inventory/types';
 import { useItemsQuery, useLocationsQuery } from '@/hooks/use-inventory-hooks';
 import { inventoryService } from '@/services/inventory-service';
 import { useQueryClient } from '@tanstack/react-query';
+import { LocationFormDialog } from './location-form-dialog';
 
 export function LocationsScreen() {
   const qc = useQueryClient();
@@ -63,7 +55,7 @@ export function LocationsScreen() {
 
   const sortedLocations = React.useMemo(
     () =>
-      [...locations].sort((a, b) =>
+      locations.toSorted((a, b) =>
         a.path.join(' > ').localeCompare(b.path.join(' > '), 'tr'),
       ),
     [locations],
@@ -130,13 +122,15 @@ export function LocationsScreen() {
         <p className="text-sm text-muted-foreground">
           Oda, dolap ve çekmece hiyerarşisini yönet.
         </p>
-        <Button
-          onClick={() => setOpen(true)}
-          className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
-        >
-          <Plus className="mr-1.5 h-4 w-4" />
-          Konum Ekle
-        </Button>
+        {!isLoading && sortedLocations.length > 0 ? (
+          <Button
+            onClick={() => setOpen(true)}
+            className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
+          >
+            <Plus className="mr-1.5 h-4 w-4" />
+            Konum Ekle
+          </Button>
+        ) : null}
       </div>
 
       {isLoading ? (
@@ -152,6 +146,12 @@ export function LocationsScreen() {
               Ev, Mutfak veya Çalışma Odası gibi ilk konumunu oluştur.
             </EmptyDescription>
           </EmptyHeader>
+          <EmptyContent>
+            <Button size="sm" onClick={() => setOpen(true)}>
+              <Plus className="mr-1.5 h-4 w-4" />
+              Konum Ekle
+            </Button>
+          </EmptyContent>
         </Empty>
       ) : (
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -193,40 +193,13 @@ export function LocationsScreen() {
         </div>
       )}
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent mobilePresentation="sheet">
-          <DialogHeader>
-            <DialogTitle>Yeni Konum Ekle</DialogTitle>
-          </DialogHeader>
-          <Form
-            schema={locationInputSchema}
-            defaultValues={{ name: '', parentId: null, note: '' }}
-            onSubmit={handleCreate}
-            className="space-y-4"
-          >
-            <TextField
-              name="name"
-              label="Konum Adı"
-              placeholder="Örn. Üst Dolap 2"
-              required
-            />
-            <SelectField
-              name="parentId"
-              label="Üst Konum"
-              options={parentOptions}
-              triggerClassName="w-full [&>span]:truncate"
-            />
-            <TextField
-              name="note"
-              label="Not (Opsiyonel)"
-              placeholder="Örn. Baharatlar ve kuru bakliyat"
-            />
-            <SubmitButton isLoading={saving} fullWidth>
-              Kaydet
-            </SubmitButton>
-          </Form>
-        </DialogContent>
-      </Dialog>
+      <LocationFormDialog
+        open={open}
+        onOpenChange={setOpen}
+        saving={saving}
+        parentOptions={parentOptions}
+        onSubmit={handleCreate}
+      />
 
       <DeleteConfirmationDialog
         open={Boolean(deleteTarget)}

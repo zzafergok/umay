@@ -39,7 +39,7 @@ export function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        'bg-text/35 dark:bg-bg/75 fixed inset-0 z-50 backdrop-blur-[3px]',
+        'fixed inset-0 z-50 bg-text/35 backdrop-blur-[3px] dark:bg-bg/75',
         'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
         className,
       )}
@@ -117,7 +117,7 @@ export const DialogContent = React.forwardRef<
             pointerEvents: 'auto',
           }}
           className={cn(
-            'dark:border-border-strong bg-surface-raised text-text shadow-float ring-text/[0.04] fixed z-50 grid min-w-0 grid-cols-1 gap-3 overflow-y-auto overflow-x-hidden border border-border p-4 outline-none ring-1 duration-200 dark:ring-white/[0.06] sm:gap-4',
+            'fixed z-50 grid min-w-0 grid-cols-1 gap-3 overflow-y-auto overflow-x-hidden border border-border bg-surface-raised p-4 text-text shadow-float outline-none ring-1 ring-text/[0.04] duration-200 dark:border-border-strong dark:ring-white/[0.06] sm:gap-4',
             presentationClasses,
             'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             className,
@@ -160,7 +160,7 @@ export const DialogContent = React.forwardRef<
           {shouldShowCloseButton && (
             <DialogPrimitive.Close
               data-slot="dialog-close"
-              className="text-text-muted hover:bg-surface-sunken hover:text-text focus-visible:ring-offset-surface-raised absolute right-3 top-3 inline-flex size-10 items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none sm:right-4 sm:top-4 sm:size-8 sm:rounded-sm [&_svg]:size-4"
+              className="absolute right-3 top-3 inline-flex size-10 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-sunken hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-raised disabled:pointer-events-none sm:right-4 sm:top-4 sm:size-8 sm:rounded-sm [&_svg]:size-4"
             >
               <XIcon />
               <span className="sr-only">Kapat</span>
@@ -180,7 +180,7 @@ export function DialogHeader({
   return (
     <div
       data-slot="dialog-header"
-      className={cn('flex flex-col gap-1.5 text-left', className)}
+      className={cn('flex flex-col gap-1.5 pr-8 text-left', className)}
       {...props}
     />
   );

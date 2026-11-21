@@ -1,194 +1,185 @@
 'use client';
 
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Plus, ShoppingBag, Sparkles } from 'lucide-react';
+import * as React from 'react';
+import { ArrowLeft, Plus, ReceiptText, Sparkles, Store } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
+import { Button } from '@/components/core/button';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from '@/components/core/empty';
 import { Link } from '@/components/core/link';
-import { cn } from '@/lib/utils';
-import { ShoppingAddForm } from './shopping-add-form';
+import { PageHeaderMeta } from '@/components/layout';
 import { ShoppingDeleteDialogs } from './shopping-delete-dialogs';
+import {
+  ShoppingAddDialog,
+  ShoppingReceiptDialog,
+  ShoppingSuggestionsDialog,
+} from './shopping-detail-dialogs';
 import { ShoppingEditDialog } from './shopping-edit-dialog';
 import { ShoppingListTable } from './shopping-list-table';
-import { ShoppingReceiptCard } from './shopping-receipt-card';
-import { ShoppingSuggestionsCard } from './shopping-suggestions';
 import { ShoppingSummaryStats } from './shopping-summary-stats';
 import { useShoppingScreen } from './use-shopping-screen';
 
-type ShoppingMobileView = 'list' | 'add' | 'ai';
+export function ShoppingDetailScreen({ listId }: { listId: string }) {
+  const s = useShoppingScreen(listId);
+  const [addOpen, setAddOpen] = React.useState(false);
+  const [receiptOpen, setReceiptOpen] = React.useState(false);
+  const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
 
-function parseShoppingMobileView(raw: string | null): ShoppingMobileView {
-  if (raw === 'add' || raw === 'ai' || raw === 'list') return raw;
-  return 'list';
-}
-
-function getShoppingViewHref(view: ShoppingMobileView): string {
-  return view === 'list' ? '/shopping' : `/shopping?view=${view}`;
-}
-
-function ShoppingViewSync({
-  onSyncView,
-}: {
-  onSyncView: (view: ShoppingMobileView) => void;
-}) {
-  const searchParams = useSearchParams();
-  const viewParam = searchParams.get('view');
-
-  useEffect(() => {
-    onSyncView(parseShoppingMobileView(viewParam));
-  }, [onSyncView, viewParam]);
-
-  return null;
-}
-
-export function ShoppingScreen() {
-  const s = useShoppingScreen();
-  const [mobileView, setMobileView] = useState<ShoppingMobileView>('list');
-
-  const handleSelectView = useCallback((view: ShoppingMobileView) => {
-    setMobileView(view);
-    if (typeof window === 'undefined') return;
-    const nextHref = getShoppingViewHref(view);
-    const currentHref = `${window.location.pathname}${window.location.search}`;
-    if (currentHref !== nextHref) {
-      window.history.pushState(null, '', nextHref);
-    }
-  }, []);
-
-  const listNode = (
-    <ShoppingListTable
-      list={s.list}
-      filteredList={s.filteredList}
-      summary={s.summary}
-      itemMap={s.itemMap}
-      categoryMap={s.categoryMap}
-      currency={s.currency}
-      isLoading={s.isLoading}
-      isClearingDone={s.isClearingDone}
-      statusFilter={s.statusFilter}
-      priorityFilter={s.priorityFilter}
-      searchQuery={s.searchQuery}
-      onStatusChange={s.setStatusFilter}
-      onPriorityChange={s.setPriorityFilter}
-      onSearchChange={s.setSearchQuery}
-      onResetFilters={s.resetFilters}
-      onToggleDone={s.handleToggleDone}
-      onAdjustQty={s.handleAdjustQty}
-      onEdit={s.setEditingEntry}
-      onDelete={s.requestDelete}
-      onClearDone={() => s.setClearDoneOpen(true)}
-    />
+  const listTitle = s.activeList?.name ?? 'Alışveriş Listesi';
+  const listTrail = React.useMemo(
+    () => [{ label: 'Alışveriş', href: '/shopping' }, { label: listTitle }],
+    [listTitle],
   );
+  const storeBadge = s.activeList?.store ? (
+    <Badge variant="outline" className="gap-1 text-[11px] font-normal">
+      <Store className="h-3 w-3" aria-hidden="true" />
+      {s.activeList.store}
+    </Badge>
+  ) : undefined;
 
-  const addNode = (
-    <ShoppingAddForm
-      items={s.items}
-      categories={s.categories}
-      currency={s.currency}
-      onAdd={s.handleAddManual}
-    />
-  );
+  if (!s.isListsLoading && !s.activeList) {
+    return (
+      <>
+        <PageHeaderMeta
+          title="Liste Bulunamadı"
+          trail={[{ label: 'Alışveriş', href: '/shopping' }, { label: 'Bulunamadı' }]}
+        />
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyTitle>Alışveriş listesi bulunamadı</EmptyTitle>
+            <EmptyDescription>
+              Bu liste silinmiş veya geçersiz olabilir.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button asChild size="sm" variant="outline">
+              <Link href="/shopping">
+                <ArrowLeft className="mr-1.5 h-4 w-4" aria-hidden="true" />
+                Listelere Dön
+              </Link>
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </>
+    );
+  }
 
-  const aiAndSummaryNode = (
-    <div className="space-y-4 lg:space-y-6">
-      <ShoppingSummaryStats summary={s.summary} currency={s.currency} />
-      <ShoppingReceiptCard />
-      <ShoppingSuggestionsCard
+  const showTopAddButton = !s.isLoading && s.list.length > 0;
+
+  return (
+    <div className="space-y-4">
+      <PageHeaderMeta
+        title={listTitle}
+        description={s.activeList?.description}
+        badge={storeBadge}
+        trail={listTrail}
+      />
+
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Button asChild variant="ghost" size="sm" className="text-text-muted">
+          <Link href="/shopping">
+            <ArrowLeft className="mr-1 h-3.5 w-3.5" aria-hidden="true" />
+            Listeler
+          </Link>
+        </Button>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {s.suggestions.length > 0 ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => setSuggestionsOpen(true)}
+            >
+              <Sparkles
+                className="text-accent mr-1.5 h-3.5 w-3.5"
+                aria-hidden="true"
+              />
+              <span>Öneriler</span>
+              <Badge
+                variant="secondary"
+                className="ml-1.5 h-4 px-1.5 text-[10px] tabular-nums"
+              >
+                {s.suggestions.length}
+              </Badge>
+            </Button>
+          ) : null}
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => setReceiptOpen(true)}
+          >
+            <ReceiptText className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+            Fiş Tara (AI)
+          </Button>
+          {showTopAddButton ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="primary"
+              onClick={() => setAddOpen(true)}
+            >
+              <Plus className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+              Ürün Ekle
+            </Button>
+          ) : null}
+        </div>
+      </div>
+
+      {s.list.length > 0 ? (
+        <ShoppingSummaryStats summary={s.summary} currency={s.currency} />
+      ) : null}
+
+      <ShoppingListTable
+        list={s.list}
+        filteredList={s.filteredList}
+        summary={s.summary}
+        itemMap={s.itemMap}
+        categoryMap={s.categoryMap}
+        currency={s.currency}
+        isLoading={s.isLoading}
+        isClearingDone={s.isClearingDone}
+        statusFilter={s.statusFilter}
+        priorityFilter={s.priorityFilter}
+        searchQuery={s.searchQuery}
+        onStatusChange={s.setStatusFilter}
+        onPriorityChange={s.setPriorityFilter}
+        onSearchChange={s.setSearchQuery}
+        onResetFilters={s.resetFilters}
+        onToggleDone={s.handleToggleDone}
+        onAdjustQty={s.handleAdjustQty}
+        onEdit={s.setEditingEntry}
+        onDelete={s.requestDelete}
+        onClearDone={() => s.setClearDoneOpen(true)}
+        onAddClick={() => setAddOpen(true)}
+      />
+
+      <ShoppingAddDialog
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        items={s.items}
+        categories={s.categories}
+        currency={s.currency}
+        onAdd={s.handleAddManual}
+      />
+      <ShoppingReceiptDialog
+        open={receiptOpen}
+        onOpenChange={setReceiptOpen}
+        listId={listId}
+      />
+      <ShoppingSuggestionsDialog
+        open={suggestionsOpen}
+        onOpenChange={setSuggestionsOpen}
         suggestions={s.suggestions}
         onAccept={s.handleAcceptSuggestion}
         onAcceptAll={s.handleAcceptAllSuggestions}
       />
-    </div>
-  );
-
-  const mobileTabs: Array<{
-    key: ShoppingMobileView;
-    label: string;
-    badge?: number;
-    Icon: typeof ShoppingBag;
-  }> = [
-    {
-      key: 'list',
-      label: 'Liste',
-      badge: s.summary.pendingCount,
-      Icon: ShoppingBag,
-    },
-    { key: 'add', label: 'Hızlı Ekle', Icon: Plus },
-    {
-      key: 'ai',
-      label: 'AI & Özet',
-      badge: s.suggestions.length > 0 ? s.suggestions.length : undefined,
-      Icon: Sparkles,
-    },
-  ];
-
-  return (
-    <div className="space-y-5 lg:space-y-6">
-      <Suspense fallback={null}>
-        <ShoppingViewSync onSyncView={setMobileView} />
-      </Suspense>
-
-      <div className="space-y-4 lg:hidden">
-        <nav
-          aria-label="Alışveriş mobil görünümleri"
-          className="bg-surface-sunken grid grid-cols-3 gap-1 rounded-xl border border-border p-1"
-        >
-          {mobileTabs.map(({ key, label, badge, Icon }) => {
-            const active = mobileView === key;
-            return (
-              <Link
-                key={key}
-                href={getShoppingViewHref(key)}
-                prefetch={false}
-                variant="ghost"
-                aria-current={active ? 'page' : undefined}
-                onClick={(event) => {
-                  if (
-                    event.defaultPrevented ||
-                    event.button !== 0 ||
-                    event.metaKey ||
-                    event.ctrlKey ||
-                    event.shiftKey ||
-                    event.altKey
-                  ) {
-                    return;
-                  }
-                  event.preventDefault();
-                  handleSelectView(key);
-                }}
-                className={cn(
-                  'min-h-[42px] gap-1.5 rounded-lg px-2 text-xs font-medium',
-                  active
-                    ? 'bg-surface text-text shadow-xs hover:bg-surface'
-                    : 'text-text-muted hover:text-text',
-                )}
-              >
-                <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                <span className="truncate">{label}</span>
-                {typeof badge === 'number' && badge > 0 ? (
-                  <Badge
-                    variant={active ? 'default' : 'secondary'}
-                    className="h-4 px-1.5 text-[10px] tabular-nums"
-                  >
-                    {badge}
-                  </Badge>
-                ) : null}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {mobileView === 'list' && listNode}
-        {mobileView === 'add' && addNode}
-        {mobileView === 'ai' && aiAndSummaryNode}
-      </div>
-
-      <div className="hidden space-y-6 lg:block">
-        {aiAndSummaryNode}
-        {addNode}
-        {listNode}
-      </div>
-
       <ShoppingEditDialog
         entry={s.editingEntry}
         items={s.items}

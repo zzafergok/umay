@@ -142,7 +142,7 @@
   body {
     background-color: rgb(var(--bg));
     color: rgb(var(--text));
-    @apply selection:text-text font-sans antialiased selection:bg-accent/20;
+    @apply font-sans antialiased selection:bg-accent/20 selection:text-text;
   }
 
   h1,
@@ -151,7 +151,7 @@
   h4,
   h5,
   h6 {
-    @apply font-heading text-text tracking-tight;
+    @apply font-heading tracking-tight text-text;
   }
 
   code {
@@ -160,18 +160,31 @@
 }
 
 /* Minimal Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+* {
+  --scrollbar-thumb: rgb(var(--border-strong));
+  --scrollbar-track: transparent;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+@supports not (scrollbar-color: auto) {
+  * {
+    scrollbar-width: auto;
+  }
 
-::-webkit-scrollbar-thumb {
-  background-color: rgb(var(--border-strong));
-  border-radius: 9999px;
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 9999px;
+  }
 }
 
 /* Hide Number Input Arrows */

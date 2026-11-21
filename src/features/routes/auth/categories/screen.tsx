@@ -101,13 +101,15 @@ export function CategoriesScreen() {
           Kategorilere özel teknik alanlar, ürün varsayılanları ve takip
           kuralları tanımla.
         </p>
-        <Button
-          onClick={openCreate}
-          className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
-        >
-          <Plus className="mr-1.5 h-4 w-4" />
-          Kategori Ekle
-        </Button>
+        {!isLoading && categories.length > 0 ? (
+          <Button
+            onClick={openCreate}
+            className="min-h-[44px] w-full sm:min-h-0 sm:w-auto"
+          >
+            <Plus className="mr-1.5 h-4 w-4" />
+            Kategori Ekle
+          </Button>
+        ) : null}
       </div>
 
       {categories.length > 0 ? (

@@ -4,6 +4,7 @@ import type {
   Location,
   Part,
   ReplacementLog,
+  ShoppingList,
   ShoppingListItem,
   StockMovement,
   UserSettings,
@@ -16,6 +17,7 @@ export interface UserVault {
   parts: Map<string, Part>;
   replacementLogs: Map<string, ReplacementLog>;
   stockMovements: Map<string, StockMovement>;
+  shoppingLists: Map<string, ShoppingList>;
   shoppingList: Map<string, ShoppingListItem>;
   settings: UserSettings;
 }
@@ -32,6 +34,7 @@ export function getUserVault(uid: string): UserVault {
       parts: new Map(),
       replacementLogs: new Map(),
       stockMovements: new Map(),
+      shoppingLists: new Map(),
       shoppingList: new Map(),
       settings: {
         currency: 'TRY',

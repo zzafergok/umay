@@ -185,18 +185,20 @@ function CategoryFormBody({
           </TabsContent>
         </Tabs>
 
-        <div className="bg-surface/95 sticky bottom-0 z-10 grid grid-cols-2 gap-2 border-t border-border pt-2.5 backdrop-blur sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
+        <div className="sticky bottom-0 z-10 grid grid-cols-2 gap-2 border-t border-border bg-surface/95 pt-2.5 backdrop-blur sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
           <Button
             type="button"
             variant="outline"
-            className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+            size="sm"
+            className="w-full sm:w-auto"
             onClick={() => onOpenChange(false)}
           >
             Vazgeç
           </Button>
           <SubmitButton
+            size="sm"
             isLoading={saving}
-            className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+            className="w-full sm:w-auto"
           >
             {dialogState.mode === 'edit'
               ? 'Değişiklikleri Kaydet'

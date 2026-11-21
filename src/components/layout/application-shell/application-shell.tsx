@@ -17,12 +17,18 @@ import { SidebarBrand } from './sidebar-brand';
 import { SidebarNav } from './sidebar-nav';
 import { ApplicationShellHeader } from './application-shell-header';
 import { isNavItemActive } from './nav-utils';
+import {
+  PageHeaderProvider,
+  usePageHeaderOverride,
+} from './page-header-context';
 import type { ApplicationShellProps } from './types';
 
 export function ApplicationShell({ ...props }: ApplicationShellProps) {
   return (
     <SidebarProvider className="bg-bg text-text [&_[data-sidebar=sidebar]]:bg-surface [&_[data-sidebar=sidebar]]:text-text font-sans">
-      <ApplicationShellContent {...props} />
+      <PageHeaderProvider>
+        <ApplicationShellContent {...props} />
+      </PageHeaderProvider>
     </SidebarProvider>
   );
 }
@@ -43,6 +49,7 @@ function ApplicationShellContent({
 }: ApplicationShellProps) {
   const pathname = usePathname();
   const { setOpenMobile, state, toggleSidebar } = useSidebar();
+  const override = usePageHeaderOverride();
   const collapsed = state === 'collapsed';
   const active =
     [...navItems, ...accountNavItems].find((item) =>
@@ -87,24 +94,27 @@ function ApplicationShellContent({
       <SidebarInset className="bg-bg text-text selection:text-text min-h-screen antialiased selection:bg-accent/20">
         <ApplicationShellHeader
           active={active}
+          pathname={pathname}
+          trail={override?.trail}
           collapsed={collapsed}
           headerActions={headerActions}
           onOpenMobile={toggleSidebar}
           onToggleCollapsed={toggleSidebar}
         />
 
-        <div className="w-full min-w-0 flex-1 p-4 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:p-6 sm:pb-[calc(7rem+env(safe-area-inset-bottom))] md:pb-8 lg:p-8">
-          <div className="space-y-5 md:space-y-6">
-            {active && !hidePageHeader && (
-              <PageHeader
-                title={pageHeaderTitle ?? active.label}
-                description={pageHeaderDescription ?? active.subtitle}
-                actions={pageHeaderActions}
-                hideMobileTitle
-              />
-            )}
-            {children}
-          </div>
+        {active && !hidePageHeader && (
+          <PageHeader
+            title={override?.title ?? pageHeaderTitle ?? active.label}
+            description={
+              override?.description ?? pageHeaderDescription ?? active.subtitle
+            }
+            badge={override?.badge}
+            actions={pageHeaderActions}
+          />
+        )}
+
+        <div className="w-full min-w-0 flex-1 p-4 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:p-5 sm:pb-[calc(7rem+env(safe-area-inset-bottom))] md:pb-8 lg:px-8 lg:py-5">
+          {children}
         </div>
 
         <ApplicationShellFooter placement="content">

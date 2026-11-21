@@ -65,36 +65,39 @@ export function ItemCard({
   const subtitleParts = [category?.name ?? 'Genel', item.brand].filter(Boolean);
 
   return (
-    <Card className="hover:border-border-strong flex flex-col justify-between transition-colors">
-      <CardHeader className="flex flex-wrap items-start justify-between gap-2.5 pb-0">
-        <div className="flex min-w-0 flex-1 items-start gap-2.5">
+    <Card
+      size="sm"
+      className="hover:border-border-strong flex flex-col justify-between gap-2.5 py-3 transition-colors"
+    >
+      <CardHeader className="flex flex-row items-start justify-between gap-2 pb-0">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           <div
-            className="bg-surface-sunken flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border"
+            className="bg-surface-sunken flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border"
             style={{ color: categoryColor }}
             aria-hidden="true"
           >
             {category ? (
-              <CategoryIcon name={category.icon} className="h-4 w-4" />
+              <CategoryIcon name={category.icon} className="h-3.5 w-3.5" />
             ) : (
-              <Package className="h-4 w-4" />
+              <Package className="h-3.5 w-3.5" />
             )}
           </div>
-          <div className="min-w-0 flex-1 space-y-0.5">
+          <div className="min-w-0 flex-1">
             <Button
               type="button"
               variant="link"
               onClick={() => onDetail(item)}
-              className="font-heading text-title text-text h-auto max-w-full justify-start whitespace-normal break-words p-0 text-left leading-snug hover:text-accent"
+              className="font-heading text-text h-auto max-w-full justify-start truncate p-0 text-left text-sm font-semibold leading-tight hover:text-accent"
             >
-              <span>{item.name}</span>
+              <span className="truncate">{item.name}</span>
             </Button>
-            <div className="text-text-muted flex items-start gap-1.5 text-caption">
+            <div className="text-text-muted mt-0.5 flex items-center gap-1.5 text-[11px]">
               <span
-                className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
+                className="h-1.5 w-1.5 shrink-0 rounded-full"
                 style={{ backgroundColor: categoryColor }}
                 aria-hidden="true"
               />
-              <span className="break-words leading-snug">
+              <span className="truncate leading-tight">
                 {subtitleParts.join(' · ')}
               </span>
             </div>
@@ -106,28 +109,28 @@ export function ItemCard({
         ) : (
           <Badge
             variant="outline"
-            className="text-text-muted shrink-0 text-[11px] font-normal"
+            className="text-text-muted shrink-0 px-1.5 py-0 text-[10px] font-normal"
           >
             {typeLabel}
           </Badge>
         )}
       </CardHeader>
 
-      <CardContent className="flex flex-1 flex-col justify-between gap-3">
-        <div className="space-y-3">
+      <CardContent className="flex flex-1 flex-col justify-between gap-2">
+        <div className="space-y-2">
           <ItemStockPanel
             item={item}
             isBusy={isBusy}
             onAdjustStock={onAdjustStock}
           />
 
-          <div className="text-text-muted flex flex-wrap items-start justify-between gap-x-3 gap-y-1.5 text-caption">
-            <span className="inline-flex min-w-0 items-start gap-1.5">
+          <div className="text-text-muted flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-[11px]">
+            <span className="inline-flex min-w-0 items-center gap-1">
               <MapPin
-                className="mt-0.5 h-3.5 w-3.5 shrink-0"
+                className="h-3 w-3 shrink-0"
                 aria-hidden="true"
               />
-              <span className="break-words leading-snug">{locationText}</span>
+              <span className="truncate">{locationText}</span>
             </span>
             {item.expiresAt ? (
               <span className="inline-flex shrink-0 items-center gap-1 tabular-nums">
@@ -138,12 +141,12 @@ export function ItemCard({
           </div>
 
           {summaryFields.length > 0 ? (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1">
               {summaryFields.map((field) => (
                 <Badge
                   key={field.key}
                   variant="secondary"
-                  className="bg-surface-sunken/70 h-auto max-w-full whitespace-normal break-words border border-border/70 px-2 py-0.5 text-left text-[11px] font-normal leading-snug"
+                  className="bg-surface-sunken/70 h-auto max-w-full truncate border border-border/70 px-1.5 py-0 text-left text-[10px] font-normal leading-snug"
                 >
                   <span className="text-text-muted">{field.label}:</span>{' '}
                   <span className="text-text font-medium">
@@ -156,39 +159,39 @@ export function ItemCard({
               ))}
             </div>
           ) : item.notes ? (
-            <p className="text-text-muted break-words text-xs leading-relaxed">
+            <p className="text-text-muted line-clamp-1 text-[11px] leading-snug">
               {item.notes}
             </p>
           ) : null}
         </div>
 
-        <div className="flex items-center justify-between gap-2 border-t border-border pt-2.5">
+        <div className="flex items-center justify-between gap-1.5 border-t border-border/70 pt-2">
           <Button
             type="button"
             size="sm"
             variant="secondary"
             onClick={() => onDetail(item)}
-            className="min-h-[40px] md:min-h-0"
+            className="h-8 px-2.5 text-xs md:h-7"
           >
-            <Eye className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+            <Eye className="mr-1 h-3 w-3" aria-hidden="true" />
             Detay
           </Button>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
             <Button
               type="button"
               size="sm"
               variant="ghost"
               onClick={() => onEdit(item)}
-              className="min-h-[40px] md:min-h-0"
+              className="h-8 px-2 text-xs md:h-7"
             >
-              <Pencil className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+              <Pencil className="mr-1 h-3 w-3" aria-hidden="true" />
               Düzenle
             </Button>
             <Button
               type="button"
               size="icon-sm"
               variant="ghost"
-              className="text-danger/80 hover:bg-danger-subtle hover:text-danger h-10 w-10 md:h-9 md:w-9"
+              className="text-danger/80 hover:bg-danger-subtle hover:text-danger h-8 w-8 md:h-7 md:w-7"
               aria-label={`${item.name} ürününü sil`}
               onClick={() => onDelete(item)}
             >

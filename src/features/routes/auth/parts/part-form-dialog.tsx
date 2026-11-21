@@ -128,7 +128,7 @@ export function PartFormDialog({
             required
           />
 
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <SelectField
               name="parentItemId"
               label="Ana Ürün"
@@ -156,7 +156,7 @@ export function PartFormDialog({
           )}
 
           {(mode === 'usage' || mode === 'both') && (
-            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <AmountField name="usageLimit" label="Kullanım Limiti" required />
               <TextField
                 name="usageUnit"
@@ -177,14 +177,16 @@ export function PartFormDialog({
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={() => onOpenChange(false)}
-              className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+              className="w-full sm:w-auto"
             >
               Vazgeç
             </Button>
             <SubmitButton
+              size="sm"
               isLoading={methods.formState.isSubmitting}
-              className="h-10 min-h-[40px] w-full sm:h-11 sm:w-auto"
+              className="w-full sm:w-auto"
             >
               Parçayı Kaydet
             </SubmitButton>

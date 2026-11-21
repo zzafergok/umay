@@ -8,7 +8,8 @@ export async function GET(request: NextRequest) {
   if (auth instanceof NextResponse) return auth;
 
   try {
-    const list = await listShoppingItems(auth.uid);
+    const listId = request.nextUrl.searchParams.get('listId') ?? undefined;
+    const list = await listShoppingItems(auth.uid, listId);
     return NextResponse.json(list);
   } catch (error) {
     return handleRouteError(error);

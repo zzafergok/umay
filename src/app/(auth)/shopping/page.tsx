@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
-import { ShoppingScreen } from '@/features/routes/auth/shopping/screen';
+import { ShoppingListsScreen } from '@/features/routes/auth/shopping/shopping-lists-screen';
 
 export const metadata: Metadata = {
-  title: 'Alışveriş Listesi',
-  description: 'Düşük stok ve parça değişimi önerili alışveriş listesi.',
+  title: 'Alışveriş Listeleri',
+  description:
+    'Market ve ev ihtiyaçları için alışveriş listelerini oluştur ve yönet.',
 };
 
 export default function ShoppingPage() {
-  return <ShoppingScreen />;
+  return <ShoppingListsScreen />;
 }

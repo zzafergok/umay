@@ -1,8 +1,10 @@
 export { AppShellLayout } from './AppShellLayout';
-export { ApplicationShell } from './application-shell';
+export { ApplicationShell, PageHeaderMeta } from './application-shell';
 export type {
   ApplicationShellProps,
   ApplicationShellNavItem,
+  BreadcrumbTrailItem,
+  PageHeaderOverride,
 } from './application-shell';
 export { LanguageSwitcher } from './language-switcher';
 export { ThemeToggle } from './theme-toggle';

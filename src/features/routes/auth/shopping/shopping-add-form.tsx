@@ -12,7 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
-import { Label } from '@/components/core/label';
 import {
   AmountField,
   Form,
@@ -39,6 +38,7 @@ interface ShoppingAddFormProps {
   categories: Category[];
   currency: CurrencyCode;
   onAdd: (input: ShoppingItemInput) => Promise<boolean>;
+  embedded?: boolean;
 }
 
 export function ShoppingAddForm({
@@ -46,6 +46,7 @@ export function ShoppingAddForm({
   categories,
   currency,
   onAdd,
+  embedded = false,
 }: ShoppingAddFormProps) {
   const [showDetails, setShowDetails] = React.useState(false);
 
@@ -111,23 +112,80 @@ export function ShoppingAddForm({
     }
   };
 
-  return (
-    <Card>
-      <CardHeader className="flex flex-col gap-3 space-y-0 pb-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0 flex-1 space-y-1">
-          <CardTitle className="font-display text-base">
-            Listeye Ürün Ekle
-          </CardTitle>
-          <CardDescription className="text-caption">
-            Hızlıca ürün ekleyin veya öncelik, mağaza, fiyat ve stok bağlantısı
-            tanımlayın.
-          </CardDescription>
+  const formNode = (
+    <Form
+      schema={shoppingFormSchema}
+      methods={methods}
+      onSubmit={handleSubmit}
+      className="space-y-4"
+    >
+      <div className="space-y-3">
+        <TextField
+          name="freeText"
+          label="Ürün Adı"
+          placeholder="Örn. Bulaşık makinesi tableti"
+          required
+        />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <TextField
+            name="qty"
+            label="Miktar"
+            type="number"
+            min={0.1}
+            step="any"
+            inputClassName="tabular-nums"
+            required
+          />
+          <SelectField name="unit" label="Birim" options={unitOptions} />
         </div>
+      </div>
+
+      {showDetails && (
+        <div className="grid grid-cols-1 gap-3 border-t border-border pt-3 sm:grid-cols-2">
+          <SelectField
+            name="priority"
+            label="Öncelik"
+            options={SHOPPING_PRIORITY_OPTIONS}
+          />
+          <SelectField
+            name="category"
+            label="Kategori"
+            allowNone
+            noneLabel="Kategori seçilmedi"
+            placeholder="Kategori seçin"
+            options={categoryOptions}
+          />
+          <SelectField
+            name="itemId"
+            label="Ev Stoğu ile Eşleştir"
+            options={itemOptions}
+            {...getLinkedItemFieldMeta(itemOptions.length > 0)}
+          />
+          <TextField
+            name="store"
+            label="Mağaza / Market"
+            placeholder="Örn. Migros, BİM, Eczane"
+          />
+          <AmountField
+            name="estimatedPrice"
+            label={`Tahmini Birim Fiyat (${currency})`}
+            placeholder="0,00"
+            inputClassName="font-medium tabular-nums"
+          />
+          <TextField
+            name="note"
+            label="Not (İsteğe Bağlı)"
+            placeholder="Örn. 60'lı ekonomik paket"
+          />
+        </div>
+      )}
+
+      <div className="flex flex-col-reverse gap-2 border-t border-border/70 pt-3 sm:flex-row sm:items-center sm:justify-between">
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="w-full shrink-0 sm:w-auto"
+          className="w-full sm:w-auto"
           onClick={() => setShowDetails((prev) => !prev)}
           aria-expanded={showDetails}
         >
@@ -139,103 +197,34 @@ export function ShoppingAddForm({
             <ChevronDown className="ml-1 h-3.5 w-3.5" />
           )}
         </Button>
-      </CardHeader>
-      <CardContent>
-        <Form
-          schema={shoppingFormSchema}
-          methods={methods}
-          onSubmit={handleSubmit}
-          className="space-y-4"
+        <SubmitButton
+          size="sm"
+          loadingText="Ekleniyor..."
+          icon={<Plus className="h-3.5 w-3.5" />}
+          className="w-full sm:w-auto"
         >
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_120px_minmax(165px,auto)_auto] lg:items-start">
-            <TextField
-              name="freeText"
-              label="Ürün Adı"
-              placeholder="Örn. Bulaşık makinesi tableti"
-              className="sm:col-span-2 lg:col-span-1"
-              inputClassName="text-body"
-              required
-            />
-            <TextField
-              name="qty"
-              label="Miktar"
-              type="number"
-              min={0.1}
-              step="any"
-              inputClassName="text-body tabular-nums"
-              required
-            />
-            <SelectField
-              name="unit"
-              label="Birim"
-              triggerClassName="text-body"
-              options={unitOptions}
-            />
-            <div className="space-y-1.5 sm:col-span-2 sm:space-y-2 lg:col-span-1">
-              <Label
-                aria-hidden="true"
-                className="pointer-events-none hidden select-none font-mono text-2xs uppercase tracking-wider opacity-0 lg:inline"
-              >
-                İşlem
-              </Label>
-              <div>
-                <SubmitButton
-                  loadingText="Ekleniyor..."
-                  icon={<Plus className="h-4 w-4" />}
-                  className="w-full shrink-0 lg:w-auto"
-                >
-                  Ekle
-                </SubmitButton>
-              </div>
-            </div>
-          </div>
+          Ekle
+        </SubmitButton>
+      </div>
+    </Form>
+  );
 
-          {showDetails && (
-            <div className="grid grid-cols-1 gap-3 border-t border-border pt-4 sm:grid-cols-2 lg:grid-cols-3">
-              <SelectField
-                name="priority"
-                label="Öncelik"
-                triggerClassName="text-body"
-                options={SHOPPING_PRIORITY_OPTIONS}
-              />
-              <SelectField
-                name="category"
-                label="Kategori"
-                triggerClassName="text-body"
-                allowNone
-                noneLabel="Kategori seçilmedi"
-                placeholder="Kategori seçin"
-                options={categoryOptions}
-              />
-              <SelectField
-                name="itemId"
-                label="Ev Stoğu ile Eşleştir"
-                triggerClassName="text-body"
-                options={itemOptions}
-                {...getLinkedItemFieldMeta(itemOptions.length > 0)}
-              />
-              <TextField
-                name="store"
-                label="Mağaza / Market"
-                placeholder="Örn. Migros, BİM, Eczane"
-                inputClassName="text-body"
-              />
-              <AmountField
-                name="estimatedPrice"
-                label={`Tahmini Birim Fiyat (${currency})`}
-                placeholder="0,00"
-                inputClassName="text-body font-medium tabular-nums"
-              />
-              <TextField
-                name="note"
-                label="Not (İsteğe Bağlı)"
-                placeholder="Örn. 60'lı ekonomik paket"
-                inputClassName="text-body"
-              />
-            </div>
-          )}
-        </Form>
-      </CardContent>
+  if (embedded) {
+    return formNode;
+  }
+
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="font-display text-base">
+          Listeye Ürün Ekle
+        </CardTitle>
+        <CardDescription className="text-caption">
+          Hızlıca ürün ekleyin veya öncelik, mağaza, fiyat ve stok bağlantısı
+          tanımlayın.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>{formNode}</CardContent>
     </Card>
   );
 }

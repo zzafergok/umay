@@ -92,6 +92,7 @@ export function ReceiptResultView({
             </p>
           ) : (
             <>
+            <div className="overflow-x-auto rounded-md border border-border">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -153,6 +154,7 @@ export function ReceiptResultView({
                   ))}
                 </TableBody>
               </Table>
+            </div>
 
               {canApply && onApplySelected && (
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">

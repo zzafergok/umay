@@ -47,6 +47,7 @@ export function TagsInput({ tags, onChange }: TagsInputProps) {
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ',') {
               e.preventDefault();
+              if (e.nativeEvent.isComposing || e.keyCode === 229) return;
               addTag();
             }
           }}

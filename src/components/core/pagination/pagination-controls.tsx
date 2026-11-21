@@ -102,6 +102,7 @@ export function PaginationControls({
   const handleJumpKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') {
+        if (e.nativeEvent.isComposing || e.keyCode === 229) return;
         handleQuickJump();
       }
     },

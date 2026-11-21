@@ -5,26 +5,49 @@ import type {
 } from '@/lib/ai/openrouter';
 
 const MAX_IMAGE_DATA_URL_LENGTH = 7_500_000;
+export const MAX_RECEIPT_IMAGES = 6;
 
-export const receiptAnalyzeRequestSchema = z.object({
-  imageDataUrl: z
-    .string()
-    .trim()
-    .min(1, 'Fiş görseli zorunludur.')
-    .max(
-      MAX_IMAGE_DATA_URL_LENGTH,
-      'Fiş görseli çok büyük (en fazla ~5 MB). Lütfen daha küçük bir görsel yükleyin.',
-    )
-    .refine(
-      (val) =>
-        /^data:image\/(jpeg|jpg|png|webp|gif);base64,[A-Za-z0-9+/=]+$/i.test(
-          val,
-        ) || /^https:\/\/.+/i.test(val),
-      'Geçerli bir görsel (JPEG, PNG, WebP data URL veya HTTPS bağlantısı) gönderin.',
-    ),
-  modelId: z.string().trim().min(1).max(160).optional(),
-  promptHint: z.string().trim().max(400).optional(),
-});
+export const receiptImageUrlSchema = z
+  .string()
+  .trim()
+  .min(1, 'Fiş görseli zorunludur.')
+  .max(
+    MAX_IMAGE_DATA_URL_LENGTH,
+    'Fiş görseli çok büyük (en fazla ~5 MB). Lütfen daha küçük bir görsel yükleyin.',
+  )
+  .refine(
+    (val) =>
+      /^data:image\/(jpeg|jpg|png|webp|gif);base64,[A-Za-z0-9+/=]+$/i.test(
+        val,
+      ) || /^https:\/\/.+/i.test(val),
+    'Geçerli bir görsel (JPEG, PNG, WebP data URL veya HTTPS bağlantısı) gönderin.',
+  );
+
+export const receiptAnalyzeRequestSchema = z
+  .object({
+    imageDataUrl: receiptImageUrlSchema.optional(),
+    imageDataUrls: z
+      .array(receiptImageUrlSchema)
+      .min(1, 'En az bir fiş görseli seçilmelidir.')
+      .max(
+        MAX_RECEIPT_IMAGES,
+        `En fazla ${MAX_RECEIPT_IMAGES} fiş görseli yüklenebilir.`,
+      )
+      .optional(),
+    modelId: z.string().trim().min(1).max(160).optional(),
+    promptHint: z.string().trim().max(400).optional(),
+  })
+  .refine(
+    (val) =>
+      Boolean(
+        val.imageDataUrl ||
+          (val.imageDataUrls && val.imageDataUrls.length > 0),
+      ),
+    {
+      message: 'En az bir fiş görseli gönderilmelidir.',
+      path: ['imageDataUrls'],
+    },
+  );
 
 export const receiptLineItemSchema = z.object({
   name: z.string().trim().min(1).default('Bilinmeyen Ürün'),
@@ -74,6 +97,8 @@ export interface ReceiptAnalysisResult extends ReceiptModelOutput {
   provider?: string;
   usage?: OpenRouterExtendedUsage;
   parsedFromJson: boolean;
+  imageCount?: number;
+  deduplicatedCount?: number;
   completionId?: string;
   finishReason?: string | null;
   nativeFinishReason?: string | null;

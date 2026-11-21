@@ -100,7 +100,7 @@ export function ItemDetailBody({
           <div className="flex items-start gap-2.5">
             {category ? (
               <span
-                className="bg-surface-sunken mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border"
+                className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-surface-sunken"
                 style={categoryHex ? { color: categoryHex } : undefined}
               >
                 <CategoryIcon name={category.icon} className="h-4 w-4" />
@@ -154,33 +154,33 @@ export function ItemDetailBody({
         </TabsContent>
       </Tabs>
 
-      <div className="bg-surface-raised/95 sticky bottom-0 z-10 mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2.5 backdrop-blur-md sm:static sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="sticky bottom-0 z-10 mt-2 flex flex-col gap-2 border-t border-border bg-surface-raised/95 pt-2.5 backdrop-blur-md sm:static sm:flex-row sm:items-center sm:justify-between sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
           <Button
             variant="outline"
             size="sm"
             onClick={() => state.setQrOpen(true)}
-            className="min-h-[40px] sm:min-h-0"
+            className="w-full sm:w-auto"
           >
-            <QrCode className="mr-1.5 h-4 w-4" />
+            <QrCode className="mr-1.5 h-3.5 w-3.5" />
             QR Etiket
           </Button>
           <Button
             variant="destructive"
             size="sm"
             onClick={() => state.setDeleteOpen(true)}
-            className="min-h-[40px] sm:min-h-0"
+            className="w-full sm:w-auto"
           >
-            <Trash2 className="mr-1.5 h-4 w-4" />
+            <Trash2 className="mr-1.5 h-3.5 w-3.5" />
             Sil
           </Button>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
           <Button
             variant="outline"
             size="sm"
             onClick={() => onOpenChange(false)}
-            className="min-h-[40px] sm:min-h-0"
+            className="w-full sm:w-auto"
           >
             Kapat
           </Button>
@@ -188,9 +188,9 @@ export function ItemDetailBody({
             variant="primary"
             size="sm"
             onClick={state.handleOpenEdit}
-            className="min-h-[40px] sm:min-h-0"
+            className="w-full sm:w-auto"
           >
-            <Pencil className="mr-1.5 h-4 w-4" />
+            <Pencil className="mr-1.5 h-3.5 w-3.5" />
             Düzenle
           </Button>
         </div>

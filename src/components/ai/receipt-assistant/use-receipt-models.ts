@@ -8,8 +8,10 @@ import type {
   OpenRouterModelsQueryParams,
 } from '@/lib/ai/openrouter';
 import {
+  countReceiptModelsByPricing,
   filterAndSortReceiptModels,
   pickDefaultReceiptModelId,
+  type ReceiptModelPricingFilter,
 } from '@/lib/ai/receipt-analyzer';
 import { aiReceiptService } from '@/services/ai-receipt-service';
 import { getOpenRouterModelsQueryKey } from './receipt-assistant-utils';
@@ -34,12 +36,19 @@ export function useReceiptModels(options: {
     [modelsQuery.data],
   );
 
-  const [freeOnly, setFreeOnly] = React.useState(
-    options.defaultFreeOnly ?? false,
+  const [pricingFilter, setPricingFilter] =
+    React.useState<ReceiptModelPricingFilter>(
+      options.defaultFreeOnly ? 'free' : 'all',
+    );
+
+  const modelCounts = React.useMemo(
+    () => countReceiptModelsByPricing(rawModels),
+    [rawModels],
   );
+
   const models = React.useMemo(
-    () => filterAndSortReceiptModels(rawModels, { freeOnly }),
-    [rawModels, freeOnly],
+    () => filterAndSortReceiptModels(rawModels, { pricingFilter }),
+    [rawModels, pricingFilter],
   );
 
   const defaultModelId = React.useMemo(
@@ -80,9 +89,11 @@ export function useReceiptModels(options: {
 
   return {
     models,
+    modelCounts,
     totalCatalogCount: modelsQuery.data?.total_count ?? rawModels.length,
-    freeOnly,
-    setFreeOnly,
+    pricingFilter,
+    setPricingFilter,
+    freeOnly: pricingFilter === 'free',
     defaultModelId,
     isLoadingModels: modelsQuery.isLoading,
     modelsLoadError: modelsQuery.isError,

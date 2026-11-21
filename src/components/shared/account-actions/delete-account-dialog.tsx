@@ -70,17 +70,17 @@ export function DeleteAccountDialog({
         dismissible={!isPending}
         showCloseButton={!isPending}
         mobilePresentation="sheet"
-        className="bg-surface-raised gap-0 overflow-hidden border-border p-0 sm:max-w-[460px] sm:p-0"
+        className="max-h-[92dvh] gap-0 overflow-y-auto overflow-x-hidden border-border bg-surface-raised p-0 sm:max-w-[460px] sm:p-0"
       >
         <DialogHeader className="flex-row items-start gap-3 space-y-0 px-5 pb-4 pr-11 pt-5 text-left">
-          <div className="border-danger/20 bg-danger-subtle text-danger ring-danger/[0.07] mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border ring-4">
+          <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-danger/20 bg-danger-subtle text-danger ring-4 ring-danger/[0.07]">
             <AlertTriangle className="size-4" aria-hidden="true" />
           </div>
           <div className="min-w-0 flex-1 space-y-1">
-            <DialogTitle className="font-heading text-text text-base font-semibold leading-snug tracking-tight">
+            <DialogTitle className="font-heading text-base font-semibold leading-snug tracking-tight text-text">
               {copy.deleteDialogTitle}
             </DialogTitle>
-            <DialogDescription className="text-body-sm text-text-muted leading-relaxed">
+            <DialogDescription className="text-body-sm leading-relaxed text-text-muted">
               {copy.deleteDialogDescription}
             </DialogDescription>
           </div>
@@ -93,15 +93,15 @@ export function DeleteAccountDialog({
           className="space-y-4"
         >
           <div className="space-y-3.5 px-5 pb-1">
-            <div className="bg-surface-sunken/70 rounded-xl border border-border/80 p-3.5">
-              <p className="text-text text-caption font-semibold">
+            <div className="rounded-xl border border-border/80 bg-surface-sunken/70 p-3.5">
+              <p className="text-caption font-semibold text-text">
                 {copy.deleteScopeTitle}
               </p>
-              <ul className="text-text-muted mt-2 space-y-1.5 text-caption">
+              <ul className="mt-2 space-y-1.5 text-caption text-text-muted">
                 {copy.deleteScopeItems.map((item) => (
                   <li key={item} className="flex items-start gap-2">
                     <span
-                      className="bg-danger mt-1.5 size-1.5 shrink-0 rounded-full"
+                      className="mt-1.5 size-1.5 shrink-0 rounded-full bg-danger"
                       aria-hidden="true"
                     />
                     <span>{item}</span>
@@ -121,7 +121,7 @@ export function DeleteAccountDialog({
             />
           </div>
 
-          <DialogFooter className="bg-surface-sunken/45 flex-col-reverse gap-2 border-t border-border/80 px-5 py-3.5 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
+          <DialogFooter className="flex-col-reverse gap-2 border-t border-border/80 bg-surface-sunken/45 px-5 py-3.5 sm:flex-row sm:items-center sm:justify-end sm:gap-2">
             <Button
               type="button"
               variant="outline"

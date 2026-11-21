@@ -75,6 +75,7 @@ export function ItemsScreen() {
         onToggleViewMode={() =>
           state.setViewMode((v) => (v === 'grid' ? 'table' : 'grid'))
         }
+        showCreateButton={!state.isLoading && state.totalCount > 0}
         onCreateClick={state.openCreateModal}
         lowStockOnly={state.lowStockOnly}
         onToggleLowStock={() => state.setLowStockOnly((v) => !v)}
@@ -89,7 +90,8 @@ export function ItemsScreen() {
       />
 
       {state.isLoading ? (
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <SkeletonCard />
           <SkeletonCard />
           <SkeletonCard />
           <SkeletonCard />
@@ -102,18 +104,22 @@ export function ItemsScreen() {
             </EmptyMedia>
             <EmptyTitle>Ürün bulunamadı</EmptyTitle>
             <EmptyDescription>
-              Filtreleri temizle veya evindeki ilk ürünü ekle.
+              {state.totalCount === 0
+                ? 'Evindeki ilk ürünü ekleyerek envanterini oluştur.'
+                : 'Filtreleri temizle veya arama kriterlerini değiştir.'}
             </EmptyDescription>
           </EmptyHeader>
-          <EmptyContent>
-            <Button variant="primary" onClick={state.openCreateModal}>
-              <Package className="mr-1.5 h-4 w-4" aria-hidden="true" />
-              Ürün ekle
-            </Button>
-          </EmptyContent>
+          {state.totalCount === 0 ? (
+            <EmptyContent>
+              <Button variant="primary" onClick={state.openCreateModal}>
+                <Package className="mr-1.5 h-4 w-4" aria-hidden="true" />
+                Ürün ekle
+              </Button>
+            </EmptyContent>
+          ) : null}
         </Empty>
       ) : state.viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {state.filtered.map((item) => (
             <ItemCard
               key={item.id}
@@ -130,7 +136,7 @@ export function ItemsScreen() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-4 md:hidden">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:hidden">
             {state.filtered.map((item) => (
               <ItemCard
                 key={item.id}
