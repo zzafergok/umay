@@ -18,7 +18,9 @@ import {
   receiptAssistantFormSchema,
   type ReceiptAssistantFormValues,
 } from './receipt-assistant-utils';
+import { enrichAnalysisItems } from './receipt-enrich-client';
 import type { ReceiptImageEntry } from './types';
+import type { ReceiptStage } from './use-receipt-progress';
 import { useReceiptModels } from './use-receipt-models';
 
 export function useReceiptAssistant(options: {
@@ -49,6 +51,7 @@ export function useReceiptAssistant(options: {
     new Set(),
   );
   const [isAnalyzing, setIsAnalyzing] = React.useState(false);
+  const [stage, setStage] = React.useState<ReceiptStage>('idle');
   const [isApplying, setIsApplying] = React.useState(false);
   const [isConfigured, setIsConfigured] = React.useState(true);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
@@ -122,6 +125,8 @@ export function useReceiptAssistant(options: {
     ).trim();
 
     setIsAnalyzing(true);
+    setStage('reading');
+    setAnalysis(null);
     setErrorMessage(null);
 
     try {
@@ -134,11 +139,18 @@ export function useReceiptAssistant(options: {
       });
 
       setIsConfigured(true);
+      // Okunan kalemler hemen gösterilir; ad/kategori düzenlemesi sonradan eklenir.
       setAnalysis(result.analysis);
       setSelectedIndices(
         new Set(result.analysis.items.map((_, index) => index)),
       );
-      options.onAnalyzed?.(result.analysis);
+      setStage('enriching');
+      const enriched = await enrichAnalysisItems(result.analysis);
+      setAnalysis(enriched.analysis);
+      options.onAnalyzed?.(enriched.analysis);
+      if (enriched.failed) {
+        toast.info('Ürün adları düzenlenemedi; fişteki ham adlar kullanıldı.');
+      }
       toast.success(
         images.length > 1
           ? `${images.length} fiş parçası birleştirilerek analiz edildi.`
@@ -156,6 +168,7 @@ export function useReceiptAssistant(options: {
       toast.error(message);
     } finally {
       setIsAnalyzing(false);
+      setStage('idle');
     }
   };
 
@@ -212,6 +225,7 @@ export function useReceiptAssistant(options: {
     analysis,
     selectedIndices,
     isAnalyzing,
+    stage,
     isApplying,
     errorMessage,
     handleFileChange,

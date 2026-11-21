@@ -140,11 +140,10 @@ export function useShoppingScreen(listId?: string) {
   };
 
   const handleAcceptAllSuggestions = async () => {
+    if (suggestions.length === 0) return;
     try {
-      await Promise.all(
-        suggestions.map((s) =>
-          inventoryService.createShopping(toSuggestionInput(s)),
-        ),
+      await inventoryService.createShoppingBulk(
+        suggestions.map(toSuggestionInput),
       );
       await invalidateShopping();
       toast.success(`${suggestions.length} öneri listeye eklendi.`);

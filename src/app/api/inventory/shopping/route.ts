@@ -1,7 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { shoppingItemInputSchema } from '@/features/inventory/schemas';
+import {
+  shoppingBulkItemsInputSchema,
+  shoppingItemInputSchema,
+} from '@/features/inventory/schemas';
 import { handleRouteError, requireAuth } from '@/lib/api/route-helpers';
-import { createShoppingItem, listShoppingItems } from '@/lib/inventory/repo';
+import {
+  createShoppingItem,
+  createShoppingItemsBulk,
+  listShoppingItems,
+} from '@/lib/inventory/repo';
+
+function isBulkPayload(body: unknown): body is { items: unknown } {
+  return (
+    typeof body === 'object' &&
+    body !== null &&
+    'items' in body &&
+    Array.isArray((body as { items?: unknown }).items)
+  );
+}
 
 export async function GET(request: NextRequest) {
   const auth = await requireAuth(request);
@@ -22,6 +38,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const body: unknown = await request.json();
+    if (isBulkPayload(body)) {
+      const parsed = shoppingBulkItemsInputSchema.parse(body);
+      const created = await createShoppingItemsBulk(auth.uid, parsed.items);
+      return NextResponse.json(
+        { items: created, count: created.length },
+        { status: 201 },
+      );
+    }
+
     const parsed = shoppingItemInputSchema.parse(body);
     const created = await createShoppingItem(auth.uid, parsed);
     return NextResponse.json(created, { status: 201 });

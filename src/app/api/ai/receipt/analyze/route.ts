@@ -6,6 +6,9 @@ import {
   receiptAnalyzeRequestSchema,
 } from '@/lib/ai/receipt-analyzer';
 
+/** Uzun fişler büyük modellerde dakikalarca sürebilir (Vercel vb. için). */
+export const maxDuration = 200;
+
 export async function POST(request: NextRequest) {
   const auth = await requireAuth(request);
   if (auth instanceof NextResponse) return auth;

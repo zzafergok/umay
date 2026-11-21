@@ -71,7 +71,10 @@ export function ShoppingReceiptDialog({
 }: ShoppingReceiptDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent mobilePresentation="sheet" className="sm:max-w-xl">
+      <DialogContent
+        mobilePresentation="sheet"
+        className="sm:max-w-2xl md:max-w-3xl"
+      >
         <DialogHeader>
           <DialogTitle>Fiş Tara (AI)</DialogTitle>
         </DialogHeader>

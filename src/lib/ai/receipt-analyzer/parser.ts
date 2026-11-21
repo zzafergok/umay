@@ -55,6 +55,49 @@ function unwrapReceiptContainer(
 }
 
 function normalizeReceiptItem(item: Record<string, unknown>) {
+  const rawQty = toOptionalNumber(
+    pickFirst(item, ['quantity', 'qty', 'count']),
+  );
+  let quantity = rawQty && rawQty > 0 ? rawQty : 1;
+  const rawUnitPrice = toOptionalNumber(
+    pickFirst(item, ['unitPrice', 'unit_price', 'price']),
+  );
+  const rawTotalPrice = toOptionalNumber(
+    pickFirst(item, [
+      'totalPrice',
+      'total_price',
+      'lineTotal',
+      'line_total',
+      'total',
+      'amount',
+    ]),
+  );
+  let unitPrice = rawUnitPrice;
+  let totalPrice = rawTotalPrice;
+
+  if (unitPrice !== null && totalPrice === null) {
+    totalPrice = Number((quantity * unitPrice).toFixed(2));
+  } else if (unitPrice === null && totalPrice !== null) {
+    unitPrice = Number((totalPrice / quantity).toFixed(2));
+  } else if (unitPrice !== null && totalPrice !== null) {
+    const computedTotal = Number((quantity * unitPrice).toFixed(2));
+    if (Math.abs(computedTotal - totalPrice) <= 0.15) {
+      // Fişte basılı satır tutarı esastır; yuvarlama farkında olduğu gibi korunur.
+    } else if (quantity > 1 && Math.abs(totalPrice - unitPrice) <= 0.01) {
+      // Model birim fiyatı satır tutarı olarak kopyalamış.
+      totalPrice = computedTotal;
+    } else {
+      // Basılı tutar ile birim fiyat doğruysa yanlış okunan şey miktardır (ör. 3,694 → 0,694).
+      const inferredQty = Number((totalPrice / unitPrice).toFixed(3));
+      const inferredTotal = Number((inferredQty * unitPrice).toFixed(2));
+      if (inferredQty > 0 && Math.abs(inferredTotal - totalPrice) <= 0.02) {
+        quantity = inferredQty;
+      } else {
+        unitPrice = Number((totalPrice / quantity).toFixed(2));
+      }
+    }
+  }
+
   return {
     name:
       toOptionalString(
@@ -76,22 +119,10 @@ function normalizeReceiptItem(item: Record<string, unknown>) {
           'clean_name',
         ]),
       ) ?? '',
-    quantity:
-      toOptionalNumber(pickFirst(item, ['quantity', 'qty', 'count'])) ?? 1,
+    quantity,
     unit: toOptionalString(pickFirst(item, ['unit', 'uom'])) ?? 'adet',
-    unitPrice: toOptionalNumber(
-      pickFirst(item, ['unitPrice', 'unit_price', 'price']),
-    ),
-    totalPrice: toOptionalNumber(
-      pickFirst(item, [
-        'totalPrice',
-        'total_price',
-        'lineTotal',
-        'line_total',
-        'total',
-        'amount',
-      ]),
-    ),
+    unitPrice,
+    totalPrice,
     categoryHint: toOptionalString(
       pickFirst(item, ['categoryHint', 'category_hint', 'category']),
     ),

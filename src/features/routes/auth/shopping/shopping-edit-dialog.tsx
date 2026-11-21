@@ -27,6 +27,7 @@ import type {
   Item,
   ShoppingListItem,
 } from '@/features/inventory/types';
+import { formatAmountInput } from '@/lib/utils';
 import { SHOPPING_PRIORITY_OPTIONS } from './constants';
 import {
   buildLinkedItemOptions,
@@ -100,7 +101,7 @@ export function ShoppingEditDialog({
       store: entry.store ?? '',
       estimatedPrice:
         typeof entry.estimatedPrice === 'number'
-          ? String(entry.estimatedPrice)
+          ? formatAmountInput(entry.estimatedPrice)
           : '',
       note: entry.note ?? '',
     });

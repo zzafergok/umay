@@ -94,6 +94,13 @@ export const shoppingItemInputSchema = z
     message: 'Ürün veya serbest metin belirtilmelidir.',
   });
 
+export const shoppingBulkItemsInputSchema = z.object({
+  items: z
+    .array(shoppingItemInputSchema)
+    .min(1, 'En az bir ürün belirtilmelidir.')
+    .max(500, 'Tek seferde en fazla 500 ürün eklenebilir.'),
+});
+
 export const shoppingItemPatchSchema = z.object({
   listId: z.string().trim().optional(),
   itemId: z.string().trim().nullable().optional(),
@@ -125,5 +132,6 @@ export type StockMovementInput = z.infer<typeof stockMovementInputSchema>;
 export type ShoppingListInput = z.infer<typeof shoppingListInputSchema>;
 export type ShoppingListPatchInput = z.infer<typeof shoppingListPatchSchema>;
 export type ShoppingItemInput = z.infer<typeof shoppingItemInputSchema>;
+export type ShoppingBulkItemsInput = z.infer<typeof shoppingBulkItemsInputSchema>;
 export type ShoppingItemPatchInput = z.infer<typeof shoppingItemPatchSchema>;
 export type UserSettingsInput = z.infer<typeof userSettingsInputSchema>;

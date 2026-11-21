@@ -9,6 +9,8 @@ import type {
 import type {
   ReceiptAnalysisResult,
   ReceiptAnalyzeInput,
+  ReceiptEnrichedItem,
+  ReceiptEnrichInput,
 } from '@/lib/ai/receipt-analyzer';
 
 function toCleanParams(
@@ -71,6 +73,13 @@ export const aiReceiptService = {
     apiClient.post<{ analysis: ReceiptAnalysisResult }>(
       '/ai/receipt/analyze',
       input,
-      { timeout: 95000 },
+      { timeout: 200_000 },
+    ),
+
+  enrichReceipt: (input: ReceiptEnrichInput) =>
+    apiClient.post<{ items: ReceiptEnrichedItem[] }>(
+      '/ai/receipt/enrich',
+      input,
+      { timeout: 95_000 },
     ),
 };

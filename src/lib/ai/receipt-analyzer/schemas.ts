@@ -92,8 +92,19 @@ export type OpenRouterExtendedUsage = OpenRouterUsage & Record<string, unknown>;
 export type OpenRouterRawCompletionResponse = OpenRouterChatCompletionResponse &
   Record<string, unknown>;
 
+export interface ReceiptTotalsCheck {
+  /** Fişte basılı ARA TOPLAM (indirim/hediye çeki öncesi ürünler toplamı). */
+  printedSubtotal: number | null;
+  /** Çıkarılan kalemlerin toplamı. */
+  itemsSum: number;
+  /** itemsSum - printedSubtotal (negatif: eksik kalem, pozitif: fazla kalem). */
+  difference: number | null;
+  status: 'match' | 'mismatch' | 'unverified';
+}
+
 export interface ReceiptAnalysisResult extends ReceiptModelOutput {
   modelUsed: string;
+  totalsCheck?: ReceiptTotalsCheck;
   provider?: string;
   usage?: OpenRouterExtendedUsage;
   parsedFromJson: boolean;
@@ -105,4 +116,29 @@ export interface ReceiptAnalysisResult extends ReceiptModelOutput {
   reasoning?: string | null;
   refusal?: string | null;
   rawResponse?: OpenRouterRawCompletionResponse;
+}
+
+export const RECEIPT_CATEGORY_HINTS = [
+  'Gıda',
+  'İçecek',
+  'Temizlik',
+  'Kişisel Bakım',
+  'Ev/Yaşam',
+  'Kırtasiye',
+  'Elektronik',
+  'Diğer',
+] as const;
+
+/** Fiş okuma bittikten sonra çalışan ürün adı/kategori düzenleme isteği. */
+export const receiptEnrichRequestSchema = z.object({
+  names: z.array(z.string().trim().min(1).max(200)).min(1).max(150),
+  modelId: z.string().trim().min(1).max(200).optional(),
+});
+
+export type ReceiptEnrichInput = z.infer<typeof receiptEnrichRequestSchema>;
+
+export interface ReceiptEnrichedItem {
+  /** Boş string: model bu kalem için öneri üretemedi, ham ad korunmalı. */
+  normalizedName: string;
+  categoryHint: string | null;
 }

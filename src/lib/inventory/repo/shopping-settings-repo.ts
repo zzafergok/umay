@@ -38,12 +38,13 @@ export async function listShoppingItems(
   return listId ? all.filter((item) => item.listId === listId) : all;
 }
 
-export async function createShoppingItem(
-  uid: string,
+const FIRESTORE_BATCH_LIMIT = 500;
+
+function buildShoppingEntry(
   input: ShoppingItemInput,
-): Promise<ShoppingListItem> {
-  const now = new Date().toISOString();
-  const entry = omitUndefined<ShoppingListItem>({
+  now: string,
+): ShoppingListItem {
+  return omitUndefined<ShoppingListItem>({
     id: newId('shp'),
     ...input,
     priority: input.priority ?? 'normal',
@@ -51,12 +52,47 @@ export async function createShoppingItem(
     createdAt: now,
     updatedAt: now,
   });
+}
+
+export async function createShoppingItem(
+  uid: string,
+  input: ShoppingItemInput,
+): Promise<ShoppingListItem> {
+  const entry = buildShoppingEntry(input, new Date().toISOString());
   if (!isFirebaseConfigured()) {
     getUserVault(uid).shoppingList.set(entry.id, entry);
     return entry;
   }
   await userCol(uid, 'shoppingList').doc(entry.id).set(entry);
   return entry;
+}
+
+export async function createShoppingItemsBulk(
+  uid: string,
+  inputs: ShoppingItemInput[],
+): Promise<ShoppingListItem[]> {
+  if (inputs.length === 0) return [];
+  const now = new Date().toISOString();
+  const entries = inputs.map((input) => buildShoppingEntry(input, now));
+
+  if (!isFirebaseConfigured()) {
+    const store = getUserVault(uid).shoppingList;
+    for (const entry of entries) {
+      store.set(entry.id, entry);
+    }
+    return entries;
+  }
+
+  const db = getAdminFirestore();
+  const col = userCol(uid, 'shoppingList');
+  for (let i = 0; i < entries.length; i += FIRESTORE_BATCH_LIMIT) {
+    const batch = db.batch();
+    for (const entry of entries.slice(i, i + FIRESTORE_BATCH_LIMIT)) {
+      batch.set(col.doc(entry.id), entry);
+    }
+    await batch.commit();
+  }
+  return entries;
 }
 
 export async function updateShoppingItem(

@@ -29,8 +29,9 @@ function canonicalizeText(text: string): string {
 }
 
 function roundMoney(value: number | null | undefined): string {
-  if (typeof value !== 'number' || !Number.isFinite(value)) return 'null';
-  return value.toFixed(2);
+  return typeof value === 'number' && Number.isFinite(value)
+    ? value.toFixed(2)
+    : 'null';
 }
 
 function areNamesEquivalent(a: ReceiptLineItem, b: ReceiptLineItem): boolean {
@@ -48,7 +49,10 @@ function areNamesEquivalent(a: ReceiptLineItem, b: ReceiptLineItem): boolean {
   return minLen >= 6 && (normA.includes(normB) || normB.includes(normA));
 }
 
-function areItemsEquivalent(a: ReceiptLineItem, b: ReceiptLineItem): boolean {
+export function areItemsEquivalent(
+  a: ReceiptLineItem,
+  b: ReceiptLineItem,
+): boolean {
   if (!areNamesEquivalent(a, b)) return false;
   const qtyA = Number((a.quantity || 1).toFixed(3));
   const qtyB = Number((b.quantity || 1).toFixed(3));
@@ -85,10 +89,9 @@ function mergeDuplicatePair(
 }
 
 function countDistinctNames(slice: ReceiptLineItem[]): number {
-  const keys = new Set(
+  return new Set(
     slice.map((item) => canonicalizeText(item.normalizedName || item.name)),
-  );
-  return keys.size;
+  ).size;
 }
 
 /**

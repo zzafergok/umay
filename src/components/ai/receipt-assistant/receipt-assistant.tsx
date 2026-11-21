@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils';
 import { receiptAssistantFormSchema } from './receipt-assistant-utils';
 import { ReceiptImageField } from './receipt-image-field';
 import { ReceiptModelSelector } from './receipt-model-selector';
+import { ReceiptProgress } from './receipt-progress';
 import { ReceiptResultView } from './receipt-result-view';
 import type { ReceiptAssistantProps } from './types';
 import { useReceiptAssistant } from './use-receipt-assistant';
@@ -67,7 +68,7 @@ export function ReceiptAssistant({
     <div className={cn('min-w-0 space-y-3.5', !embedded && 'space-y-4')}>
       {embedded ? (
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-text-muted text-xs">{description}</p>
+          <p className="text-xs text-text-muted">{description}</p>
           <Badge variant="secondary" size="sm" className="shrink-0 font-mono">
             {filterBadgeLabel} ({state.models.length})
           </Badge>
@@ -133,7 +134,7 @@ export function ReceiptAssistant({
 
         {imageCount > 0 && (
           <div className="flex flex-col gap-2 border-t border-border/70 pt-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-text-muted text-caption">
+            <p className="text-caption text-text-muted">
               {imageCount > 1
                 ? `${imageCount} fiş parçası birleştirilip mükerrer satırlar elenecek`
                 : 'Fiş görseli analize hazır'}
@@ -153,6 +154,11 @@ export function ReceiptAssistant({
         )}
       </Form>
 
+      <ReceiptProgress
+        stage={state.stage}
+        totalsCheck={state.analysis?.totalsCheck}
+      />
+
       {state.errorMessage && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
@@ -170,6 +176,7 @@ export function ReceiptAssistant({
           onApplySelected={state.handleApplySelected}
           applyLabel={applyLabel}
           isApplying={state.isApplying}
+          isEnriching={state.stage === 'enriching'}
           canApply={Boolean(onApplyItems)}
         />
       )}
@@ -185,7 +192,7 @@ export function ReceiptAssistant({
       <CardHeader className="flex flex-col gap-3 space-y-0 pb-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1 space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <ReceiptText className="text-umay-blue h-4 w-4 shrink-0" />
+            <ReceiptText className="h-4 w-4 shrink-0 text-umay-blue" />
             <CardTitle className="font-display text-base">{title}</CardTitle>
             <Badge variant="secondary" size="sm" className="font-mono">
               {filterBadgeLabel} ({state.models.length})

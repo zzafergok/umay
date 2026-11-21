@@ -46,23 +46,24 @@ export function ShoppingReceiptCard({
     items: ReceiptLineItem[],
     analysis: ReceiptAnalysisResult,
   ) => {
+    if (items.length === 0) return;
+    const targetListId = listId && listId !== 'unassigned' ? listId : undefined;
+    const store = analysis.merchantName?.trim() || undefined;
     try {
-      await Promise.all(
-        items.map((item) =>
-          inventoryService.createShopping({
-            listId: listId && listId !== 'unassigned' ? listId : undefined,
-            itemId: null,
-            freeText: item.normalizedName || item.name,
-            qty: Math.max(1, Math.round(item.quantity || 1)),
-            unit: formatShoppingUnit(item.unit),
-            category: item.categoryHint?.trim() || undefined,
-            priority: 'normal',
-            estimatedPrice: resolveUnitPrice(item),
-            store: analysis.merchantName?.trim() || undefined,
-            source: 'receipt_ai',
-            done: false,
-          }),
-        ),
+      await inventoryService.createShoppingBulk(
+        items.map((item) => ({
+          listId: targetListId,
+          itemId: null,
+          freeText: item.normalizedName || item.name,
+          qty: item.quantity > 0 ? Number(item.quantity.toFixed(3)) : 1,
+          unit: formatShoppingUnit(item.unit),
+          category: item.categoryHint?.trim() || undefined,
+          priority: 'normal',
+          estimatedPrice: resolveUnitPrice(item),
+          store,
+          source: 'receipt_ai',
+          done: false,
+        })),
       );
       await qc.invalidateQueries({ queryKey: ['inventory', 'shopping'] });
       toast.success(`${items.length} ürün alışveriş listesine eklendi.`);

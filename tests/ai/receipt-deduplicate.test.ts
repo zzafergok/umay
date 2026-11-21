@@ -6,6 +6,7 @@ import {
   deduplicateReceiptItems,
   parseReceiptModelResponse,
   receiptAnalyzeRequestSchema,
+  reconcileConsecutiveRunsWithAraToplam,
   resolveReceiptImages,
   type ReceiptLineItem,
 } from '@/lib/ai/receipt-analyzer';
@@ -198,5 +199,35 @@ describe('multi-image reasoning truncation & preferred model isolation', () => {
     expect(result.imageCount).toBe(2);
     expect(result.items).toHaveLength(2);
     expect(result.deduplicatedCount).toBe(2);
+  });
+
+  it('reconciles a +1 optical illusion in a 3+ consecutive identical item run against ARA TOPLAM', () => {
+    const probis = {
+      name: 'ULKER PROBIS SAND.75',
+      normalizedName: 'Ülker Probis Sandviç 75g',
+      quantity: 1,
+      unit: 'adet',
+      unitPrice: 26.25,
+      totalPrice: 26.25,
+      categoryHint: 'Gıda',
+      vatRate: 1,
+    };
+    const items = [
+      { ...probis, name: 'PATOS PARTI ACI SOSL', unitPrice: 94.5, totalPrice: 94.5 },
+      probis,
+      probis,
+      probis,
+      probis,
+      probis, // 5 instead of 4 (+26.25 optical illusion)
+    ];
+    const reconciled = reconcileConsecutiveRunsWithAraToplam(
+      items,
+      'Yunus Market 01.11.2026 15:15 ARA TOPLAM 199.50 TOPKDV 8.78',
+    );
+    expect(reconciled).toHaveLength(5);
+    const sum = Number(
+      reconciled.reduce((acc, item) => acc + (item.totalPrice ?? 0), 0).toFixed(2),
+    );
+    expect(sum).toBe(199.5);
   });
 });

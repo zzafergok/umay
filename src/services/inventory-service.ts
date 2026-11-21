@@ -111,6 +111,11 @@ export const inventoryService = {
     }),
   createShopping: (data: ShoppingItemInput) =>
     apiClient.post<ShoppingListItem>('/inventory/shopping', data),
+  createShoppingBulk: (items: ShoppingItemInput[]) =>
+    apiClient.post<{ items: ShoppingListItem[]; count: number }>(
+      '/inventory/shopping',
+      { items },
+    ),
   updateShopping: (id: string, data: ShoppingItemPatchInput) =>
     apiClient.patch<ShoppingListItem>(`/inventory/shopping/${id}`, data),
   deleteShopping: (id: string) =>

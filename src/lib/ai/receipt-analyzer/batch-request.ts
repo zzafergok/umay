@@ -98,7 +98,11 @@ export async function requestBatchCompletion(
   input: ReceiptAnalyzeInput,
   imageUrls: string[],
   modelMap: Map<string, OpenRouterModel>,
+  timeoutMs?: number,
 ): Promise<OpenRouterChatCompletionResponse> {
+  const call = (
+    payload: Parameters<typeof createOpenRouterChatCompletion>[0],
+  ) => createOpenRouterChatCompletion(payload, { timeoutMs });
   const allSupportJson = batch.every((id) => {
     const model = modelMap.get(id);
     return model ? supportsJsonObject(model) : false;
@@ -144,11 +148,11 @@ export async function requestBatchCompletion(
 
   const reasoningConfig = buildReasoningConfig(batch, anySupportsReasoning);
   if (!allSupportJson && !reasoningConfig) {
-    return createOpenRouterChatCompletion(basePayload);
+    return call(basePayload);
   }
 
   try {
-    return await createOpenRouterChatCompletion({
+    return await call({
       ...basePayload,
       ...(allSupportJson
         ? { response_format: { type: 'json_object' as const } }
@@ -157,7 +161,7 @@ export async function requestBatchCompletion(
     });
   } catch (error) {
     if (shouldRetryWithLowReasoning(error)) {
-      return createOpenRouterChatCompletion({
+      return call({
         ...basePayload,
         ...(allSupportJson
           ? { response_format: { type: 'json_object' as const } }
@@ -166,7 +170,7 @@ export async function requestBatchCompletion(
       });
     }
     if (shouldRetryWithBasicPayload(error)) {
-      return createOpenRouterChatCompletion({
+      return call({
         ...basePayload,
         max_tokens: imageUrls.length > 1 ? 6144 : 4096,
       });

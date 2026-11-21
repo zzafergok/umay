@@ -126,8 +126,35 @@ export function filterAndSortShoppingList(
 
 export function parseOptionalPrice(value: unknown): number | undefined {
   if (value === null || value === undefined) return undefined;
-  const normalized = String(value).replace(',', '.').trim();
-  if (!normalized) return undefined;
+  if (typeof value === 'number') {
+    return Number.isFinite(value) && value >= 0
+      ? Number(value.toFixed(2))
+      : undefined;
+  }
+  const trimmed = String(value).replace(/\s+/g, '').trim();
+  if (!trimmed) return undefined;
+
+  const hasComma = trimmed.includes(',');
+  const hasDot = trimmed.includes('.');
+  let normalized = trimmed;
+
+  if (hasComma && hasDot) {
+    normalized =
+      trimmed.lastIndexOf(',') > trimmed.lastIndexOf('.')
+        ? trimmed.replace(/\./g, '').replace(',', '.')
+        : trimmed.replace(/,/g, '');
+  } else if (hasComma) {
+    normalized = trimmed.replace(',', '.');
+  } else if (hasDot) {
+    const parts = trimmed.split('.');
+    const isGroupedThousands =
+      parts.length > 2 ||
+      (parts.length === 2 &&
+        (parts[1]?.length ?? 0) === 3 &&
+        parts[0] !== '0');
+    normalized = isGroupedThousands ? trimmed.replace(/\./g, '') : trimmed;
+  }
+
   const parsed = Number(normalized);
   if (!Number.isFinite(parsed) || parsed < 0) return undefined;
   return Number(parsed.toFixed(2));

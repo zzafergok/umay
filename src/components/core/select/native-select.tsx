@@ -24,6 +24,9 @@ export const NativeSelect = ({
   onChange,
   options: providedOptions,
   required,
+  searchable,
+  searchThreshold,
+  searchPlaceholder,
   value,
   ...props
 }: NativeSelectProps) => {
@@ -48,6 +51,7 @@ export const NativeSelect = ({
         disabled: child.props.disabled,
         endAdornment: undefined,
         label: child.props.children,
+        searchValue: undefined,
         value: String(child.props.value ?? ''),
       },
     ];
@@ -98,13 +102,18 @@ export const NativeSelect = ({
           {selectedValue ? (selectedOption?.label ?? selectedValue) : undefined}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        searchable={searchable}
+        searchThreshold={searchThreshold}
+        searchPlaceholder={searchPlaceholder}
+      >
         {options.map((option) => (
           <SelectItem
             key={option.value}
             value={option.value}
             disabled={option.disabled}
             endAdornment={option.endAdornment}
+            searchValue={option.searchValue}
           >
             {option.label}
           </SelectItem>

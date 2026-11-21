@@ -1,4 +1,15 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { NextRequest } from 'next/server';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('server-only', () => ({}));
+vi.mock('@/lib/firebase/admin', () => ({
+  isFirebaseConfigured: () => false,
+  getAdminAuth: vi.fn(),
+  getAdminFirestore: vi.fn(),
+  getAdminStorage: vi.fn(),
+}));
+
+import { POST as createShoppingRoute } from '@/app/api/inventory/shopping/route';
 import type { Category, Item } from '@/features/inventory/types';
 import {
   computeShoppingSummary,
@@ -6,9 +17,11 @@ import {
   formatShoppingUnit,
   parseOptionalPrice,
 } from '@/features/routes/auth/shopping/shopping-utils';
+import { signToken } from '@/lib/auth/jwt';
 import { clearMemoryStore } from '@/lib/inventory/memory-store';
 import {
   createShoppingItem,
+  createShoppingItemsBulk,
   listShoppingItems,
   updateShoppingItem,
 } from '@/lib/inventory/repo';
@@ -119,6 +132,11 @@ describe('detailed shopping list repository & utils', () => {
     );
     expect(searched.map((i) => i.id)).toEqual([urgent.id]);
     expect(parseOptionalPrice('129,95')).toBe(129.95);
+    expect(parseOptionalPrice('1.044,75')).toBe(1044.75);
+    expect(parseOptionalPrice('1.234.567,89')).toBe(1234567.89);
+    expect(parseOptionalPrice('1044.75')).toBe(1044.75);
+    expect(parseOptionalPrice('1.044')).toBe(1044);
+    expect(parseOptionalPrice('1,044.75')).toBe(1044.75);
     expect(parseOptionalPrice('')).toBeUndefined();
     expect(formatShoppingUnit('lt')).toBe('Litre');
     expect(formatShoppingUnit('kg')).toBe('Kilogram');
@@ -126,5 +144,87 @@ describe('detailed shopping list repository & utils', () => {
     expect(formatShoppingUnit('ml')).toBe('Mililitre');
     expect(formatShoppingUnit('adet')).toBe('Adet');
     expect(formatShoppingUnit('demet')).toBe('Demet');
+  });
+
+  it('supports single and bulk creation in repo and POST /api/inventory/shopping', async () => {
+    const bulkRepo = await createShoppingItemsBulk(uid, [
+      {
+        itemId: null,
+        freeText: 'Süt',
+        qty: 2,
+        unit: 'Litre',
+        priority: 'normal',
+        source: 'receipt_ai',
+        done: false,
+      },
+      {
+        itemId: null,
+        freeText: 'Yoğurt',
+        qty: 1,
+        unit: 'Adet',
+        priority: 'normal',
+        source: 'receipt_ai',
+        done: false,
+      },
+    ]);
+    expect(bulkRepo).toHaveLength(2);
+    expect(await listShoppingItems(uid)).toHaveLength(2);
+
+    const token = signToken({
+      sub: 'uid_route_shopping_test',
+      email: 'test@umay.app',
+      name: 'Tester',
+      role: 'user',
+    });
+
+    const singleReq = new NextRequest('http://localhost:3000/api/inventory/shopping', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        itemId: null,
+        freeText: 'Ekmek',
+        qty: 2,
+        unit: 'Adet',
+        source: 'manual',
+      }),
+    });
+    const singleRes = await createShoppingRoute(singleReq);
+    expect(singleRes.status).toBe(201);
+    const singleJson = (await singleRes.json()) as { id: string; freeText?: string };
+    expect(singleJson.freeText).toBe('Ekmek');
+
+    const bulkReq = new NextRequest('http://localhost:3000/api/inventory/shopping', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        items: [
+          { itemId: null, freeText: 'Peynir', qty: 1, unit: 'Adet', source: 'receipt_ai' },
+          { itemId: null, freeText: 'Zeytin', qty: 1, unit: 'Adet', source: 'receipt_ai' },
+        ],
+      }),
+    });
+    const bulkRes = await createShoppingRoute(bulkReq);
+    expect(bulkRes.status).toBe(201);
+    const bulkJson = (await bulkRes.json()) as { count: number; items: unknown[] };
+    expect(bulkJson.count).toBe(2);
+    expect(bulkJson.items).toHaveLength(2);
+    expect(await listShoppingItems('uid_route_shopping_test')).toHaveLength(3);
+
+    const emptyBulkReq = new NextRequest('http://localhost:3000/api/inventory/shopping', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ items: [] }),
+    });
+    const emptyBulkRes = await createShoppingRoute(emptyBulkReq);
+    expect(emptyBulkRes.status).toBe(400);
   });
 });
