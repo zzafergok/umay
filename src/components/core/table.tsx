@@ -1,6 +1,8 @@
 'use client';
 
 import * as React from 'react';
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import { Button } from '@/components/core/button';
 import { cn } from '@/lib/utils';
 
 const Table = React.forwardRef<
@@ -124,12 +126,76 @@ const TableCaption = React.forwardRef<
 ));
 TableCaption.displayName = 'TableCaption';
 
+export type TableSortOrder = 'asc' | 'desc';
+
+export interface SortableTableHeadProps<TKey extends string = string>
+  extends Omit<React.ThHTMLAttributes<HTMLTableCellElement>, 'onSelect'> {
+  sortKey: TKey;
+  sortBy?: string;
+  sortOrder?: TableSortOrder;
+  onSort: (key: TKey) => void;
+  align?: 'left' | 'right';
+}
+
+function SortableTableHead<TKey extends string = string>({
+  sortKey,
+  sortBy,
+  sortOrder = 'desc',
+  onSort,
+  align = 'left',
+  className,
+  children,
+  ...props
+}: SortableTableHeadProps<TKey>) {
+  const isActive = sortBy === sortKey;
+  const ariaSort = isActive
+    ? sortOrder === 'asc'
+      ? 'ascending'
+      : 'descending'
+    : 'none';
+
+  return (
+    <TableHead
+      aria-sort={ariaSort}
+      className={cn(align === 'right' && 'text-right', className)}
+      {...props}
+    >
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => onSort(sortKey)}
+        className={cn(
+          '-mx-2 h-7 min-h-0 gap-1.5 px-2 text-caption font-medium text-text-muted hover:bg-surface/70 hover:text-text',
+          isActive && 'text-text',
+          align === 'right' && 'ml-auto flex-row-reverse',
+        )}
+      >
+        <span>{children}</span>
+        {isActive ? (
+          sortOrder === 'asc' ? (
+            <ArrowUp className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+          ) : (
+            <ArrowDown className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+          )
+        ) : (
+          <ArrowUpDown
+            className="h-3.5 w-3.5 opacity-45"
+            aria-hidden="true"
+          />
+        )}
+      </Button>
+    </TableHead>
+  );
+}
+
 export {
   Table,
   TableHeader,
   TableBody,
   TableFooter,
   TableHead,
+  SortableTableHead,
   TableRow,
   TableCell,
   TableCaption,

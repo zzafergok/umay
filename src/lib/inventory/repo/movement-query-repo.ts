@@ -6,6 +6,7 @@ import type { MovementListQuery } from '@/features/inventory/schemas';
 import {
   matchesTurkishSearch,
   paginateArray,
+  sortItems,
   type PaginatedResponse,
 } from '@/lib/pagination';
 import { listItems, listStockMovements } from './item-stock-repo';
@@ -37,6 +38,21 @@ const MOVEMENT_TYPE_LABELS: Record<StockMovementType, string> = {
   adjust: 'Düzenleme',
   replace_part: 'Parça Değişimi',
   discard: 'İmha / Fire',
+};
+
+const MOVEMENT_COMPARATORS: Record<
+  string,
+  (a: MovementListItem, b: MovementListItem) => number
+> = {
+  at: (a, b) => a.movement.at.localeCompare(b.movement.at),
+  itemName: (a, b) => a.itemName.localeCompare(b.itemName, 'tr-TR'),
+  type: (a, b) =>
+    (MOVEMENT_TYPE_LABELS[a.movement.type] ?? a.movement.type).localeCompare(
+      MOVEMENT_TYPE_LABELS[b.movement.type] ?? b.movement.type,
+      'tr-TR',
+    ),
+  delta: (a, b) => a.movement.delta - b.movement.delta,
+  quantityAfter: (a, b) => a.movement.quantityAfter - b.movement.quantityAfter,
 };
 
 function roundTwo(value: number): number {
@@ -129,5 +145,12 @@ export async function listStockMovementsPaginated(
     filtered.push({ movement, itemName, itemUnit });
   }
 
-  return paginateArray(filtered, query.page, query.pageSize, summary);
+  const sorted = sortItems(
+    filtered,
+    query.sortBy,
+    query.sortOrder,
+    MOVEMENT_COMPARATORS,
+  );
+
+  return paginateArray(sorted, query.page, query.pageSize, summary);
 }

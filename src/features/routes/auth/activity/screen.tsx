@@ -10,6 +10,7 @@ import {
 } from '@/components/core/card';
 import { ServerListToolbar } from '@/components/shared/server-list-toolbar';
 import { ServerPaginationFooter } from '@/components/shared/server-pagination-footer';
+import type { MovementSortField } from '@/features/inventory/schemas';
 import { useMovementsPaginatedQuery } from '@/hooks/use-inventory-hooks';
 import { useServerListState } from '@/hooks/use-server-list-state';
 import { cn } from '@/lib/utils';
@@ -50,16 +51,19 @@ export function ActivityScreen() {
     pageSize,
     searchInput,
     filters,
+    sortState,
     hasActiveFilters,
     isSearchPending,
     queryParams,
     setSearchInput,
     setFilter,
+    setSort,
     handlePageChange,
     handlePageSizeChange,
     resetAll,
-  } = useServerListState({
+  } = useServerListState<typeof INITIAL_FILTERS, MovementSortField>({
     initialFilters: INITIAL_FILTERS,
+    initialSort: { sortBy: 'at', sortOrder: 'desc' },
     initialPageSize: 20,
     searchDebounceMs: 300,
   });
@@ -165,6 +169,14 @@ export function ActivityScreen() {
             <ActivityListView
               entries={entries}
               hasAnyMovements={summary.totalCount > 0}
+              sortBy={sortState.sortBy}
+              sortOrder={sortState.sortOrder}
+              onSort={(column) =>
+                setSort(
+                  column,
+                  column === 'itemName' || column === 'type' ? 'asc' : 'desc',
+                )
+              }
               onResetFilters={resetAll}
             />
           </div>

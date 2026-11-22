@@ -4,6 +4,8 @@ import {
   matchesTurkishSearch,
   paginateArray,
   parsePaginationSearchParams,
+  sortItems,
+  toggleSortState,
 } from '@/lib/pagination';
 import { movementListQuerySchema } from '@/features/inventory/schemas';
 import {
@@ -22,7 +24,25 @@ describe('server pagination utilities', () => {
       direction: 'inflow',
       type: 'all',
       dateRange: 'all',
+      sortBy: 'at',
+      sortOrder: 'desc',
     });
+  });
+
+  it('toggles sort state and sorts items using typed comparators', () => {
+    const first = toggleSortState(
+      { sortBy: 'at', sortOrder: 'desc' },
+      'delta',
+      'desc',
+    );
+    expect(first).toEqual({ sortBy: 'delta', sortOrder: 'desc' });
+    const flipped = toggleSortState(first, 'delta', 'desc');
+    expect(flipped).toEqual({ sortBy: 'delta', sortOrder: 'asc' });
+
+    const rows = [{ delta: 5 }, { delta: -2 }, { delta: 10 }];
+    expect(
+      sortItems(rows, 'delta', 'asc', { delta: (a, b) => a.delta - b.delta }),
+    ).toEqual([{ delta: -2 }, { delta: 5 }, { delta: 10 }]);
   });
 
   it('paginates arrays safely and clamps out-of-range page numbers', () => {

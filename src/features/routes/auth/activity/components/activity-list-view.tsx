@@ -4,14 +4,17 @@ import { RotateCcw } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import {
+  SortableTableHead,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
+  type TableSortOrder,
 } from '@/components/core/table';
 import { UmayEmptyIllustration } from '@/components/shared/umay-brand';
+import type { MovementSortField } from '@/features/inventory/schemas';
 import {
   formatActivityDelta,
   formatActivityNumber,
@@ -22,6 +25,9 @@ import type { EnrichedMovement } from '../types';
 interface ActivityListViewProps {
   entries: EnrichedMovement[];
   hasAnyMovements: boolean;
+  sortBy?: MovementSortField;
+  sortOrder?: TableSortOrder;
+  onSort: (column: MovementSortField) => void;
   onResetFilters: () => void;
 }
 
@@ -44,6 +50,9 @@ function formatMovementDate(iso: string): string {
 export function ActivityListView({
   entries,
   hasAnyMovements,
+  sortBy,
+  sortOrder,
+  onSort,
   onResetFilters,
 }: ActivityListViewProps) {
   if (entries.length === 0) {
@@ -127,12 +136,49 @@ export function ActivityListView({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tarih</TableHead>
-              <TableHead>Ürün</TableHead>
-              <TableHead>İşlem Türü</TableHead>
+              <SortableTableHead
+                sortKey="at"
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSort={onSort}
+              >
+                Tarih
+              </SortableTableHead>
+              <SortableTableHead
+                sortKey="itemName"
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSort={onSort}
+              >
+                Ürün
+              </SortableTableHead>
+              <SortableTableHead
+                sortKey="type"
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSort={onSort}
+              >
+                İşlem Türü
+              </SortableTableHead>
               <TableHead>Açıklama</TableHead>
-              <TableHead className="text-right">Değişim</TableHead>
-              <TableHead className="text-right">Son Miktar</TableHead>
+              <SortableTableHead
+                sortKey="delta"
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSort={onSort}
+                align="right"
+              >
+                Değişim
+              </SortableTableHead>
+              <SortableTableHead
+                sortKey="quantityAfter"
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSort={onSort}
+                align="right"
+              >
+                Son Miktar
+              </SortableTableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

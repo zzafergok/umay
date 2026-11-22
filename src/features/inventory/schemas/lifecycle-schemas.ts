@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { basePaginationQuerySchema } from '@/lib/pagination';
+import { createSortablePaginationQuerySchema } from '@/lib/pagination';
 
 const isoDateOrDatetime = z
   .string()
@@ -151,7 +151,21 @@ export const userSettingsInputSchema = z.object({
   compactMode: z.boolean().optional(),
 });
 
-export const movementListQuerySchema = basePaginationQuerySchema.extend({
+export const MOVEMENT_SORT_FIELDS = [
+  'at',
+  'itemName',
+  'type',
+  'delta',
+  'quantityAfter',
+] as const;
+
+export type MovementSortField = (typeof MOVEMENT_SORT_FIELDS)[number];
+
+export const movementListQuerySchema = createSortablePaginationQuerySchema(
+  MOVEMENT_SORT_FIELDS,
+  'at',
+  'desc',
+).extend({
   itemId: z.string().trim().min(1).optional(),
   direction: z.enum(['all', 'inflow', 'outflow']).default('all'),
   type: z
