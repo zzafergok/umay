@@ -20,6 +20,7 @@ import {
   resolveCategoryColorHex,
 } from '@/features/inventory/utils';
 import { resolveCategoryCssVar } from '@/lib/design/tokens';
+import { useUserPreferences } from '@/hooks/use-user-preferences';
 import { getItemExceptionPill, getItemTypeLabel } from './item-card-utils';
 import { ItemStockPanel } from './item-stock-panel';
 
@@ -45,6 +46,7 @@ export function ItemCard({
   onDelete,
   isBusy = false,
 }: ItemCardProps) {
+  const { formatDate } = useUserPreferences();
   const [nowMs] = React.useState(() => Date.now());
   const pill = getItemExceptionPill(item, nowMs);
   const typeLabel = getItemTypeLabel(item.type);
@@ -132,7 +134,7 @@ export function ItemCard({
             {item.expiresAt ? (
               <span className="inline-flex shrink-0 items-center gap-1 tabular-nums">
                 <CalendarClock className="h-3 w-3" aria-hidden="true" />
-                SKT: {new Date(item.expiresAt).toLocaleDateString('tr-TR')}
+                SKT: {formatDate(item.expiresAt)}
               </span>
             ) : null}
           </div>

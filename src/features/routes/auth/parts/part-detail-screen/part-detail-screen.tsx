@@ -26,6 +26,7 @@ import {
 } from '@/features/routes/auth/parts/part-form-schema';
 import { ReplacePartDialog } from '@/features/routes/auth/parts/replace-part-dialog';
 import { usePartQuery } from '@/hooks/use-inventory-hooks';
+import { useUserPreferences } from '@/hooks/use-user-preferences';
 import { computePartHealth } from '@/lib/lifecycle';
 import { parseAmountInput } from '@/lib/utils';
 import { inventoryService } from '@/services/inventory-service';
@@ -35,6 +36,7 @@ export function PartDetailScreen({ id }: { id: string }) {
   const router = useRouter();
   const qc = useQueryClient();
   const { data, isLoading } = usePartQuery(id);
+  const { formatDate } = useUserPreferences();
   const [replaceOpen, setReplaceOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
 
@@ -135,11 +137,9 @@ export function PartDetailScreen({ id }: { id: string }) {
           <div className="min-w-0 space-y-1">
             <CardTitle className="text-xl">{part.name}</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Takılma: {new Date(part.installedAt).toLocaleDateString('tr-TR')}
+              Takılma: {formatDate(part.installedAt)}
               {part.nextReplacementAt
-                ? ` • Planlanan değişim: ${new Date(
-                    part.nextReplacementAt,
-                  ).toLocaleDateString('tr-TR')}`
+                ? ` • Planlanan değişim: ${formatDate(part.nextReplacementAt)}`
                 : ''}
             </p>
           </div>

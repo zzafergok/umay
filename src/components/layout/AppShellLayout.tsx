@@ -21,6 +21,7 @@ import {
   ApplicationShell,
   type ApplicationShellNavItem,
 } from '@/components/layout/application-shell';
+import { CommandPaletteTrigger } from '@/components/layout/command-palette';
 import { LanguageSwitcher } from '@/components/layout/language-switcher';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import {
@@ -75,6 +76,7 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
       footer={({ collapsed }) => <SidebarUserFooter collapsed={collapsed} />}
       headerActions={
         <>
+          <CommandPaletteTrigger />
           <div className="hidden items-center gap-1.5 sm:flex">
             <ThemeToggle />
             <LanguageSwitcher />

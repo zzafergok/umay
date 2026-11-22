@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@/components/core/table';
 import type { StockMovement } from '@/features/inventory/types';
+import { useUserPreferences } from '@/hooks/use-user-preferences';
 
 interface ItemMovementsCardProps {
   movements: StockMovement[];
@@ -23,6 +24,7 @@ interface ItemMovementsCardProps {
 
 /** Displays stock movement history rows for a single inventory item. */
 export function ItemMovementsCard({ movements, unit }: ItemMovementsCardProps) {
+  const { formatDateTime } = useUserPreferences();
   return (
     <Card>
       <CardHeader>
@@ -46,7 +48,7 @@ export function ItemMovementsCard({ movements, unit }: ItemMovementsCardProps) {
                     {mov.reason || mov.type}
                   </p>
                   <p className="text-xs text-text-muted">
-                    {new Date(mov.at).toLocaleString('tr-TR')}
+                    {formatDateTime(mov.at)}
                   </p>
                 </div>
                 <div className="shrink-0 text-right font-mono text-xs tabular-nums">
@@ -75,7 +77,7 @@ export function ItemMovementsCard({ movements, unit }: ItemMovementsCardProps) {
                 {movements.map((mov) => (
                   <TableRow key={mov.id}>
                     <TableCell className="text-xs text-muted-foreground">
-                      {new Date(mov.at).toLocaleString('tr-TR')}
+                      {formatDateTime(mov.at)}
                     </TableCell>
                     <TableCell>{mov.reason || mov.type}</TableCell>
                     <TableCell className="text-right font-mono tabular-nums">

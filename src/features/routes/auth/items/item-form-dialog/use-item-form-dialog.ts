@@ -15,6 +15,7 @@ import {
   validateCustomFieldValues,
 } from '@/features/inventory/utils';
 import { compressImageFile } from '@/lib/utils/image-compress';
+import { useUserPreferences } from '@/hooks/use-user-preferences';
 import { inventoryService } from '@/services/inventory-service';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -41,6 +42,7 @@ export function useItemFormDialog({
   editItem,
 }: UseItemFormDialogParams) {
   const qc = useQueryClient();
+  const { currency, defaultUnit } = useUserPreferences();
   const [saving, setSaving] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState('basic');
   const [customValues, setCustomValues] = React.useState<
@@ -59,6 +61,7 @@ export function useItemFormDialog({
       categories,
       locations,
       initialBarcode,
+      { currency, defaultUnit },
     ),
     mode: 'onChange',
   });
@@ -82,9 +85,7 @@ export function useItemFormDialog({
     if (defaults?.defaultType) {
       methods.setValue('type', defaults.defaultType);
     }
-    if (defaults?.defaultUnit) {
-      methods.setValue('unit', defaults.defaultUnit);
-    }
+    methods.setValue('unit', defaults?.defaultUnit || defaultUnit);
     if (defaults?.defaultMinQuantity !== undefined) {
       methods.setValue('minQuantity', defaults.defaultMinQuantity);
     }

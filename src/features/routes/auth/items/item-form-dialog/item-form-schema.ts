@@ -62,6 +62,7 @@ export function buildItemFormDefaults(
   categories: Category[],
   locations: Location[],
   initialBarcode?: string,
+  userDefaults?: { currency?: Item['currency']; defaultUnit?: string },
 ): ItemFormValues {
   const defaultCategory =
     categories.find((c) => c.id === editItem?.categoryId) ?? categories[0];
@@ -74,7 +75,11 @@ export function buildItemFormDefaults(
     type: editItem?.type ?? defaults?.defaultType ?? 'consumable',
     status: editItem?.status ?? 'active',
     quantity: editItem?.quantity ?? 1,
-    unit: editItem?.unit ?? defaults?.defaultUnit ?? 'adet',
+    unit:
+      editItem?.unit ??
+      defaults?.defaultUnit ??
+      userDefaults?.defaultUnit ??
+      'adet',
     minQuantity: editItem?.minQuantity ?? defaults?.defaultMinQuantity ?? 1,
     targetQuantity: editItem?.targetQuantity ?? '',
     barcode: editItem?.barcode ?? initialBarcode ?? '',
@@ -83,7 +88,7 @@ export function buildItemFormDefaults(
     serialNumber: editItem?.serialNumber ?? '',
     purchaseDate: toIsoDateSlice(editItem?.purchaseDate),
     purchasePrice: editItem?.purchasePrice ?? '',
-    currency: editItem?.currency ?? 'TRY',
+    currency: editItem?.currency ?? userDefaults?.currency ?? 'TRY',
     store: editItem?.store ?? '',
     warrantyEndsAt: toIsoDateSlice(editItem?.warrantyEndsAt),
     expiresAt: toIsoDateSlice(editItem?.expiresAt),

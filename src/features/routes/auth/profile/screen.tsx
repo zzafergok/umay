@@ -3,7 +3,6 @@ import { getAuthenticatedUser } from '@/lib/auth/request-user';
 import { getAdminAuth, isFirebaseConfigured } from '@/lib/firebase/admin';
 import { getCurrentLocale } from '@/lib/i18n/server-locale';
 import {
-  getUserSettings,
   listCategories,
   listItems,
   listLocations,
@@ -15,7 +14,6 @@ import {
   ProfileDangerZoneCard,
   ProfileEditForm,
   ProfileOverviewCard,
-  ProfilePreferencesCard,
   ProfileRecentActivityCard,
   ProfileSessionCard,
 } from './components';
@@ -74,7 +72,6 @@ export async function AuthProfileScreen() {
     categories,
     shoppingItems,
     movements,
-    settings,
     sessionMeta,
   ] = await Promise.all([
     getCurrentLocale(),
@@ -85,7 +82,6 @@ export async function AuthProfileScreen() {
     listCategories(user.uid),
     listShoppingItems(user.uid),
     listStockMovements(user.uid),
-    getUserSettings(user.uid),
     resolveSessionMeta(user),
   ]);
 
@@ -131,12 +127,9 @@ export async function AuthProfileScreen() {
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
         <div className="space-y-6 xl:col-span-7">
           <ProfileEditForm initialUser={userSnapshot} copy={copy.editForm} />
-          <ProfilePreferencesCard
-            initialSettings={{
-              currency: settings.currency,
-              dateFormat: settings.dateFormat,
-            }}
-            copy={copy.preferences}
+          <ProfileRecentActivityCard
+            movements={recentMovements}
+            copy={copy.recentActivity}
           />
         </div>
 
@@ -147,17 +140,12 @@ export async function AuthProfileScreen() {
             providerLabels={copy.overview.providers}
             copy={copy.sessionCard}
           />
-          <ProfileRecentActivityCard
-            movements={recentMovements}
-            copy={copy.recentActivity}
+          <ProfileDangerZoneCard
+            userEmail={userSnapshot.email}
+            copy={copy.dangerZone}
           />
         </div>
       </div>
-
-      <ProfileDangerZoneCard
-        userEmail={userSnapshot.email}
-        copy={copy.dangerZone}
-      />
     </div>
   );
 }

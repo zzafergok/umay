@@ -12,6 +12,7 @@ import { Link } from '@/components/core/link';
 import { ITEM_TYPE_OPTIONS } from '@/features/inventory/constants';
 import type { Category, Item } from '@/features/inventory/types';
 import { formatCustomFieldValue } from '@/features/inventory/utils';
+import { useUserPreferences } from '@/hooks/use-user-preferences';
 
 interface ItemSpecsCardProps {
   item: Item;
@@ -19,6 +20,7 @@ interface ItemSpecsCardProps {
 }
 
 export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
+  const { formatDate, formatPrice } = useUserPreferences();
   const fields = category?.customFields ?? [];
   const populatedFields = fields.filter(
     (field) =>
@@ -73,7 +75,7 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
             <div>
               <p className="text-xs text-text-muted">Satın Alma Fiyatı</p>
               <p className="font-medium tabular-nums">
-                {item.purchasePrice.toLocaleString('tr-TR')} {item.currency}
+                {formatPrice(item.purchasePrice, item.currency)}
               </p>
             </div>
           ) : null}
@@ -86,17 +88,13 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
           {item.purchaseDate ? (
             <div>
               <p className="text-xs text-text-muted">Satın Alma Tarihi</p>
-              <p className="font-medium">
-                {new Date(item.purchaseDate).toLocaleDateString('tr-TR')}
-              </p>
+              <p className="font-medium">{formatDate(item.purchaseDate)}</p>
             </div>
           ) : null}
           {item.warrantyEndsAt ? (
             <div>
               <p className="text-xs text-text-muted">Garanti Bitiş</p>
-              <p className="font-medium">
-                {new Date(item.warrantyEndsAt).toLocaleDateString('tr-TR')}
-              </p>
+              <p className="font-medium">{formatDate(item.warrantyEndsAt)}</p>
             </div>
           ) : null}
         </div>

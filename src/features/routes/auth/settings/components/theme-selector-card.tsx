@@ -3,7 +3,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { Globe, Monitor, Moon, Palette, Sun } from 'lucide-react';
+import {
+  AlignJustify,
+  Globe,
+  Monitor,
+  Moon,
+  Palette,
+  Rows3,
+  Sun,
+} from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/core/button';
 import {
@@ -13,13 +21,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
-import {
-  DensityToggle,
-  type DensityMode,
-} from '@/components/core/density-toggle';
+import { type DensityMode } from '@/components/core/density-toggle';
 import { Label } from '@/components/core/label';
 import { Separator } from '@/components/core/separator';
 import { toast } from '@/components/core/toast';
+import { InfoTooltip } from '@/components/shared/info-tooltip';
 import {
   useCurrentLocale,
   useSwitchLocale,
@@ -135,9 +141,11 @@ export function ThemeSelectorCard({
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label className="font-mono text-2xs uppercase tracking-wider text-ash">
-              {copy.languageLabel}
-            </Label>
+            <div className="flex h-6 items-center">
+              <Label className="font-mono text-2xs uppercase tracking-wider text-text-muted">
+                {copy.languageLabel}
+              </Label>
+            </div>
             <div
               role="group"
               aria-label={copy.languageLabel}
@@ -149,17 +157,13 @@ export function ThemeSelectorCard({
                   <Button
                     key={itemLocale}
                     type="button"
-                    size="sm"
                     variant={selected ? 'primary' : 'secondary'}
                     disabled={switchingLocale !== null}
                     onClick={() => void handleLocaleSwitch(itemLocale)}
-                    className="justify-center gap-1.5"
+                    className="min-h-[42px] justify-center gap-1.5 px-2.5 sm:min-h-0"
                   >
-                    <Globe
-                      className="h-3.5 w-3.5 shrink-0"
-                      aria-hidden="true"
-                    />
-                    <span>
+                    <Globe className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <span className="truncate">
                       {itemLocale === 'tr' ? 'Türkçe (TR)' : 'English (EN)'}
                     </span>
                   </Button>
@@ -169,16 +173,46 @@ export function ThemeSelectorCard({
           </div>
 
           <div className="space-y-2">
-            <Label className="font-mono text-2xs uppercase tracking-wider text-ash">
-              {copy.densityLabel}
-            </Label>
-            <div className="flex flex-col items-start gap-1.5">
-              <DensityToggle
-                value={densityValue}
-                onValueChange={(mode) => void handleDensityChange(mode)}
-                label={copy.densityLabel}
+            <div className="flex h-6 items-center gap-1.5">
+              <Label className="font-mono text-2xs uppercase tracking-wider text-text-muted">
+                {copy.densityLabel}
+              </Label>
+              <InfoTooltip
+                content={copy.densityHint}
+                ariaLabel={copy.densityLabel}
               />
-              <p className="text-caption text-text-muted">{copy.densityHint}</p>
+            </div>
+            <div
+              role="group"
+              aria-label={copy.densityLabel}
+              className="grid grid-cols-2 gap-2"
+            >
+              <Button
+                type="button"
+                variant={densityValue === 'compact' ? 'primary' : 'secondary'}
+                aria-pressed={densityValue === 'compact'}
+                disabled={savingDensity}
+                onClick={() => void handleDensityChange('compact')}
+                className="min-h-[42px] justify-center gap-1.5 px-2.5 sm:min-h-0"
+              >
+                <Rows3 className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="truncate">
+                  {locale === 'tr' ? 'Kompakt' : 'Compact'}
+                </span>
+              </Button>
+              <Button
+                type="button"
+                variant={densityValue === 'detailed' ? 'primary' : 'secondary'}
+                aria-pressed={densityValue === 'detailed'}
+                disabled={savingDensity}
+                onClick={() => void handleDensityChange('detailed')}
+                className="min-h-[42px] justify-center gap-1.5 px-2.5 sm:min-h-0"
+              >
+                <AlignJustify className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="truncate">
+                  {locale === 'tr' ? 'Detaylı' : 'Detailed'}
+                </span>
+              </Button>
             </div>
           </div>
         </div>

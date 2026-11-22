@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@/components/core/table';
 import type { ReplacementLog } from '@/features/inventory/types';
+import { useUserPreferences } from '@/hooks/use-user-preferences';
 
 interface PartLogsCardProps {
   logs: ReplacementLog[];
@@ -22,6 +23,7 @@ interface PartLogsCardProps {
 
 /** Displays replacement history logs for a lifecycle-tracked part. */
 export function PartLogsCard({ logs }: PartLogsCardProps) {
+  const { formatDate, formatPrice } = useUserPreferences();
   return (
     <Card>
       <CardHeader>
@@ -42,14 +44,14 @@ export function PartLogsCard({ logs }: PartLogsCardProps) {
               >
                 <div className="min-w-0 space-y-0.5">
                   <p className="text-xs font-medium text-text">
-                    {new Date(log.replacedAt).toLocaleDateString('tr-TR')}
+                    {formatDate(log.replacedAt)}
                   </p>
                   <p className="break-words text-xs text-text-muted">
                     {log.note || 'Not belirtilmedi'}
                   </p>
                 </div>
                 <span className="shrink-0 font-mono text-xs font-semibold tabular-nums text-text">
-                  {log.cost ? `${log.cost} TRY` : '—'}
+                  {log.cost ? formatPrice(log.cost) : '—'}
                 </span>
               </div>
             ))}
@@ -68,13 +70,13 @@ export function PartLogsCard({ logs }: PartLogsCardProps) {
                 {logs.map((log) => (
                   <TableRow key={log.id}>
                     <TableCell className="text-xs">
-                      {new Date(log.replacedAt).toLocaleDateString('tr-TR')}
+                      {formatDate(log.replacedAt)}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {log.note || '—'}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
-                      {log.cost ? `${log.cost} TRY` : '—'}
+                      {log.cost ? formatPrice(log.cost) : '—'}
                     </TableCell>
                   </TableRow>
                 ))}

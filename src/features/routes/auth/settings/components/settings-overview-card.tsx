@@ -20,13 +20,28 @@ import type { AuthSettingsCopy, SettingsSnapshot } from '../types';
 
 interface SettingsOverviewCardProps {
   initialSettings: SettingsSnapshot;
+  draftRules?: Pick<
+    SettingsSnapshot,
+    'currency' | 'dateFormat' | 'defaultUnit'
+  > | null;
   openProfileLabel: string;
+  unitOptions: AuthSettingsCopy['inventoryRules']['unitOptions'];
+  dateFormatOptions: AuthSettingsCopy['inventoryRules']['dateFormatOptions'];
   copy: AuthSettingsCopy['overview'];
 }
 
+const CURRENCY_SYMBOLS: Record<SettingsSnapshot['currency'], string> = {
+  TRY: '₺',
+  USD: '$',
+  EUR: '€',
+};
+
 export function SettingsOverviewCard({
   initialSettings,
+  draftRules,
   openProfileLabel,
+  unitOptions,
+  dateFormatOptions,
   copy,
 }: SettingsOverviewCardProps) {
   const { theme } = useTheme();
@@ -34,7 +49,7 @@ export function SettingsOverviewCard({
   const locale = useCurrentLocale();
   const { data: settingsData } = useSettingsQuery();
 
-  const current = { ...initialSettings, ...settingsData };
+  const current = { ...initialSettings, ...settingsData, ...draftRules };
   const activeThemeKey = (
     mounted && (theme === 'light' || theme === 'dark' || theme === 'system')
       ? theme
@@ -44,6 +59,13 @@ export function SettingsOverviewCard({
   const densityLabel = current.compactMode
     ? copy.compactLabel
     : copy.detailedLabel;
+
+  const currencySymbol = CURRENCY_SYMBOLS[current.currency] ?? '';
+  const dateLabel =
+    dateFormatOptions[current.dateFormat]?.split(' ')[0] ?? current.dateFormat;
+  const unitLabel =
+    unitOptions[current.defaultUnit as keyof typeof unitOptions] ??
+    current.defaultUnit;
 
   const summaryItems = [
     {
@@ -58,12 +80,12 @@ export function SettingsOverviewCard({
     },
     {
       label: copy.formatLabel,
-      value: `${current.currency} · ${current.dateFormat}`,
+      value: `${currencySymbol} ${current.currency} · ${dateLabel}`,
       Icon: CalendarClock,
     },
     {
       label: copy.unitAndDensityLabel,
-      value: `${current.defaultUnit} · ${densityLabel}`,
+      value: `${unitLabel} · ${densityLabel}`,
       Icon: Layers,
     },
   ];

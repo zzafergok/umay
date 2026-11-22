@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { Globe, Save } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import {
   Card,
@@ -32,11 +32,15 @@ type InventoryPreferencesFormValues = z.infer<
 
 interface InventoryRulesCardProps {
   initialSettings: SettingsSnapshot;
+  onDraftChange?: (
+    draft: Pick<SettingsSnapshot, 'currency' | 'dateFormat' | 'defaultUnit'>,
+  ) => void;
   copy: AuthSettingsCopy['inventoryRules'];
 }
 
 export function InventoryRulesCard({
   initialSettings,
+  onDraftChange,
   copy,
 }: InventoryRulesCardProps) {
   const router = useRouter();
@@ -63,6 +67,28 @@ export function InventoryRulesCard({
       defaultUnit: current.defaultUnit,
     });
   }, [current.currency, current.dateFormat, current.defaultUnit, methods]);
+
+  const watchedValues = useWatch({ control: methods.control });
+
+  useEffect(() => {
+    if (!onDraftChange) return;
+    if (
+      watchedValues.currency &&
+      watchedValues.dateFormat &&
+      watchedValues.defaultUnit
+    ) {
+      onDraftChange({
+        currency: watchedValues.currency,
+        dateFormat: watchedValues.dateFormat,
+        defaultUnit: watchedValues.defaultUnit,
+      });
+    }
+  }, [
+    onDraftChange,
+    watchedValues.currency,
+    watchedValues.dateFormat,
+    watchedValues.defaultUnit,
+  ]);
 
   const handleSubmit = async (formData: InventoryPreferencesFormValues) => {
     setSaving(true);

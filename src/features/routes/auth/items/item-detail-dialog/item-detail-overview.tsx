@@ -9,6 +9,7 @@ import { InfoTooltip } from '@/components/shared/info-tooltip';
 import { MIN_QUANTITY_TOOLTIP } from '@/features/inventory/constants';
 import type { Category, Item } from '@/features/inventory/types';
 import { ItemSpecsCard } from '@/features/routes/auth/items/item-specs-card';
+import { useUserPreferences } from '@/hooks/use-user-preferences';
 
 interface ItemDetailOverviewProps {
   item: Item;
@@ -24,6 +25,7 @@ export function ItemDetailOverview({
   isAdjusting,
   onAdjustStock,
 }: ItemDetailOverviewProps) {
+  const { formatDate } = useUserPreferences();
   return (
     <div className="space-y-4">
       <Card>
@@ -56,7 +58,7 @@ export function ItemDetailOverview({
               ) : null}
               {item.expiresAt ? (
                 <Badge variant="outline">
-                  SKT: {new Date(item.expiresAt).toLocaleDateString('tr-TR')}
+                  SKT: {formatDate(item.expiresAt)}
                 </Badge>
               ) : null}
             </div>

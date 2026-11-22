@@ -15,6 +15,7 @@ import {
 } from '@/components/core/table';
 import { UmayEmptyIllustration } from '@/components/shared/umay-brand';
 import type { MovementSortField } from '@/features/inventory/schemas';
+import { useUserPreferences } from '@/hooks/use-user-preferences';
 import {
   formatActivityDelta,
   formatActivityNumber,
@@ -31,22 +32,6 @@ interface ActivityListViewProps {
   onResetFilters: () => void;
 }
 
-const DATE_FORMAT = new Intl.DateTimeFormat('tr-TR', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  timeZone: 'Europe/Istanbul',
-});
-
-function formatMovementDate(iso: string): string {
-  const parsed = Date.parse(iso);
-  if (Number.isNaN(parsed)) return iso;
-  return DATE_FORMAT.format(new Date(parsed));
-}
-
 export function ActivityListView({
   entries,
   hasAnyMovements,
@@ -55,6 +40,7 @@ export function ActivityListView({
   onSort,
   onResetFilters,
 }: ActivityListViewProps) {
+  const { formatDateTime } = useUserPreferences();
   if (entries.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-md border border-dashed border-border bg-surface-sunken/30 py-10 text-center">
@@ -115,7 +101,7 @@ export function ActivityListView({
                   {movement.reason || typeMeta.label}
                 </p>
                 <p className="font-mono text-2xs tabular-nums text-text-subtle">
-                  {formatMovementDate(movement.at)}
+                  {formatDateTime(movement.at)}
                 </p>
               </div>
               <div className="flex shrink-0 flex-col items-end gap-1">
@@ -193,7 +179,7 @@ export function ActivityListView({
               return (
                 <TableRow key={movement.id}>
                   <TableCell className="whitespace-nowrap font-mono text-caption tabular-nums text-text-muted">
-                    {formatMovementDate(movement.at)}
+                    {formatDateTime(movement.at)}
                   </TableCell>
                   <TableCell className="font-medium text-text">
                     {itemName}
