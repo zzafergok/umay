@@ -66,3 +66,18 @@
 
 - Tüm kaynak ve test dosyaları 250 satır sınırının altında (`analyzer.ts`: 217, `batch-request.ts`: 204, `deduplicate.ts`: 189, `json-repair.ts`: 171, `model-catalog.ts`: 240, `parser.ts`: 242, `prompt.ts`: 81, `receipt-result-meta.tsx`: 39, `receipt-result-view.tsx`: 246 satır).
 - `npm test` (20 test dosyası, 135 test) ve `npm run type-check` sıfır hata ile geçti.
+
+---
+
+# `/home` Profesyonel Dashboard & Grafik Refactoring Özeti
+
+- **Detaylı KPI Özet Kartları (`DashboardKpiGrid` & `KpiCardShell`)**:
+  - **Toplam Envanter**: Toplam ürün, toplam birim rozeti, tahmini envanter değeri (`formatCurrency`), aktif oran çubuğu ve `Aktif / Konum / Kategori` alt kırılımı.
+  - **Stok Sağlığı**: Sağlıklı stok yüzdesi, ilerleme çubuğu ve `Tükendi / Düşük / Yeterli` 3'lü durum kırılımı.
+  - **Parça & Bakım**: Toplam parça, toplam bakım/değişim maliyeti, parça sağlığı oranı ve `Geciken / Yaklaşan / Normal` kırılımı.
+  - **Alışveriş & SKT**: Bekleyen alışveriş kalemi, tahmini sepet tutarı, tamamlanma oranı ve `Tamamlanan / Acil / SKT-Garanti` kırılımı.
+- **Etkileşimli Grafikler (`@/components/core/chart` + Recharts)**:
+  - **Stok Hareket Trendi (`StockActivityChart`)**: Son 14 günün günlük stok giriş ve çıkış/tüketim hareketlerini gösteren çift serili `AreaChart`.
+  - **Kategori Dağılımı (`CategoryDistributionCard`)**: Merkezinde toplam ürün sayısını gösteren `PieChart` (Donut) + kategori renkli alt liste.
+  - **Konum Dağılımı (`LocationDistributionCard`)**: En yoğun 6 konumu ürün çeşidine göre sıralayan yatay `BarChart`.
+- **Doğrulama**: Tüm dosyalar 250 satır sınırının altında (`home-utils.ts`: 199, `dashboard-kpi-grid.tsx`: 207, `stock-activity-chart.tsx`: 160, `category-distribution-card.tsx`: 136, `kpi-card-shell.tsx`: 119, `home-chart-utils.ts`: 107, `screen.tsx`: 98, `location-distribution-card.tsx`: 86, `types.ts`: 82, `quick-actions-bar.tsx`: 76, `attention-list-card.tsx`: 66 satır). `npm run type-check`, `npm run lint`, `npm test` (23 dosya, 149 test) ve `npm run build` sıfır hata ile geçti.

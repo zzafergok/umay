@@ -1,30 +1,44 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
+import { Badge } from '@/components/core/badge';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/card';
 import { Link } from '@/components/core/link';
-import { StatusPill, type StatusTone } from '@/components/core/status-pill';
+import { StatusPill } from '@/components/core/status-pill';
 import { UmayEmptyIllustration } from '@/components/shared/umay-brand';
+import type { AttentionItem } from '../types';
 
-export interface AttentionItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  tone: StatusTone;
-  badge: string;
-  href: string;
-  priority: number;
-}
+export type { AttentionItem };
 
 export function AttentionListCard({ items }: { items: AttentionItem[] }) {
   return (
     <Card className="lg:col-span-2">
       <CardHeader>
-        <CardTitle>Bugün ilgilenmen gerekenler</CardTitle>
+        <CardTitle>Bugün İlgilenmen Gerekenler</CardTitle>
+        <CardDescription>
+          Geciken parçalar, kritik stoklar ve yaklaşan SKT / garanti tarihleri
+        </CardDescription>
+        <CardAction>
+          <Badge
+            variant={items.length > 0 ? 'warning' : 'success'}
+            size="sm"
+            className="font-mono tabular-nums"
+          >
+            {items.length > 0 ? `${items.length} uyarı` : 'Tümü güncel'}
+          </Badge>
+        </CardAction>
       </CardHeader>
+
       <CardContent className="space-y-2">
         {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-3 py-6 text-center">
+          <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
             <UmayEmptyIllustration className="h-20 w-20" />
             <p className="text-body-sm text-text-muted">
-              Bugün için bir şey yok.
+              Bugün için acil bir aksiyon gerekmiyor.
             </p>
           </div>
         ) : (

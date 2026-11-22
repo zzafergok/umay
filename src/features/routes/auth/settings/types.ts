@@ -80,7 +80,6 @@ export type AuthSettingsCopy = {
       locations: string;
       categories: string;
       parts: string;
-      scan: string;
       activity: string;
     };
   };

@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  Activity,
-  MapPin,
-  ScanLine,
-  Settings,
-  Tags,
-  UserRound,
-} from 'lucide-react';
+import { Activity, MapPin, Settings, Tags, UserRound } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -28,11 +21,15 @@ interface MobileMoreSheetProps {
 }
 
 const SECONDARY_LINKS = [
-  { href: '/scan', tr: 'Barkod & QR Tarama', en: 'Scan Barcode / QR', icon: ScanLine },
   { href: '/locations', tr: 'Konumlar', en: 'Locations', icon: MapPin },
   { href: '/categories', tr: 'Kategoriler', en: 'Categories', icon: Tags },
   { href: '/activity', tr: 'Hareketler', en: 'Activity', icon: Activity },
-  { href: '/profile', tr: 'Profil & Hesap', en: 'Profile & Account', icon: UserRound },
+  {
+    href: '/profile',
+    tr: 'Profil & Hesap',
+    en: 'Profile & Account',
+    icon: UserRound,
+  },
   { href: '/settings', tr: 'Ayarlar', en: 'Settings', icon: Settings },
 ] as const;
 
@@ -56,8 +53,8 @@ export function MobileMoreSheet({
           </DialogTitle>
           <DialogDescription className="text-xs">
             {isEn
-              ? 'Jump directly to scanning, locations, categories, or account settings.'
-              : 'Tarama, konumlar, kategoriler, hareketler ve hesap ayarlarına geçin.'}
+              ? 'Jump directly to locations, categories, activity, or account settings.'
+              : 'Konumlar, kategoriler, hareketler ve hesap ayarlarına geçin.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -72,10 +69,10 @@ export function MobileMoreSheet({
                 href={item.href}
                 onClick={() => onOpenChange(false)}
                 className={cn(
-                  'border-border flex min-h-[44px] items-center gap-2.5 rounded-xl border p-3 text-left text-xs font-medium transition-colors',
+                  'flex min-h-[44px] items-center gap-2.5 rounded-xl border border-border p-3 text-left text-xs font-medium transition-colors',
                   active
                     ? 'border-accent/40 bg-accent-subtle text-accent'
-                    : 'bg-surface hover:bg-surface-sunken text-text',
+                    : 'bg-surface text-text hover:bg-surface-sunken',
                 )}
               >
                 <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -86,7 +83,7 @@ export function MobileMoreSheet({
         </div>
 
         <div className="flex items-center justify-between gap-3 border-t border-border pt-3 sm:hidden">
-          <span className="text-text-muted text-xs font-medium">
+          <span className="text-xs font-medium text-text-muted">
             {isEn ? 'Theme & Language' : 'Tema & Dil'}
           </span>
           <div className="flex items-center gap-2">

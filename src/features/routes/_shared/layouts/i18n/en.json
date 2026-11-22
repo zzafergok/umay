@@ -68,12 +68,6 @@
       "icon": "tags"
     },
     {
-      "href": "/scan",
-      "label": "Scan",
-      "subtitle": "Barcode & QR scanner",
-      "icon": "scanLine"
-    },
-    {
       "href": "/activity",
       "label": "Activity",
       "subtitle": "Stock & change log",

@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  Activity,
-  FolderTree,
-  ScanLine,
-  Sparkles,
-  Tags,
-  Wrench,
-} from 'lucide-react';
+import { Activity, FolderTree, Sparkles, Tags, Wrench } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import {
   Card,
@@ -29,7 +22,6 @@ export function QuickToolsCard({ copy }: QuickToolsCardProps) {
     { href: '/locations', label: copy.links.locations, Icon: FolderTree },
     { href: '/categories', label: copy.links.categories, Icon: Tags },
     { href: '/parts', label: copy.links.parts, Icon: Wrench },
-    { href: '/scan', label: copy.links.scan, Icon: ScanLine },
     { href: '/activity', label: copy.links.activity, Icon: Activity },
   ];
 
@@ -60,8 +52,8 @@ export function QuickToolsCard({ copy }: QuickToolsCardProps) {
           ))}
         </div>
 
-        <div className="bg-surface-sunken hidden items-center justify-between gap-3 rounded-md border border-border px-3.5 py-2.5 md:flex">
-          <p className="text-text-muted text-caption leading-relaxed">
+        <div className="hidden items-center justify-between gap-3 rounded-md border border-border bg-surface-sunken px-3.5 py-2.5 md:flex">
+          <p className="text-caption leading-relaxed text-text-muted">
             {copy.shortcutHint}
           </p>
           <Kbd className="shrink-0">⌘K</Kbd>

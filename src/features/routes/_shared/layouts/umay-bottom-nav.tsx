@@ -17,7 +17,6 @@ import { useI18n } from '@/hooks/use-i18n';
 import { MobileMoreSheet } from './mobile-more-sheet';
 
 const SECONDARY_PREFIXES = [
-  '/scan',
   '/locations',
   '/categories',
   '/activity',
@@ -72,7 +71,7 @@ export function UmayBottomNav() {
         <Button
           asChild
           variant="primary"
-          className="shadow-float dark:border-border-strong fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] right-4 z-40 min-h-[44px] rounded-full px-4 backdrop-blur-md dark:border md:hidden"
+          className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] right-4 z-40 min-h-[44px] rounded-full px-4 shadow-float backdrop-blur-md dark:border dark:border-border-strong md:hidden"
         >
           <Link href="/items?new=1">
             <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />

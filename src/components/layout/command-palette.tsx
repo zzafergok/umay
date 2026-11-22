@@ -6,7 +6,6 @@ import {
   Boxes,
   Home,
   LogOut,
-  QrCode,
   Settings,
   ShoppingCart,
   UserRound,
@@ -85,10 +84,6 @@ export function CommandPalette() {
           <CommandItem onSelect={() => go('/shopping')}>
             <ShoppingCart className="mr-2 h-4 w-4" />
             <span>Alışveriş Listesi</span>
-          </CommandItem>
-          <CommandItem onSelect={() => go('/scan')}>
-            <QrCode className="mr-2 h-4 w-4" />
-            <span>Barkod / QR Tara</span>
           </CommandItem>
         </CommandGroup>
         <CommandGroup heading={accountCopy.menuAccountLabel}>

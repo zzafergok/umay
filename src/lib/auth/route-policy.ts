@@ -11,7 +11,6 @@ const AUTH_EXACT_ROUTES = new Set<string>([
   '/shopping',
   '/locations',
   '/categories',
-  '/scan',
   '/activity',
   '/profile',
   '/settings',

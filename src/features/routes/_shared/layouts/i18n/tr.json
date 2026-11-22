@@ -68,12 +68,6 @@
       "icon": "tags"
     },
     {
-      "href": "/scan",
-      "label": "Tara",
-      "subtitle": "Barkod ve QR okuyucu",
-      "icon": "scanLine"
-    },
-    {
       "href": "/activity",
       "label": "Faaliyet",
       "subtitle": "Hareket ve işlem günlüğü",
