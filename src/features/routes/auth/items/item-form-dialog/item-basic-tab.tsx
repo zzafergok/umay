@@ -85,9 +85,9 @@ export function ItemBasicTab({
         />
       </div>
 
-      <div className="hidden flex-wrap items-center gap-1.5 sm:flex">
+      <div className="flex flex-wrap items-center gap-1.5">
         <span className="mr-1 text-[11px] text-text-muted">Hızlı birim:</span>
-        {UNIT_SUGGESTIONS.slice(0, 7).map((unit) => (
+        {UNIT_SUGGESTIONS.map((unit) => (
           <Button
             key={unit}
             type="button"

@@ -1,3 +1,4 @@
+import { roundQuantity } from '@/features/inventory/constants';
 import type { Item, StockMovement } from '@/features/inventory/types';
 import type {
   ItemInput,
@@ -156,7 +157,7 @@ export async function recordStockMovement(
     const item = vault.items.get(input.itemId);
     if (!item) throw new InventoryRepoError(404, 'Ürün bulunamadı.');
 
-    const nextQty = item.quantity + input.delta;
+    const nextQty = roundQuantity(item.quantity + input.delta);
     if (nextQty < 0) {
       throw new InventoryRepoError(400, 'Stok miktarı 0 altına düşemez.');
     }
@@ -189,7 +190,7 @@ export async function recordStockMovement(
       throw new InventoryRepoError(404, 'Ürün bulunamadı.');
     }
     const item = { ...(itemDoc.data() as Item), id: itemDoc.id };
-    const nextQty = item.quantity + input.delta;
+    const nextQty = roundQuantity(item.quantity + input.delta);
     if (nextQty < 0) {
       throw new InventoryRepoError(400, 'Stok miktarı 0 altına düşemez.');
     }

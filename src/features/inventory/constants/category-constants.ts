@@ -1,3 +1,4 @@
+import { INVENTORY_UNIT_IDS } from './unit-constants';
 import {
   BatteryCharging,
   BookOpen,
@@ -153,18 +154,7 @@ export const ITEM_STATUS_OPTIONS: { value: ItemStatus; label: string }[] = [
   { value: 'discarded', label: 'Kullanım Dışı' },
 ];
 
-export const UNIT_SUGGESTIONS = [
-  'adet',
-  'paket',
-  'kutu',
-  'kg',
-  'gr',
-  'lt',
-  'ml',
-  'm',
-  'çift',
-  'set',
-] as const;
+export const UNIT_SUGGESTIONS = INVENTORY_UNIT_IDS;
 
 export const NUMBER_UNIT_SUGGESTIONS = [
   'cm',

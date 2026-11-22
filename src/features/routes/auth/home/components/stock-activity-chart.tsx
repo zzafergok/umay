@@ -62,7 +62,7 @@ export function StockActivityChart({ data }: StockActivityChartProps) {
         <CardDescription>
           Son 14 gündeki günlük stok giriş ve tüketim hareketleri
         </CardDescription>
-        <CardAction className="flex flex-wrap items-center gap-1.5">
+        <CardAction className="flex flex-wrap items-center justify-end gap-1.5">
           <Badge variant="success" size="sm" className="font-mono tabular-nums">
             <ArrowDownLeft className="mr-1 h-3 w-3" aria-hidden="true" />+
             {formatTwoDecimals(totals.inflow)}

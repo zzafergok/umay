@@ -2,11 +2,17 @@
 
 import { ExternalLink, ImageIcon } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
+import { Button } from '@/components/core/button';
 import { Card, CardContent } from '@/components/core/card';
 import { Link } from '@/components/core/link';
 import { QuantityStepper } from '@/components/core/quantity-stepper';
 import { InfoTooltip } from '@/components/shared/info-tooltip';
-import { MIN_QUANTITY_TOOLTIP } from '@/features/inventory/constants';
+import {
+  getEffectiveDecrementStep,
+  getUnitDefinition,
+  MIN_QUANTITY_TOOLTIP,
+  roundQuantity,
+} from '@/features/inventory/constants';
 import type { Category, Item } from '@/features/inventory/types';
 import { ItemSpecsCard } from '@/features/routes/auth/items/item-specs-card';
 import { useUserPreferences } from '@/hooks/use-user-preferences';
@@ -26,17 +32,22 @@ export function ItemDetailOverview({
   onAdjustStock,
 }: ItemDetailOverviewProps) {
   const { formatDate } = useUserPreferences();
+  const unitDef = getUnitDefinition(item.unit);
+  const incStep = unitDef.defaultStep;
+  const decStep = getEffectiveDecrementStep(item.unit, item.quantity);
+
   return (
     <div className="space-y-4">
       <Card>
         <CardContent className="space-y-4 pt-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <QuantityStepper
-              value={item.quantity}
+              value={roundQuantity(item.quantity)}
               unit={item.unit}
+              step={incStep}
               isLoading={isAdjusting}
-              onDecrement={() => onAdjustStock(-1)}
-              onIncrement={() => onAdjustStock(1)}
+              onDecrement={() => onAdjustStock(-decStep)}
+              onIncrement={() => onAdjustStock(incStep)}
             />
             <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
               {item.minQuantity > 0 ? (
@@ -63,6 +74,34 @@ export function ItemDetailOverview({
               ) : null}
             </div>
           </div>
+
+          {unitDef.stepPresets.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-3">
+              <span className="mr-1 text-caption text-text-muted">
+                Hızlı tüketim:
+              </span>
+              {unitDef.stepPresets.map((preset) => {
+                const effectiveDec = getEffectiveDecrementStep(
+                  item.unit,
+                  item.quantity,
+                  preset,
+                );
+                return (
+                  <Button
+                    key={`quick-dec-${preset}`}
+                    type="button"
+                    size="xs"
+                    variant="outline"
+                    disabled={isAdjusting || item.quantity <= 0}
+                    onClick={() => onAdjustStock(-effectiveDec)}
+                    className="h-7 min-h-0 font-mono tabular-nums"
+                  >
+                    -{preset} {unitDef.shortLabel}
+                  </Button>
+                );
+              })}
+            </div>
+          ) : null}
 
           {item.notes ? (
             <p className="border-t border-border pt-3 text-sm text-muted-foreground">

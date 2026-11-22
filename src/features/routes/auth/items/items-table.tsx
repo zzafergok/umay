@@ -13,6 +13,11 @@ import {
   TableRow,
 } from '@/components/core/table';
 import { TableActionButton } from '@/components/shared/table-action-button';
+import {
+  getEffectiveDecrementStep,
+  getUnitDefinition,
+  roundQuantity,
+} from '@/features/inventory/constants';
 import type { Item, Location } from '@/features/inventory/types';
 
 export function ItemsTableView({
@@ -73,24 +78,38 @@ export function ItemsTableView({
                   )}
                 </TableCell>
                 <TableCell className="text-right tabular-nums">
-                  {item.quantity} {item.unit}
+                  {roundQuantity(item.quantity)} {item.unit}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1">
-                    <TableActionButton
-                      icon={Minus}
-                      tooltip="Stok azalt (-1)"
-                      disabled={item.quantity <= 0 || pendingItemId === item.id}
-                      aria-label={`${item.name} stok azalt (-1)`}
-                      onClick={() => onAdjustStock(item, -1)}
-                    />
-                    <TableActionButton
-                      icon={Plus}
-                      tooltip="Stok artır (+1)"
-                      disabled={pendingItemId === item.id}
-                      aria-label={`${item.name} stok artır (+1)`}
-                      onClick={() => onAdjustStock(item, 1)}
-                    />
+                    {(() => {
+                      const unitDef = getUnitDefinition(item.unit);
+                      const decStep = getEffectiveDecrementStep(
+                        item.unit,
+                        item.quantity,
+                      );
+                      const incStep = unitDef.defaultStep;
+                      return (
+                        <>
+                          <TableActionButton
+                            icon={Minus}
+                            tooltip={`Stok azalt (-${decStep} ${item.unit})`}
+                            disabled={
+                              item.quantity <= 0 || pendingItemId === item.id
+                            }
+                            aria-label={`${item.name} stok azalt (-${decStep} ${item.unit})`}
+                            onClick={() => onAdjustStock(item, -decStep)}
+                          />
+                          <TableActionButton
+                            icon={Plus}
+                            tooltip={`Stok artır (+${incStep} ${item.unit})`}
+                            disabled={pendingItemId === item.id}
+                            aria-label={`${item.name} stok artır (+${incStep} ${item.unit})`}
+                            onClick={() => onAdjustStock(item, incStep)}
+                          />
+                        </>
+                      );
+                    })()}
                     <TableActionButton
                       icon={Eye}
                       tooltip="Detayı görüntüle"

@@ -50,7 +50,7 @@ export function CommandDialog({
       </DialogHeader>
       <DialogContent
         className={cn(
-          'max-w-xl gap-0 overflow-hidden rounded-xl border border-border/80 bg-surface-raised/95 p-0 text-text shadow-float backdrop-blur-xl dark:border-border-strong',
+          'w-[calc(100vw-1.5rem)] max-w-xl gap-0 overflow-hidden rounded-xl border border-border/80 bg-surface-raised/95 p-0 text-text shadow-float backdrop-blur-xl dark:border-border-strong sm:w-full',
           className,
         )}
         showCloseButton={showCloseButton}

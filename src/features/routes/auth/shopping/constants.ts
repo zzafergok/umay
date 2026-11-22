@@ -2,40 +2,21 @@ import type {
   ShoppingPriority,
   ShoppingSource,
 } from '@/features/inventory/types';
+import {
+  INVENTORY_UNIT_OPTIONS,
+  INVENTORY_UNITS,
+  UNIT_ALIASES,
+} from '@/features/inventory/constants';
 import type { SelectOption } from '@/components/forms';
 
-export const SHOPPING_UNIT_OPTIONS: SelectOption[] = [
-  { value: 'Adet', label: 'Adet' },
-  { value: 'Paket', label: 'Paket' },
-  { value: 'Kutu', label: 'Kutu' },
-  { value: 'Kilogram', label: 'Kilogram' },
-  { value: 'Gram', label: 'Gram' },
-  { value: 'Litre', label: 'Litre' },
-  { value: 'Mililitre', label: 'Mililitre' },
-  { value: 'Şişe', label: 'Şişe' },
-  { value: 'Rulo', label: 'Rulo' },
-];
+export const SHOPPING_UNIT_OPTIONS: SelectOption[] = INVENTORY_UNIT_OPTIONS;
 
-export const SHOPPING_UNIT_ALIASES: Record<string, string> = {
-  adet: 'Adet',
-  paket: 'Paket',
-  pkt: 'Paket',
-  kutu: 'Kutu',
-  kg: 'Kilogram',
-  kilo: 'Kilogram',
-  kilogram: 'Kilogram',
-  gr: 'Gram',
-  g: 'Gram',
-  gram: 'Gram',
-  lt: 'Litre',
-  l: 'Litre',
-  litre: 'Litre',
-  ml: 'Mililitre',
-  mililitre: 'Mililitre',
-  şişe: 'Şişe',
-  sise: 'Şişe',
-  rulo: 'Rulo',
-};
+export const SHOPPING_UNIT_ALIASES: Record<string, string> = Object.fromEntries(
+  Object.entries(UNIT_ALIASES).map(([alias, unitId]) => [
+    alias,
+    INVENTORY_UNITS[unitId].label.replace(/\s*\([^)]*\)$/, ''),
+  ]),
+);
 
 export const SHOPPING_PRIORITY_OPTIONS: SelectOption[] = [
   { value: 'high', label: 'Acil' },

@@ -16,6 +16,7 @@ import {
 } from '@/components/core/card';
 import { toast } from '@/components/core/toast';
 import { Form, SelectField, SubmitButton } from '@/components/forms';
+import { INVENTORY_UNIT_OPTIONS } from '@/features/inventory/constants';
 import { useSettingsQuery } from '@/hooks/use-inventory-hooks';
 import { inventoryService } from '@/services/inventory-service';
 import type { AuthSettingsCopy, SettingsSnapshot } from '../types';
@@ -152,13 +153,13 @@ export function InventoryRulesCard({
             <SelectField
               name="defaultUnit"
               label={copy.defaultUnitLabel}
-              options={[
-                { value: 'adet', label: copy.unitOptions.adet },
-                { value: 'kg', label: copy.unitOptions.kg },
-                { value: 'lt', label: copy.unitOptions.lt },
-                { value: 'paket', label: copy.unitOptions.paket },
-                { value: 'kutu', label: copy.unitOptions.kutu },
-              ]}
+              options={INVENTORY_UNIT_OPTIONS.map((opt) => ({
+                value: opt.value,
+                label:
+                  copy.unitOptions[
+                    opt.value as keyof typeof copy.unitOptions
+                  ] ?? opt.label,
+              }))}
             />
           </div>
 
