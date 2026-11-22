@@ -9,6 +9,7 @@ import {
 
 describe('JWT Utilities', () => {
   afterEach(() => {
+    vi.unstubAllEnvs();
     vi.restoreAllMocks();
   });
 
@@ -100,5 +101,59 @@ describe('JWT Utilities', () => {
     const remaining = getTokenRemainingMs(token);
     expect(remaining).not.toBeNull();
     expect((remaining ?? 0) > 0).toBe(true);
+  });
+
+  it('should support UTF-8 characters in payload claims', () => {
+    const token = signToken({
+      sub: 'usr_tr',
+      email: 'cagla@umay.app',
+      name: 'Çağla Şahin Öztürk',
+      role: 'user',
+    });
+
+    const verified = verifyToken(token);
+    expect(verified?.name).toBe('Çağla Şahin Öztürk');
+    expect(decodeToken(token)?.name).toBe('Çağla Şahin Öztürk');
+  });
+
+  it('should reject alg=none and forged non-HMAC signatures', () => {
+    const algNoneHeader = Buffer.from(
+      JSON.stringify({ alg: 'none', typ: 'JWT' }),
+      'utf8',
+    ).toString('base64url');
+    const payloadPart = Buffer.from(
+      JSON.stringify({
+        sub: 'usr_1',
+        email: 'a@umay.app',
+        role: 'admin',
+        exp: Math.floor(Date.now() / 1000) + 3600,
+      }),
+      'utf8',
+    ).toString('base64url');
+
+    expect(verifyToken(`${algNoneHeader}.${payloadPart}.`)).toBeNull();
+
+    const forgedPlainSig = Buffer.from(
+      `${algNoneHeader}.${payloadPart}.umay-dev-only-jwt-secret-do-not-use-in-prod`,
+      'utf8',
+    ).toString('base64url');
+    expect(
+      verifyToken(`${algNoneHeader}.${payloadPart}.${forgedPlainSig}`),
+    ).toBeNull();
+  });
+
+  it('should fail closed in production when JWT_SECRET is missing', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('JWT_SECRET', '');
+
+    expect(() =>
+      signToken({
+        sub: 'usr_prod',
+        email: 'prod@umay.app',
+        role: 'user',
+      }),
+    ).toThrow(/JWT_SECRET/);
+
+    expect(verifyToken('a.b.c')).toBeNull();
   });
 });
