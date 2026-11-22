@@ -177,53 +177,80 @@ describe('detailed shopping list repository & utils', () => {
       role: 'user',
     });
 
-    const singleReq = new NextRequest('http://localhost:3000/api/inventory/shopping', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${token}`,
+    const singleReq = new NextRequest(
+      'http://localhost:3000/api/inventory/shopping',
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          itemId: null,
+          freeText: 'Ekmek',
+          qty: 2,
+          unit: 'Adet',
+          source: 'manual',
+        }),
       },
-      body: JSON.stringify({
-        itemId: null,
-        freeText: 'Ekmek',
-        qty: 2,
-        unit: 'Adet',
-        source: 'manual',
-      }),
-    });
+    );
     const singleRes = await createShoppingRoute(singleReq);
     expect(singleRes.status).toBe(201);
-    const singleJson = (await singleRes.json()) as { id: string; freeText?: string };
+    const singleJson = (await singleRes.json()) as {
+      id: string;
+      freeText?: string;
+    };
     expect(singleJson.freeText).toBe('Ekmek');
 
-    const bulkReq = new NextRequest('http://localhost:3000/api/inventory/shopping', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${token}`,
+    const bulkReq = new NextRequest(
+      'http://localhost:3000/api/inventory/shopping',
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          items: [
+            {
+              itemId: null,
+              freeText: 'Peynir',
+              qty: 1,
+              unit: 'Adet',
+              source: 'receipt_ai',
+            },
+            {
+              itemId: null,
+              freeText: 'Zeytin',
+              qty: 1,
+              unit: 'Adet',
+              source: 'receipt_ai',
+            },
+          ],
+        }),
       },
-      body: JSON.stringify({
-        items: [
-          { itemId: null, freeText: 'Peynir', qty: 1, unit: 'Adet', source: 'receipt_ai' },
-          { itemId: null, freeText: 'Zeytin', qty: 1, unit: 'Adet', source: 'receipt_ai' },
-        ],
-      }),
-    });
+    );
     const bulkRes = await createShoppingRoute(bulkReq);
     expect(bulkRes.status).toBe(201);
-    const bulkJson = (await bulkRes.json()) as { count: number; items: unknown[] };
+    const bulkJson = (await bulkRes.json()) as {
+      count: number;
+      items: unknown[];
+    };
     expect(bulkJson.count).toBe(2);
     expect(bulkJson.items).toHaveLength(2);
     expect(await listShoppingItems('uid_route_shopping_test')).toHaveLength(3);
 
-    const emptyBulkReq = new NextRequest('http://localhost:3000/api/inventory/shopping', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${token}`,
+    const emptyBulkReq = new NextRequest(
+      'http://localhost:3000/api/inventory/shopping',
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ items: [] }),
       },
-      body: JSON.stringify({ items: [] }),
-    });
+    );
     const emptyBulkRes = await createShoppingRoute(emptyBulkReq);
     expect(emptyBulkRes.status).toBe(400);
   });

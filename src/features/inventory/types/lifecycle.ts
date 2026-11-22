@@ -1,4 +1,4 @@
-import type { CurrencyCode } from './inventory';
+import type { CurrencyCode, ItemType } from './inventory';
 
 export type LifespanMode = 'time' | 'usage' | 'both';
 
@@ -76,6 +76,14 @@ export interface ShoppingListItem {
   qty: number;
   unit?: string;
   category?: string;
+  locationId?: string;
+  type?: ItemType;
+  minQuantity?: number;
+  brand?: string;
+  model?: string;
+  barcode?: string;
+  currency?: CurrencyCode;
+  expiresAt?: string;
   priority?: ShoppingPriority;
   estimatedPrice?: number;
   store?: string;

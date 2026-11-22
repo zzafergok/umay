@@ -7,7 +7,12 @@ import {
   DialogTitle,
 } from '@/components/core/dialog';
 import type { ShoppingItemInput } from '@/features/inventory/schemas';
-import type { Category, CurrencyCode, Item } from '@/features/inventory/types';
+import type {
+  Category,
+  CurrencyCode,
+  Item,
+  Location,
+} from '@/features/inventory/types';
 import { ShoppingAddForm } from './shopping-add-form';
 import { ShoppingReceiptCard } from './shopping-receipt-card';
 import {
@@ -20,6 +25,7 @@ interface ShoppingAddDialogProps {
   onOpenChange: (open: boolean) => void;
   items: Item[];
   categories: Category[];
+  locations: Location[];
   currency: CurrencyCode;
   onAdd: (input: ShoppingItemInput) => Promise<boolean>;
 }
@@ -29,6 +35,7 @@ export function ShoppingAddDialog({
   onOpenChange,
   items,
   categories,
+  locations,
   currency,
   onAdd,
 }: ShoppingAddDialogProps) {
@@ -42,13 +49,17 @@ export function ShoppingAddDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent mobilePresentation="sheet" className="max-w-lg">
+      <DialogContent
+        mobilePresentation="sheet"
+        className="max-h-[90vh] overflow-y-auto sm:max-w-2xl"
+      >
         <DialogHeader>
           <DialogTitle>Listeye Ürün Ekle</DialogTitle>
         </DialogHeader>
         <ShoppingAddForm
           items={items}
           categories={categories}
+          locations={locations}
           currency={currency}
           onAdd={handleAdd}
           embedded

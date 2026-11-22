@@ -47,7 +47,10 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
       <>
         <PageHeaderMeta
           title="Liste Bulunamadı"
-          trail={[{ label: 'Alışveriş', href: '/shopping' }, { label: 'Bulunamadı' }]}
+          trail={[
+            { label: 'Alışveriş', href: '/shopping' },
+            { label: 'Bulunamadı' },
+          ]}
         />
         <Empty className="border">
           <EmptyHeader>
@@ -97,7 +100,7 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
               onClick={() => setSuggestionsOpen(true)}
             >
               <Sparkles
-                className="text-accent mr-1.5 h-3.5 w-3.5"
+                className="mr-1.5 h-3.5 w-3.5 text-accent"
                 aria-hidden="true"
               />
               <span>Öneriler</span>
@@ -145,6 +148,8 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
         currency={s.currency}
         isLoading={s.isLoading}
         isClearingDone={s.isClearingDone}
+        isBulkUpdatingDone={s.isBulkUpdatingDone}
+        isSyncingDoneItems={s.isSyncingDoneItems}
         statusFilter={s.statusFilter}
         priorityFilter={s.priorityFilter}
         searchQuery={s.searchQuery}
@@ -153,6 +158,8 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
         onSearchChange={s.setSearchQuery}
         onResetFilters={s.resetFilters}
         onToggleDone={s.handleToggleDone}
+        onBulkToggleDone={s.handleBulkToggleDone}
+        onSyncDoneToInventory={() => s.handleSyncDoneToInventory(listId)}
         onAdjustQty={s.handleAdjustQty}
         onEdit={s.setEditingEntry}
         onDelete={s.requestDelete}
@@ -165,6 +172,7 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
         onOpenChange={setAddOpen}
         items={s.items}
         categories={s.categories}
+        locations={s.locations}
         currency={s.currency}
         onAdd={s.handleAddManual}
       />
@@ -184,6 +192,7 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
         entry={s.editingEntry}
         items={s.items}
         categories={s.categories}
+        locations={s.locations}
         currency={s.currency}
         onClose={() => s.setEditingEntry(null)}
         onSave={s.handleSaveEdit}

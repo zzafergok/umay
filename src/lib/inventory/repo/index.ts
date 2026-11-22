@@ -6,3 +6,5 @@ export * from './part-lifecycle-repo';
 export * from './part-replace-repo';
 export * from './shopping-lists-repo';
 export * from './shopping-settings-repo';
+export * from './shopping-sync-repo';
+export * from './user-settings-repo';

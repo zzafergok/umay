@@ -1,8 +1,14 @@
 import { z } from 'zod';
 import type { SelectOption } from '@/components/forms';
-import type { Category, Item } from '@/features/inventory/types';
+import type { Category, Item, Location } from '@/features/inventory/types';
 import { SHOPPING_CATEGORY_PRESETS, SHOPPING_UNIT_OPTIONS } from './constants';
 import { formatShoppingUnit } from './shopping-utils';
+
+export const SHOPPING_ITEM_TYPE_OPTIONS: SelectOption[] = [
+  { value: 'consumable', label: 'Sarf / Tüketim' },
+  { value: 'durable', label: 'Demirbaş / Dayanıklı' },
+  { value: 'component', label: 'Parça / Bileşen' },
+];
 
 export const shoppingFormSchema = z.object({
   freeText: z
@@ -17,9 +23,16 @@ export const shoppingFormSchema = z.object({
   unit: z.string().trim().min(1).max(24),
   priority: z.enum(['low', 'normal', 'high']),
   category: z.string().trim().max(60).nullable().optional(),
+  locationId: z.string().trim().nullable().optional(),
+  type: z.enum(['durable', 'consumable', 'component']),
+  minQuantity: z.union([z.string(), z.number()]).optional(),
   itemId: z.string().trim().nullable().optional(),
+  brand: z.string().trim().max(80).optional(),
+  model: z.string().trim().max(80).optional(),
+  barcode: z.string().trim().max(80).optional(),
   store: z.string().trim().max(80).optional(),
   estimatedPrice: z.union([z.string(), z.number()]).optional(),
+  expiresAt: z.string().trim().nullable().optional(),
   note: z.string().trim().max(240).optional(),
 });
 
@@ -31,9 +44,16 @@ export const SHOPPING_FORM_DEFAULT_VALUES: ShoppingFormValues = {
   unit: 'Adet',
   priority: 'normal',
   category: null,
+  locationId: null,
+  type: 'consumable',
+  minQuantity: '',
   itemId: null,
+  brand: '',
+  model: '',
+  barcode: '',
   store: '',
   estimatedPrice: '',
+  expiresAt: null,
   note: '',
 };
 
@@ -59,6 +79,15 @@ export function buildShoppingCategoryOptions(
   return options;
 }
 
+export function buildShoppingLocationOptions(
+  locations: Location[],
+): SelectOption[] {
+  return locations.map((loc) => ({
+    value: loc.id,
+    label: loc.path.length > 0 ? loc.path.join(' / ') : loc.name,
+  }));
+}
+
 export function buildLinkedItemOptions(items: Item[]): SelectOption[] {
   return items.map((item) => ({
     value: item.id,
@@ -66,7 +95,9 @@ export function buildLinkedItemOptions(items: Item[]): SelectOption[] {
   }));
 }
 
-export function buildShoppingUnitOptions(currentUnit?: string | null): SelectOption[] {
+export function buildShoppingUnitOptions(
+  currentUnit?: string | null,
+): SelectOption[] {
   const formatted = formatShoppingUnit(currentUnit);
   const exists = SHOPPING_UNIT_OPTIONS.some((opt) => opt.value === formatted);
   if (exists) return SHOPPING_UNIT_OPTIONS;

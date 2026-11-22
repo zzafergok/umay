@@ -13,31 +13,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/core/dialog';
-import {
-  AmountField,
-  Form,
-  SelectField,
-  SubmitButton,
-  TextField,
-} from '@/components/forms';
+import { Form, SelectField, SubmitButton, TextField } from '@/components/forms';
 import type { ShoppingItemPatchInput } from '@/features/inventory/schemas';
 import type {
   Category,
   CurrencyCode,
   Item,
+  Location,
   ShoppingListItem,
 } from '@/features/inventory/types';
 import { formatAmountInput } from '@/lib/utils';
-import { SHOPPING_PRIORITY_OPTIONS } from './constants';
 import {
   buildLinkedItemOptions,
   buildShoppingCategoryOptions,
+  buildShoppingLocationOptions,
   buildShoppingUnitOptions,
-  getLinkedItemFieldMeta,
   SHOPPING_FORM_DEFAULT_VALUES,
   shoppingFormSchema,
   type ShoppingFormValues,
 } from './shopping-form-schema';
+import { ShoppingProductFields } from './shopping-product-fields';
 import {
   formatShoppingUnit,
   parseOptionalPrice,
@@ -48,6 +43,7 @@ interface ShoppingEditDialogProps {
   entry: ShoppingListItem | null;
   items: Item[];
   categories: Category[];
+  locations: Location[];
   currency: CurrencyCode;
   onClose: () => void;
   onSave: (id: string, patch: ShoppingItemPatchInput) => Promise<boolean>;
@@ -57,6 +53,7 @@ export function ShoppingEditDialog({
   entry,
   items,
   categories,
+  locations,
   currency,
   onClose,
   onSave,
@@ -68,6 +65,10 @@ export function ShoppingEditDialog({
   const categoryOptions = React.useMemo(
     () => buildShoppingCategoryOptions(categories),
     [categories],
+  );
+  const locationOptions = React.useMemo(
+    () => buildShoppingLocationOptions(locations),
+    [locations],
   );
   const itemOptions = React.useMemo(
     () => buildLinkedItemOptions(items),
@@ -97,12 +98,22 @@ export function ShoppingEditDialog({
       unit: formatShoppingUnit(entry.unit),
       priority: entry.priority ?? 'normal',
       category: entry.category ?? null,
+      locationId: entry.locationId ?? null,
+      type: entry.type ?? 'consumable',
+      minQuantity:
+        typeof entry.minQuantity === 'number'
+          ? formatAmountInput(entry.minQuantity)
+          : '',
       itemId: entry.itemId ?? null,
+      brand: entry.brand ?? '',
+      model: entry.model ?? '',
+      barcode: entry.barcode ?? '',
       store: entry.store ?? '',
       estimatedPrice:
         typeof entry.estimatedPrice === 'number'
           ? formatAmountInput(entry.estimatedPrice)
           : '',
+      expiresAt: entry.expiresAt ? entry.expiresAt.slice(0, 10) : null,
       note: entry.note ?? '',
     });
   }, [entry, itemMap, methods]);
@@ -110,6 +121,7 @@ export function ShoppingEditDialog({
   const handleSubmit = async (values: ShoppingFormValues) => {
     if (!entry) return;
     const parsedPrice = parseOptionalPrice(values.estimatedPrice);
+    const parsedMinQty = parseOptionalPrice(values.minQuantity);
     const ok = await onSave(entry.id, {
       itemId: values.itemId || null,
       freeText: values.freeText.trim(),
@@ -117,8 +129,16 @@ export function ShoppingEditDialog({
       unit: formatShoppingUnit(values.unit),
       priority: values.priority,
       category: values.category?.trim() || '',
+      locationId: values.locationId || null,
+      type: values.type,
+      minQuantity: parsedMinQty ?? null,
+      brand: values.brand?.trim() || '',
+      model: values.model?.trim() || '',
+      barcode: values.barcode?.trim() || '',
+      currency,
       store: values.store?.trim() || '',
       estimatedPrice: parsedPrice ?? null,
+      expiresAt: values.expiresAt || null,
       note: values.note?.trim() || '',
     });
     if (ok) {
@@ -128,12 +148,15 @@ export function ShoppingEditDialog({
 
   return (
     <Dialog open={Boolean(entry)} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent mobilePresentation="sheet" className="sm:max-w-lg">
+      <DialogContent
+        mobilePresentation="sheet"
+        className="max-h-[90vh] overflow-y-auto sm:max-w-2xl"
+      >
         <DialogHeader>
           <DialogTitle>Alışveriş Kalemini Düzenle</DialogTitle>
           <DialogDescription>
-            Miktar, öncelik, kategori, mağaza ve tahmini birim fiyat bilgilerini
-            güncelleyin.
+            Miktar, öncelik, kategori, konum, ürün detayları ve tahmini birim
+            fiyat bilgilerini güncelleyin.
           </DialogDescription>
         </DialogHeader>
         <Form
@@ -143,7 +166,7 @@ export function ShoppingEditDialog({
           className="min-w-0 space-y-3"
         >
           <TextField name="freeText" label="Ürün Adı" required />
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <TextField
               name="qty"
               label="Miktar"
@@ -154,43 +177,15 @@ export function ShoppingEditDialog({
               required
             />
             <SelectField name="unit" label="Birim" options={unitOptions} />
-            <SelectField
-              name="priority"
-              label="Öncelik"
-              options={SHOPPING_PRIORITY_OPTIONS}
-            />
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <SelectField
-              name="category"
-              label="Kategori"
-              allowNone
-              noneLabel="Kategori seçilmedi"
-              placeholder="Kategori seçin"
-              options={categoryOptions}
-            />
-            <SelectField
-              name="itemId"
-              label="Ev Stoğu ile Eşleştir"
-              options={itemOptions}
-              {...getLinkedItemFieldMeta(itemOptions.length > 0)}
-            />
-          </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <TextField
-              name="store"
-              label="Mağaza / Market"
-              placeholder="Örn. Migros"
-            />
-            <AmountField
-              name="estimatedPrice"
-              label={`Tahmini Birim Fiyat (${currency})`}
-              placeholder="0,00"
-              inputClassName="font-medium tabular-nums"
-            />
-          </div>
+          <ShoppingProductFields
+            currency={currency}
+            categoryOptions={categoryOptions}
+            locationOptions={locationOptions}
+            itemOptions={itemOptions}
+          />
           <TextField name="note" label="Not" placeholder="Ek açıklama" />
-          <DialogFooter className="bg-surface-raised/95 sticky bottom-0 grid grid-cols-2 gap-2 border-t border-border pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:gap-2 sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
+          <DialogFooter className="sticky bottom-0 grid grid-cols-2 gap-2 border-t border-border bg-surface-raised/95 pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:gap-2 sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
             <Button
               type="button"
               variant="outline"

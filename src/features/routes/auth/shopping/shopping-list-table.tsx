@@ -1,18 +1,9 @@
 'use client';
 
-import { Plus, ShoppingCart } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import { Card, CardContent } from '@/components/core/card';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/core/empty';
-import { Skeleton } from '@/components/core/skeleton';
+import { Checkbox } from '@/components/core/checkbox';
 import {
   Table,
   TableBody,
@@ -30,6 +21,7 @@ import { formatCurrency } from '@/lib/utils';
 import { ShoppingListRow } from './shopping-list-row';
 import { ShoppingListToolbar } from './shopping-list-toolbar';
 import { ShoppingMobileCards } from './shopping-mobile-cards';
+import { ShoppingTableBulkActions, ShoppingTableState } from './shopping-table-states';
 import type {
   ShoppingPriorityFilter,
   ShoppingStatusFilter,
@@ -45,6 +37,8 @@ interface ShoppingListTableProps {
   currency: CurrencyCode;
   isLoading: boolean;
   isClearingDone: boolean;
+  isBulkUpdatingDone: boolean;
+  isSyncingDoneItems?: boolean;
   statusFilter: ShoppingStatusFilter;
   priorityFilter: ShoppingPriorityFilter;
   searchQuery: string;
@@ -53,6 +47,8 @@ interface ShoppingListTableProps {
   onSearchChange: (value: string) => void;
   onResetFilters: () => void;
   onToggleDone: (entry: ShoppingListItem) => void;
+  onBulkToggleDone: (entries: ShoppingListItem[], nextDone: boolean) => void;
+  onSyncDoneToInventory?: () => void;
   onAdjustQty: (entry: ShoppingListItem, delta: number) => void;
   onEdit: (entry: ShoppingListItem) => void;
   onDelete: (id: string) => void;
@@ -69,6 +65,8 @@ export function ShoppingListTable({
   currency,
   isLoading,
   isClearingDone,
+  isBulkUpdatingDone,
+  isSyncingDoneItems = false,
   statusFilter,
   priorityFilter,
   searchQuery,
@@ -77,12 +75,24 @@ export function ShoppingListTable({
   onSearchChange,
   onResetFilters,
   onToggleDone,
+  onBulkToggleDone,
+  onSyncDoneToInventory,
   onAdjustQty,
   onEdit,
   onDelete,
   onClearDone,
   onAddClick,
 }: ShoppingListTableProps) {
+  const unsyncedDoneCount = list.filter((e) => e.done && !e.itemId).length;
+  const pendingFilteredCount = filteredList.filter((e) => !e.done).length;
+  const allFilteredDone = filteredList.length > 0 && pendingFilteredCount === 0;
+  const someFilteredDone =
+    filteredList.length > 0 && pendingFilteredCount < filteredList.length;
+  const headerDoneState: boolean | 'indeterminate' = allFilteredDone
+    ? true
+    : someFilteredDone
+      ? 'indeterminate'
+      : false;
   const filteredEstimatedTotal = filteredList.reduce((sum, entry) => {
     if (typeof entry.estimatedPrice === 'number' && entry.estimatedPrice > 0) {
       return sum + entry.estimatedPrice * entry.qty;
@@ -108,61 +118,38 @@ export function ShoppingListTable({
             />
           </div>
           {summary.totalCount > 0 ? (
-            <Badge variant="secondary" className="shrink-0 font-mono tabular-nums">
-              {summary.pendingCount} alınacak · {summary.doneCount} alındı
-            </Badge>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge
+                variant="secondary"
+                className="shrink-0 font-mono tabular-nums"
+              >
+                {summary.pendingCount} alınacak · {summary.doneCount} alındı
+              </Badge>
+              <ShoppingTableBulkActions
+                filteredCount={filteredList.length}
+                pendingFilteredCount={pendingFilteredCount}
+                allFilteredDone={allFilteredDone}
+                isBulkUpdatingDone={isBulkUpdatingDone}
+                unsyncedDoneCount={unsyncedDoneCount}
+                isSyncingDoneItems={isSyncingDoneItems}
+                onBulkToggle={() =>
+                  onBulkToggleDone(filteredList, !allFilteredDone)
+                }
+                onSyncDoneToInventory={onSyncDoneToInventory}
+              />
+            </div>
           ) : null}
         </div>
 
         {isLoading ? (
-          <div className="space-y-2">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-          </div>
+          <ShoppingTableState variant="loading" />
         ) : list.length === 0 ? (
-          <Empty className="border">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <ShoppingCart />
-              </EmptyMedia>
-              <EmptyTitle>Bu listede henüz ürün yok</EmptyTitle>
-              <EmptyDescription>
-                Manuel ürün ekleyebilir, fiş tarayabilir veya düşük stok
-                önerilerini aktarabilirsin.
-              </EmptyDescription>
-            </EmptyHeader>
-            {onAddClick ? (
-              <EmptyContent>
-                <Button size="sm" onClick={onAddClick}>
-                  <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />
-                  Ürün Ekle
-                </Button>
-              </EmptyContent>
-            ) : null}
-          </Empty>
+          <ShoppingTableState variant="empty" onAddClick={onAddClick} />
         ) : filteredList.length === 0 ? (
-          <Empty className="border">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <ShoppingCart />
-              </EmptyMedia>
-              <EmptyTitle>Filtreyle eşleşen ürün yok</EmptyTitle>
-              <EmptyDescription>
-                Arama metnini veya seçili durum/öncelik filtresini değiştirin.
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={onResetFilters}
-              >
-                Filtreleri Temizle
-              </Button>
-            </EmptyContent>
-          </Empty>
+          <ShoppingTableState
+            variant="no-matches"
+            onResetFilters={onResetFilters}
+          />
         ) : (
           <>
             <ShoppingMobileCards
@@ -180,7 +167,25 @@ export function ShoppingListTable({
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-11">Alındı</TableHead>
+                    <TableHead className="w-24">
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          checked={headerDoneState}
+                          disabled={
+                            isBulkUpdatingDone || filteredList.length === 0
+                          }
+                          onCheckedChange={() =>
+                            onBulkToggleDone(filteredList, !allFilteredDone)
+                          }
+                          aria-label={
+                            allFilteredDone
+                              ? 'Listelenen tüm kalemlerin alındı işaretini kaldır'
+                              : 'Listelenen tüm kalemleri alındı işaretle'
+                          }
+                        />
+                        <span>Alındı</span>
+                      </div>
+                    </TableHead>
                     <TableHead>Ürün & Detaylar</TableHead>
                     <TableHead>Öncelik</TableHead>
                     <TableHead>Miktar</TableHead>
@@ -206,12 +211,12 @@ export function ShoppingListTable({
               </Table>
             </div>
 
-            <div className="text-text-muted flex flex-wrap items-center justify-between gap-2 text-caption">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-caption text-text-muted">
               <span className="font-mono tabular-nums">
                 Gösterilen: {filteredList.length} / {list.length} kalem
               </span>
               {filteredEstimatedTotal > 0 && (
-                <span className="text-text font-mono tabular-nums">
+                <span className="font-mono tabular-nums text-text">
                   Listelenen tahmini tutar:{' '}
                   {formatCurrency(filteredEstimatedTotal, {
                     currency,

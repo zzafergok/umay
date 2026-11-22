@@ -3,16 +3,13 @@
 import * as React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/core/toast';
-import type {
-  ShoppingItemInput,
-  ShoppingItemPatchInput,
-} from '@/features/inventory/schemas';
+import type { ShoppingItemInput } from '@/features/inventory/schemas';
 import type { ShoppingListItem } from '@/features/inventory/types';
 import {
   useCategoriesQuery,
   useItemsQuery,
+  useLocationsQuery,
   usePartsQuery,
-  useRecordMovementMutation,
   useSettingsQuery,
   useShoppingListsQuery,
   useShoppingQuery,
@@ -27,6 +24,7 @@ import {
   type ShoppingStatusFilter,
 } from './shopping-utils';
 import { useShoppingDelete } from './use-shopping-delete';
+import { useShoppingMutations } from './use-shopping-mutations';
 
 export function useShoppingScreen(listId?: string) {
   const qc = useQueryClient();
@@ -37,9 +35,9 @@ export function useShoppingScreen(listId?: string) {
   const { data: rawList = [], isLoading } = useShoppingQuery(scopedListId);
   const { data: items = [] } = useItemsQuery();
   const { data: categories = [] } = useCategoriesQuery();
+  const { data: locations = [] } = useLocationsQuery();
   const { data: partsData } = usePartsQuery();
   const { data: settings } = useSettingsQuery();
-  const moveMutation = useRecordMovementMutation();
 
   const activeList = React.useMemo(() => {
     if (isUnassigned) {
@@ -73,8 +71,14 @@ export function useShoppingScreen(listId?: string) {
   );
   const deleteState = useShoppingDelete(list, invalidateShopping);
   const currency = settings?.currency ?? 'TRY';
-  const itemMap = React.useMemo(() => new Map(items.map((i) => [i.id, i])), [items]);
-  const categoryMap = React.useMemo(() => new Map(categories.map((c) => [c.id, c])), [categories]);
+  const itemMap = React.useMemo(
+    () => new Map(items.map((i) => [i.id, i])),
+    [items],
+  );
+  const categoryMap = React.useMemo(
+    () => new Map(categories.map((c) => [c.id, c])),
+    [categories],
+  );
 
   const suggestions = React.useMemo<ShoppingSuggestion[]>(
     () =>
@@ -152,56 +156,7 @@ export function useShoppingScreen(listId?: string) {
     }
   };
 
-  const handleToggleDone = async (entry: ShoppingListItem) => {
-    const nextDone = !entry.done;
-    try {
-      await inventoryService.updateShopping(entry.id, { done: nextDone });
-      if (nextDone && entry.itemId) {
-        await moveMutation.mutateAsync({
-          itemId: entry.itemId,
-          type: 'in',
-          delta: entry.qty,
-          reason: 'Alışverişten stok girişi',
-        });
-      }
-      await invalidateShopping();
-      toast.success(
-        nextDone
-          ? entry.itemId
-            ? 'Alındı ve stoğa eklendi.'
-            : 'Alındı olarak işaretlendi.'
-          : 'Alınacaklara geri taşındı.',
-      );
-    } catch {
-      toast.error('Durum güncellenemedi.');
-    }
-  };
-
-  const handleAdjustQty = async (entry: ShoppingListItem, delta: number) => {
-    const nextQty = Math.max(1, entry.qty + delta);
-    if (nextQty === entry.qty) return;
-    try {
-      await inventoryService.updateShopping(entry.id, { qty: nextQty });
-      await invalidateShopping();
-    } catch {
-      toast.error('Miktar güncellenemedi.');
-    }
-  };
-
-  const handleSaveEdit = async (
-    id: string,
-    patch: ShoppingItemPatchInput,
-  ): Promise<boolean> => {
-    try {
-      await inventoryService.updateShopping(id, patch);
-      await invalidateShopping();
-      toast.success('Alışveriş kalemi güncellendi.');
-      return true;
-    } catch {
-      toast.error('Değişiklikler kaydedilemedi.');
-      return false;
-    }
-  };
+  const mutationState = useShoppingMutations(invalidateShopping);
 
   const resetFilters = () => {
     setStatusFilter('all');
@@ -216,6 +171,7 @@ export function useShoppingScreen(listId?: string) {
     filteredList,
     items,
     categories,
+    locations,
     itemMap,
     categoryMap,
     suggestions,
@@ -234,9 +190,7 @@ export function useShoppingScreen(listId?: string) {
     handleAddManual,
     handleAcceptSuggestion,
     handleAcceptAllSuggestions,
-    handleToggleDone,
-    handleAdjustQty,
-    handleSaveEdit,
+    ...mutationState,
     ...deleteState,
   };
 }

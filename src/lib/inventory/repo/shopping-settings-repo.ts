@@ -1,15 +1,12 @@
-import type {
-  ShoppingListItem,
-  UserSettings,
-} from '@/features/inventory/types';
+import type { ShoppingListItem } from '@/features/inventory/types';
 import type {
   ShoppingItemInput,
   ShoppingItemPatchInput,
-  UserSettingsInput,
 } from '@/features/inventory/schemas';
 import { getAdminFirestore, isFirebaseConfigured } from '@/lib/firebase/admin';
 import { getUserVault } from '@/lib/inventory/memory-store';
 import { InventoryRepoError, newId } from './errors';
+import { syncShoppingEntriesToInventory } from './shopping-sync-repo';
 
 function omitUndefined<T extends object>(obj: T): T {
   return Object.fromEntries(
@@ -47,6 +44,8 @@ function buildShoppingEntry(
   return omitUndefined<ShoppingListItem>({
     id: newId('shp'),
     ...input,
+    locationId: input.locationId ?? undefined,
+    expiresAt: input.expiresAt ?? undefined,
     priority: input.priority ?? 'normal',
     boughtAt: input.done ? now : undefined,
     createdAt: now,
@@ -95,6 +94,34 @@ export async function createShoppingItemsBulk(
   return entries;
 }
 
+function resolveNullable<T>(
+  patchVal: T | null | undefined,
+  currentVal: T | undefined,
+): T | undefined {
+  if (patchVal === null) return undefined;
+  return patchVal !== undefined ? patchVal : currentVal;
+}
+
+async function saveShoppingEntries(
+  uid: string,
+  entries: ShoppingListItem[],
+): Promise<void> {
+  if (!isFirebaseConfigured()) {
+    const store = getUserVault(uid).shoppingList;
+    for (const entry of entries) store.set(entry.id, entry);
+    return;
+  }
+  const db = getAdminFirestore();
+  const col = userCol(uid, 'shoppingList');
+  for (let i = 0; i < entries.length; i += FIRESTORE_BATCH_LIMIT) {
+    const batch = db.batch();
+    for (const entry of entries.slice(i, i + FIRESTORE_BATCH_LIMIT)) {
+      batch.set(col.doc(entry.id), entry);
+    }
+    await batch.commit();
+  }
+}
+
 export async function updateShoppingItem(
   uid: string,
   id: string,
@@ -102,17 +129,12 @@ export async function updateShoppingItem(
 ): Promise<ShoppingListItem> {
   const all = await listShoppingItems(uid);
   const current = all.find((s) => s.id === id);
-  if (!current)
+  if (!current) {
     throw new InventoryRepoError(404, 'Alışveriş öğesi bulunamadı.');
+  }
 
   const now = new Date().toISOString();
-  const { estimatedPrice, ...rest } = input;
-  const nextEstimatedPrice =
-    estimatedPrice === null
-      ? undefined
-      : estimatedPrice !== undefined
-        ? estimatedPrice
-        : current.estimatedPrice;
+  const { estimatedPrice, locationId, minQuantity, expiresAt, ...rest } = input;
   const nextBoughtAt =
     input.done === true
       ? (current.boughtAt ?? now)
@@ -120,19 +142,82 @@ export async function updateShoppingItem(
         ? undefined
         : current.boughtAt;
 
-  const updated = omitUndefined<ShoppingListItem>({
+  let updated = omitUndefined<ShoppingListItem>({
     ...current,
     ...rest,
-    estimatedPrice: nextEstimatedPrice,
+    estimatedPrice: resolveNullable(estimatedPrice, current.estimatedPrice),
+    locationId: resolveNullable(locationId, current.locationId),
+    minQuantity: resolveNullable(minQuantity, current.minQuantity),
+    expiresAt: resolveNullable(expiresAt, current.expiresAt),
     boughtAt: nextBoughtAt,
     updatedAt: now,
   });
-  if (!isFirebaseConfigured()) {
-    getUserVault(uid).shoppingList.set(id, updated);
-    return updated;
+
+  if (!current.done && updated.done) {
+    const [synced] = await syncShoppingEntriesToInventory(uid, [updated]);
+    if (synced) updated = synced;
   }
-  await userCol(uid, 'shoppingList').doc(id).set(updated);
+
+  await saveShoppingEntries(uid, [updated]);
   return updated;
+}
+
+export async function updateShoppingItemsBulk(
+  uid: string,
+  ids: string[],
+  done: boolean,
+): Promise<ShoppingListItem[]> {
+  const uniqueIds = Array.from(new Set(ids));
+  if (uniqueIds.length === 0) return [];
+
+  const idSet = new Set(uniqueIds);
+  const all = await listShoppingItems(uid);
+  const targets = all.filter((item) => idSet.has(item.id));
+  if (targets.length === 0) {
+    throw new InventoryRepoError(
+      404,
+      'Güncellenecek alışveriş öğesi bulunamadı.',
+    );
+  }
+
+  const now = new Date().toISOString();
+  const newlyDoneIds = new Set(
+    done ? targets.filter((item) => !item.done).map((item) => item.id) : [],
+  );
+  let updatedEntries = targets.map((current) =>
+    omitUndefined<ShoppingListItem>({
+      ...current,
+      done,
+      boughtAt: done ? (current.boughtAt ?? now) : undefined,
+      updatedAt: now,
+    }),
+  );
+
+  if (newlyDoneIds.size > 0) {
+    const toSync = updatedEntries.filter((entry) => newlyDoneIds.has(entry.id));
+    const syncedList = await syncShoppingEntriesToInventory(uid, toSync);
+    const syncedMap = new Map(syncedList.map((entry) => [entry.id, entry]));
+    updatedEntries = updatedEntries.map(
+      (entry) => syncedMap.get(entry.id) ?? entry,
+    );
+  }
+
+  await saveShoppingEntries(uid, updatedEntries);
+  return updatedEntries;
+}
+
+/** Daha önce alındı işaretlenmiş ancak Ürünler'e aktarılmamış kalemleri tek seferlik eşitler. */
+export async function syncPendingDoneShoppingItems(
+  uid: string,
+  listId?: string,
+): Promise<ShoppingListItem[]> {
+  const all = await listShoppingItems(uid, listId);
+  const unsynced = all.filter((item) => item.done && !item.itemId);
+  if (unsynced.length === 0) return [];
+
+  const synced = await syncShoppingEntriesToInventory(uid, unsynced);
+  await saveShoppingEntries(uid, synced);
+  return synced;
 }
 
 export async function deleteShoppingItem(
@@ -150,52 +235,4 @@ export async function deleteShoppingItem(
   if (!doc.exists)
     throw new InventoryRepoError(404, 'Alışveriş öğesi bulunamadı.');
   await ref.delete();
-}
-
-const DEFAULT_USER_SETTINGS: Omit<UserSettings, 'updatedAt'> = {
-  currency: 'TRY',
-  dateFormat: 'dd.MM.yyyy',
-  defaultUnit: 'adet',
-  compactMode: false,
-};
-
-export async function getUserSettings(uid: string): Promise<UserSettings> {
-  if (!isFirebaseConfigured()) {
-    return {
-      ...DEFAULT_USER_SETTINGS,
-      ...getUserVault(uid).settings,
-    };
-  }
-  const doc = await userCol(uid, 'settings').doc('preferences').get();
-  if (!doc.exists) {
-    return {
-      ...DEFAULT_USER_SETTINGS,
-      updatedAt: new Date().toISOString(),
-    };
-  }
-  const docData = doc.data() as Partial<UserSettings>;
-  return {
-    ...DEFAULT_USER_SETTINGS,
-    ...docData,
-    updatedAt: docData.updatedAt ?? new Date().toISOString(),
-  };
-}
-
-export async function updateUserSettings(
-  uid: string,
-  input: UserSettingsInput,
-): Promise<UserSettings> {
-  const current = await getUserSettings(uid);
-  const updated: UserSettings = omitUndefined<UserSettings>({
-    ...DEFAULT_USER_SETTINGS,
-    ...current,
-    ...omitUndefined(input),
-    updatedAt: new Date().toISOString(),
-  });
-  if (!isFirebaseConfigured()) {
-    getUserVault(uid).settings = updated;
-    return updated;
-  }
-  await userCol(uid, 'settings').doc('preferences').set(updated);
-  return updated;
 }

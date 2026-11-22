@@ -81,6 +81,14 @@ export const shoppingItemInputSchema = z
     qty: z.number().positive('Miktar 0 dan büyük olmalıdır.').max(100000),
     unit: z.string().trim().max(24).optional(),
     category: z.string().trim().max(60).optional(),
+    locationId: z.string().trim().nullable().optional(),
+    type: z.enum(['durable', 'consumable', 'component']).optional(),
+    minQuantity: z.number().min(0).max(1000000).optional(),
+    brand: z.string().trim().max(80).optional(),
+    model: z.string().trim().max(80).optional(),
+    barcode: z.string().trim().max(80).optional(),
+    currency: z.enum(['TRY', 'USD', 'EUR']).optional(),
+    expiresAt: z.string().trim().nullable().optional(),
     priority: shoppingPrioritySchema.optional(),
     estimatedPrice: z.number().min(0).max(10000000).optional(),
     store: z.string().trim().max(80).optional(),
@@ -101,6 +109,14 @@ export const shoppingBulkItemsInputSchema = z.object({
     .max(500, 'Tek seferde en fazla 500 ürün eklenebilir.'),
 });
 
+export const shoppingBulkDoneInputSchema = z.object({
+  ids: z
+    .array(z.string().trim().min(1))
+    .min(1, 'En az bir ürün seçilmelidir.')
+    .max(500, 'Tek seferde en fazla 500 ürün güncellenebilir.'),
+  done: z.boolean(),
+});
+
 export const shoppingItemPatchSchema = z.object({
   listId: z.string().trim().optional(),
   itemId: z.string().trim().nullable().optional(),
@@ -112,6 +128,14 @@ export const shoppingItemPatchSchema = z.object({
     .optional(),
   unit: z.string().trim().max(24).optional(),
   category: z.string().trim().max(60).optional(),
+  locationId: z.string().trim().nullable().optional(),
+  type: z.enum(['durable', 'consumable', 'component']).optional(),
+  minQuantity: z.number().min(0).max(1000000).nullable().optional(),
+  brand: z.string().trim().max(80).optional(),
+  model: z.string().trim().max(80).optional(),
+  barcode: z.string().trim().max(80).optional(),
+  currency: z.enum(['TRY', 'USD', 'EUR']).optional(),
+  expiresAt: z.string().trim().nullable().optional(),
   priority: shoppingPrioritySchema.optional(),
   estimatedPrice: z.number().min(0).max(10000000).nullable().optional(),
   store: z.string().trim().max(80).optional(),
@@ -132,6 +156,9 @@ export type StockMovementInput = z.infer<typeof stockMovementInputSchema>;
 export type ShoppingListInput = z.infer<typeof shoppingListInputSchema>;
 export type ShoppingListPatchInput = z.infer<typeof shoppingListPatchSchema>;
 export type ShoppingItemInput = z.infer<typeof shoppingItemInputSchema>;
-export type ShoppingBulkItemsInput = z.infer<typeof shoppingBulkItemsInputSchema>;
+export type ShoppingBulkItemsInput = z.infer<
+  typeof shoppingBulkItemsInputSchema
+>;
+export type ShoppingBulkDoneInput = z.infer<typeof shoppingBulkDoneInputSchema>;
 export type ShoppingItemPatchInput = z.infer<typeof shoppingItemPatchSchema>;
 export type UserSettingsInput = z.infer<typeof userSettingsInputSchema>;

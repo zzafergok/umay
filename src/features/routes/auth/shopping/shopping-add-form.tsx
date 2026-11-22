@@ -12,30 +12,30 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/core/card';
-import {
-  AmountField,
-  Form,
-  SelectField,
-  SubmitButton,
-  TextField,
-} from '@/components/forms';
+import { Form, SelectField, SubmitButton, TextField } from '@/components/forms';
 import type { ShoppingItemInput } from '@/features/inventory/schemas';
-import type { Category, CurrencyCode, Item } from '@/features/inventory/types';
-import { SHOPPING_PRIORITY_OPTIONS } from './constants';
+import type {
+  Category,
+  CurrencyCode,
+  Item,
+  Location,
+} from '@/features/inventory/types';
 import {
   buildLinkedItemOptions,
   buildShoppingCategoryOptions,
+  buildShoppingLocationOptions,
   buildShoppingUnitOptions,
-  getLinkedItemFieldMeta,
   SHOPPING_FORM_DEFAULT_VALUES,
   shoppingFormSchema,
   type ShoppingFormValues,
 } from './shopping-form-schema';
+import { ShoppingProductFields } from './shopping-product-fields';
 import { formatShoppingUnit, parseOptionalPrice } from './shopping-utils';
 
 interface ShoppingAddFormProps {
   items: Item[];
   categories: Category[];
+  locations: Location[];
   currency: CurrencyCode;
   onAdd: (input: ShoppingItemInput) => Promise<boolean>;
   embedded?: boolean;
@@ -44,6 +44,7 @@ interface ShoppingAddFormProps {
 export function ShoppingAddForm({
   items,
   categories,
+  locations,
   currency,
   onAdd,
   embedded = false,
@@ -71,6 +72,10 @@ export function ShoppingAddForm({
   const categoryOptions = React.useMemo(
     () => buildShoppingCategoryOptions(categories),
     [categories],
+  );
+  const locationOptions = React.useMemo(
+    () => buildShoppingLocationOptions(locations),
+    [locations],
   );
   const itemOptions = React.useMemo(
     () => buildLinkedItemOptions(items),
@@ -100,9 +105,17 @@ export function ShoppingAddForm({
       qty: values.qty,
       unit: formatShoppingUnit(values.unit),
       category: values.category?.trim() || undefined,
+      locationId: values.locationId || undefined,
+      type: values.type,
+      minQuantity: parseOptionalPrice(values.minQuantity),
+      brand: values.brand?.trim() || undefined,
+      model: values.model?.trim() || undefined,
+      barcode: values.barcode?.trim() || undefined,
+      currency,
       priority: values.priority,
       estimatedPrice: parseOptionalPrice(values.estimatedPrice),
       store: values.store?.trim() || undefined,
+      expiresAt: values.expiresAt || undefined,
       note: values.note?.trim() || undefined,
       source: 'manual',
       done: false,
@@ -141,36 +154,12 @@ export function ShoppingAddForm({
       </div>
 
       {showDetails && (
-        <div className="grid grid-cols-1 gap-3 border-t border-border pt-3 sm:grid-cols-2">
-          <SelectField
-            name="priority"
-            label="Öncelik"
-            options={SHOPPING_PRIORITY_OPTIONS}
-          />
-          <SelectField
-            name="category"
-            label="Kategori"
-            allowNone
-            noneLabel="Kategori seçilmedi"
-            placeholder="Kategori seçin"
-            options={categoryOptions}
-          />
-          <SelectField
-            name="itemId"
-            label="Ev Stoğu ile Eşleştir"
-            options={itemOptions}
-            {...getLinkedItemFieldMeta(itemOptions.length > 0)}
-          />
-          <TextField
-            name="store"
-            label="Mağaza / Market"
-            placeholder="Örn. Migros, BİM, Eczane"
-          />
-          <AmountField
-            name="estimatedPrice"
-            label={`Tahmini Birim Fiyat (${currency})`}
-            placeholder="0,00"
-            inputClassName="font-medium tabular-nums"
+        <div className="space-y-3 border-t border-border pt-3">
+          <ShoppingProductFields
+            currency={currency}
+            categoryOptions={categoryOptions}
+            locationOptions={locationOptions}
+            itemOptions={itemOptions}
           />
           <TextField
             name="note"
@@ -209,9 +198,7 @@ export function ShoppingAddForm({
     </Form>
   );
 
-  if (embedded) {
-    return formNode;
-  }
+  if (embedded) return formNode;
 
   return (
     <Card>

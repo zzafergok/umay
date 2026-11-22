@@ -118,6 +118,16 @@ export const inventoryService = {
     ),
   updateShopping: (id: string, data: ShoppingItemPatchInput) =>
     apiClient.patch<ShoppingListItem>(`/inventory/shopping/${id}`, data),
+  bulkUpdateShoppingDone: (ids: string[], done: boolean) =>
+    apiClient.patch<{ items: ShoppingListItem[]; count: number }>(
+      '/inventory/shopping',
+      { ids, done },
+    ),
+  syncDoneShoppingToItems: (listId?: string) =>
+    apiClient.post<{ items: ShoppingListItem[]; count: number }>(
+      '/inventory/shopping/sync',
+      listId ? { listId } : {},
+    ),
   deleteShopping: (id: string) =>
     apiClient.delete<{ ok: boolean }>(`/inventory/shopping/${id}`),
 

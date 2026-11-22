@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
+  shoppingBulkDoneInputSchema,
   shoppingBulkItemsInputSchema,
   shoppingItemInputSchema,
 } from '@/features/inventory/schemas';
@@ -8,6 +9,7 @@ import {
   createShoppingItem,
   createShoppingItemsBulk,
   listShoppingItems,
+  updateShoppingItemsBulk,
 } from '@/lib/inventory/repo';
 
 function isBulkPayload(body: unknown): body is { items: unknown } {
@@ -50,6 +52,24 @@ export async function POST(request: NextRequest) {
     const parsed = shoppingItemInputSchema.parse(body);
     const created = await createShoppingItem(auth.uid, parsed);
     return NextResponse.json(created, { status: 201 });
+  } catch (error) {
+    return handleRouteError(error);
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  const auth = await requireAuth(request);
+  if (auth instanceof NextResponse) return auth;
+
+  try {
+    const body: unknown = await request.json();
+    const parsed = shoppingBulkDoneInputSchema.parse(body);
+    const updated = await updateShoppingItemsBulk(
+      auth.uid,
+      parsed.ids,
+      parsed.done,
+    );
+    return NextResponse.json({ items: updated, count: updated.length });
   } catch (error) {
     return handleRouteError(error);
   }
