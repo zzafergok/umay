@@ -32,9 +32,9 @@ export function ItemTechnicalTab({
   return (
     <div className="space-y-2.5 sm:space-y-4">
       {activeCategory && customFields.length > 0 ? (
-        <div className="bg-surface-sunken/30 space-y-2.5 rounded-md border border-border p-2.5 sm:space-y-3 sm:p-3">
+        <div className="space-y-2.5 rounded-md border border-border bg-surface-sunken/30 p-2.5 sm:space-y-3 sm:p-3">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-text-muted truncate text-xs font-semibold uppercase tracking-wider">
+            <p className="truncate text-xs font-semibold uppercase tracking-wider text-text-muted">
               {activeCategory.name} Özel Alanları
             </p>
             <Badge variant="secondary" className="shrink-0 text-[11px]">
@@ -54,7 +54,7 @@ export function ItemTechnicalTab({
           </div>
         </div>
       ) : (
-        <p className="text-text-muted rounded-md border border-dashed border-border p-2.5 text-xs sm:p-3">
+        <p className="rounded-md border border-dashed border-border p-2.5 text-xs text-text-muted sm:p-3">
           Seçili kategoride henüz özel alan tanımlı değil. Kategoriler
           sayfasından bu kategoriye özel inputlar ekleyebilirsiniz.
         </p>

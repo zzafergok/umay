@@ -45,7 +45,7 @@ export function AmountField({
       <div className="flex min-h-4 min-w-0 items-center gap-1">
         <Label
           htmlFor={name}
-          className="text-text-muted truncate font-mono text-2xs uppercase tracking-wider"
+          className="truncate font-mono text-2xs uppercase tracking-wider text-text-muted"
         >
           {label} {required && <span className="text-umay-blue">*</span>}
         </Label>

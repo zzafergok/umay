@@ -56,7 +56,7 @@ export function LocationsScreen() {
   const sortedLocations = React.useMemo(
     () =>
       locations.toSorted((a, b) =>
-        a.path.join(' > ').localeCompare(b.path.join(' > '), 'tr'),
+        a.path.join('>').localeCompare(b.path.join('>'), 'tr'),
       ),
     [locations],
   );
@@ -66,7 +66,7 @@ export function LocationsScreen() {
       { value: '__none__', label: 'Kök Konum (Üst Yok)' },
       ...sortedLocations.map((loc) => ({
         value: loc.id,
-        label: loc.path.join(' > '),
+        label: loc.path.join('>'),
       })),
     ],
     [sortedLocations],
@@ -162,11 +162,11 @@ export function LocationsScreen() {
                 <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
                   <div className="min-w-0 flex-1 space-y-1">
                     <CardTitle className="flex items-center gap-2 text-base">
-                      <MapPin className="text-umay-blue h-4 w-4 shrink-0" />
+                      <MapPin className="h-4 w-4 shrink-0 text-umay-blue" />
                       <span className="truncate">{loc.name}</span>
                     </CardTitle>
                     <p className="break-words text-xs text-muted-foreground">
-                      {loc.path.join(' > ')}
+                      {loc.path.join('>')}
                     </p>
                   </div>
                   <Badge variant="outline" className="shrink-0 tabular-nums">
@@ -180,7 +180,7 @@ export function LocationsScreen() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-danger/80 hover:bg-danger-subtle hover:text-danger h-10 w-10 shrink-0 sm:h-8 sm:w-8"
+                    className="h-10 w-10 shrink-0 text-danger/80 hover:bg-danger-subtle hover:text-danger sm:h-8 sm:w-8"
                     aria-label={`${loc.name} konumunu sil`}
                     onClick={() => setDeleteTarget(loc)}
                   >
@@ -213,7 +213,7 @@ export function LocationsScreen() {
         details={
           deleteTarget
             ? [
-                { label: 'Konum Yolu', value: deleteTarget.path.join(' > ') },
+                { label: 'Konum Yolu', value: deleteTarget.path.join('>') },
                 { label: 'Bağlı Ürün', value: `${deleteItemCount} ürün` },
               ]
             : undefined

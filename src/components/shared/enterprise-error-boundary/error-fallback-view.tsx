@@ -140,14 +140,15 @@ export function ErrorFallbackView({
 
         <div className="border-t border-gunmetal/60 pt-2">
           <p className="text-xs text-ash/70">
-            Sorun devam ederse{' '}
+            Sorun devam ederse{''}
             <a
               href="mailto:support@umay.dev"
               className="inline-flex items-center text-umay-blue underline hover:text-umay-blue/80 hover:no-underline"
             >
               <Mail className="mr-1 inline h-3 w-3" />
               support@umay.dev
-            </a>{' '}
+            </a>
+            {''}
             adresinden iletişime geçin.
           </p>
         </div>

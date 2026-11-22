@@ -75,15 +75,15 @@ export function BrandMark({
 }) {
   return (
     <Link href="/" className="flex items-center gap-2.5">
-      <span className="bg-surface-sunken flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-surface-sunken">
         <UmayMark className="h-5 w-5" />
       </span>
       {!compact && (
         <span>
-          <span className="font-heading text-title text-text block font-bold tracking-tight">
+          <span className="block font-heading text-title font-bold tracking-tight text-text">
             {copy.title}
           </span>
-          <span className="text-text-muted block text-caption">
+          <span className="block text-caption text-text-muted">
             {copy.subtitle}
           </span>
         </span>
@@ -117,7 +117,7 @@ function ShellNav({
           variant="ghost"
           size="sm"
           className={cn(
-            'text-body-sm text-text-muted hover:text-text font-medium',
+            'text-body-sm font-medium text-text-muted hover:text-text',
             direction === 'column' && 'justify-start',
           )}
         >
@@ -145,8 +145,8 @@ export async function PublicShell({ children }: { children: React.ReactNode }) {
   const copy = getShellCopy(locale);
 
   return (
-    <div className="bg-bg text-text flex min-h-screen flex-col">
-      <header className="bg-surface/95 sticky top-0 z-40 border-b border-border backdrop-blur-md">
+    <div className="flex min-h-screen flex-col bg-bg text-text">
+      <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-16 lg:gap-4 lg:px-8">
           <BrandMark copy={copy.brand} />
           <ShellNav

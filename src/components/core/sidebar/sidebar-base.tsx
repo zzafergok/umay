@@ -36,7 +36,7 @@ export const Sidebar = React.forwardRef<
           data-slot="sidebar"
           data-sidebar="sidebar"
           className={cn(
-            'bg-surface text-text flex h-full w-[var(--sidebar-width)] flex-col border-r border-border',
+            'flex h-full w-[var(--sidebar-width)] flex-col border-r border-border bg-surface text-text',
             className,
           )}
           ref={ref}
@@ -55,7 +55,7 @@ export const Sidebar = React.forwardRef<
             data-sidebar="sidebar"
             data-slot="sidebar"
             data-mobile="true"
-            className="bg-surface text-text w-[var(--sidebar-width)] border-border p-0 [&>button]:hidden"
+            className="w-[var(--sidebar-width)] border-border bg-surface p-0 text-text [&>button]:hidden"
             style={
               {
                 '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
@@ -72,7 +72,7 @@ export const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="text-text group peer hidden md:block"
+        className="group peer hidden text-text md:block"
         data-state={state}
         data-collapsible={state === 'collapsed' ? collapsible : ''}
         data-variant={variant}
@@ -107,9 +107,9 @@ export const Sidebar = React.forwardRef<
           <div
             data-sidebar="sidebar"
             className={cn(
-              'bg-surface flex h-full w-full flex-col',
+              'flex h-full w-full flex-col bg-surface',
               variant === 'floating' &&
-                'shadow-float dark:border-border-strong rounded-lg border border-border',
+                'rounded-lg border border-border shadow-float dark:border-border-strong',
               variant === 'inset' && 'rounded-lg border border-border',
             )}
           >
@@ -136,7 +136,7 @@ export const SidebarTrigger = React.forwardRef<
       variant="ghost"
       size="icon"
       className={cn(
-        'text-text-muted hover:text-text size-8 rounded-md',
+        'size-8 rounded-md text-text-muted hover:text-text',
         className,
       )}
       onClick={(event) => {
@@ -168,11 +168,11 @@ export const SidebarRail = React.forwardRef<
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
-        'hover:after:bg-border-strong absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] sm:flex',
+        'absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] hover:after:bg-border-strong sm:flex',
         'group-data-[side=left]:-right-4 group-data-[side=right]:left-0 ltr:-translate-x-1/2 rtl:-translate-x-1/2',
         '[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize',
         '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
-        'group-data-[collapsible=offcanvas]:hover:bg-surface-sunken group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full',
+        'group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-surface-sunken',
         '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2',
         '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
         className,
@@ -192,7 +192,7 @@ export const SidebarInset = React.forwardRef<
       ref={ref}
       data-slot="sidebar-inset"
       className={cn(
-        'bg-bg text-text relative flex min-h-svh flex-1 flex-col',
+        'relative flex min-h-svh flex-1 flex-col bg-bg text-text',
         'peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-lg md:peer-data-[variant=inset]:border md:peer-data-[variant=inset]:border-border',
         className,
       )}

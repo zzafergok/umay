@@ -19,7 +19,7 @@ export function FaqSection({
     <section id="sss" className="scroll-mt-20 space-y-6">
       <div className="mx-auto max-w-2xl space-y-2 text-center">
         <Badge variant="outline">{faqSection.badge}</Badge>
-        <h2 className="font-heading text-title sm:text-display text-text">
+        <h2 className="font-heading text-title text-text sm:text-display">
           {faqSection.title}
         </h2>
         <p className="text-body-sm text-text-muted">{faqSection.description}</p>

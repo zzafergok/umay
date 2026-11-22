@@ -24,12 +24,12 @@ export function DeleteAnimationStage({
 }: DeleteAnimationStageProps) {
   return (
     <div
-      className="bg-surface-raised/95 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 p-6 text-center backdrop-blur-[2px]"
+      className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-surface-raised/95 p-6 text-center backdrop-blur-[2px]"
       role="status"
       aria-live="polite"
       aria-label={`${itemName} ${dialogCopy.deleting}`}
     >
-      <div className="border-danger/20 bg-danger-subtle text-danger ring-danger/10 flex size-12 items-center justify-center rounded-2xl border ring-4">
+      <div className="flex size-12 items-center justify-center rounded-2xl border border-danger/20 bg-danger-subtle text-danger">
         {phase === 'waiting' ? (
           <Loader2
             className="size-5 animate-spin motion-reduce:animate-none"
@@ -41,13 +41,13 @@ export function DeleteAnimationStage({
       </div>
 
       <div className="max-w-sm space-y-1">
-        <p className="text-text-subtle font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-text-subtle">
           {upperEntityLabel} · {dialogCopy.deletingStatus}
         </p>
-        <p className="text-body-sm text-text break-words font-semibold">
+        <p className="break-words text-body-sm font-semibold text-text">
           {itemName}
         </p>
-        <p className="text-text-muted text-caption">
+        <p className="text-caption text-text-muted">
           {phase === 'waiting'
             ? dialogCopy.completingText
             : dialogCopy.movingToTrashText}

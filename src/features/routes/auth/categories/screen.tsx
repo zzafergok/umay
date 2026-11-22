@@ -82,7 +82,7 @@ export function CategoriesScreen() {
     try {
       await inventoryService.createCategory(preset.data);
       await qc.invalidateQueries({ queryKey: ['inventory', 'categories'] });
-      toast.success(`"${preset.data.name}" kategorisi eklendi.`);
+      toast.success(`"${preset.data.name}"kategorisi eklendi.`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Kategori eklenemedi.');
     }
@@ -115,7 +115,7 @@ export function CategoriesScreen() {
       {categories.length > 0 ? (
         <InputGroup className="w-full max-w-md">
           <InputGroupAddon align="inline-start">
-            <Search className="text-text-muted h-4 w-4" />
+            <Search className="h-4 w-4 text-text-muted" />
           </InputGroupAddon>
           <InputGroupInput
             value={search}

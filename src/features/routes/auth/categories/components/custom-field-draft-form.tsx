@@ -82,7 +82,12 @@ export function CustomFieldDraftForm({
             : 'Yeni Özel Alan Ekle'}
         </p>
         {editingIndex !== null ? (
-          <Button type="button" variant="ghost" size="xs" onClick={onCancelEdit}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="xs"
+            onClick={onCancelEdit}
+          >
             <X className="mr-1 h-3 w-3" />
             Vazgeç
           </Button>
@@ -123,7 +128,11 @@ export function CustomFieldDraftForm({
             </SelectTrigger>
             <SelectContent>
               {CUSTOM_FIELD_TYPE_OPTIONS.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                <SelectItem
+                  key={opt.value}
+                  value={opt.value}
+                  className="text-xs"
+                >
                   {opt.label}
                 </SelectItem>
               ))}
@@ -152,7 +161,9 @@ export function CustomFieldDraftForm({
       </div>
 
       {selectedTypeMeta ? (
-        <p className="text-[11px] text-text-muted">{selectedTypeMeta.description}</p>
+        <p className="text-[11px] text-text-muted">
+          {selectedTypeMeta.description}
+        </p>
       ) : null}
 
       <CustomFieldTypeOptions draft={draft} onChange={onChange} />
@@ -183,7 +194,10 @@ export function CustomFieldDraftForm({
                 onChange((prev) => ({ ...prev, required: val }))
               }
             />
-            <Label htmlFor="cf-draft-required" className="cursor-pointer text-xs">
+            <Label
+              htmlFor="cf-draft-required"
+              className="cursor-pointer text-xs"
+            >
               Zorunlu alan
             </Label>
           </div>
@@ -196,7 +210,10 @@ export function CustomFieldDraftForm({
                 onChange((prev) => ({ ...prev, showInSummary: val }))
               }
             />
-            <Label htmlFor="cf-draft-summary" className="cursor-pointer text-xs">
+            <Label
+              htmlFor="cf-draft-summary"
+              className="cursor-pointer text-xs"
+            >
               Ürün kartında göster
             </Label>
           </div>
@@ -206,7 +223,12 @@ export function CustomFieldDraftForm({
       {error ? <p className="text-xs text-danger">{error}</p> : null}
 
       <div className="flex justify-end">
-        <Button type="button" variant="secondary" size="sm" onClick={handleSave}>
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={handleSave}
+        >
           {editingIndex !== null ? (
             <>
               <Check className="mr-1.5 h-3.5 w-3.5" />

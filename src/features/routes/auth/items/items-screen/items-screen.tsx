@@ -206,7 +206,7 @@ export function ItemsScreen() {
                 },
                 {
                   label: 'Konum',
-                  value: deleteLocation?.path.join(' > ') ?? 'Konum yok',
+                  value: deleteLocation?.path.join('>') ?? 'Konum yok',
                 },
                 { label: 'Kategori', value: deleteCategory?.name ?? 'Genel' },
               ]

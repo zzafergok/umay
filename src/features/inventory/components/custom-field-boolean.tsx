@@ -45,7 +45,10 @@ export function CustomFieldBoolean({
         ) : null}
       </div>
       <div className="flex shrink-0 items-center gap-2">
-        <Badge variant={checked ? 'default' : 'outline'} className="text-[11px]">
+        <Badge
+          variant={checked ? 'default' : 'outline'}
+          className="text-[11px]"
+        >
           {checked ? 'Evet' : 'Hayır'}
         </Badge>
         <Switch

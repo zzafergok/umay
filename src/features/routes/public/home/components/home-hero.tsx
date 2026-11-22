@@ -22,17 +22,17 @@ export function HomeHero({ hero, heroPreview }: HomeHeroProps) {
     >
       <div className="space-y-6 lg:col-span-6 lg:pt-2">
         <div className="flex items-center gap-3">
-          <span className="bg-surface-sunken flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-surface-sunken">
             <UmayMark className="h-5 w-5" />
           </span>
           <Badge variant="outline">{hero.badge}</Badge>
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-text text-3xl font-semibold tracking-tight sm:text-4xl lg:text-[2.65rem] lg:leading-[1.12]">
+          <h1 className="text-3xl font-semibold tracking-tight text-text sm:text-4xl lg:text-[2.65rem] lg:leading-[1.12]">
             {hero.title}
           </h1>
-          <p className="text-text-muted max-w-xl text-sm leading-relaxed sm:text-base">
+          <p className="max-w-xl text-sm leading-relaxed text-text-muted sm:text-base">
             {hero.description}
           </p>
         </div>
@@ -51,7 +51,7 @@ export function HomeHero({ hero, heroPreview }: HomeHeroProps) {
           >
             <Link href="#ekranlar">
               <LayoutDashboard
-                className="text-text-muted mr-2 h-4 w-4"
+                className="mr-2 h-4 w-4 text-text-muted"
                 aria-hidden="true"
               />
               {hero.exploreAction}
@@ -63,7 +63,7 @@ export function HomeHero({ hero, heroPreview }: HomeHeroProps) {
           {hero.highlights.map((item) => (
             <li
               key={item}
-              className="text-text-muted flex items-center gap-2 text-xs sm:text-sm"
+              className="flex items-center gap-2 text-xs text-text-muted sm:text-sm"
             >
               <CheckCircle2
                 className="h-4 w-4 shrink-0 text-accent"

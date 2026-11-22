@@ -33,7 +33,10 @@ function describeTotals(check?: ReceiptTotalsCheck): {
       detail: `Fiş ara toplamıyla fark: ${sign}${check.difference.toFixed(2)}`,
     };
   }
-  return { state: 'done', detail: 'Fişte ara toplam bulunamadı, doğrulanamadı' };
+  return {
+    state: 'done',
+    detail: 'Fişte ara toplam bulunamadı, doğrulanamadı',
+  };
 }
 
 function buildSteps(
@@ -71,7 +74,7 @@ function StepIcon({ state }: { state: StepState }) {
   if (state === 'active') {
     return (
       <Loader2
-        className={cn(STEP_ICON_CLASS, 'text-accent animate-spin')}
+        className={cn(STEP_ICON_CLASS, 'animate-spin text-accent')}
         aria-hidden
       />
     );
@@ -101,12 +104,12 @@ function ReceiptProgressBody({ stage, totalsCheck }: ReceiptProgressBodyProps) {
 
   return (
     <div
-      className="border-border/70 space-y-2.5 rounded-lg border p-3"
+      className="space-y-2.5 rounded-lg border border-border/70 p-3"
       aria-live="polite"
     >
       <div className="flex items-center justify-between gap-2 text-caption">
         <span className="font-medium">Fiş analiz ediliyor</span>
-        <span className="text-text-muted font-mono tabular-nums">
+        <span className="font-mono tabular-nums text-text-muted">
           %{percent} · {Math.floor(elapsedSec)} sn
         </span>
       </div>
@@ -125,7 +128,7 @@ function ReceiptProgressBody({ stage, totalsCheck }: ReceiptProgressBodyProps) {
             >
               {step.label}
               {step.detail && (
-                <span className="text-text-muted block font-normal">
+                <span className="block font-normal text-text-muted">
                   {step.detail}
                 </span>
               )}
@@ -134,7 +137,7 @@ function ReceiptProgressBody({ stage, totalsCheck }: ReceiptProgressBodyProps) {
         ))}
       </ol>
       {stage === 'reading' && (
-        <p className="text-text-muted text-caption">
+        <p className="text-caption text-text-muted">
           Uzun fişlerde model ve parça sayısına göre genellikle 20–90 sn sürer.
         </p>
       )}

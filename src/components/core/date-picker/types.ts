@@ -74,10 +74,10 @@ export interface ModernDatePickerProps {
 }
 
 export interface MonthYearPickerProps {
-  value?: string; // Format: "YYYY-MM"
+  value?: string; // Format:"YYYY-MM"
   error?: boolean;
-  minDate?: string; // Format: "YYYY-MM"
-  maxDate?: string; // Format: "YYYY-MM"
+  minDate?: string; // Format:"YYYY-MM"
+  maxDate?: string; // Format:"YYYY-MM"
   disabled?: boolean;
   className?: string;
   clearable?: boolean;

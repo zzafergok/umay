@@ -35,7 +35,7 @@ export function TagsInput({ tags, onChange }: TagsInputProps) {
     <div className="space-y-2">
       <Label
         htmlFor="item-tags-input"
-        className="text-text-muted text-xs font-medium uppercase tracking-wider"
+        className="text-xs font-medium uppercase tracking-wider text-text-muted"
       >
         Etiketler (Opsiyonel)
       </Label>
@@ -73,7 +73,7 @@ export function TagsInput({ tags, onChange }: TagsInputProps) {
               variant="secondary"
               className="gap-1.5 py-1 pl-2.5 pr-1 text-xs"
             >
-              <Tag className="text-text-muted h-3 w-3" />
+              <Tag className="h-3 w-3 text-text-muted" />
               <span>{tag}</span>
               <Button
                 type="button"
@@ -81,7 +81,7 @@ export function TagsInput({ tags, onChange }: TagsInputProps) {
                 size="icon-xs"
                 onClick={() => onChange(tags.filter((t) => t !== tag))}
                 aria-label={`${tag} etiketini kaldır`}
-                className="hover:bg-danger/15 hover:text-danger h-7 w-7 rounded-full p-0 sm:h-5 sm:w-5"
+                className="h-7 w-7 rounded-full p-0 hover:bg-danger/15 hover:text-danger sm:h-5 sm:w-5"
               >
                 <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
               </Button>

@@ -57,12 +57,12 @@ export function CategoryAppearancePanel({
                 onClick={() => onColorChange(opt.value)}
                 className={cn(
                   'justify-start gap-2 px-2.5 text-xs',
-                  active && 'border-accent ring-1 ring-accent',
+                  active && 'border-accent',
                 )}
               >
                 <span
                   aria-hidden="true"
-                  className="border-border-strong h-3.5 w-3.5 shrink-0 rounded-full border"
+                  className="h-3.5 w-3.5 shrink-0 rounded-full border border-border-strong"
                   style={{ backgroundColor: opt.swatchColor }}
                 />
                 <span className="truncate">{opt.label}</span>
@@ -92,7 +92,7 @@ export function CategoryAppearancePanel({
                 onClick={() => onIconChange(opt.value)}
                 className={cn(
                   'min-h-[40px] justify-start gap-1.5 px-2.5 text-xs sm:min-h-0 sm:px-2',
-                  active && 'border-accent ring-1 ring-accent',
+                  active && 'border-accent',
                 )}
               >
                 <Icon

@@ -35,21 +35,21 @@ export function SidebarBrand({
           collapsed ? 'justify-center' : 'flex-1 gap-2.5'
         }`}
       >
-        <span className="bg-surface-sunken flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-surface-sunken">
           <UmayMark className="h-5 w-5" />
         </span>
         {!collapsed && (
           <span className="min-w-0 flex-1">
-            <span className="font-heading text-title text-text flex items-center gap-2 font-bold tracking-tight">
+            <span className="flex items-center gap-2 font-heading text-title font-bold tracking-tight text-text">
               <span className="truncate">{brand.title}</span>
               {planLabel && (
-                <span className="bg-surface-sunken text-text-muted shrink-0 rounded-sm border border-border px-1.5 py-0.5 text-caption">
+                <span className="shrink-0 rounded-sm border border-border bg-surface-sunken px-1.5 py-0.5 text-caption text-text-muted">
                   {planLabel}
                 </span>
               )}
             </span>
             <span
-              className="text-text-muted block truncate text-caption"
+              className="block truncate text-caption text-text-muted"
               title={brand.subtitle}
             >
               {brand.subtitle}
@@ -62,7 +62,7 @@ export function SidebarBrand({
         variant="ghost"
         size="icon-sm"
         aria-label="Menüyü kapat"
-        className="text-text-muted hover:text-text ml-auto shrink-0 md:hidden"
+        className="ml-auto shrink-0 text-text-muted hover:text-text md:hidden"
       >
         <X className="h-5 w-5" />
       </Button>

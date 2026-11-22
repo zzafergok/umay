@@ -73,7 +73,7 @@ export function DeleteAccountDialog({
         className="max-h-[92dvh] gap-0 overflow-y-auto overflow-x-hidden border-border bg-surface-raised p-0 sm:max-w-[460px] sm:p-0"
       >
         <DialogHeader className="flex-row items-start gap-3 space-y-0 px-5 pb-4 pr-11 pt-5 text-left">
-          <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-danger/20 bg-danger-subtle text-danger ring-4 ring-danger/[0.07]">
+          <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-danger/20 bg-danger-subtle text-danger">
             <AlertTriangle className="size-4" aria-hidden="true" />
           </div>
           <div className="min-w-0 flex-1 space-y-1">

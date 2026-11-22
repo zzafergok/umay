@@ -24,7 +24,7 @@ export function ItemStockPanel({
   const fillWidth = item.quantity > 0 ? Math.max(8, stock.percent) : 0;
 
   return (
-    <div className="bg-surface-sunken/55 space-y-1.5 rounded-md border border-border/80 px-2.5 py-2">
+    <div className="space-y-1.5 rounded-md border border-border/80 bg-surface-sunken/55 px-2.5 py-2">
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
           <div className="flex items-baseline gap-1">
@@ -36,12 +36,12 @@ export function ItemStockPanel({
             >
               {item.quantity}
             </span>
-            <span className="text-text-muted text-xs font-medium">
+            <span className="text-xs font-medium text-text-muted">
               {item.unit}
             </span>
           </div>
           {stock.thresholdLabel ? (
-            <div className="text-text-muted flex items-center gap-1 text-[11px] tabular-nums">
+            <div className="flex items-center gap-1 text-[11px] tabular-nums text-text-muted">
               <span>· {stock.thresholdLabel}</span>
               {!(item.targetQuantity && item.targetQuantity > 0) &&
                 item.minQuantity > 0 && (
@@ -55,7 +55,7 @@ export function ItemStockPanel({
         </div>
 
         <div
-          className="bg-surface inline-flex shrink-0 items-center rounded border border-border p-0.5"
+          className="inline-flex shrink-0 items-center rounded border border-border bg-surface p-0.5"
           role="group"
           aria-label={`${item.name} hızlı stok kontrolü`}
         >

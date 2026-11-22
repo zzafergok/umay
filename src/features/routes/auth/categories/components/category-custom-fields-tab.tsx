@@ -106,7 +106,7 @@ export function CategoryCustomFieldsTab({
           </p>
         </div>
         {fields.length === 0 ? (
-          <p className="text-text-muted rounded-md border border-dashed border-border p-4 text-center text-xs">
+          <p className="rounded-md border border-dashed border-border p-4 text-center text-xs text-text-muted">
             Henüz özel alan yok. Yukarıdan metin, sayı+birim, seçim listesi,
             tarih, anahtar veya URL alanı ekleyebilirsiniz.
           </p>

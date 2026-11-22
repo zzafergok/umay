@@ -37,7 +37,7 @@ export const TabsList = React.forwardRef<
     data-slot="tabs-list"
     data-variant={variant}
     className={cn(
-      'group/tabs-list bg-surface-sunken text-text-muted inline-flex h-10 w-fit min-w-0 max-w-full items-center justify-center rounded-md border border-border p-1 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col',
+      'group/tabs-list inline-flex h-10 w-fit min-w-0 max-w-full items-center justify-center rounded-md border border-border bg-surface-sunken p-1 text-text-muted group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col',
       variant === 'line' &&
         'gap-1 rounded-md border-0 border-b border-border bg-transparent p-0 group-data-[orientation=vertical]/tabs:border-b-0 group-data-[orientation=vertical]/tabs:border-r group-data-[orientation=vertical]/tabs:border-border',
       className,
@@ -55,12 +55,12 @@ export const TabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="tabs-trigger"
     className={cn(
-      'text-body-sm text-text-muted inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-sm px-3 py-1.5 font-medium outline-none transition-all',
-      'hover:text-text focus-visible:ring-offset-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
+      'inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-sm px-3 py-1.5 text-body-sm font-medium text-text-muted outline-none transition-all',
+      'hover:text-text focus-visible:outline-none',
       'disabled:pointer-events-none disabled:opacity-50',
       '[&_svg:not([class*="size-"])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
       'group-data-[variant=default]/tabs-list:data-[state=active]:bg-surface group-data-[variant=default]/tabs-list:data-[state=active]:text-text',
-      'group-data-[variant=line]/tabs-list:data-[state=active]:text-text group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:rounded-l-sm group-data-[variant=line]/tabs-list:rounded-t-sm group-data-[variant=line]/tabs-list:border-b-2 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:border-b-0 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:border-r-2 group-data-[variant=line]/tabs-list:border-transparent group-data-[variant=line]/tabs-list:px-2.5 group-data-[variant=line]/tabs-list:py-1.5 group-data-[variant=line]/tabs-list:data-[state=active]:border-accent',
+      'group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:rounded-l-sm group-data-[variant=line]/tabs-list:rounded-t-sm group-data-[variant=line]/tabs-list:border-b-2 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:border-b-0 group-data-[variant=line]/tabs-list:group-data-[orientation=vertical]/tabs:border-r-2 group-data-[variant=line]/tabs-list:border-transparent group-data-[variant=line]/tabs-list:px-2.5 group-data-[variant=line]/tabs-list:py-1.5 group-data-[variant=line]/tabs-list:data-[state=active]:border-accent group-data-[variant=line]/tabs-list:data-[state=active]:text-text',
       className,
     )}
     {...props}
@@ -76,7 +76,7 @@ export const TabsContent = React.forwardRef<
     ref={ref}
     data-slot="tabs-content"
     className={cn(
-      'text-body-sm text-text focus-visible:ring-offset-bg flex-1 outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
+      'flex-1 text-body-sm text-text outline-none focus-visible:outline-none',
       className,
     )}
     {...props}

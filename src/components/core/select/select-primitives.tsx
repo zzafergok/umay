@@ -40,9 +40,9 @@ export const SelectTrigger = React.forwardRef<
     data-slot="select-trigger"
     className={cn(
       'flex h-10 min-h-[40px] w-full min-w-0 items-center justify-between gap-2 rounded-md border border-border bg-surface-sunken px-3 py-1.5 text-body-sm text-text outline-none transition-colors duration-150 md:h-9 md:min-h-[36px]',
-      'placeholder:text-text-subtle focus:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
+      'placeholder:text-text-subtle focus:border-accent',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      'aria-invalid:border-danger aria-invalid:focus-visible:ring-danger',
+      'aria-invalid:border-danger',
       '[&>span]:min-w-0 [&>span]:flex-1 [&>span]:truncate [&>span]:text-left [&>span]:leading-snug',
       className,
     )}

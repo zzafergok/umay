@@ -18,12 +18,12 @@ function ToastIcon({ type }: { type?: string }) {
     case 'success':
       return <CheckCircle2Icon className="size-4 shrink-0 text-success" />;
     case 'error':
-      return <AlertTriangleIcon className="text-danger size-4 shrink-0" />;
+      return <AlertTriangleIcon className="size-4 shrink-0 text-danger" />;
     case 'warning':
       return <ClockIcon className="size-4 shrink-0 text-warning" />;
     case 'loading':
       return (
-        <Loader2Icon className="text-text-muted size-4 shrink-0 animate-spin" />
+        <Loader2Icon className="size-4 shrink-0 animate-spin text-text-muted" />
       );
     case 'info':
       return <InfoIcon className="size-4 shrink-0 text-info" />;
@@ -44,7 +44,7 @@ export function ToastList() {
           toast={t}
           data-slot="toast"
           className={cn(
-            'group/toast dark:border-border-strong bg-surface-raised text-text shadow-float pointer-events-auto relative flex w-full items-center justify-between gap-3 overflow-hidden rounded-md border border-border p-4 transition-all duration-150',
+            'group/toast pointer-events-auto relative flex w-full items-center justify-between gap-3 overflow-hidden rounded-md border border-border bg-surface-raised p-4 text-text shadow-float transition-all duration-150 dark:border-border-strong',
             'data-[starting-style]:translate-y-2 data-[starting-style]:opacity-0',
             'data-[ending-style]:translate-y-2 data-[ending-style]:opacity-0',
           )}
@@ -55,7 +55,7 @@ export function ToastList() {
               {t.title && (
                 <ToastPrimitive.Title
                   data-slot="toast-title"
-                  className="text-body-sm text-text font-medium"
+                  className="text-body-sm font-medium text-text"
                 >
                   {t.title}
                 </ToastPrimitive.Title>
@@ -63,7 +63,7 @@ export function ToastList() {
               {t.description && (
                 <ToastPrimitive.Description
                   data-slot="toast-description"
-                  className="text-text-muted text-caption"
+                  className="text-caption text-text-muted"
                 >
                   {t.description}
                 </ToastPrimitive.Description>
@@ -75,7 +75,7 @@ export function ToastList() {
               data-slot="toast-action"
               {...t.actionProps}
               className={cn(
-                'bg-surface text-text hover:bg-surface-sunken focus-visible:ring-offset-surface-raised inline-flex h-8 shrink-0 items-center justify-center rounded-sm border border-border px-2.5 text-caption font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+                'inline-flex h-8 shrink-0 items-center justify-center rounded-sm border border-border bg-surface px-2.5 text-caption font-medium text-text transition-colors hover:bg-surface-sunken focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
                 t.actionProps.className,
               )}
             />
@@ -83,7 +83,7 @@ export function ToastList() {
           <ToastPrimitive.Close
             data-slot="toast-close"
             aria-label="Kapat"
-            className="text-text-muted hover:bg-surface-sunken hover:text-text focus-visible:ring-offset-surface-raised shrink-0 rounded-sm p-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            className="shrink-0 rounded-sm p-1 text-text-muted transition-colors hover:bg-surface-sunken hover:text-text focus-visible:outline-none"
           >
             <XIcon className="size-4" />
           </ToastPrimitive.Close>

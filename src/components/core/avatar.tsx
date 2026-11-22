@@ -80,7 +80,7 @@ export const AvatarBadge = React.forwardRef<HTMLDivElement, AvatarBadgeProps>(
       ref={ref}
       data-slot="avatar-badge"
       className={cn(
-        'absolute bottom-0 right-0 z-10 flex size-3.5 translate-x-1/4 translate-y-1/4 items-center justify-center rounded-full bg-success text-[9px] text-on-accent ring-2 ring-surface rtl:left-0 rtl:right-auto rtl:-translate-x-1/4 [&>svg]:size-2.5',
+        'absolute bottom-0 right-0 z-10 flex size-3.5 translate-x-1/4 translate-y-1/4 items-center justify-center rounded-full bg-success text-[9px] text-on-accent rtl:left-0 rtl:right-auto rtl:-translate-x-1/4 [&>svg]:size-2.5',
         className,
       )}
       {...props}
@@ -98,7 +98,7 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
       role="group"
       data-slot="avatar-group"
       className={cn(
-        'flex items-center -space-x-2 rtl:space-x-reverse [&>[data-slot=avatar-group-count]]:ring-2 [&>[data-slot=avatar-group-count]]:ring-obsidian [&>[data-slot=avatar]]:ring-2 [&>[data-slot=avatar]]:ring-obsidian',
+        '[&>[data-slot=avatar-group-count]]: [&>[data-slot=avatar-group-count]]: [&>[data-slot=avatar]]: [&>[data-slot=avatar]]: flex items-center -space-x-2 rtl:space-x-reverse',
         className,
       )}
       {...props}

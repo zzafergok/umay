@@ -31,7 +31,7 @@ function ItemSeparator({
 }
 
 const itemVariants = cva(
-  'group/item flex flex-wrap items-center rounded-sm border border-transparent text-sm outline-none transition-colors duration-100 focus-visible:border-umay-blue focus-visible:ring-[3px] focus-visible:ring-umay-blue/20 [a]:transition-colors [a]:hover:bg-gunmetal/30',
+  'group/item flex flex-wrap items-center rounded-sm border border-transparent text-sm outline-none transition-colors duration-100 focus-visible:border-umay-blue [a]:transition-colors [a]:hover:bg-gunmetal/30',
   {
     variants: {
       variant: {

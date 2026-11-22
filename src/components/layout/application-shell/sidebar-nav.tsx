@@ -54,7 +54,7 @@ export function SidebarNav({
                 <div>
                   <div className="font-medium">{item.label}</div>
                   {item.subtitle && (
-                    <div className="text-text-muted text-caption">
+                    <div className="text-caption text-text-muted">
                       {item.subtitle}
                     </div>
                   )}
@@ -106,7 +106,7 @@ export function SidebarNav({
               />
               <span className="min-w-0 flex-1 text-left">
                 <span
-                  className={`text-body-sm block truncate font-medium ${
+                  className={`block truncate text-body-sm font-medium ${
                     isActive ? 'text-text' : ''
                   }`}
                   title={item.label}
@@ -115,7 +115,7 @@ export function SidebarNav({
                 </span>
                 {item.subtitle && (
                   <span
-                    className="text-text-muted block truncate text-caption"
+                    className="block truncate text-caption text-text-muted"
                     title={item.subtitle}
                   >
                     {item.subtitle}

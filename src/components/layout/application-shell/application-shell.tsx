@@ -25,7 +25,7 @@ import type { ApplicationShellProps } from './types';
 
 export function ApplicationShell({ ...props }: ApplicationShellProps) {
   return (
-    <SidebarProvider className="bg-bg text-text [&_[data-sidebar=sidebar]]:bg-surface [&_[data-sidebar=sidebar]]:text-text font-sans">
+    <SidebarProvider className="bg-bg font-sans text-text [&_[data-sidebar=sidebar]]:bg-surface [&_[data-sidebar=sidebar]]:text-text">
       <PageHeaderProvider>
         <ApplicationShellContent {...props} />
       </PageHeaderProvider>
@@ -91,7 +91,7 @@ function ApplicationShellContent({
         )}
       </Sidebar>
 
-      <SidebarInset className="bg-bg text-text selection:text-text min-h-screen antialiased selection:bg-accent/20">
+      <SidebarInset className="min-h-screen bg-bg text-text antialiased selection:bg-accent/20 selection:text-text">
         <ApplicationShellHeader
           active={active}
           pathname={pathname}

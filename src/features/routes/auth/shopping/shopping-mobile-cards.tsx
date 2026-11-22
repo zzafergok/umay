@@ -62,7 +62,7 @@ export function ShoppingMobileCards({
           <div
             key={entry.id}
             className={cn(
-              'bg-surface space-y-2.5 rounded-xl border border-border p-3 transition-opacity',
+              'space-y-2.5 rounded-xl border border-border bg-surface p-3 transition-opacity',
               entry.done && 'opacity-70',
             )}
           >
@@ -80,7 +80,7 @@ export function ShoppingMobileCards({
                 <div className="flex items-start justify-between gap-2">
                   <p
                     className={cn(
-                      'text-body-sm text-text font-medium leading-snug',
+                      'text-body-sm font-medium leading-snug text-text',
                       entry.done && 'text-text-muted line-through',
                     )}
                   >
@@ -105,7 +105,7 @@ export function ShoppingMobileCards({
                     {SHOPPING_SOURCE_LABELS[entry.source]}
                   </Badge>
                   {entry.store && (
-                    <span className="text-text-muted inline-flex items-center gap-1 text-caption">
+                    <span className="inline-flex items-center gap-1 text-caption text-text-muted">
                       <MapPin className="h-3 w-3 shrink-0" />
                       {entry.store}
                     </span>
@@ -121,13 +121,13 @@ export function ShoppingMobileCards({
                 </div>
 
                 {entry.note && (
-                  <p className="text-text-muted text-caption">{entry.note}</p>
+                  <p className="text-caption text-text-muted">{entry.note}</p>
                 )}
               </div>
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2">
-              <div className="bg-surface-sunken inline-flex items-center gap-0.5 rounded-md border border-border p-0.5">
+              <div className="inline-flex items-center gap-0.5 rounded-md border border-border bg-surface-sunken p-0.5">
                 <Button
                   type="button"
                   variant="ghost"
@@ -139,7 +139,7 @@ export function ShoppingMobileCards({
                 >
                   <Minus className="h-3.5 w-3.5" />
                 </Button>
-                <span className="text-text min-w-[4.5rem] whitespace-nowrap px-1.5 text-center font-mono text-caption tabular-nums">
+                <span className="min-w-[4.5rem] whitespace-nowrap px-1.5 text-center font-mono text-caption tabular-nums text-text">
                   {entry.qty} {formatShoppingUnit(entry.unit)}
                 </span>
                 <Button
@@ -157,7 +157,7 @@ export function ShoppingMobileCards({
 
               <div className="flex items-center gap-2">
                 {lineTotal !== null && (
-                  <span className="text-text font-mono text-xs font-medium tabular-nums">
+                  <span className="font-mono text-xs font-medium tabular-nums text-text">
                     {formatCurrency(lineTotal, { currency, locale: 'tr' })}
                   </span>
                 )}

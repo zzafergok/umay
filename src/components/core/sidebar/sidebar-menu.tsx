@@ -41,7 +41,7 @@ export const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = 'SidebarMenuItem';
 
 export const sidebarMenuButtonVariants = cva(
-  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-xs p-2 text-left font-mono text-sm outline-none ring-umay-blue/50 transition-[width,height,padding] hover:bg-gunmetal/40 hover:text-titanium focus-visible:ring-1 active:bg-gunmetal/60 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-gunmetal/60 data-[active=true]:font-medium data-[active=true]:text-titanium data-[state=open]:hover:bg-gunmetal/40 data-[state=open]:hover:text-titanium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-xs p-2 text-left font-mono text-sm outline-none transition-[width,height,padding] hover:bg-gunmetal/40 hover:text-titanium active:bg-gunmetal/60 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-gunmetal/60 data-[active=true]:font-medium data-[active=true]:text-titanium data-[state=open]:hover:bg-gunmetal/40 data-[state=open]:hover:text-titanium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -139,7 +139,7 @@ export const SidebarMenuAction = React.forwardRef<
       data-sidebar="menu-action"
       data-slot="sidebar-menu-action"
       className={cn(
-        'rounded-xs focus-visible:ring-umay-blue/50 absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center p-0 text-ash outline-none transition-transform hover:bg-gunmetal/40 hover:text-titanium focus-visible:ring-1 [&>svg]:size-4 [&>svg]:shrink-0',
+        'absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-xs p-0 text-ash outline-none transition-transform hover:bg-gunmetal/40 hover:text-titanium [&>svg]:size-4 [&>svg]:shrink-0',
         // Increases the hit area of the button on mobile.
         'after:absolute after:-inset-2 md:after:hidden',
         'peer-data-[size=sm]/menu-button:top-1',
@@ -165,7 +165,7 @@ export const SidebarMenuBadge = React.forwardRef<
     data-sidebar="menu-badge"
     data-slot="sidebar-menu-badge"
     className={cn(
-      'rounded-xs pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center px-1 font-mono text-xs font-medium tabular-nums text-ash',
+      'pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-xs px-1 font-mono text-xs font-medium tabular-nums text-ash',
       'peer-hover/menu-button:text-titanium peer-data-[active=true]/menu-button:text-titanium',
       'peer-data-[size=sm]/menu-button:top-1',
       'peer-data-[size=default]/menu-button:top-1.5',
@@ -193,12 +193,12 @@ export const SidebarMenuSkeleton = React.forwardRef<
       ref={ref}
       data-sidebar="menu-skeleton"
       data-slot="sidebar-menu-skeleton"
-      className={cn('rounded-xs flex h-8 items-center gap-2 px-2', className)}
+      className={cn('flex h-8 items-center gap-2 rounded-xs px-2', className)}
       {...props}
     >
       {showIcon && (
         <Skeleton
-          className="rounded-xs size-4"
+          className="size-4 rounded-xs"
           data-sidebar="menu-skeleton-icon"
         />
       )}

@@ -52,7 +52,7 @@ function ItemFormBody({
   }));
   const locationOptions = locations.map((l) => ({
     value: l.id,
-    label: l.path.join(' > '),
+    label: l.path.join('>'),
   }));
   const customFieldCount = formState.activeCategory?.customFields.length ?? 0;
 

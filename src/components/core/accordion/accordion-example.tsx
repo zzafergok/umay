@@ -35,8 +35,8 @@ export function AccordionExample() {
           <AccordionItem value="item-2">
             <AccordionTrigger>Özelleştirilebilir mi?</AccordionTrigger>
             <AccordionContent>
-              Kesinlikle. Umay brutalist tasarım tokenları ve Tailwind
-              sınıfları ile kolayca özelleştirilebilir.
+              Kesinlikle. Umay brutalist tasarım tokenları ve Tailwind sınıfları
+              ile kolayca özelleştirilebilir.
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -49,9 +49,12 @@ export function AccordionExample() {
         </h3>
         <Accordion type="multiple" defaultValue={['multi-1']}>
           <AccordionItem value="multi-1">
-            <AccordionTrigger>Aynı anda birden fazla sekme açılabilir mi?</AccordionTrigger>
+            <AccordionTrigger>
+              Aynı anda birden fazla sekme açılabilir mi?
+            </AccordionTrigger>
             <AccordionContent>
-              Evet, çoklu seçim modu sayesinde kullanıcı dilediği kadar sekmeyi açık bırakabilir.
+              Evet, çoklu seçim modu sayesinde kullanıcı dilediği kadar sekmeyi
+              açık bırakabilir.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="multi-2">

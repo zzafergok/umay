@@ -16,7 +16,7 @@ export function InputGroup({
       data-slot="input-group"
       role="group"
       className={cn(
-        'group/input-group bg-surface-sunken text-text relative flex h-10 w-full items-center rounded-md border border-border outline-none transition-[color,box-shadow] md:h-9',
+        'group/input-group relative flex h-10 w-full items-center rounded-md border border-border bg-surface-sunken text-text outline-none transition-[color,box-shadow] md:h-9',
         'min-w-0 has-[>textarea]:h-auto has-[>textarea]:min-h-[40px] md:has-[>textarea]:min-h-[36px]',
 
         // Variants based on alignment.
@@ -26,10 +26,10 @@ export function InputGroup({
         'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3',
 
         // Focus state.
-        'has-[[data-slot=input-group-control]:focus-visible]:border-accent has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-accent/20',
+        'has-[[data-slot=input-group-control]:focus-visible]: has-[[data-slot=input-group-control]:focus-visible]: has-[[data-slot=input-group-control]:focus-visible]:border-accent',
 
         // Error state.
-        'has-[[data-slot][aria-invalid=true]]:border-danger has-[[data-slot][aria-invalid=true]]:ring-danger/20',
+        'has-[[data-slot][aria-invalid=true]]: has-[[data-slot][aria-invalid=true]]:border-danger',
 
         className,
       )}
@@ -141,7 +141,7 @@ export function InputGroupInput({
     <Input
       data-slot="input-group-control"
       className={cn(
-        'flex-1 rounded-md border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-offset-0',
+        'flex-1 rounded-md border-0 bg-transparent shadow-none',
         className,
       )}
       {...props}
@@ -157,7 +157,7 @@ export function InputGroupTextarea({
     <Textarea
       data-slot="input-group-control"
       className={cn(
-        'flex-1 resize-none rounded-md border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0',
+        'flex-1 resize-none rounded-md border-0 bg-transparent py-3 shadow-none',
         className,
       )}
       {...props}

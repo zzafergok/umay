@@ -66,7 +66,7 @@ export function SelectField({
     <div className={cn('min-w-0 space-y-1 sm:space-y-2', className)}>
       <Label
         htmlFor={name}
-        className="text-text-muted block truncate font-mono text-2xs uppercase tracking-wider"
+        className="block truncate font-mono text-2xs uppercase tracking-wider text-text-muted"
       >
         {label} {required && <span className="text-umay-blue">*</span>}
       </Label>

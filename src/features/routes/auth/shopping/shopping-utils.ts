@@ -59,7 +59,9 @@ export function computeShoppingSummary(
   const highPriorityPendingCount = pending.filter(
     (item) => item.priority === 'high',
   ).length;
-  const linkedPendingCount = pending.filter((item) => Boolean(item.itemId)).length;
+  const linkedPendingCount = pending.filter((item) =>
+    Boolean(item.itemId),
+  ).length;
 
   let estimatedPendingTotal = 0;
   let pricedPendingCount = 0;
@@ -109,9 +111,10 @@ export function filterAndSortShoppingList(
 
       if (!query) return true;
       const title = resolveShoppingTitle(entry, itemMap);
-      const category = resolveShoppingCategory(entry, itemMap, categoryMap) ?? '';
+      const category =
+        resolveShoppingCategory(entry, itemMap, categoryMap) ?? '';
       const haystack = [title, category, entry.store ?? '', entry.note ?? '']
-        .join(' ')
+        .join('')
         .toLocaleLowerCase('tr');
       return haystack.includes(query);
     })
@@ -149,9 +152,7 @@ export function parseOptionalPrice(value: unknown): number | undefined {
     const parts = trimmed.split('.');
     const isGroupedThousands =
       parts.length > 2 ||
-      (parts.length === 2 &&
-        (parts[1]?.length ?? 0) === 3 &&
-        parts[0] !== '0');
+      (parts.length === 2 && (parts[1]?.length ?? 0) === 3 && parts[0] !== '0');
     normalized = isGroupedThousands ? trimmed.replace(/\./g, '') : trimmed;
   }
 

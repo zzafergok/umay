@@ -38,7 +38,7 @@ export function DensityToggle({
     <div
       role="group"
       aria-label={toggleLabel}
-      className="bg-surface inline-flex gap-1 rounded-md border border-border p-1"
+      className="inline-flex gap-1 rounded-md border border-border bg-surface p-1"
     >
       <Button
         type="button"
@@ -48,7 +48,7 @@ export function DensityToggle({
         aria-pressed={value === 'compact'}
         className={`h-8 gap-1.5 rounded-sm px-3 text-caption font-medium ${
           value === 'compact'
-            ? 'text-on-accent hover:bg-accent-hover hover:text-on-accent bg-accent'
+            ? 'bg-accent text-on-accent hover:bg-accent-hover hover:text-on-accent'
             : 'text-text-muted hover:bg-surface-sunken hover:text-text'
         }`}
       >
@@ -63,7 +63,7 @@ export function DensityToggle({
         aria-pressed={value === 'detailed'}
         className={`h-8 gap-1.5 rounded-sm px-3 text-caption font-medium ${
           value === 'detailed'
-            ? 'text-on-accent hover:bg-accent-hover hover:text-on-accent bg-accent'
+            ? 'bg-accent text-on-accent hover:bg-accent-hover hover:text-on-accent'
             : 'text-text-muted hover:bg-surface-sunken hover:text-text'
         }`}
       >

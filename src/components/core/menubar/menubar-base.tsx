@@ -59,7 +59,7 @@ export const MenubarTrigger = React.forwardRef<
     ref={ref}
     data-slot="menubar-trigger"
     className={cn(
-      'rounded-xs flex cursor-default select-none items-center px-3 py-1 text-sm font-medium text-titanium outline-none transition-colors focus:bg-gunmetal/40 focus:text-titanium data-[state=open]:bg-gunmetal/40 data-[state=open]:text-titanium',
+      'flex cursor-default select-none items-center rounded-xs px-3 py-1 text-sm font-medium text-titanium outline-none transition-colors focus:bg-gunmetal/40 focus:text-titanium data-[state=open]:bg-gunmetal/40 data-[state=open]:text-titanium',
       className,
     )}
     {...props}

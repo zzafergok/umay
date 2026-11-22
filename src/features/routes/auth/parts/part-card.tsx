@@ -59,13 +59,13 @@ export function PartCard({
           metaLabel={metaLabel}
         />
 
-        <div className="text-text-muted flex items-center gap-2 truncate text-caption">
+        <div className="flex items-center gap-2 truncate text-caption text-text-muted">
           <span
-            className="bg-cat-7 h-2 w-2 shrink-0 rounded-full"
+            className="h-2 w-2 shrink-0 rounded-full bg-cat-7"
             aria-hidden="true"
           />
           <span className="truncate">
-            {parentItem?.name ?? 'Bağımsız parça'} ·{' '}
+            {parentItem?.name ?? 'Bağımsız parça'} ·{''}
             {spareItem
               ? `Yedek stok: ${spareItem.quantity} ${spareItem.unit}`
               : 'Yedek bağlı değil'}

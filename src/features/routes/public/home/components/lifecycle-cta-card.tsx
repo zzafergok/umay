@@ -42,13 +42,13 @@ export function LifecycleCtaCard({
         <div className="grid gap-5 p-4 sm:p-6 md:grid-cols-12 md:items-center md:gap-6 md:p-8">
           <div className="space-y-3 sm:space-y-4 md:col-span-6">
             <Badge variant="outline">{lifecycleCallout.badge}</Badge>
-            <h2 className="text-text text-xl font-semibold tracking-tight sm:text-3xl">
+            <h2 className="text-xl font-semibold tracking-tight text-text sm:text-3xl">
               {lifecycleCallout.title}
             </h2>
-            <p className="text-text-muted text-sm leading-relaxed sm:text-base">
+            <p className="text-sm leading-relaxed text-text-muted sm:text-base">
               {lifecycleCallout.description}
             </p>
-            <p className="text-text-subtle text-xs">
+            <p className="text-xs text-text-subtle">
               {lifecycleCallout.replaceHint}
             </p>
             {!hideSignInCta && (
@@ -59,11 +59,11 @@ export function LifecycleCtaCard({
           </div>
 
           <div className="md:col-span-6">
-            <Card className="bg-surface-raised border-border">
+            <Card className="border-border bg-surface-raised">
               <CardHeader className="space-y-1.5 pb-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex min-w-0 items-center gap-2">
-                    <div className="bg-warning-subtle flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-warning">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-warning-subtle text-warning">
                       <Wrench className="h-4 w-4" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
@@ -92,7 +92,7 @@ export function LifecycleCtaCard({
                     <span className="text-text-muted">
                       {lifecycleCallout.remainingDaysLabel}
                     </span>
-                    <span className="text-text font-medium tabular-nums">
+                    <span className="font-medium tabular-nums text-text">
                       {remainingText}
                     </span>
                   </div>
@@ -104,7 +104,7 @@ export function LifecycleCtaCard({
                   />
                 </div>
 
-                <p className="bg-surface text-text-muted rounded-lg border border-border px-3 py-2 text-xs">
+                <p className="rounded-lg border border-border bg-surface px-3 py-2 text-xs text-text-muted">
                   {lifecycleCallout.spareStockNote}
                 </p>
 

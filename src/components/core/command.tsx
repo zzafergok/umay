@@ -149,7 +149,7 @@ export function CommandItem({
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        'rounded-xs relative flex cursor-pointer select-none items-center gap-2 px-2 py-1.5 text-sm outline-none transition-colors',
+        'relative flex cursor-pointer select-none items-center gap-2 rounded-xs px-2 py-1.5 text-sm outline-none transition-colors',
         'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
         'data-[selected=true]:bg-gunmetal/40 data-[selected=true]:text-titanium',
         "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ash [&_svg]:pointer-events-none [&_svg]:shrink-0",

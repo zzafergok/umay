@@ -2,10 +2,7 @@
 
 import { Component, type ErrorInfo } from 'react';
 import { ErrorFallbackView } from './error-fallback-view';
-import type {
-  EnterpriseErrorBoundaryProps,
-  ErrorBoundaryState,
-} from './types';
+import type { EnterpriseErrorBoundaryProps, ErrorBoundaryState } from './types';
 
 export class EnterpriseErrorBoundary extends Component<
   EnterpriseErrorBoundaryProps,

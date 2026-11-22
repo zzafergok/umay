@@ -93,7 +93,7 @@ export function ReceiptModelSelector({
       <div
         role="group"
         aria-label="Vision model fiyat filtresi"
-        className="border-border/80 bg-surface-sunken/80 inline-flex w-full items-center gap-1 rounded-lg border p-1"
+        className="inline-flex w-full items-center gap-1 rounded-lg border border-border/80 bg-surface-sunken/80 p-1"
       >
         {PRICING_TABS.map((tab) => {
           const isActive = pricingFilter === tab.id;
@@ -109,7 +109,7 @@ export function ReceiptModelSelector({
               className={cn(
                 'h-7 flex-1 justify-center gap-1.5 rounded-md px-2 text-xs font-medium transition-all md:h-7',
                 isActive
-                  ? 'border-border/70 bg-surface text-text shadow-xs border'
+                  ? 'shadow-xs border border-border/70 bg-surface text-text'
                   : 'text-text-muted hover:text-text',
               )}
             >
@@ -169,7 +169,7 @@ export function ReceiptModelSelector({
           type="button"
           variant="outline"
           size="icon"
-          className="bg-surface-sunken shrink-0"
+          className="shrink-0 bg-surface-sunken"
           onClick={onRefreshModels}
           disabled={isRefreshingModels}
           aria-label="Model listesini yenile"
@@ -190,47 +190,27 @@ export function ReceiptModelSelector({
               </Badge>
             )}
             {pricingLabel && (
-              <Badge
-                variant="outline"
-                size="sm"
-                className="font-mono text-2xs"
-              >
+              <Badge variant="outline" size="sm" className="font-mono text-2xs">
                 {pricingLabel}
               </Badge>
             )}
             {contextLabel && (
-              <Badge
-                variant="outline"
-                size="sm"
-                className="font-mono text-2xs"
-              >
+              <Badge variant="outline" size="sm" className="font-mono text-2xs">
                 {contextLabel}
               </Badge>
             )}
             {supportsStructuredOutputs(selectedModel) && (
-              <Badge
-                variant="outline"
-                size="sm"
-                className="font-mono text-2xs"
-              >
+              <Badge variant="outline" size="sm" className="font-mono text-2xs">
                 Structured
               </Badge>
             )}
             {supportsJsonObject(selectedModel) && (
-              <Badge
-                variant="outline"
-                size="sm"
-                className="font-mono text-2xs"
-              >
+              <Badge variant="outline" size="sm" className="font-mono text-2xs">
                 JSON
               </Badge>
             )}
             {supportsReasoningOutput(selectedModel) && (
-              <Badge
-                variant="outline"
-                size="sm"
-                className="font-mono text-2xs"
-              >
+              <Badge variant="outline" size="sm" className="font-mono text-2xs">
                 Reasoning
               </Badge>
             )}

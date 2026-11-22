@@ -49,7 +49,7 @@ export const Slider = React.forwardRef<
         <SliderPrimitive.Thumb
           key={index}
           data-slot="slider-thumb"
-          className="block size-4 shrink-0 rounded-full border-2 border-umay-blue bg-obsidian shadow-sm transition-[color,box-shadow] hover:ring-2 hover:ring-umay-blue/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-umay-blue/50 disabled:pointer-events-none disabled:opacity-50"
+          className="block size-4 shrink-0 rounded-full border-2 border-umay-blue bg-obsidian shadow-sm transition-[color,box-shadow] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
         />
       ))}
     </SliderPrimitive.Root>

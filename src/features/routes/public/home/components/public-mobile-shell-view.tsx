@@ -61,11 +61,11 @@ export function PublicMobileShellView({
       <div className="mx-auto w-full max-w-2xl space-y-6 px-4 pb-28 pt-4 sm:px-6 sm:pt-6">
         {activeTab === 'start' && (
           <div className="space-y-6">
-            <Card className="bg-surface border-border">
+            <Card className="border-border bg-surface">
               <CardContent className="space-y-4 p-4 sm:p-5">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2.5">
-                    <span className="bg-surface-sunken flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-sunken">
                       <UmayMark className="h-5 w-5" />
                     </span>
                     <Badge variant="outline">{copy.hero.badge}</Badge>
@@ -76,10 +76,10 @@ export function PublicMobileShellView({
                 </div>
 
                 <div className="space-y-2">
-                  <h1 className="text-text text-2xl font-semibold leading-tight tracking-tight">
+                  <h1 className="text-2xl font-semibold leading-tight tracking-tight text-text">
                     {copy.hero.title}
                   </h1>
-                  <p className="text-text-muted text-sm leading-relaxed">
+                  <p className="text-sm leading-relaxed text-text-muted">
                     {copy.hero.description}
                   </p>
                 </div>
@@ -124,7 +124,7 @@ export function PublicMobileShellView({
                   {copy.hero.highlights.map((item) => (
                     <li
                       key={item}
-                      className="text-text-muted flex items-start gap-2 text-xs"
+                      className="flex items-start gap-2 text-xs text-text-muted"
                     >
                       <CheckCircle2
                         className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent"
@@ -155,7 +155,7 @@ export function PublicMobileShellView({
         {activeTab === 'features' && (
           <div className="space-y-6">
             <FeatureInfoCards featuresSection={copy.featuresSection} />
-            <p className="text-text-muted text-center text-xs">
+            <p className="text-center text-xs text-text-muted">
               {copy.mobileShell.featuresExpandHint}
             </p>
             <HomeFooterCta

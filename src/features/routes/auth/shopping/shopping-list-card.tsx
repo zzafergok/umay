@@ -45,12 +45,12 @@ export function ShoppingListCard({
   return (
     <Card
       size="sm"
-      className="hover:border-border-strong flex flex-col justify-between gap-2.5 py-3 transition-colors"
+      className="flex flex-col justify-between gap-2.5 py-3 transition-colors hover:border-border-strong"
     >
       <CardHeader className="flex flex-row items-start justify-between gap-2 pb-0">
         <div className="flex min-w-0 flex-1 items-start gap-2.5">
           <div
-            className="bg-surface-sunken text-accent flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-surface-sunken text-accent"
             aria-hidden="true"
           >
             <ShoppingCart className="h-3.5 w-3.5" />
@@ -60,13 +60,13 @@ export function ShoppingListCard({
               <Link
                 href={href}
                 variant="link"
-                className="text-text h-auto justify-start p-0 text-left font-semibold hover:text-accent"
+                className="h-auto justify-start p-0 text-left font-semibold text-text hover:text-accent"
               >
                 <span className="truncate">{list.name}</span>
               </Link>
             </CardTitle>
             {list.description ? (
-              <p className="text-text-muted mt-0.5 line-clamp-1 text-[11px]">
+              <p className="mt-0.5 line-clamp-1 text-[11px] text-text-muted">
                 {list.description}
               </p>
             ) : null}
@@ -75,7 +75,7 @@ export function ShoppingListCard({
         {list.store ? (
           <Badge
             variant="outline"
-            className="text-text-muted shrink-0 gap-1 px-1.5 py-0 text-[10px] font-normal"
+            className="shrink-0 gap-1 px-1.5 py-0 text-[10px] font-normal text-text-muted"
           >
             <Store className="h-2.5 w-2.5" aria-hidden="true" />
             <span className="max-w-[90px] truncate">{list.store}</span>
@@ -84,15 +84,15 @@ export function ShoppingListCard({
       </CardHeader>
 
       <CardContent className="flex flex-1 flex-col justify-between gap-2.5">
-        <div className="bg-surface-sunken/55 space-y-1.5 rounded-md border border-border/80 px-2.5 py-2">
+        <div className="space-y-1.5 rounded-md border border-border/80 bg-surface-sunken/55 px-2.5 py-2">
           <div className="flex items-center justify-between gap-2 text-xs">
-            <span className="text-text-muted tabular-nums">
+            <span className="tabular-nums text-text-muted">
               {hasItems
                 ? `${summary.doneCount} / ${summary.totalCount} alındı`
                 : 'Henüz ürün yok'}
             </span>
             {summary.estimatedPendingTotal > 0 ? (
-              <span className="text-text font-medium tabular-nums">
+              <span className="font-medium tabular-nums text-text">
                 {formatCurrency(summary.estimatedPendingTotal, {
                   currency,
                   locale: 'tr',
@@ -144,7 +144,7 @@ export function ShoppingListCard({
                   type="button"
                   size="icon-sm"
                   variant="ghost"
-                  className="text-danger/80 hover:bg-danger-subtle hover:text-danger h-8 w-8 md:h-7 md:w-7"
+                  className="h-8 w-8 text-danger/80 hover:bg-danger-subtle hover:text-danger md:h-7 md:w-7"
                   aria-label={`${list.name} listesini sil`}
                   onClick={() => onDelete(list)}
                 >

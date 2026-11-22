@@ -173,7 +173,7 @@ export function PartFormDialog({
             required
           />
 
-          <div className="bg-surface-raised/95 sticky bottom-0 grid grid-cols-2 gap-2 border-t border-border pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
+          <div className="sticky bottom-0 grid grid-cols-2 gap-2 border-t border-border bg-surface-raised/95 pt-2.5 backdrop-blur-md sm:static sm:flex sm:justify-end sm:bg-transparent sm:pt-3 sm:backdrop-blur-none">
             <Button
               type="button"
               variant="outline"

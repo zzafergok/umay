@@ -100,7 +100,7 @@ export function ThemeSelectorCard({
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="space-y-2">
-          <Label className="text-text-muted font-mono text-2xs uppercase tracking-wider">
+          <Label className="font-mono text-2xs uppercase tracking-wider text-text-muted">
             {copy.themeLabel}
           </Label>
           <div
@@ -178,7 +178,7 @@ export function ThemeSelectorCard({
                 onValueChange={(mode) => void handleDensityChange(mode)}
                 label={copy.densityLabel}
               />
-              <p className="text-text-muted text-caption">{copy.densityHint}</p>
+              <p className="text-caption text-text-muted">{copy.densityHint}</p>
             </div>
           </div>
         </div>

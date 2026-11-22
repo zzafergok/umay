@@ -6,7 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 export const badgeVariants = cva(
-  'inline-flex items-center justify-center rounded-sm border font-medium transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg select-none [&_svg]:pointer-events-none [&_svg]:size-3.5 shrink-0 [&>[data-icon=inline-start]]:-ml-0.5 [&>[data-icon=inline-start]]:mr-1.5 [&>[data-icon=inline-end]]:-mr-0.5 [&>[data-icon=inline-end]]:ml-1.5',
+  'inline-flex items-center justify-center rounded-sm border font-medium transition-colors duration-150 focus:outline-none select-none [&_svg]:pointer-events-none [&_svg]:size-3.5 shrink-0 [&>[data-icon=inline-start]]:-ml-0.5 [&>[data-icon=inline-start]]:mr-1.5 [&>[data-icon=inline-end]]:-mr-0.5 [&>[data-icon=inline-end]]:ml-1.5',
   {
     variants: {
       variant: {
@@ -16,7 +16,8 @@ export const badgeVariants = cva(
         warning: 'border-warning/25 bg-warning-subtle text-warning',
         success: 'border-success/25 bg-success-subtle text-success',
         outline: 'border-border bg-transparent text-text',
-        ghost: 'border-transparent bg-transparent text-text hover:bg-surface-sunken',
+        ghost:
+          'border-transparent bg-transparent text-text hover:bg-surface-sunken',
         link: 'border-transparent text-accent underline-offset-4 hover:underline p-0 h-auto',
         none: 'border-transparent bg-transparent',
       },

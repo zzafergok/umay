@@ -6,16 +6,14 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-body-sm font-medium transition-colors duration-150 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&>[data-icon=inline-start]]:-ml-0.5 [&>[data-icon=inline-start]]:mr-1.5 [&>[data-icon=inline-end]]:-mr-0.5 [&>[data-icon=inline-end]]:ml-1.5',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-body-sm font-medium transition-colors duration-150 cursor-pointer select-none focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&>[data-icon=inline-start]]:-ml-0.5 [&>[data-icon=inline-start]]:mr-1.5 [&>[data-icon=inline-end]]:-mr-0.5 [&>[data-icon=inline-end]]:ml-1.5',
   {
     variants: {
       variant: {
         default: 'bg-accent text-on-accent hover:bg-accent-hover',
         primary: 'bg-accent text-on-accent hover:bg-accent-hover',
-        destructive:
-          'bg-danger text-on-accent hover:bg-danger/90 focus-visible:ring-danger',
-        danger:
-          'bg-danger text-on-accent hover:bg-danger/90 focus-visible:ring-danger',
+        destructive: 'bg-danger text-on-accent hover:bg-danger/90',
+        danger: 'bg-danger text-on-accent hover:bg-danger/90',
         outline:
           'border border-border bg-surface text-text hover:bg-surface-sunken hover:border-border-strong',
         secondary:

@@ -82,13 +82,13 @@ export function CustomFieldInput({
           className="font-mono text-2xs uppercase tracking-wider text-ash"
         >
           {field.label}
-          {field.required && <span className="text-umay-blue ml-1">*</span>}
+          {field.required && <span className="ml-1 text-umay-blue">*</span>}
         </Label>
         {field.type === 'number' &&
         (field.min !== undefined || field.max !== undefined) ? (
-          <span className="text-text-subtle text-[11px]">
+          <span className="text-[11px] text-text-subtle">
             {field.min !== undefined ? `Min: ${field.min}` : ''}
-            {field.min !== undefined && field.max !== undefined ? ' · ' : ''}
+            {field.min !== undefined && field.max !== undefined ? '·' : ''}
             {field.max !== undefined ? `Max: ${field.max}` : ''}
           </span>
         ) : null}
@@ -129,7 +129,7 @@ export function CustomFieldInput({
           />
           {field.unit ? (
             <InputGroupAddon align="inline-end">
-              <InputGroupText className="rounded-xs bg-surface text-text px-2 py-0.5 text-xs font-medium">
+              <InputGroupText className="rounded-xs bg-surface px-2 py-0.5 text-xs font-medium text-text">
                 {field.unit}
               </InputGroupText>
             </InputGroupAddon>
@@ -155,7 +155,7 @@ export function CustomFieldInput({
           </SelectTrigger>
           <SelectContent>
             {!field.required && (
-              <SelectItem value="__none__" className="text-text-muted text-xs">
+              <SelectItem value="__none__" className="text-xs text-text-muted">
                 Seçim yok
               </SelectItem>
             )}
@@ -180,7 +180,7 @@ export function CustomFieldInput({
         <div className="flex gap-1.5">
           <InputGroup className="flex-1">
             <InputGroupAddon align="inline-start">
-              <Link2 className="text-text-muted h-3.5 w-3.5" />
+              <Link2 className="h-3.5 w-3.5 text-text-muted" />
             </InputGroupAddon>
             <InputGroupInput
               id={inputId}
@@ -220,10 +220,10 @@ export function CustomFieldInput({
       )}
 
       {field.helpText && !error ? (
-        <p className="text-text-muted text-xs">{field.helpText}</p>
+        <p className="text-xs text-text-muted">{field.helpText}</p>
       ) : null}
       {error ? (
-        <p className="text-danger flex items-center gap-1 font-mono text-2xs">
+        <p className="flex items-center gap-1 font-mono text-2xs text-danger">
           <AlertCircle className="h-3 w-3 shrink-0" />
           {error}
         </p>

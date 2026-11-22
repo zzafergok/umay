@@ -37,8 +37,12 @@ export function QuantityStepper({
   const canDecrement = !disabled && !isLoading && value > min;
   const canIncrement = !disabled && !isLoading;
 
-  const holdTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const holdIntervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  const holdTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const holdIntervalRef = React.useRef<ReturnType<typeof setInterval> | null>(
+    null,
+  );
   const didRepeatRef = React.useRef(false);
 
   const stopHold = React.useCallback(() => {
@@ -92,7 +96,7 @@ export function QuantityStepper({
         onPointerCancel={stopHold}
         disabled={!canDecrement}
         aria-label={decrementLabel}
-        className="h-11 w-11 min-h-[44px] min-w-[44px] rounded-sm"
+        className="h-11 min-h-[44px] w-11 min-w-[44px] rounded-sm"
       >
         <Minus className="h-4 w-4" aria-hidden="true" />
       </Button>
@@ -115,7 +119,7 @@ export function QuantityStepper({
         onPointerCancel={stopHold}
         disabled={!canIncrement}
         aria-label={incrementLabel}
-        className="h-11 w-11 min-h-[44px] min-w-[44px] rounded-sm"
+        className="h-11 min-h-[44px] w-11 min-w-[44px] rounded-sm"
       >
         <Plus className="h-4 w-4" aria-hidden="true" />
       </Button>

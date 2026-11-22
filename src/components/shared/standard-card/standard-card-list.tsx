@@ -22,7 +22,7 @@ export function StandardCardList({
       onClick={onClick}
       className={cn(
         'group relative cursor-pointer rounded-sm border transition-all duration-300',
-        'hover:border-umay-blue/50 border-gunmetal bg-obsidian hover:bg-gunmetal/20 hover:shadow-lg',
+        'border-gunmetal bg-obsidian hover:border-umay-blue/50 hover:bg-gunmetal/20 hover:shadow-lg',
         'flex w-full flex-col gap-4 p-5 md:flex-row md:items-start md:gap-8 md:p-6',
         className,
       )}
@@ -31,7 +31,7 @@ export function StandardCardList({
       <div className="min-w-0 flex-1 space-y-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 items-center gap-3">
-            <h3 className="group-hover:text-umay-blue line-clamp-1 text-sm font-bold uppercase tracking-tight text-titanium transition-colors">
+            <h3 className="line-clamp-1 text-sm font-bold uppercase tracking-tight text-titanium transition-colors group-hover:text-umay-blue">
               {title}
             </h3>
             {status && (
@@ -87,7 +87,7 @@ export function StandardCardList({
           <div className="mt-5 space-y-1.5">
             <div className="h-1.5 w-full max-w-none overflow-hidden rounded-sm bg-gunmetal md:max-w-md lg:max-w-lg">
               <div
-                className="from-umay-blue h-full bg-gradient-to-r to-signal-green transition-all duration-500"
+                className="h-full bg-gradient-to-r from-umay-blue to-signal-green transition-all duration-500"
                 style={{ width: `${progress.percent}%` }}
               />
             </div>
@@ -108,10 +108,10 @@ export function StandardCardList({
                 action.onClick(e);
               }}
               className={cn(
-                'bg-surface-sunken text-text-muted h-10 w-10 rounded-md border border-border md:h-8 md:w-8',
+                'h-10 w-10 rounded-md border border-border bg-surface-sunken text-text-muted md:h-8 md:w-8',
                 action.variant === 'destructive' || action.variant === 'rose'
                   ? 'hover:border-danger/40 hover:bg-danger-subtle hover:text-danger'
-                  : 'hover:bg-accent-subtle hover:border-accent/40 hover:text-accent',
+                  : 'hover:border-accent/40 hover:bg-accent-subtle hover:text-accent',
               )}
               title={action.label}
             >

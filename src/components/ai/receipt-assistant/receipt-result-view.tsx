@@ -156,7 +156,7 @@ export function ReceiptResultView({
                                 size="sm"
                                 className="shrink-0 whitespace-nowrap font-mono text-2xs tabular-nums text-ash"
                               >
-                                {item.quantity} {item.unit} ×{' '}
+                                {item.quantity} {item.unit} ×{''}
                                 {formatReceiptMoney(
                                   item.unitPrice ??
                                     Number(

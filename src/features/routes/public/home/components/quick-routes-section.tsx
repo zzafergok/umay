@@ -41,10 +41,10 @@ export function QuickRoutesSection({
     <section id="ekranlar" className="scroll-mt-20 space-y-4 sm:space-y-6">
       <div className="max-w-2xl space-y-2">
         <Badge variant="outline">{quickRoutesSection.badge}</Badge>
-        <h2 className="text-text text-xl font-semibold tracking-tight sm:text-3xl">
+        <h2 className="text-xl font-semibold tracking-tight text-text sm:text-3xl">
           {quickRoutesSection.title}
         </h2>
-        <p className="text-text-muted text-sm leading-relaxed sm:text-base">
+        <p className="text-sm leading-relaxed text-text-muted sm:text-base">
           {quickRoutesSection.description}
         </p>
       </div>
@@ -65,21 +65,21 @@ export function QuickRoutesSection({
                 className="flex h-full flex-col justify-between border-border p-3 sm:p-4"
               >
                 <div className="space-y-2.5 sm:space-y-3">
-                  <div className="bg-surface-sunken text-text group-hover:bg-accent-subtle flex h-8 w-8 items-center justify-center rounded-lg transition-colors group-hover:text-accent sm:h-9 sm:w-9">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-sunken text-text transition-colors group-hover:bg-accent-subtle group-hover:text-accent sm:h-9 sm:w-9">
                     <Icon className="h-4 w-4" aria-hidden="true" />
                   </div>
 
                   <div className="space-y-1">
-                    <h3 className="text-text text-xs font-semibold sm:text-sm">
+                    <h3 className="text-xs font-semibold text-text sm:text-sm">
                       {route.title}
                     </h3>
-                    <p className="text-text-muted line-clamp-2 text-[11px] leading-relaxed sm:line-clamp-none sm:text-xs">
+                    <p className="line-clamp-2 text-[11px] leading-relaxed text-text-muted sm:line-clamp-none sm:text-xs">
                       {route.description}
                     </p>
                   </div>
                 </div>
 
-                <div className="text-text-muted mt-3 flex items-center justify-between gap-1 border-t border-border/70 pt-2 text-[10px] sm:mt-4 sm:pt-2.5 sm:text-[11px]">
+                <div className="mt-3 flex items-center justify-between gap-1 border-t border-border/70 pt-2 text-[10px] text-text-muted sm:mt-4 sm:pt-2.5 sm:text-[11px]">
                   <span className="inline-flex items-center gap-1 truncate">
                     <Lock className="h-3 w-3 shrink-0" aria-hidden="true" />
                     <span className="truncate">

@@ -178,7 +178,7 @@ export function ProfilePreferencesCard({
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label className="text-text-muted font-mono text-2xs uppercase tracking-wider">
+            <Label className="font-mono text-2xs uppercase tracking-wider text-text-muted">
               {copy.themeLabel}
             </Label>
             <div

@@ -16,7 +16,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
       data-size={size}
       className={cn(
         'group/card flex flex-col rounded-md border border-border bg-surface text-text transition-colors duration-150',
-        '[--card-spacing:1rem] md:[--card-spacing:1.25rem] data-[size=sm]:[--card-spacing:0.875rem]',
+        '[--card-spacing:1rem] data-[size=sm]:[--card-spacing:0.875rem] md:[--card-spacing:1.25rem]',
         'gap-[var(--card-spacing)] py-[var(--card-spacing)]',
         'has-[[data-slot=card-footer]]:pb-0',
         '*:[img:first-child]:rounded-t-md *:[img:last-child]:rounded-b-md has-[>img:first-child]:pt-0',
@@ -54,10 +54,7 @@ export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
     <h3
       ref={ref}
       data-slot="card-title"
-      className={cn(
-        'col-start-1 font-heading text-title text-text',
-        className,
-      )}
+      className={cn('col-start-1 font-heading text-title text-text', className)}
       {...props}
     />
   ),

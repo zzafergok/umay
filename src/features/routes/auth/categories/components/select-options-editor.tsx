@@ -44,7 +44,7 @@ export function SelectOptionsEditor({
   };
 
   return (
-    <div className="bg-surface space-y-3 rounded-md border border-border p-3">
+    <div className="space-y-3 rounded-md border border-border bg-surface p-3">
       <div className="space-y-1.5">
         <Label htmlFor="cf-draft-option" className="text-xs">
           Liste Seçenekleri
@@ -95,7 +95,7 @@ export function SelectOptionsEditor({
                   size="icon-xs"
                   onClick={() => removeOption(opt)}
                   aria-label={`${opt} seçeneğini kaldır`}
-                  className="hover:bg-danger/15 hover:text-danger h-7 w-7 rounded-full p-0 sm:h-5 sm:w-5"
+                  className="h-7 w-7 rounded-full p-0 hover:bg-danger/15 hover:text-danger sm:h-5 sm:w-5"
                 >
                   <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                 </Button>
@@ -139,7 +139,7 @@ export function SelectOptionsEditor({
           </div>
         </div>
       ) : (
-        <p className="text-text-muted text-xs">
+        <p className="text-xs text-text-muted">
           En az bir seçenek ekleyin (örn. USB-C, Lightning, HDMI).
         </p>
       )}

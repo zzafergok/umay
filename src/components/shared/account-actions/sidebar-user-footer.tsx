@@ -29,10 +29,10 @@ export function SidebarUserFooter({
           href="/profile"
           aria-label={copy.menuProfile}
           title={displayName}
-          className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="rounded-md focus-visible:outline-none"
         >
           <Avatar size="sm" className="border-border">
-            <AvatarFallback className="bg-accent-subtle text-accent text-caption font-semibold">
+            <AvatarFallback className="bg-accent-subtle text-caption font-semibold text-accent">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -51,19 +51,19 @@ export function SidebarUserFooter({
     <div className="flex w-full items-center justify-between gap-2">
       <Link
         href="/profile"
-        className="hover:bg-surface-sunken flex min-w-0 flex-1 items-center gap-2.5 rounded-md px-1.5 py-1 transition-colors"
+        className="flex min-w-0 flex-1 items-center gap-2.5 rounded-md px-1.5 py-1 transition-colors hover:bg-surface-sunken"
       >
         <Avatar size="sm" className="shrink-0 border-border">
-          <AvatarFallback className="bg-accent-subtle text-accent text-caption font-semibold">
+          <AvatarFallback className="bg-accent-subtle text-caption font-semibold text-accent">
             {initials}
           </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <p className="text-body-sm text-text truncate font-medium">
+          <p className="truncate text-body-sm font-medium text-text">
             {displayName}
           </p>
           {user?.email && (
-            <p className="text-text-muted truncate text-caption">
+            <p className="truncate text-caption text-text-muted">
               {user.email}
             </p>
           )}

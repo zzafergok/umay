@@ -67,7 +67,7 @@ export function ChoiceCardField({
                   key={option.value}
                   htmlFor={inputId}
                   className={cn(
-                    'group relative flex cursor-pointer border bg-background transition-colors focus-within:border-umay-blue focus-within:ring-2 focus-within:ring-umay-blue/50',
+                    'group relative flex cursor-pointer border bg-background transition-colors focus-within:border-umay-blue',
                     isCompact
                       ? 'min-h-20 items-center gap-3 p-3'
                       : 'min-h-28 flex-col justify-between p-4',

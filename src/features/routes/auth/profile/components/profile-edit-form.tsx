@@ -92,7 +92,7 @@ export function ProfileEditForm({ initialUser, copy }: ProfileEditFormProps) {
           <div className="space-y-1.5">
             <Label
               htmlFor="profile-email-readonly"
-              className="text-text-muted font-mono text-2xs uppercase tracking-wider"
+              className="font-mono text-2xs uppercase tracking-wider text-text-muted"
             >
               {copy.emailLabel}
             </Label>
@@ -104,7 +104,7 @@ export function ProfileEditForm({ initialUser, copy }: ProfileEditFormProps) {
               readOnly
               className="text-xs"
             />
-            <p className="text-text-muted text-caption">{copy.emailHint}</p>
+            <p className="text-caption text-text-muted">{copy.emailHint}</p>
           </div>
 
           <SubmitButton

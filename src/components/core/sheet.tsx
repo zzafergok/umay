@@ -38,7 +38,7 @@ export function SheetOverlay({
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        'bg-text/35 dark:bg-bg/75 fixed inset-0 z-50',
+        'fixed inset-0 z-50 bg-text/35 dark:bg-bg/75',
         'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
         className,
       )}
@@ -93,14 +93,14 @@ export const SheetContent = React.forwardRef<
         {side === 'bottom' ? (
           <div
             aria-hidden="true"
-            className="bg-border-strong mx-auto -mt-1 mb-1 h-1 w-10 shrink-0 rounded-full"
+            className="mx-auto -mt-1 mb-1 h-1 w-10 shrink-0 rounded-full bg-border-strong"
           />
         ) : null}
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close
             data-slot="sheet-close"
-            className="text-text-muted hover:bg-surface-sunken hover:text-text focus-visible:ring-offset-surface-raised absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none [&_svg]:size-4"
+            className="absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-sm text-text-muted transition-colors hover:bg-surface-sunken hover:text-text focus-visible:outline-none disabled:pointer-events-none [&_svg]:size-4"
           >
             <XIcon />
             <span className="sr-only">Kapat</span>

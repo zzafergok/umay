@@ -31,7 +31,7 @@ function useBubbleContext() {
 }
 
 export const bubbleContentVariants = cva(
-  'relative inline-block break-words leading-relaxed text-body-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
+  'relative inline-block break-words leading-relaxed text-body-sm transition-colors focus-visible:outline-none',
   {
     variants: {
       variant: {

@@ -8,6 +8,8 @@ const messages: Record<Locale, ShellCopy> = {
   en,
 };
 
-export function getShellCopy(locale: Locale = routing.defaultLocale): ShellCopy {
+export function getShellCopy(
+  locale: Locale = routing.defaultLocale,
+): ShellCopy {
   return messages[locale];
 }

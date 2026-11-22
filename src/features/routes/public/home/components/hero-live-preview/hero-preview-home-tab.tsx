@@ -53,9 +53,9 @@ export function HeroPreviewHomeTab({
         {stats.map((stat) => (
           <div
             key={stat.id}
-            className="bg-surface-sunken/70 rounded-lg border border-border px-2.5 py-2"
+            className="rounded-lg border border-border bg-surface-sunken/70 px-2.5 py-2"
           >
-            <p className="text-text-muted truncate text-[11px] font-medium">
+            <p className="truncate text-[11px] font-medium text-text-muted">
               {stat.label}
             </p>
             <p
@@ -67,20 +67,20 @@ export function HeroPreviewHomeTab({
         ))}
       </div>
 
-      <div className="bg-surface-sunken/40 rounded-xl border border-border p-3">
+      <div className="rounded-xl border border-border bg-surface-sunken/40 p-3">
         <div className="mb-2.5 flex items-center justify-between gap-2">
-          <p className="text-text text-xs font-semibold">
+          <p className="text-xs font-semibold text-text">
             {homeView.attentionTitle}
           </p>
         </div>
 
         <div className="space-y-2">
-          <div className="bg-surface flex items-center justify-between gap-2 rounded-lg border border-border px-2.5 py-2">
+          <div className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-2.5 py-2">
             <div className="min-w-0">
-              <p className="text-text truncate text-xs font-medium">
+              <p className="truncate text-xs font-medium text-text">
                 {homeView.duePartRow.title}
               </p>
-              <p className="text-text-muted truncate text-[11px]">
+              <p className="truncate text-[11px] text-text-muted">
                 {homeView.duePartRow.subtitle}
               </p>
             </div>
@@ -91,7 +91,7 @@ export function HeroPreviewHomeTab({
           </div>
 
           {lowStockItems.length === 0 ? (
-            <div className="bg-success-subtle text-text rounded-lg border border-success/25 px-3 py-2.5 text-xs">
+            <div className="rounded-lg border border-success/25 bg-success-subtle px-3 py-2.5 text-xs text-text">
               {homeView.itemOkBanner}
             </div>
           ) : (
@@ -100,14 +100,14 @@ export function HeroPreviewHomeTab({
               return (
                 <div
                   key={item.id}
-                  className="bg-surface flex items-center justify-between gap-2 rounded-lg border border-border px-2.5 py-2"
+                  className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-2.5 py-2"
                 >
                   <div className="min-w-0">
-                    <p className="text-text truncate text-xs font-medium">
+                    <p className="truncate text-xs font-medium text-text">
                       {item.name}
                     </p>
-                    <p className="text-text-muted truncate text-[11px]">
-                      {item.quantity} / {item.minQuantity} {item.unit} ·{' '}
+                    <p className="truncate text-[11px] text-text-muted">
+                      {item.quantity} / {item.minQuantity} {item.unit} ·{''}
                       {homeView.itemLowFallbackSubtitle}
                     </p>
                   </div>

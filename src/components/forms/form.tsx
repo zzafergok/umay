@@ -21,10 +21,7 @@ export interface FormProps<T extends FieldValues> {
   defaultValues?: DefaultValues<T>;
   methods?: UseFormReturn<T>;
   onKeyDown?: React.KeyboardEventHandler<HTMLFormElement>;
-  onSubmit: (
-    data: T,
-    methods: UseFormReturn<T>,
-  ) => void | Promise<void>;
+  onSubmit: (data: T, methods: UseFormReturn<T>) => void | Promise<void>;
 }
 
 export function Form<T extends FieldValues>({

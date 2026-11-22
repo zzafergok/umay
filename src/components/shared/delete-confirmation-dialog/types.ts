@@ -21,8 +21,4 @@ export interface DeleteConfirmationDialogProps {
 }
 
 export type DeletePhase =
-  | 'idle'
-  | 'crumpling'
-  | 'tossing'
-  | 'waiting'
-  | 'error';
+  'idle' | 'crumpling' | 'tossing' | 'waiting' | 'error';

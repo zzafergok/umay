@@ -37,25 +37,27 @@ export function ShoppingSuggestionsCard({
   if (suggestions.length === 0) return null;
 
   const listNode = (
-    <div className={embedded ? 'grid grid-cols-1 gap-2' : 'grid gap-2 md:grid-cols-2'}>
+    <div
+      className={
+        embedded ? 'grid grid-cols-1 gap-2' : 'grid gap-2 md:grid-cols-2'
+      }
+    >
       {suggestions.map((s) => (
         <div
           key={s.key}
-          className="bg-surface-sunken/40 flex flex-wrap items-center justify-between gap-2.5 rounded-sm border border-border p-2.5 sm:p-3"
+          className="flex flex-wrap items-center justify-between gap-2.5 rounded-sm border border-border bg-surface-sunken/40 p-2.5 sm:p-3"
         >
           <div className="min-w-0 flex-1 space-y-1">
             <div className="flex flex-wrap items-center gap-1.5">
-              <p className="text-text text-sm font-medium">{s.label}</p>
+              <p className="text-sm font-medium text-text">{s.label}</p>
               <Badge
-                variant={
-                  s.source === 'auto_part_due' ? 'warning' : 'secondary'
-                }
+                variant={s.source === 'auto_part_due' ? 'warning' : 'secondary'}
                 size="sm"
               >
                 {s.source === 'auto_part_due' ? 'Parça Vadesi' : 'Düşük Stok'}
               </Badge>
             </div>
-            <p className="text-text-muted text-xs tabular-nums">
+            <p className="text-xs tabular-nums text-text-muted">
               Önerilen: {s.suggestedQty} {formatShoppingUnit(s.unit)}
               {s.reason ? ` · ${s.reason}` : ''}
             </p>
@@ -79,7 +81,7 @@ export function ShoppingSuggestionsCard({
     return (
       <div className="space-y-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-text-muted text-xs">
+          <p className="text-xs text-text-muted">
             Düşük stoktaki ürünler ve değişim vakti yaklaşan parçalar için
             otomatik öneriler.
           </p>
@@ -106,7 +108,7 @@ export function ShoppingSuggestionsCard({
       <CardHeader className="flex flex-col gap-3 space-y-0 pb-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1 space-y-1">
           <CardTitle className="flex items-center gap-2 text-base">
-            <Sparkles className="text-umay-blue h-4 w-4 shrink-0" />
+            <Sparkles className="h-4 w-4 shrink-0 text-umay-blue" />
             <span>Akıllı Öneriler ({suggestions.length})</span>
           </CardTitle>
           <CardDescription className="text-caption">

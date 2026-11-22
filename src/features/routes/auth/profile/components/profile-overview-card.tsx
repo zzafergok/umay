@@ -94,7 +94,7 @@ export function ProfileOverviewCard({
             </Avatar>
             <div className="min-w-0 space-y-1.5">
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="font-heading text-title text-text truncate font-bold">
+                <h2 className="truncate font-heading text-title font-bold text-text">
                   {displayName}
                 </h2>
                 <StatusPill tone="active" label={copy.activeSession} />
@@ -110,11 +110,11 @@ export function ProfileOverviewCard({
                   </Badge>
                 )}
               </div>
-              <p className="text-body-sm text-text-muted truncate">
+              <p className="truncate text-body-sm text-text-muted">
                 {currentUser.email}
               </p>
               <div className="flex items-start gap-2 sm:items-center">
-                <span className="text-text-subtle min-w-0 flex-1 break-all font-mono text-caption">
+                <span className="min-w-0 flex-1 break-all font-mono text-caption text-text-subtle">
                   {copy.accountIdLabel}: {currentUser.id}
                 </span>
                 <Button
@@ -174,16 +174,16 @@ export function ProfileOverviewCard({
           {statItems.map(({ label, value, Icon }, index) => (
             <div
               key={label}
-              className={`bg-surface-sunken flex min-w-0 items-center gap-3 rounded-md border border-border px-3 py-3 sm:px-4 ${
+              className={`flex min-w-0 items-center gap-3 rounded-md border border-border bg-surface-sunken px-3 py-3 sm:px-4 ${
                 index === statItems.length - 1 ? 'col-span-2 sm:col-span-1' : ''
               }`}
             >
-              <span className="bg-surface flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border">
-                <Icon className="text-text-muted h-4 w-4" aria-hidden="true" />
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-surface">
+                <Icon className="h-4 w-4 text-text-muted" aria-hidden="true" />
               </span>
               <div className="min-w-0">
-                <p className="text-text-muted truncate text-caption">{label}</p>
-                <p className="font-heading text-title text-text font-bold tabular-nums">
+                <p className="truncate text-caption text-text-muted">{label}</p>
+                <p className="font-heading text-title font-bold tabular-nums text-text">
                   {value}
                 </p>
               </div>

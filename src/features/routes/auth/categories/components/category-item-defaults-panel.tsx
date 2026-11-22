@@ -80,14 +80,13 @@ export function CategoryItemDefaultsPanel({
                 onClick={() => onChange({ ...value, defaultType: opt.value })}
                 className={cn(
                   'h-auto flex-col items-start gap-1 whitespace-normal p-3 text-left',
-                  active &&
-                    'bg-accent-subtle/40 border-accent ring-1 ring-accent',
+                  active && 'border-accent bg-accent-subtle/40',
                 )}
               >
-                <span className="text-text text-xs font-semibold">
+                <span className="text-xs font-semibold text-text">
                   {opt.label}
                 </span>
-                <span className="text-text-muted text-[11px] font-normal">
+                <span className="text-[11px] font-normal text-text-muted">
                   {opt.description}
                 </span>
               </Button>
@@ -155,7 +154,7 @@ export function CategoryItemDefaultsPanel({
             placeholder="Örn. 1"
             className="h-9 text-xs"
           />
-          <p className="text-text-muted text-[11px]">
+          <p className="text-[11px] text-text-muted">
             Bu kategoride yeni ürün oluştururken otomatik uygulanır.
           </p>
         </div>
@@ -171,7 +170,7 @@ export function CategoryItemDefaultsPanel({
             return (
               <div
                 key={toggle.key}
-                className="bg-surface-sunken/40 flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2.5"
+                className="flex items-center justify-between gap-3 rounded-md border border-border bg-surface-sunken/40 px-3 py-2.5"
               >
                 <div className="min-w-0 space-y-0.5">
                   <Label
@@ -180,7 +179,7 @@ export function CategoryItemDefaultsPanel({
                   >
                     {toggle.label}
                   </Label>
-                  <p className="text-text-muted text-[11px]">
+                  <p className="text-[11px] text-text-muted">
                     {toggle.description}
                   </p>
                 </div>

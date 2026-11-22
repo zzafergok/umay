@@ -13,33 +13,33 @@ This directory contains reusable form components built with **React Hook Form** 
 
 ## Available Components
 
-| Component | Based On | Description |
-|-----------|----------|-------------|
-| `Form` | FormProvider | Base form wrapper with validation |
-| `TextField` | `core/input` | Text input with validation |
-| `SelectField` | `core/select` | Dropdown select with options |
-| `TextareaField` | `core/textarea` | Multi-line text input |
-| `CheckboxField` | `core/checkbox` | Checkbox input |
-| `RadioField` | HTML radio | Radio button group |
-| `SwitchField` | `core/switch` | Toggle switch input |
-| `DateField` | `core/modern-date-picker` | Modern date picker with calendar |
-| `SubmitButton` | `core/button` | Submit button with loading state |
+| Component       | Based On                  | Description                       |
+| --------------- | ------------------------- | --------------------------------- |
+| `Form`          | FormProvider              | Base form wrapper with validation |
+| `TextField`     | `core/input`              | Text input with validation        |
+| `SelectField`   | `core/select`             | Dropdown select with options      |
+| `TextareaField` | `core/textarea`           | Multi-line text input             |
+| `CheckboxField` | `core/checkbox`           | Checkbox input                    |
+| `RadioField`    | HTML radio                | Radio button group                |
+| `SwitchField`   | `core/switch`             | Toggle switch input               |
+| `DateField`     | `core/modern-date-picker` | Modern date picker with calendar  |
+| `SubmitButton`  | `core/button`             | Submit button with loading state  |
 
 ## Quick Start
 
 ```tsx
-import { z } from 'zod'
-import { Form, TextField, SelectField, SubmitButton } from '@/components/forms'
+import { z } from 'zod';
+import { Form, TextField, SelectField, SubmitButton } from '@/components/forms';
 
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   role: z.string().min(1, 'Please select a role'),
-})
+});
 
 function MyForm() {
   const handleSubmit = (data) => {
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   return (
     <Form
@@ -59,7 +59,7 @@ function MyForm() {
       />
       <SubmitButton>Submit</SubmitButton>
     </Form>
-  )
+  );
 }
 ```
 
@@ -77,18 +77,14 @@ function MyForm() {
 ## Integration with useFormChanged
 
 ```tsx
-import { useFormChanged } from '@/hooks/use-form-changed'
-import { useFormContext } from '@/components/forms'
+import { useFormChanged } from '@/hooks/use-form-changed';
+import { useFormContext } from '@/components/forms';
 
 function EditForm({ initialData }) {
-  const { watch } = useFormContext()
-  const hasChanges = useFormChanged(watch, initialData)
+  const { watch } = useFormContext();
+  const hasChanges = useFormChanged(watch, initialData);
 
-  return (
-    <SubmitButton disabled={!hasChanges}>
-      Save Changes
-    </SubmitButton>
-  )
+  return <SubmitButton disabled={!hasChanges}>Save Changes</SubmitButton>;
 }
 ```
 
@@ -114,6 +110,7 @@ See [USAGE_EXAMPLE.md](./USAGE_EXAMPLE.md) for comprehensive examples and API do
 ## Migration Notes
 
 All form fields now use the core components from `@/components/core`:
+
 - ✅ Consistent styling across the app
 - ✅ Shared component logic
 - ✅ Easier maintenance

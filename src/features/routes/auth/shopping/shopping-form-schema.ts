@@ -84,7 +84,7 @@ export function buildShoppingLocationOptions(
 ): SelectOption[] {
   return locations.map((loc) => ({
     value: loc.id,
-    label: loc.path.length > 0 ? loc.path.join(' / ') : loc.name,
+    label: loc.path.length > 0 ? loc.path.join('/') : loc.name,
   }));
 }
 

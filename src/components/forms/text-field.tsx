@@ -73,7 +73,7 @@ export function TextField({
       <Label
         htmlFor={name}
         className={cn(
-          'text-text-muted block truncate font-mono text-2xs uppercase tracking-wider',
+          'block truncate font-mono text-2xs uppercase tracking-wider text-text-muted',
           hideLabel && 'sr-only',
           labelClassName,
         )}

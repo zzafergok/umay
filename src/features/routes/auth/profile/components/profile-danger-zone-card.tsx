@@ -24,14 +24,14 @@ export function ProfileDangerZoneCard({
     <Card className="border-danger/35">
       <CardHeader>
         <div className="flex items-center gap-2">
-          <AlertTriangle className="text-danger h-5 w-5" aria-hidden="true" />
+          <AlertTriangle className="h-5 w-5 text-danger" aria-hidden="true" />
           <CardTitle className="text-danger">{copy.title}</CardTitle>
         </div>
         <CardDescription>{copy.description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="border-danger/25 bg-danger-subtle/50 rounded-md border p-3.5">
-          <p className="text-body-sm text-text leading-relaxed">
+        <div className="rounded-md border border-danger/25 bg-danger-subtle/50 p-3.5">
+          <p className="text-body-sm leading-relaxed text-text">
             {copy.warning}
           </p>
         </div>

@@ -74,7 +74,9 @@ export function KpiCardShell({
               {primaryValue}
             </span>
             {primaryUnit ? (
-              <span className="text-caption text-text-muted">{primaryUnit}</span>
+              <span className="text-caption text-text-muted">
+                {primaryUnit}
+              </span>
             ) : null}
           </div>
           <p className="mt-0.5 truncate text-caption text-text-muted">
@@ -105,7 +107,7 @@ export function KpiCardShell({
         </div>
       </CardContent>
 
-      <CardFooter className="border-t border-border/60 pt-2.5 pb-3">
+      <CardFooter className="border-t border-border/60 pb-3 pt-2.5">
         <Link
           href={href}
           className="inline-flex w-full items-center justify-between text-caption font-medium text-text-muted transition-colors hover:text-accent"

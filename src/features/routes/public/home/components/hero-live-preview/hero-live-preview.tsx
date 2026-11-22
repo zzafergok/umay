@@ -98,17 +98,17 @@ export function HeroLivePreview({ preview }: HeroLivePreviewProps) {
   ];
 
   return (
-    <Card className="bg-surface border-border shadow-sm">
+    <Card className="border-border bg-surface shadow-sm">
       <CardHeader className="space-y-2.5 border-b border-border pb-3.5">
         <div className="space-y-1">
           <Badge variant="outline" className="text-[10px]">
             {preview.badge}
           </Badge>
-          <p className="text-text text-sm font-semibold">{preview.title}</p>
-          <p className="text-text-muted text-xs">{preview.description}</p>
+          <p className="text-sm font-semibold text-text">{preview.title}</p>
+          <p className="text-xs text-text-muted">{preview.description}</p>
         </div>
 
-        <div className="bg-surface-sunken grid grid-cols-3 gap-1 rounded-lg p-1">
+        <div className="grid grid-cols-3 gap-1 rounded-lg bg-surface-sunken p-1">
           {tabs.map(({ key, label, Icon }) => {
             const active = activeTab === key;
             return (
@@ -161,7 +161,7 @@ export function HeroLivePreview({ preview }: HeroLivePreviewProps) {
           )}
         </div>
 
-        <p className="text-text-muted mt-3 border-t border-border pt-2.5 text-[11px]">
+        <p className="mt-3 border-t border-border pt-2.5 text-[11px] text-text-muted">
           {preview.routeNote}
         </p>
       </CardContent>

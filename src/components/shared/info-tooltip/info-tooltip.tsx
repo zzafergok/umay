@@ -37,7 +37,7 @@ export function InfoTooltip({
         size="icon-xs"
         aria-label={ariaLabel}
         className={cn(
-          'text-text-muted hover:bg-surface-sunken hover:text-text size-4 shrink-0 rounded-full p-0',
+          'size-4 shrink-0 rounded-full p-0 text-text-muted hover:bg-surface-sunken hover:text-text',
           className,
         )}
       >

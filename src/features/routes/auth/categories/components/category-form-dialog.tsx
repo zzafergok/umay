@@ -76,7 +76,7 @@ function CategoryFormBody({
       ...template.data,
       itemDefaults: template.data.itemDefaults ?? DEFAULT_CATEGORY_ITEM_CONFIG,
     });
-    toast.success(`"${template.data.name}" şablonu uygulandı.`);
+    toast.success(`"${template.data.name}"şablonu uygulandı.`);
   };
 
   const handleSubmit = async (values: CategoryInput) => {

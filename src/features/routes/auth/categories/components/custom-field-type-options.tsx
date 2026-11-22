@@ -48,7 +48,8 @@ export function CustomFieldTypeOptions({
               onChange={(e) =>
                 onChange((prev) => ({
                   ...prev,
-                  min: e.target.value === '' ? undefined : Number(e.target.value),
+                  min:
+                    e.target.value === '' ? undefined : Number(e.target.value),
                 }))
               }
               placeholder="—"
@@ -67,7 +68,8 @@ export function CustomFieldTypeOptions({
               onChange={(e) =>
                 onChange((prev) => ({
                   ...prev,
-                  max: e.target.value === '' ? undefined : Number(e.target.value),
+                  max:
+                    e.target.value === '' ? undefined : Number(e.target.value),
                 }))
               }
               placeholder="—"
@@ -108,7 +110,10 @@ export function CustomFieldTypeOptions({
     return (
       <div className="flex items-center justify-between rounded-md border border-border bg-surface p-3">
         <div className="space-y-0.5">
-          <Label htmlFor="cf-draft-default-bool" className="text-xs font-medium">
+          <Label
+            htmlFor="cf-draft-default-bool"
+            className="text-xs font-medium"
+          >
             Varsayılan Durum
           </Label>
           <p className="text-[11px] text-text-muted">

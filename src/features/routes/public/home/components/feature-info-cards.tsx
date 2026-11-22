@@ -50,10 +50,10 @@ export function FeatureInfoCards({ featuresSection }: FeatureInfoCardsProps) {
     <section id="ozellikler" className="scroll-mt-20 space-y-4 sm:space-y-6">
       <div className="max-w-2xl space-y-2">
         <Badge variant="outline">{featuresSection.badge}</Badge>
-        <h2 className="text-text text-xl font-semibold tracking-tight sm:text-3xl">
+        <h2 className="text-xl font-semibold tracking-tight text-text sm:text-3xl">
           {featuresSection.title}
         </h2>
-        <p className="text-text-muted text-sm leading-relaxed sm:text-base">
+        <p className="text-sm leading-relaxed text-text-muted sm:text-base">
           {featuresSection.description}
         </p>
       </div>
@@ -85,7 +85,7 @@ export function FeatureInfoCards({ featuresSection }: FeatureInfoCardsProps) {
                 </div>
                 <div className="space-y-1">
                   <CardTitle className="text-base">{card.title}</CardTitle>
-                  <CardDescription className="text-text-muted text-sm leading-relaxed">
+                  <CardDescription className="text-sm leading-relaxed text-text-muted">
                     {card.description}
                   </CardDescription>
                 </div>
@@ -96,7 +96,7 @@ export function FeatureInfoCards({ featuresSection }: FeatureInfoCardsProps) {
                   {card.highlights.map((highlight) => (
                     <li
                       key={highlight}
-                      className="text-text-muted flex items-start gap-2 text-xs"
+                      className="flex items-start gap-2 text-xs text-text-muted"
                     >
                       <Check
                         className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent"

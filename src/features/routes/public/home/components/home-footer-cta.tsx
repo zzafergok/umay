@@ -21,7 +21,7 @@ export function HomeFooterCta({
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2.5">
           <UmayMark className="h-5 w-5" />
-          <span className="text-text-muted text-xs">
+          <span className="text-xs text-text-muted">
             Umay · Home &amp; Personal Inventory
           </span>
         </div>
@@ -35,7 +35,7 @@ export function HomeFooterCta({
                 variant="ghost"
                 size="sm"
                 onClick={() => onNavigateTab(anchor.href)}
-                className="text-text-muted hover:text-text h-7 px-2 text-xs"
+                className="h-7 px-2 text-xs text-text-muted hover:text-text"
               >
                 {anchor.label}
               </Button>
@@ -43,7 +43,7 @@ export function HomeFooterCta({
               <Link
                 key={anchor.href}
                 href={anchor.href}
-                className="text-text-muted hover:text-text px-1.5 py-1 text-xs transition-colors"
+                className="px-1.5 py-1 text-xs text-text-muted transition-colors hover:text-text"
               >
                 {anchor.label}
               </Link>

@@ -19,10 +19,10 @@ export function HowItWorksSection({ howItWorks }: HowItWorksSectionProps) {
     <section id="nasil-calisir" className="scroll-mt-20 space-y-4 sm:space-y-6">
       <div className="max-w-2xl space-y-2">
         <Badge variant="outline">{howItWorks.badge}</Badge>
-        <h2 className="text-text text-xl font-semibold tracking-tight sm:text-3xl">
+        <h2 className="text-xl font-semibold tracking-tight text-text sm:text-3xl">
           {howItWorks.title}
         </h2>
-        <p className="text-text-muted text-sm leading-relaxed sm:text-base">
+        <p className="text-sm leading-relaxed text-text-muted sm:text-base">
           {howItWorks.description}
         </p>
       </div>
@@ -35,7 +35,7 @@ export function HowItWorksSection({ howItWorks }: HowItWorksSectionProps) {
           >
             <CardHeader className="space-y-2.5 pb-2">
               <div className="flex items-center justify-between gap-2">
-                <span className="bg-accent-subtle inline-flex h-8 w-8 items-center justify-center rounded-lg font-mono text-xs font-semibold text-accent">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent-subtle font-mono text-xs font-semibold text-accent">
                   {step.stepNumber}
                 </span>
                 <Badge variant="outline" className="text-[11px]">
@@ -45,7 +45,7 @@ export function HowItWorksSection({ howItWorks }: HowItWorksSectionProps) {
               <CardTitle className="text-base">{step.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription className="text-text-muted text-sm leading-relaxed">
+              <CardDescription className="text-sm leading-relaxed text-text-muted">
                 {step.description}
               </CardDescription>
             </CardContent>

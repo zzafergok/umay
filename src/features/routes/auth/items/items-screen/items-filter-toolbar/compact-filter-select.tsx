@@ -39,7 +39,7 @@ export function CompactFilterSelect({
       <SelectTrigger
         aria-label={ariaLabel}
         className={cn(
-          'w-auto min-w-[120px] flex-1 justify-between gap-1.5 border-0 bg-transparent py-0 shadow-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:ring-offset-0 sm:flex-none [&>span]:truncate',
+          'w-auto min-w-[120px] flex-1 justify-between gap-1.5 border-0 bg-transparent py-0 shadow-none sm:flex-none [&>span]:truncate',
           maxWidthClass,
           isActive ? activeClassName : inactiveClassName,
         )}

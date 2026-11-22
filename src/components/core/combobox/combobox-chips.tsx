@@ -16,8 +16,8 @@ export function ComboboxChips({
       data-slot="combobox-chips"
       className={cn(
         'shadow-xs flex min-h-9 flex-wrap items-center gap-1.5 rounded-sm border border-gunmetal/80 bg-obsidian bg-clip-padding px-2.5 py-1.5 text-sm transition-[color,box-shadow]',
-        'focus-within:border-umay-blue focus-within:ring-[3px] focus-within:ring-umay-blue/20',
-        'has-aria-invalid:border-alert-red has-aria-invalid:ring-[3px] has-aria-invalid:ring-alert-red/20',
+        'focus-within:border-umay-blue',
+        'has-aria-invalid:border-alert-red',
         'has-data-[slot=combobox-chip]:px-1.5',
         className,
       )}
@@ -38,7 +38,7 @@ export function ComboboxChip({
     <ComboboxPrimitive.Chip
       data-slot="combobox-chip"
       className={cn(
-        'rounded-xs flex h-[calc(--spacing(5.5))] w-fit items-center justify-center gap-1 whitespace-nowrap bg-gunmetal/50 px-1.5 text-xs font-medium text-titanium',
+        'flex h-[calc(--spacing(5.5))] w-fit items-center justify-center gap-1 whitespace-nowrap rounded-xs bg-gunmetal/50 px-1.5 text-xs font-medium text-titanium',
         'has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0',
         className,
       )}

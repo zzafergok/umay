@@ -5,7 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/core/toast';
 import type { ShoppingListInput } from '@/features/inventory/schemas';
-import type { ShoppingList, ShoppingListItem } from '@/features/inventory/types';
+import type {
+  ShoppingList,
+  ShoppingListItem,
+} from '@/features/inventory/types';
 import {
   useSettingsQuery,
   useShoppingListsQuery,

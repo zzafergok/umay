@@ -31,9 +31,9 @@ const RadioGroupItem = React.forwardRef<
       data-slot="radio-group-item"
       className={cn(
         'aspect-square size-4 rounded-full border border-border-strong bg-surface text-accent outline-none transition-colors',
-        'focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
+        'focus-visible:border-accent',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        'aria-invalid:border-danger aria-invalid:ring-1 aria-invalid:ring-danger/30',
+        'aria-invalid:border-danger',
         className,
       )}
       {...props}

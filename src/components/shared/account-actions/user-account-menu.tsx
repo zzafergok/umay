@@ -58,7 +58,7 @@ export function UserAccountMenu({ className }: UserAccountMenuProps) {
           className={cn('gap-2 px-2 sm:px-2.5', className)}
         >
           <Avatar size="sm" className="size-6 border-border">
-            <AvatarFallback className="bg-accent-subtle text-accent text-caption font-semibold">
+            <AvatarFallback className="bg-accent-subtle text-caption font-semibold text-accent">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -66,7 +66,7 @@ export function UserAccountMenu({ className }: UserAccountMenuProps) {
             {displayName}
           </span>
           <ChevronDown
-            className="text-text-muted hidden h-3.5 w-3.5 sm:inline"
+            className="hidden h-3.5 w-3.5 text-text-muted sm:inline"
             aria-hidden="true"
           />
         </Button>
@@ -75,11 +75,11 @@ export function UserAccountMenu({ className }: UserAccountMenuProps) {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-0.5">
-            <span className="text-body-sm text-text truncate font-semibold">
+            <span className="truncate text-body-sm font-semibold text-text">
               {displayName}
             </span>
             {user?.email && (
-              <span className="text-text-muted truncate text-caption">
+              <span className="truncate text-caption text-text-muted">
                 {user.email}
               </span>
             )}

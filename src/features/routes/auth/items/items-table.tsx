@@ -53,14 +53,14 @@ export function ItemsTableView({
                     type="button"
                     variant="link"
                     size="sm"
-                    className="text-text h-auto whitespace-normal break-words p-0 text-left font-medium hover:text-accent"
+                    className="h-auto whitespace-normal break-words p-0 text-left font-medium text-text hover:text-accent"
                     onClick={() => onDetail(item)}
                   >
                     {item.name}
                   </Button>
                 </TableCell>
-                <TableCell className="text-text-muted whitespace-normal break-words">
-                  {locationMap.get(item.locationId)?.path.join(' > ') ?? '—'}
+                <TableCell className="whitespace-normal break-words text-text-muted">
+                  {locationMap.get(item.locationId)?.path.join('>') ?? '—'}
                 </TableCell>
                 <TableCell>
                   {item.quantity <= 0 ? (
@@ -69,7 +69,7 @@ export function ItemsTableView({
                     item.quantity <= item.minQuantity ? (
                     <StatusPill tone="low_stock" label="Düşük stok" />
                   ) : (
-                    <span className="text-text-muted text-caption">—</span>
+                    <span className="text-caption text-text-muted">—</span>
                   )}
                 </TableCell>
                 <TableCell className="text-right tabular-nums">

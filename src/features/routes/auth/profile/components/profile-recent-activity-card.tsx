@@ -92,10 +92,10 @@ export function ProfileRecentActivityCard({
                   className="flex items-center justify-between gap-3 px-3.5 py-2.5"
                 >
                   <div className="min-w-0 space-y-0.5">
-                    <p className="text-body-sm text-text truncate font-medium">
+                    <p className="truncate text-body-sm font-medium text-text">
                       {movement.itemName || copy.fallbackItemName}
                     </p>
-                    <p className="text-text-muted truncate text-caption">
+                    <p className="truncate text-caption text-text-muted">
                       {copy.movementTypes[movement.type]}
                       {movement.reason ? ` · ${movement.reason}` : ''}
                     </p>
@@ -104,7 +104,7 @@ export function ProfileRecentActivityCard({
                     <Badge variant={badgeVariant} className="tabular-nums">
                       {deltaText}
                     </Badge>
-                    <span className="text-text-subtle text-caption tabular-nums">
+                    <span className="text-caption tabular-nums text-text-subtle">
                       {formatActivityDate(movement.at, locale)}
                     </span>
                   </div>

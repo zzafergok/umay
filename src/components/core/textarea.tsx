@@ -15,12 +15,12 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         data-slot="textarea"
         aria-invalid={error ? true : props['aria-invalid']}
         className={cn(
-          'bg-surface-sunken text-body text-text flex min-h-24 w-full rounded-md border border-border px-3 py-2 outline-none transition-colors duration-150',
+          'flex min-h-24 w-full rounded-md border border-border bg-surface-sunken px-3 py-2 text-body text-text outline-none transition-colors duration-150',
           'placeholder:text-text-subtle',
-          'focus-visible:ring-offset-bg focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
-          'aria-invalid:border-danger aria-invalid:focus-visible:ring-danger',
+          'focus-visible:border-accent',
+          'aria-invalid:border-danger',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          error && 'border-danger focus-visible:ring-danger',
+          error && 'border-danger',
           className,
         )}
         {...props}

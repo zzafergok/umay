@@ -7,23 +7,23 @@
  *
  * @example
  * ```tsx
- * import { Form, TextField, SelectField, SubmitButton } from '@/components/forms'
+ * import { Form, TextField, SelectField, SubmitButton } from'@/components/forms'
  *
  * const schema = z.object({
- *   name: z.string().min(2),
- *   email: z.string().email(),
+ * name: z.string().min(2),
+ * email: z.string().email(),
  * })
  *
  * function MyForm() {
- *   const handleSubmit = (data) => console.log(data)
+ * const handleSubmit = (data) => console.log(data)
  *
- *   return (
- *     <Form schema={schema} defaultValues={{ name: '', email: '' }} onSubmit={handleSubmit}>
- *       <TextField name="name" label="Name" required />
- *       <TextField name="email" label="Email" type="email" required />
- *       <SubmitButton>Submit</SubmitButton>
- *     </Form>
- *   )
+ * return (
+ * <Form schema={schema} defaultValues={{ name:'', email:''}} onSubmit={handleSubmit}>
+ * <TextField name="name"label="Name"required />
+ * <TextField name="email"label="Email"type="email"required />
+ * <SubmitButton>Submit</SubmitButton>
+ * </Form>
+ * )
  * }
  * ```
  */

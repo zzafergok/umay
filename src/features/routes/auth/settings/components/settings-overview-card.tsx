@@ -73,14 +73,14 @@ export function SettingsOverviewCard({
       <CardContent className="space-y-6 p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex min-w-0 items-start gap-3.5 sm:items-center">
-            <span className="bg-accent-subtle flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-border">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-border bg-accent-subtle">
               <SlidersHorizontal
                 className="h-5 w-5 text-accent"
                 aria-hidden="true"
               />
             </span>
             <div className="min-w-0 space-y-1">
-              <h2 className="font-heading text-title text-text truncate font-bold">
+              <h2 className="truncate font-heading text-title font-bold text-text">
                 {copy.activeConfigTitle}
               </h2>
               <p className="text-body-sm text-text-muted">
@@ -109,14 +109,14 @@ export function SettingsOverviewCard({
           {summaryItems.map(({ label, value, Icon }) => (
             <div
               key={label}
-              className="bg-surface-sunken flex items-center gap-3 rounded-md border border-border px-4 py-3"
+              className="flex items-center gap-3 rounded-md border border-border bg-surface-sunken px-4 py-3"
             >
-              <span className="bg-surface flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border">
-                <Icon className="text-text-muted h-4 w-4" aria-hidden="true" />
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-surface">
+                <Icon className="h-4 w-4 text-text-muted" aria-hidden="true" />
               </span>
               <div className="min-w-0">
-                <p className="text-text-muted truncate text-caption">{label}</p>
-                <p className="text-body-sm text-text truncate font-semibold tabular-nums">
+                <p className="truncate text-caption text-text-muted">{label}</p>
+                <p className="truncate text-body-sm font-semibold tabular-nums text-text">
                   {value}
                 </p>
               </div>

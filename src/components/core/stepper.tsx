@@ -68,8 +68,8 @@ export function StepperItem({
           className={cn(
             'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 font-mono text-xs font-bold transition-colors sm:h-10 sm:w-10 sm:text-sm',
             isActive || isCompleted
-              ? 'text-on-accent border-accent bg-accent'
-              : 'bg-surface text-text-muted border-border',
+              ? 'border-accent bg-accent text-on-accent'
+              : 'border-border bg-surface text-text-muted',
           )}
         >
           {isCompleted ? (
@@ -95,7 +95,7 @@ export function StepperItem({
             {title}
           </div>
           {description && (
-            <div className="text-text-muted mt-1 hidden text-caption sm:block">
+            <div className="mt-1 hidden text-caption text-text-muted sm:block">
               {description}
             </div>
           )}

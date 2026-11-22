@@ -80,7 +80,8 @@ export function ReceiptAssistant({
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>OpenRouter API Anahtarı Eksik</AlertTitle>
           <AlertDescription>
-            Fiş analizi için <code className="font-mono">.env</code> dosyasına{' '}
+            Fiş analizi için <code className="font-mono">.env</code> dosyasına
+            {''}
             <code className="font-mono">OPENROUTER_API_KEY</code> tanımlayın.
           </AlertDescription>
         </Alert>

@@ -58,10 +58,10 @@ export function CategoryLivePreview({
 
   return (
     <div className="space-y-4">
-      <div className="bg-surface-sunken/50 rounded-md border border-border p-3">
+      <div className="rounded-md border border-border bg-surface-sunken/50 p-3">
         <div className="flex items-start gap-3">
           <div
-            className="bg-surface flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-surface"
             style={{ color }}
           >
             <CategoryIcon name={icon} className="h-5 w-5" />
@@ -72,7 +72,7 @@ export function CategoryLivePreview({
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: color }}
               />
-              <h4 className="text-text text-sm font-semibold">
+              <h4 className="text-sm font-semibold text-text">
                 {name.trim() || 'Örnek Kategori'}
               </h4>
               <Badge variant="outline" className="text-[11px]">
@@ -88,7 +88,7 @@ export function CategoryLivePreview({
               ) : null}
             </div>
             {description ? (
-              <p className="text-text-muted text-xs">{description}</p>
+              <p className="text-xs text-text-muted">{description}</p>
             ) : null}
             {activeTrackingBadges.length > 0 ? (
               <div className="flex flex-wrap gap-1 pt-1">
@@ -108,7 +108,7 @@ export function CategoryLivePreview({
           Ürün Ekleme Formunda Görünecek Özel Alanlar
         </p>
         {customFields.length === 0 ? (
-          <p className="text-text-muted text-xs">
+          <p className="text-xs text-text-muted">
             Henüz özel alan eklenmedi. &ldquo;Özel Alanlar&rdquo; sekmesinden bu
             kategoriye özel teknik inputlar ekleyebilirsiniz.
           </p>

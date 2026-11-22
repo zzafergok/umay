@@ -69,7 +69,8 @@ const NavigationMenuTrigger = React.forwardRef<
     className={cn(navigationMenuTriggerStyle(), 'group', className)}
     {...props}
   >
-    {children}{' '}
+    {children}
+    {''}
     <ChevronDown
       className="relative top-[1px] ml-1 size-3 text-ash transition duration-300 group-data-[state=open]:rotate-180"
       aria-hidden="true"
@@ -142,7 +143,7 @@ const NavigationMenuIndicator = React.forwardRef<
     )}
     {...props}
   >
-    <div className="rounded-tl-xs relative top-[60%] size-2 rotate-45 border-l border-t border-border bg-surface-raised dark:border-border-strong" />
+    <div className="relative top-[60%] size-2 rotate-45 rounded-tl-xs border-l border-t border-border bg-surface-raised dark:border-border-strong" />
   </NavigationMenuPrimitive.Indicator>
 ));
 NavigationMenuIndicator.displayName =

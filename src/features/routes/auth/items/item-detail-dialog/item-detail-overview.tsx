@@ -76,7 +76,7 @@ export function ItemDetailOverview({
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-surface-sunken/50 inline-flex min-h-[36px] items-center gap-1.5 rounded-sm border border-border px-2.5 py-1 text-xs font-medium transition-colors hover:border-accent"
+                  className="inline-flex min-h-[36px] items-center gap-1.5 rounded-sm border border-border bg-surface-sunken/50 px-2.5 py-1 text-xs font-medium transition-colors hover:border-accent"
                 >
                   <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" />
                   <span>Fotoğraf #{idx + 1}</span>

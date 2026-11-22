@@ -29,7 +29,7 @@ export function PartLogsCard({ logs }: PartLogsCardProps) {
       </CardHeader>
 
       {logs.length === 0 ? (
-        <CardContent className="text-text-muted py-6 text-center text-sm">
+        <CardContent className="py-6 text-center text-sm text-text-muted">
           Henüz değişim kaydı yok.
         </CardContent>
       ) : (
@@ -38,17 +38,17 @@ export function PartLogsCard({ logs }: PartLogsCardProps) {
             {logs.map((log) => (
               <div
                 key={log.id}
-                className="bg-surface-sunken/50 flex items-start justify-between gap-3 rounded-lg border border-border/80 px-3 py-2.5"
+                className="flex items-start justify-between gap-3 rounded-lg border border-border/80 bg-surface-sunken/50 px-3 py-2.5"
               >
                 <div className="min-w-0 space-y-0.5">
-                  <p className="text-text text-xs font-medium">
+                  <p className="text-xs font-medium text-text">
                     {new Date(log.replacedAt).toLocaleDateString('tr-TR')}
                   </p>
-                  <p className="text-text-muted break-words text-xs">
+                  <p className="break-words text-xs text-text-muted">
                     {log.note || 'Not belirtilmedi'}
                   </p>
                 </div>
-                <span className="text-text shrink-0 font-mono text-xs font-semibold tabular-nums">
+                <span className="shrink-0 font-mono text-xs font-semibold tabular-nums text-text">
                   {log.cost ? `${log.cost} TRY` : '—'}
                 </span>
               </div>

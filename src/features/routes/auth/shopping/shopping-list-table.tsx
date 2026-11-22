@@ -21,7 +21,10 @@ import { formatCurrency } from '@/lib/utils';
 import { ShoppingListRow } from './shopping-list-row';
 import { ShoppingListToolbar } from './shopping-list-toolbar';
 import { ShoppingMobileCards } from './shopping-mobile-cards';
-import { ShoppingTableBulkActions, ShoppingTableState } from './shopping-table-states';
+import {
+  ShoppingTableBulkActions,
+  ShoppingTableState,
+} from './shopping-table-states';
 import type {
   ShoppingPriorityFilter,
   ShoppingStatusFilter,
@@ -217,7 +220,7 @@ export function ShoppingListTable({
               </span>
               {filteredEstimatedTotal > 0 && (
                 <span className="font-mono tabular-nums text-text">
-                  Listelenen tahmini tutar:{' '}
+                  Listelenen tahmini tutar:{''}
                   {formatCurrency(filteredEstimatedTotal, {
                     currency,
                     locale: 'tr',

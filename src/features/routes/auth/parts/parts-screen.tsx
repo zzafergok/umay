@@ -49,7 +49,7 @@ export function PartsScreen() {
   return (
     <div className="space-y-5 md:space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="bg-surface-sunken grid w-full grid-cols-4 gap-1 rounded-xl border border-border p-1 sm:flex sm:w-auto sm:flex-wrap sm:gap-1.5">
+        <div className="grid w-full grid-cols-4 gap-1 rounded-xl border border-border bg-surface-sunken p-1 sm:flex sm:w-auto sm:flex-wrap sm:gap-1.5">
           {(
             [
               { key: 'all', label: 'Tümü' },

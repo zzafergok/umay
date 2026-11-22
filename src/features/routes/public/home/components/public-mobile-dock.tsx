@@ -42,7 +42,7 @@ export function PublicMobileDock({
     >
       <nav
         aria-label={mobileShell.navAriaLabel}
-        className="bg-surface/75 dark:bg-surface-raised/75 border-border-strong/70 pointer-events-auto mx-auto max-w-md rounded-[26px] border p-1.5 shadow-[0_10px_32px_-8px_rgb(var(--text)/0.16),inset_0_1px_0_rgb(255_255_255/0.65)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/15 dark:shadow-[0_12px_32px_-8px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.12)]"
+        className="pointer-events-auto mx-auto max-w-md rounded-[26px] border border-border-strong/70 bg-surface/75 p-1.5 shadow-[0_10px_32px_-8px_rgb(var(--text)/0.16),inset_0_1px_0_rgb(255_255_255/0.65)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/15 dark:bg-surface-raised/75 dark:shadow-[0_12px_32px_-8px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.12)]"
       >
         <div className="grid grid-cols-4 items-stretch gap-1">
           {TAB_ITEMS.map(({ key, icon: Icon }) => {
@@ -65,7 +65,7 @@ export function PublicMobileDock({
                   'h-[52px] w-full flex-col gap-0.5 rounded-[20px] px-1.5 py-1 text-[11px] font-medium transition-all duration-200',
                   isActive
                     ? 'bg-accent/14 hover:bg-accent/18 text-accent shadow-[inset_0_1px_0_rgb(255_255_255/0.55)] dark:bg-accent/20 dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12)]'
-                    : 'text-text-muted hover:text-text hover:bg-surface-sunken/50',
+                    : 'text-text-muted hover:bg-surface-sunken/50 hover:text-text',
                 )}
               >
                 <Icon className="h-4.5 w-4.5 shrink-0" aria-hidden="true" />

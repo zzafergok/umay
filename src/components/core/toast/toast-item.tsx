@@ -13,11 +13,11 @@ const ToastIcon = ({ type }: { type?: ToastType }) => {
     case 'success':
       return <Check className="h-4 w-4 text-success" />;
     case 'error':
-      return <AlertTriangle className="text-danger h-4 w-4" />;
+      return <AlertTriangle className="h-4 w-4 text-danger" />;
     case 'warning':
       return <Clock className="h-4 w-4 text-warning" />;
     case 'loading':
-      return <Loader2 className="text-text-muted h-4 w-4 animate-spin" />;
+      return <Loader2 className="h-4 w-4 animate-spin text-text-muted" />;
     default:
       return <Info className="h-4 w-4 text-info" />;
   }
@@ -94,7 +94,7 @@ export function ToastItem({ t }: { t: Toast }) {
       onMouseLeave={isInfinite ? undefined : resumeTimer}
       className={cn(
         'layout-group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden',
-        'dark:border-border-strong bg-surface-raised text-text shadow-float rounded-md border border-border p-4',
+        'rounded-md border border-border bg-surface-raised p-4 text-text shadow-float dark:border-border-strong',
       )}
     >
       <div className="mt-0.5 shrink-0">
@@ -102,10 +102,10 @@ export function ToastItem({ t }: { t: Toast }) {
       </div>
       <div className="flex-1 space-y-1">
         {t.title && (
-          <p className="text-body-sm text-text font-medium">{t.title}</p>
+          <p className="text-body-sm font-medium text-text">{t.title}</p>
         )}
         {t.description && (
-          <p className="text-text-muted text-caption">{t.description}</p>
+          <p className="text-caption text-text-muted">{t.description}</p>
         )}
         {t.action && (
           <div className="pt-1.5">

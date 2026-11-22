@@ -54,7 +54,7 @@ export function ApplicationShellHeader({
   return (
     <header
       className={cn(
-        'bg-surface/85 dark:bg-surface/80 sticky top-0 z-30 flex shrink-0 items-center justify-between gap-2 border-b border-border px-3 backdrop-blur-xl sm:px-6 lg:px-8',
+        'sticky top-0 z-30 flex shrink-0 items-center justify-between gap-2 border-b border-border bg-surface/85 px-3 backdrop-blur-xl dark:bg-surface/80 sm:px-6 lg:px-8',
         SHELL_TOPBAR_HEIGHT_CLASS,
       )}
     >
@@ -96,12 +96,12 @@ export function ApplicationShellHeader({
                       {!isLast && item.href ? (
                         <BreadcrumbLink
                           asChild
-                          className="text-text-muted truncate hover:text-text"
+                          className="truncate text-text-muted hover:text-text"
                         >
                           <Link href={item.href}>{item.label}</Link>
                         </BreadcrumbLink>
                       ) : (
-                        <BreadcrumbPage className="font-heading text-text truncate font-semibold">
+                        <BreadcrumbPage className="truncate font-heading font-semibold text-text">
                           {item.label}
                         </BreadcrumbPage>
                       )}
@@ -115,7 +115,7 @@ export function ApplicationShellHeader({
       </div>
 
       {headerActions && (
-        <div className="text-body-sm flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2 text-body-sm">
           {headerActions}
         </div>
       )}

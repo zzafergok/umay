@@ -19,7 +19,7 @@ const TURKISH_FOLD_MAP: Record<string, string> = {
 
 /**
  * Türkçe ve İngilizce karakter duyarsız (diacritic-insensitive) arama normalizasyonu.
- * Örn: "Ücretsiz Görsel" -> "ucretsiz gorsel", "İçecek" -> "icecek"
+ * Örn:"Ücretsiz Görsel"->"ucretsiz gorsel","İçecek"->"icecek"
  */
 export function normalizeSelectSearchText(input: string): string {
   if (!input) return '';
@@ -46,7 +46,7 @@ export function matchesSelectSearch(
   const normalizedTarget = normalizeSelectSearchText(targetText);
   if (!normalizedTarget) return false;
 
-  const tokens = normalizedQuery.split(' ').filter(Boolean);
+  const tokens = normalizedQuery.split('').filter(Boolean);
   return tokens.every((token) => normalizedTarget.includes(token));
 }
 
@@ -61,7 +61,7 @@ export function extractTextFromReactNode(node: React.ReactNode): string {
     return String(node);
   }
   if (Array.isArray(node)) {
-    return node.map(extractTextFromReactNode).filter(Boolean).join(' ');
+    return node.map(extractTextFromReactNode).filter(Boolean).join('');
   }
   if (React.isValidElement<{ children?: React.ReactNode }>(node)) {
     return extractTextFromReactNode(node.props.children);
@@ -96,7 +96,7 @@ export function buildSelectItemSearchCorpus(
   if (typeof props.value === 'string' && props.value) {
     parts.push(props.value);
   }
-  return parts.filter(Boolean).join(' ');
+  return parts.filter(Boolean).join('');
 }
 
 /**

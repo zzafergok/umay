@@ -34,12 +34,12 @@ export function Stat({
     <div
       data-slot="stat"
       className={cn(
-        'bg-surface flex flex-col justify-between gap-2 rounded-md border border-border p-4 md:p-5',
+        'flex flex-col justify-between gap-2 rounded-md border border-border bg-surface p-4 md:p-5',
         className,
       )}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-text-muted text-caption">{label}</span>
+        <span className="text-caption text-text-muted">{label}</span>
         {icon ? (
           <span className="text-text-muted" aria-hidden="true">
             {icon}
@@ -49,18 +49,18 @@ export function Stat({
       <div className="flex min-w-0 items-baseline gap-1.5">
         <span
           className={cn(
-            'font-heading truncate text-xl tabular-nums sm:text-metric',
+            'truncate font-heading text-xl tabular-nums sm:text-metric',
             VALUE_TONE_CLASSES[tone],
           )}
         >
           {value}
         </span>
         {unit ? (
-          <span className="text-text-muted shrink-0 text-caption">{unit}</span>
+          <span className="shrink-0 text-caption text-text-muted">{unit}</span>
         ) : null}
       </div>
       {hint ? (
-        <span className="text-text-muted text-caption">{hint}</span>
+        <span className="text-caption text-text-muted">{hint}</span>
       ) : null}
     </div>
   );

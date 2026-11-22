@@ -49,11 +49,11 @@ export function HeroPreviewShoppingTab({
 
   return (
     <div className="space-y-3">
-      <div className="bg-surface-sunken/40 rounded-xl border border-border p-3">
+      <div className="rounded-xl border border-border bg-surface-sunken/40 p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Receipt className="h-4 w-4 text-accent" aria-hidden="true" />
-            <p className="text-text text-xs font-semibold">
+            <p className="text-xs font-semibold text-text">
               {shoppingView.receiptCardTitle}
             </p>
           </div>
@@ -62,7 +62,7 @@ export function HeroPreviewShoppingTab({
           </Badge>
         </div>
 
-        <p className="text-text-muted mt-1 text-[11px]">
+        <p className="mt-1 text-[11px] text-text-muted">
           {shoppingView.receiptFileName} · {shoppingView.receiptSummary}
         </p>
 
@@ -70,12 +70,12 @@ export function HeroPreviewShoppingTab({
           {shoppingView.receiptLines.map((line) => (
             <div
               key={line.id}
-              className="bg-surface flex items-center justify-between gap-2 rounded-md border border-border px-2.5 py-1.5 text-xs"
+              className="flex items-center justify-between gap-2 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs"
             >
-              <span className="text-text truncate font-medium">
+              <span className="truncate font-medium text-text">
                 {line.name}
               </span>
-              <span className="text-text-muted shrink-0 text-[11px]">
+              <span className="shrink-0 text-[11px] text-text-muted">
                 {line.quantityText}
               </span>
             </div>
@@ -104,21 +104,21 @@ export function HeroPreviewShoppingTab({
       </div>
 
       {suggestions.length > 0 && (
-        <div className="bg-surface-sunken/60 rounded-xl border border-border p-2.5">
-          <p className="text-text-muted mb-1.5 text-[11px] font-semibold">
+        <div className="rounded-xl border border-border bg-surface-sunken/60 p-2.5">
+          <p className="mb-1.5 text-[11px] font-semibold text-text-muted">
             {shoppingView.smartSuggestionsTitle}
           </p>
           <div className="space-y-1.5">
             {suggestions.slice(0, 2).map((suggestion) => (
               <div
                 key={suggestion.id}
-                className="bg-surface flex items-center justify-between gap-2 rounded-lg border border-border px-2.5 py-1.5"
+                className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-2.5 py-1.5"
               >
                 <div className="min-w-0">
-                  <p className="text-text truncate text-xs font-medium">
+                  <p className="truncate text-xs font-medium text-text">
                     {suggestion.title}
                   </p>
-                  <p className="text-text-muted truncate text-[10px]">
+                  <p className="truncate text-[10px] text-text-muted">
                     {suggestion.reason}
                   </p>
                 </div>
@@ -145,13 +145,13 @@ export function HeroPreviewShoppingTab({
       )}
 
       <div className="space-y-1.5">
-        <p className="text-text-muted text-[11px] font-semibold">
+        <p className="text-[11px] font-semibold text-text-muted">
           {shoppingView.listTitle}
         </p>
         {shoppingRows.map((row) => (
           <div
             key={row.id}
-            className="bg-surface flex items-center justify-between gap-2 rounded-lg border border-border px-2.5 py-2"
+            className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-2.5 py-2"
           >
             <Button
               type="button"
@@ -163,8 +163,8 @@ export function HeroPreviewShoppingTab({
               <span
                 className={
                   row.checked
-                    ? 'text-on-accent flex h-4 w-4 shrink-0 items-center justify-center rounded border border-transparent bg-success text-[10px]'
-                    : 'border-border-strong bg-surface flex h-4 w-4 shrink-0 items-center justify-center rounded border'
+                    ? 'flex h-4 w-4 shrink-0 items-center justify-center rounded border border-transparent bg-success text-[10px] text-on-accent'
+                    : 'flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border-strong bg-surface'
                 }
               >
                 {row.checked ? <Check className="h-3 w-3" /> : null}
@@ -172,8 +172,8 @@ export function HeroPreviewShoppingTab({
               <span
                 className={
                   row.checked
-                    ? 'text-text-muted truncate text-xs line-through'
-                    : 'text-text truncate text-xs font-medium'
+                    ? 'truncate text-xs text-text-muted line-through'
+                    : 'truncate text-xs font-medium text-text'
                 }
               >
                 {row.title}

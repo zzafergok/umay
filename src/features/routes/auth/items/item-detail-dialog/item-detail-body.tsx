@@ -109,7 +109,7 @@ export function ItemDetailBody({
             <div className="space-y-0.5">
               <DialogTitle>{item.name}</DialogTitle>
               <DialogDescription>
-                {location?.path.join(' > ') ?? 'Konum yok'} •{' '}
+                {location?.path.join('>') ?? 'Konum yok'} •{''}
                 {category?.name ?? 'Genel'}
               </DialogDescription>
             </div>
@@ -230,7 +230,7 @@ export function ItemDetailBody({
           { label: 'Stok', value: `${item.quantity} ${item.unit}` },
           {
             label: 'Konum',
-            value: location?.path.join(' > ') ?? 'Konum yok',
+            value: location?.path.join('>') ?? 'Konum yok',
           },
           { label: 'Kategori', value: category?.name ?? 'Genel' },
         ]}

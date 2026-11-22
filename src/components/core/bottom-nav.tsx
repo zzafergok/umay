@@ -41,7 +41,7 @@ export function BottomNav({
     >
       <nav
         aria-label={ariaLabel}
-        className="bg-surface/75 dark:bg-surface-raised/75 border-border-strong/70 pointer-events-auto mx-auto max-w-md rounded-[26px] border p-1.5 shadow-[0_10px_32px_-8px_rgb(var(--text)/0.16),inset_0_1px_0_rgb(255_255_255/0.65)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/15 dark:shadow-[0_12px_32px_-8px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.12)]"
+        className="pointer-events-auto mx-auto max-w-md rounded-[26px] border border-border-strong/70 bg-surface/75 p-1.5 shadow-[0_10px_32px_-8px_rgb(var(--text)/0.16),inset_0_1px_0_rgb(255_255_255/0.65)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/15 dark:bg-surface-raised/75 dark:shadow-[0_12px_32px_-8px_rgb(0_0_0/0.55),inset_0_1px_0_rgb(255_255_255/0.12)]"
       >
         <ul className="grid grid-cols-5 items-stretch gap-1">
           {items.map((item) => {
@@ -52,7 +52,7 @@ export function BottomNav({
                 : pathname === item.href);
             const Icon = item.icon;
             const itemClasses = cn(
-              'flex h-auto min-h-[54px] w-full flex-col items-center justify-center gap-1 rounded-[20px] px-1 py-1.5 text-[11px] leading-[1.25] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1',
+              'flex h-auto min-h-[54px] w-full flex-col items-center justify-center gap-1 rounded-[20px] px-1 py-1.5 text-[11px] leading-[1.25] font-medium transition-all duration-200 focus-visible:outline-none',
               isActive
                 ? 'bg-accent/14 text-accent dark:bg-accent/20 shadow-[inset_0_1px_0_rgb(255_255_255/0.55)] dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12)]'
                 : 'text-text-muted hover:text-text',

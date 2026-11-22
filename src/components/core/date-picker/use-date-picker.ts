@@ -28,7 +28,7 @@ function formatDisplayValue(
     `${format(value, dateFormat, { locale })}${enableTime ? ` ${format(value, timeFormat, { locale })}` : ''}`;
 
   if (date instanceof Date) return formatDate(date);
-  if (Array.isArray(date)) return date.map(formatDate).join(', ');
+  if (Array.isArray(date)) return date.map(formatDate).join(',');
   if (date.from && date.to)
     return `${formatDate(date.from)} - ${formatDate(date.to)}`;
   if (date.from) return `${formatDate(date.from)} - ...`;

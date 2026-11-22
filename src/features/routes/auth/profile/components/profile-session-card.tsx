@@ -105,11 +105,11 @@ export function ProfileSessionCard({
         <CardDescription>{copy.description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="bg-surface-sunken space-y-3 rounded-md border border-border p-3.5">
+        <div className="space-y-3 rounded-md border border-border bg-surface-sunken p-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
-              <p className="text-text-muted text-caption">{copy.signedInAs}</p>
-              <p className="text-body-sm text-text mt-0.5 truncate font-semibold">
+              <p className="text-caption text-text-muted">{copy.signedInAs}</p>
+              <p className="mt-0.5 truncate text-body-sm font-semibold text-text">
                 {userEmail}
               </p>
             </div>
@@ -121,10 +121,10 @@ export function ProfileSessionCard({
           <div className="grid grid-cols-1 gap-2 border-t border-border pt-2.5 sm:grid-cols-3">
             {sessionRows.map((row) => (
               <div key={row.label} className="min-w-0">
-                <p className="text-text-muted truncate text-caption">
+                <p className="truncate text-caption text-text-muted">
                   {row.label}
                 </p>
-                <p className="text-text mt-0.5 truncate text-xs font-medium tabular-nums">
+                <p className="mt-0.5 truncate text-xs font-medium tabular-nums text-text">
                   {row.value}
                 </p>
               </div>

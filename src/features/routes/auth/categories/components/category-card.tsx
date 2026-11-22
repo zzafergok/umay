@@ -50,7 +50,7 @@ export function CategoryCard({
       <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
         <div className="flex min-w-0 items-start gap-2.5">
           <div
-            className="bg-surface-sunken flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-surface-sunken"
             style={{ color }}
           >
             <CategoryIcon name={category.icon} className="h-4 w-4" />
@@ -64,7 +64,7 @@ export function CategoryCard({
               <span className="truncate">{category.name}</span>
             </CardTitle>
             {category.description ? (
-              <p className="text-text-muted line-clamp-2 text-xs">
+              <p className="line-clamp-2 text-xs text-text-muted">
                 {category.description}
               </p>
             ) : null}
@@ -94,7 +94,7 @@ export function CategoryCard({
               <Badge
                 key={flag}
                 variant="outline"
-                className="text-text-muted text-[11px]"
+                className="text-[11px] text-text-muted"
               >
                 {flag}
               </Badge>
@@ -114,9 +114,9 @@ export function CategoryCard({
               >
                 <span>
                   {field.label}
-                  {field.required ? ' *' : ''}
+                  {field.required ? '*' : ''}
                 </span>
-                <span className="text-text-muted text-[10px]">
+                <span className="text-[10px] text-text-muted">
                   ({formatCustomFieldBadge(field)})
                 </span>
               </Badge>
@@ -142,7 +142,7 @@ export function CategoryCard({
             onClick={() => onDuplicate(category)}
             aria-label={`${category.name} kategorisini çoğalt`}
           >
-            <Copy className="text-text-muted h-3.5 w-3.5" />
+            <Copy className="h-3.5 w-3.5 text-text-muted" />
           </Button>
           <Button
             variant="ghost"

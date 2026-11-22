@@ -1,6 +1,12 @@
 'use client';
 
-import { CheckCheck, PackagePlus, Plus, RotateCcw, ShoppingCart } from 'lucide-react';
+import {
+  CheckCheck,
+  PackagePlus,
+  Plus,
+  RotateCcw,
+  ShoppingCart,
+} from 'lucide-react';
 import { Button } from '@/components/core/button';
 import {
   Empty,

@@ -48,7 +48,7 @@ export function ItemCard({
   const [nowMs] = React.useState(() => Date.now());
   const pill = getItemExceptionPill(item, nowMs);
   const typeLabel = getItemTypeLabel(item.type);
-  const locationText = location ? location.path.join(' > ') : 'Konum yok';
+  const locationText = location ? location.path.join('>') : 'Konum yok';
   const categoryColor = category?.colorToken
     ? resolveCategoryColorHex(category.colorToken)
     : resolveCategoryCssVar(category?.name);
@@ -67,12 +67,12 @@ export function ItemCard({
   return (
     <Card
       size="sm"
-      className="hover:border-border-strong flex flex-col justify-between gap-2.5 py-3 transition-colors"
+      className="flex flex-col justify-between gap-2.5 py-3 transition-colors hover:border-border-strong"
     >
       <CardHeader className="flex flex-row items-start justify-between gap-2 pb-0">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <div
-            className="bg-surface-sunken flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-surface-sunken"
             style={{ color: categoryColor }}
             aria-hidden="true"
           >
@@ -87,18 +87,18 @@ export function ItemCard({
               type="button"
               variant="link"
               onClick={() => onDetail(item)}
-              className="font-heading text-text h-auto max-w-full justify-start truncate p-0 text-left text-sm font-semibold leading-tight hover:text-accent"
+              className="h-auto max-w-full justify-start truncate p-0 text-left font-heading text-sm font-semibold leading-tight text-text hover:text-accent"
             >
               <span className="truncate">{item.name}</span>
             </Button>
-            <div className="text-text-muted mt-0.5 flex items-center gap-1.5 text-[11px]">
+            <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-text-muted">
               <span
                 className="h-1.5 w-1.5 shrink-0 rounded-full"
                 style={{ backgroundColor: categoryColor }}
                 aria-hidden="true"
               />
               <span className="truncate leading-tight">
-                {subtitleParts.join(' · ')}
+                {subtitleParts.join('·')}
               </span>
             </div>
           </div>
@@ -109,7 +109,7 @@ export function ItemCard({
         ) : (
           <Badge
             variant="outline"
-            className="text-text-muted shrink-0 px-1.5 py-0 text-[10px] font-normal"
+            className="shrink-0 px-1.5 py-0 text-[10px] font-normal text-text-muted"
           >
             {typeLabel}
           </Badge>
@@ -124,12 +124,9 @@ export function ItemCard({
             onAdjustStock={onAdjustStock}
           />
 
-          <div className="text-text-muted flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-[11px]">
+          <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-[11px] text-text-muted">
             <span className="inline-flex min-w-0 items-center gap-1">
-              <MapPin
-                className="h-3 w-3 shrink-0"
-                aria-hidden="true"
-              />
+              <MapPin className="h-3 w-3 shrink-0" aria-hidden="true" />
               <span className="truncate">{locationText}</span>
             </span>
             {item.expiresAt ? (
@@ -146,10 +143,11 @@ export function ItemCard({
                 <Badge
                   key={field.key}
                   variant="secondary"
-                  className="bg-surface-sunken/70 h-auto max-w-full truncate border border-border/70 px-1.5 py-0 text-left text-[10px] font-normal leading-snug"
+                  className="h-auto max-w-full truncate border border-border/70 bg-surface-sunken/70 px-1.5 py-0 text-left text-[10px] font-normal leading-snug"
                 >
-                  <span className="text-text-muted">{field.label}:</span>{' '}
-                  <span className="text-text font-medium">
+                  <span className="text-text-muted">{field.label}:</span>
+                  {''}
+                  <span className="font-medium text-text">
                     {formatCustomFieldValue(
                       field,
                       item.customFieldValues[field.key],
@@ -159,7 +157,7 @@ export function ItemCard({
               ))}
             </div>
           ) : item.notes ? (
-            <p className="text-text-muted line-clamp-1 text-[11px] leading-snug">
+            <p className="line-clamp-1 text-[11px] leading-snug text-text-muted">
               {item.notes}
             </p>
           ) : null}
@@ -191,7 +189,7 @@ export function ItemCard({
               type="button"
               size="icon-sm"
               variant="ghost"
-              className="text-danger/80 hover:bg-danger-subtle hover:text-danger h-8 w-8 md:h-7 md:w-7"
+              className="h-8 w-8 text-danger/80 hover:bg-danger-subtle hover:text-danger md:h-7 md:w-7"
               aria-label={`${item.name} ürününü sil`}
               onClick={() => onDelete(item)}
             >

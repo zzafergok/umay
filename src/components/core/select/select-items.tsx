@@ -19,7 +19,7 @@ export const SelectScrollUpButton = React.forwardRef<
     ref={ref}
     data-slot="select-scroll-up-button"
     className={cn(
-      'text-text-muted flex cursor-default items-center justify-center py-1',
+      'flex cursor-default items-center justify-center py-1 text-text-muted',
       className,
     )}
     {...props}
@@ -37,7 +37,7 @@ export const SelectScrollDownButton = React.forwardRef<
     ref={ref}
     data-slot="select-scroll-down-button"
     className={cn(
-      'text-text-muted flex cursor-default items-center justify-center py-1',
+      'flex cursor-default items-center justify-center py-1 text-text-muted',
       className,
     )}
     {...props}
@@ -56,7 +56,7 @@ export const SelectLabel = React.forwardRef<
     ref={ref}
     data-slot="select-label"
     className={cn(
-      'text-text-muted py-1.5 pl-8 pr-2 text-caption font-semibold',
+      'py-1.5 pl-8 pr-2 text-caption font-semibold text-text-muted',
       className,
     )}
     {...props}
@@ -97,7 +97,7 @@ export const SelectItem = React.forwardRef<
       data-search-hidden={!isMatched ? 'true' : undefined}
       aria-hidden={!isMatched ? 'true' : undefined}
       className={cn(
-        'text-body-sm text-text relative flex min-h-[36px] w-full max-w-full cursor-pointer select-none items-center overflow-hidden rounded-sm py-1.5 pl-7 pr-2 outline-none transition-colors duration-150',
+        'relative flex min-h-[36px] w-full max-w-full cursor-pointer select-none items-center overflow-hidden rounded-sm py-1.5 pl-7 pr-2 text-body-sm text-text outline-none transition-colors duration-150',
         'focus:bg-accent-subtle focus:text-text data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
         !isMatched && 'hidden',
         className,

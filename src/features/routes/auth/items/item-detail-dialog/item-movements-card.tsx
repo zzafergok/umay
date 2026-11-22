@@ -30,7 +30,7 @@ export function ItemMovementsCard({ movements, unit }: ItemMovementsCardProps) {
       </CardHeader>
 
       {movements.length === 0 ? (
-        <CardContent className="text-text-muted py-6 text-center text-sm">
+        <CardContent className="py-6 text-center text-sm text-text-muted">
           Henüz stok hareketi yok.
         </CardContent>
       ) : (
@@ -39,18 +39,18 @@ export function ItemMovementsCard({ movements, unit }: ItemMovementsCardProps) {
             {movements.map((mov) => (
               <div
                 key={mov.id}
-                className="bg-surface-sunken/50 flex items-center justify-between gap-3 rounded-lg border border-border/80 px-3 py-2.5"
+                className="flex items-center justify-between gap-3 rounded-lg border border-border/80 bg-surface-sunken/50 px-3 py-2.5"
               >
                 <div className="min-w-0 space-y-0.5">
-                  <p className="text-text truncate text-sm font-medium">
+                  <p className="truncate text-sm font-medium text-text">
                     {mov.reason || mov.type}
                   </p>
-                  <p className="text-text-muted text-xs">
+                  <p className="text-xs text-text-muted">
                     {new Date(mov.at).toLocaleString('tr-TR')}
                   </p>
                 </div>
                 <div className="shrink-0 text-right font-mono text-xs tabular-nums">
-                  <p className="text-text font-semibold">
+                  <p className="font-semibold text-text">
                     {mov.delta > 0 ? `+${mov.delta}` : mov.delta}
                   </p>
                   <p className="text-text-muted">

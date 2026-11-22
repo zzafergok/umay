@@ -33,16 +33,16 @@ export function CustomFieldListItem({
     <div
       className={`flex flex-col gap-3 rounded-md border px-3 py-2.5 transition-colors sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:py-2 ${
         isEditing
-          ? 'bg-accent-subtle/40 border-accent'
-          : 'bg-surface-sunken/50 border-border'
+          ? 'border-accent bg-accent-subtle/40'
+          : 'border-border bg-surface-sunken/50'
       }`}
     >
       <div className="min-w-0 flex-1 space-y-1">
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-text-subtle font-mono text-2xs tabular-nums">
+          <span className="font-mono text-2xs tabular-nums text-text-subtle">
             #{index + 1}
           </span>
-          <span className="text-text truncate text-sm font-medium">
+          <span className="truncate text-sm font-medium text-text">
             {field.label}
           </span>
           <Badge variant="secondary" className="text-[11px]">
@@ -62,7 +62,7 @@ export function CustomFieldListItem({
             </Badge>
           ) : null}
         </div>
-        <div className="text-text-muted flex flex-wrap items-center gap-2 text-[11px]">
+        <div className="flex flex-wrap items-center gap-2 text-[11px] text-text-muted">
           <code className="rounded-xs bg-surface px-1.5 py-0.5 font-mono text-[10px]">
             {field.key}
           </code>

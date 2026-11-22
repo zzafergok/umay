@@ -66,7 +66,7 @@ export function ShoppingListRow({
         <div className="min-w-[180px] space-y-1">
           <p
             className={cn(
-              'text-body-sm text-text font-medium',
+              'text-body-sm font-medium text-text',
               entry.done && 'text-text-muted line-through',
             )}
           >
@@ -82,7 +82,7 @@ export function ShoppingListRow({
               {SHOPPING_SOURCE_LABELS[entry.source]}
             </Badge>
             {entry.store && (
-              <span className="text-text-muted inline-flex items-center gap-1 text-caption">
+              <span className="inline-flex items-center gap-1 text-caption text-text-muted">
                 <MapPin className="h-3 w-3" />
                 {entry.store}
               </span>
@@ -95,7 +95,7 @@ export function ShoppingListRow({
             )}
           </div>
           {entry.note && (
-            <p className="text-text-muted text-caption">{entry.note}</p>
+            <p className="text-caption text-text-muted">{entry.note}</p>
           )}
         </div>
       </TableCell>
@@ -105,7 +105,7 @@ export function ShoppingListRow({
         </Badge>
       </TableCell>
       <TableCell>
-        <div className="bg-surface-sunken inline-flex items-center gap-1 rounded-sm border border-border px-1 py-0.5">
+        <div className="inline-flex items-center gap-1 rounded-sm border border-border bg-surface-sunken px-1 py-0.5">
           <Button
             type="button"
             variant="ghost"
@@ -116,7 +116,7 @@ export function ShoppingListRow({
           >
             <Minus className="h-3 w-3" />
           </Button>
-          <span className="text-text min-w-[5.25rem] whitespace-nowrap px-1.5 text-center font-mono text-caption tabular-nums">
+          <span className="min-w-[5.25rem] whitespace-nowrap px-1.5 text-center font-mono text-caption tabular-nums text-text">
             {entry.qty} {formatShoppingUnit(entry.unit)}
           </span>
           <Button
@@ -134,10 +134,10 @@ export function ShoppingListRow({
       <TableCell className="text-right font-mono tabular-nums">
         {lineTotal !== null ? (
           <div className="space-y-0.5">
-            <p className="text-body-sm text-text font-medium">
+            <p className="text-body-sm font-medium text-text">
               {formatCurrency(lineTotal, { currency, locale: 'tr' })}
             </p>
-            <p className="text-text-muted text-2xs">
+            <p className="text-2xs text-text-muted">
               {formatCurrency(entry.estimatedPrice ?? 0, {
                 currency,
                 locale: 'tr',

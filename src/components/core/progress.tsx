@@ -72,7 +72,9 @@ function LifecycleProgressBar({
   return (
     <div className={cn('space-y-1.5', className)}>
       <div className="flex items-baseline justify-between gap-2 tabular-nums">
-        <span className="text-body-sm font-medium text-text">{summaryText}</span>
+        <span className="text-body-sm font-medium text-text">
+          {summaryText}
+        </span>
         {metaLabel ? (
           <span className="text-caption text-text-muted">{metaLabel}</span>
         ) : null}

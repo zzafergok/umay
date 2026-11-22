@@ -78,11 +78,11 @@ export function ItemsFilterToolbar({
       <div
         role="search"
         aria-label="Ürün filtreleri"
-        className="bg-surface-sunken focus-within:border-border-strong flex min-w-0 flex-1 flex-col rounded-lg border border-border transition-[color,box-shadow] has-[[data-slot=input]:focus-visible]:border-accent has-[[data-slot=input]:focus-visible]:ring-2 has-[[data-slot=input]:focus-visible]:ring-accent/20 lg:min-h-[40px] lg:flex-row lg:items-center"
+        className="has-[[data-slot=input]:focus-visible]: has-[[data-slot=input]:focus-visible]: flex min-w-0 flex-1 flex-col rounded-lg border border-border bg-surface-sunken transition-[color,box-shadow] focus-within:border-border-strong has-[[data-slot=input]:focus-visible]:border-accent lg:min-h-[40px] lg:flex-row lg:items-center"
       >
         <div className="flex min-w-0 flex-1 items-center gap-2 px-3">
           <Search
-            className="text-text-muted h-4 w-4 shrink-0"
+            className="h-4 w-4 shrink-0 text-text-muted"
             aria-hidden="true"
           />
           <Input
@@ -90,7 +90,7 @@ export function ItemsFilterToolbar({
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Ürün, marka, barkod veya etiket ara..."
             aria-label="Ürün, marka, barkod veya etiket ara"
-            className="text-body-sm h-10 min-h-[40px] flex-1 border-0 bg-transparent px-0 py-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 md:h-9 md:min-h-[36px]"
+            className="h-10 min-h-[40px] flex-1 border-0 bg-transparent px-0 py-1 text-body-sm shadow-none md:h-9 md:min-h-[36px]"
           />
           {search && (
             <Button
@@ -99,7 +99,7 @@ export function ItemsFilterToolbar({
               size="icon-xs"
               onClick={() => onSearchChange('')}
               aria-label="Aramayı temizle"
-              className="text-text-muted hover:text-text size-9 shrink-0 rounded-sm md:size-6"
+              className="size-9 shrink-0 rounded-sm text-text-muted hover:text-text md:size-6"
             >
               <X className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
@@ -153,7 +153,7 @@ export function ItemsFilterToolbar({
             ariaLabel="Konum filtresi"
             options={locations.map((l) => ({
               value: l.id,
-              label: l.path.join(' > '),
+              label: l.path.join('>'),
             }))}
             activeClassName={ACTIVE_FILTER_CLASS}
             inactiveClassName={INACTIVE_FILTER_CLASS}
@@ -168,7 +168,7 @@ export function ItemsFilterToolbar({
               onClick={handleResetFilters}
               aria-label="Tüm filtreleri temizle"
               title="Filtreleri temizle"
-              className="text-text-muted hover:bg-surface hover:text-text size-9 shrink-0 rounded-sm md:size-7"
+              className="size-9 shrink-0 rounded-sm text-text-muted hover:bg-surface hover:text-text md:size-7"
             >
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
@@ -180,7 +180,7 @@ export function ItemsFilterToolbar({
         <div
           role="group"
           aria-label="Görünüm modu"
-          className="bg-surface-sunken inline-flex h-10 items-center gap-0.5 rounded-lg border border-border p-1"
+          className="inline-flex h-10 items-center gap-0.5 rounded-lg border border-border bg-surface-sunken p-1"
         >
           {VIEW_MODES.map(({ mode, label, Icon }) => {
             const active = viewMode === mode;

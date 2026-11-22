@@ -54,24 +54,24 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
           <div>
-            <p className="text-text-muted text-xs">Tür</p>
+            <p className="text-xs text-text-muted">Tür</p>
             <p className="font-medium">{typeLabel}</p>
           </div>
           {item.model ? (
             <div>
-              <p className="text-text-muted text-xs">Model</p>
+              <p className="text-xs text-text-muted">Model</p>
               <p className="font-medium">{item.model}</p>
             </div>
           ) : null}
           {item.serialNumber ? (
             <div>
-              <p className="text-text-muted text-xs">Seri No</p>
+              <p className="text-xs text-text-muted">Seri No</p>
               <p className="font-mono text-xs">{item.serialNumber}</p>
             </div>
           ) : null}
           {item.purchasePrice !== undefined ? (
             <div>
-              <p className="text-text-muted text-xs">Satın Alma Fiyatı</p>
+              <p className="text-xs text-text-muted">Satın Alma Fiyatı</p>
               <p className="font-medium tabular-nums">
                 {item.purchasePrice.toLocaleString('tr-TR')} {item.currency}
               </p>
@@ -79,13 +79,13 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
           ) : null}
           {item.store ? (
             <div>
-              <p className="text-text-muted text-xs">Mağaza</p>
+              <p className="text-xs text-text-muted">Mağaza</p>
               <p className="font-medium">{item.store}</p>
             </div>
           ) : null}
           {item.purchaseDate ? (
             <div>
-              <p className="text-text-muted text-xs">Satın Alma Tarihi</p>
+              <p className="text-xs text-text-muted">Satın Alma Tarihi</p>
               <p className="font-medium">
                 {new Date(item.purchaseDate).toLocaleDateString('tr-TR')}
               </p>
@@ -93,7 +93,7 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
           ) : null}
           {item.warrantyEndsAt ? (
             <div>
-              <p className="text-text-muted text-xs">Garanti Bitiş</p>
+              <p className="text-xs text-text-muted">Garanti Bitiş</p>
               <p className="font-medium">
                 {new Date(item.warrantyEndsAt).toLocaleDateString('tr-TR')}
               </p>
@@ -109,9 +109,9 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
               return (
                 <div
                   key={field.key}
-                  className="bg-surface-sunken/40 rounded-sm border border-border px-3 py-2"
+                  className="rounded-sm border border-border bg-surface-sunken/40 px-3 py-2"
                 >
-                  <p className="text-text-muted text-[11px] font-medium">
+                  <p className="text-[11px] font-medium text-text-muted">
                     {field.label}
                   </p>
                   {field.type === 'url' &&
@@ -127,7 +127,7 @@ export function ItemSpecsCard({ item, category }: ItemSpecsCardProps) {
                       <ExternalLink className="h-3 w-3 shrink-0" />
                     </Link>
                   ) : (
-                    <p className="text-text text-sm font-medium">{formatted}</p>
+                    <p className="text-sm font-medium text-text">{formatted}</p>
                   )}
                 </div>
               );

@@ -2,7 +2,12 @@
 
 import * as React from 'react';
 import { Button } from '@/components/core/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/card';
 
 interface WorkspaceBoardViewProps {
   lanes: readonly string[];
@@ -18,11 +23,11 @@ export function WorkspaceBoardView({
 
   return (
     <div className="space-y-4">
-      <div className="lg:hidden space-y-3">
+      <div className="space-y-3 lg:hidden">
         <div
           role="tablist"
           aria-label="Çalışma alanı sütunları"
-          className="bg-surface-sunken grid grid-cols-3 gap-1 rounded-xl border border-border p-1"
+          className="grid grid-cols-3 gap-1 rounded-xl border border-border bg-surface-sunken p-1"
         >
           {lanes.map((lane, index) => (
             <Button
