@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { basePaginationQuerySchema } from '@/lib/pagination';
 
 const isoDateOrDatetime = z
   .string()
@@ -150,9 +151,19 @@ export const userSettingsInputSchema = z.object({
   compactMode: z.boolean().optional(),
 });
 
+export const movementListQuerySchema = basePaginationQuerySchema.extend({
+  itemId: z.string().trim().min(1).optional(),
+  direction: z.enum(['all', 'inflow', 'outflow']).default('all'),
+  type: z
+    .enum(['all', 'in', 'out', 'adjust', 'consume', 'replace_part', 'discard'])
+    .default('all'),
+  dateRange: z.enum(['all', 'today', '7d', '30d']).default('all'),
+});
+
 export type PartInput = z.infer<typeof partInputSchema>;
 export type PartReplaceInput = z.infer<typeof partReplaceInputSchema>;
 export type StockMovementInput = z.infer<typeof stockMovementInputSchema>;
+export type MovementListQuery = z.infer<typeof movementListQuerySchema>;
 export type ShoppingListInput = z.infer<typeof shoppingListInputSchema>;
 export type ShoppingListPatchInput = z.infer<typeof shoppingListPatchSchema>;
 export type ShoppingItemInput = z.infer<typeof shoppingItemInputSchema>;

@@ -16,8 +16,8 @@ export function InputGroup({
       data-slot="input-group"
       role="group"
       className={cn(
-        'group/input-group bg-surface-sunken text-text relative flex w-full items-center rounded-md border border-border outline-none transition-[color,box-shadow]',
-        'min-h-[40px] min-w-0 has-[>textarea]:h-auto md:min-h-[36px]',
+        'group/input-group bg-surface-sunken text-text relative flex h-10 w-full items-center rounded-md border border-border outline-none transition-[color,box-shadow] md:h-9',
+        'min-w-0 has-[>textarea]:h-auto has-[>textarea]:min-h-[40px] md:has-[>textarea]:min-h-[36px]',
 
         // Variants based on alignment.
         'has-[>[data-align=inline-start]]:[&>input]:pl-2',
@@ -39,7 +39,7 @@ export function InputGroup({
 }
 
 const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-ash select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-xs [&>svg:not([class*='size-'])]:size-4",
+  "flex h-full cursor-text items-center justify-center gap-2 py-0 text-sm font-medium text-ash select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-xs [&>svg:not([class*='size-'])]:size-4",
   {
     variants: {
       align: {
@@ -82,14 +82,14 @@ export function InputGroupAddon({
 }
 
 const inputGroupButtonVariants = cva(
-  'flex items-center gap-2 text-sm shadow-none',
+  'flex min-h-0 items-center gap-2 text-sm shadow-none',
   {
     variants: {
       size: {
-        xs: "h-6 gap-1 rounded-xs px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
-        sm: 'h-8 gap-1.5 rounded-sm px-2.5 has-[>svg]:px-2.5',
-        'icon-xs': 'size-6 rounded-xs p-0 has-[>svg]:p-0',
-        'icon-sm': 'size-8 p-0 has-[>svg]:p-0',
+        xs: "h-6 min-h-0 gap-1 rounded-xs px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
+        sm: 'h-7 min-h-0 gap-1.5 rounded-sm px-2.5 has-[>svg]:px-2.5',
+        'icon-xs': 'h-6 w-6 min-h-0 rounded-xs p-0 has-[>svg]:p-0',
+        'icon-sm': 'h-7 w-7 min-h-0 p-0 has-[>svg]:p-0',
       },
     },
     defaultVariants: {

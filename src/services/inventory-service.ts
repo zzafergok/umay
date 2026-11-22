@@ -1,4 +1,12 @@
 import { apiClient } from '@/lib/api';
+import {
+  buildCleanQueryParams,
+  type PaginatedResponse,
+} from '@/lib/pagination';
+import type {
+  MovementListItem,
+  MovementListSummary,
+} from '@/lib/inventory/repo';
 import type {
   Category,
   Item,
@@ -14,6 +22,7 @@ import type {
   CategoryInput,
   ItemInput,
   LocationInput,
+  MovementListQuery,
   PartInput,
   PartReplaceInput,
   ShoppingItemInput,
@@ -66,6 +75,16 @@ export const inventoryService = {
     apiClient.get<StockMovement[]>('/inventory/movements', {
       params: itemId ? { itemId } : undefined,
     }),
+  listMovementsPaginated: (query: Partial<MovementListQuery>) =>
+    apiClient.get<PaginatedResponse<MovementListItem, MovementListSummary>>(
+      '/inventory/movements',
+      {
+        params: {
+          paginated: 'true',
+          ...buildCleanQueryParams(query),
+        },
+      },
+    ),
   recordMovement: (data: StockMovementInput) =>
     apiClient.post<{ item: Item; movement: StockMovement }>(
       '/inventory/movements',

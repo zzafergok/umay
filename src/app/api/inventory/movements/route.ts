@@ -1,14 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stockMovementInputSchema } from '@/features/inventory/schemas';
+import {
+  movementListQuerySchema,
+  stockMovementInputSchema,
+} from '@/features/inventory/schemas';
 import { handleRouteError, requireAuth } from '@/lib/api/route-helpers';
-import { listStockMovements, recordStockMovement } from '@/lib/inventory/repo';
+import {
+  listStockMovements,
+  listStockMovementsPaginated,
+  recordStockMovement,
+} from '@/lib/inventory/repo';
+import { parsePaginationSearchParams } from '@/lib/pagination';
 
 export async function GET(request: NextRequest) {
   const auth = await requireAuth(request);
   if (auth instanceof NextResponse) return auth;
 
   try {
-    const itemId = request.nextUrl.searchParams.get('itemId') ?? undefined;
+    const searchParams = request.nextUrl.searchParams;
+    const isPaginated =
+      searchParams.get('paginated') === 'true' ||
+      searchParams.has('page') ||
+      searchParams.has('pageSize');
+
+    if (isPaginated) {
+      const query = parsePaginationSearchParams(
+        searchParams,
+        movementListQuerySchema,
+      );
+      const result = await listStockMovementsPaginated(auth.uid, query);
+      return NextResponse.json(result);
+    }
+
+    const itemId = searchParams.get('itemId') ?? undefined;
     const movements = await listStockMovements(auth.uid, itemId);
     return NextResponse.json(movements);
   } catch (error) {

@@ -1,116 +1,184 @@
 'use client';
 
-import { Badge } from '@/components/core/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/core/card';
+import * as React from 'react';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/core/table';
-import { useItemsQuery, useMovementsQuery } from '@/hooks/use-inventory-hooks';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/core/card';
+import { ServerListToolbar } from '@/components/shared/server-list-toolbar';
+import { ServerPaginationFooter } from '@/components/shared/server-pagination-footer';
+import { useMovementsPaginatedQuery } from '@/hooks/use-inventory-hooks';
+import { useServerListState } from '@/hooks/use-server-list-state';
+import { cn } from '@/lib/utils';
+import { ActivityListView } from './components/activity-list-view';
+import { ActivitySummaryGrid } from './components/activity-summary-grid';
+import type {
+  ActivityDateFilter,
+  ActivityDirectionFilter,
+  ActivitySummary,
+  ActivityTypeFilter,
+} from './types';
+
+const EMPTY_SUMMARY: ActivitySummary = {
+  totalCount: 0,
+  inflowCount: 0,
+  outflowCount: 0,
+  inflowUnits: 0,
+  outflowUnits: 0,
+  netUnits: 0,
+  uniqueItemsCount: 0,
+  last24hCount: 0,
+  partReplaceCount: 0,
+};
+
+const INITIAL_FILTERS: {
+  direction: ActivityDirectionFilter;
+  type: ActivityTypeFilter;
+  dateRange: ActivityDateFilter;
+} = {
+  direction: 'all',
+  type: 'all',
+  dateRange: 'all',
+};
 
 export function ActivityScreen() {
-  const { data: movements = [] } = useMovementsQuery();
-  const { data: items = [] } = useItemsQuery(true);
+  const {
+    page,
+    pageSize,
+    searchInput,
+    filters,
+    hasActiveFilters,
+    isSearchPending,
+    queryParams,
+    setSearchInput,
+    setFilter,
+    handlePageChange,
+    handlePageSizeChange,
+    resetAll,
+  } = useServerListState({
+    initialFilters: INITIAL_FILTERS,
+    initialPageSize: 20,
+    searchDebounceMs: 300,
+  });
 
-  const itemMap = new Map(items.map((i) => [i.id, i]));
-  const recentMovements = movements.slice(0, 50);
+  const { data, isFetching, isPlaceholderData } =
+    useMovementsPaginatedQuery(queryParams);
+
+  const summary = data?.summary ?? EMPTY_SUMMARY;
+  const entries = data?.items ?? [];
+  const totalFiltered = data?.total ?? 0;
+  const totalPages = data?.totalPages ?? 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 md:space-y-6">
+      <div className="space-y-0.5">
+        <h1 className="text-heading font-heading text-text">
+          Stok Hareket Günlüğü
+        </h1>
+        <p className="text-body-sm text-text-muted">
+          Envanterdeki tüm stok giriş, çıkış, tüketim ve parça değişim kayıtları
+        </p>
+      </div>
+
+      <ActivitySummaryGrid summary={summary} />
+
       <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Stok Hareket Günlüğü</CardTitle>
+        <CardHeader className="pb-3">
+          <CardTitle>Hareket Kayıtları</CardTitle>
+          <CardDescription>
+            Ürün adı, işlem türü veya tarih aralığına göre sunucu üzerinden
+            filtreleyin
+          </CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-2.5 md:hidden">
-          {recentMovements.length === 0 ? (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              Henüz hareket kaydı yok.
-            </p>
-          ) : (
-            recentMovements.map((mov) => {
-              const deltaText = mov.delta > 0 ? `+${mov.delta}` : String(mov.delta);
-              const badgeTone =
-                mov.delta > 0 ? 'success' : mov.delta < 0 ? 'warning' : 'secondary';
-              return (
-                <div
-                  key={mov.id}
-                  className="bg-surface-sunken/50 flex items-start justify-between gap-3 rounded-lg border border-border p-3"
-                >
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <p className="truncate text-sm font-semibold text-text">
-                      {itemMap.get(mov.itemId)?.name ?? mov.itemId}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {mov.reason || mov.type}
-                    </p>
-                    <p className="font-mono text-2xs text-text-muted tabular-nums">
-                      {new Date(mov.at).toLocaleString('tr-TR')}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 flex-col items-end gap-1">
-                    <Badge variant={badgeTone} className="font-mono tabular-nums">
-                      {deltaText}
-                    </Badge>
-                    <span className="font-mono text-2xs text-muted-foreground tabular-nums">
-                      Son: {mov.quantityAfter}
-                    </span>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </CardContent>
+        <CardContent className="space-y-4">
+          <ServerListToolbar
+            tabs={{
+              value: filters.direction,
+              onChange: (value) =>
+                setFilter('direction', value as ActivityDirectionFilter),
+              options: [
+                { value: 'all', label: `Tümü (${summary.totalCount})` },
+                { value: 'inflow', label: `Giriş (${summary.inflowCount})` },
+                {
+                  value: 'outflow',
+                  label: `Çıkış / Tüketim (${summary.outflowCount})`,
+                },
+              ],
+            }}
+            search={{
+              value: searchInput,
+              onChange: setSearchInput,
+              placeholder: 'Ürün adı, işlem türü veya açıklama ara',
+              ariaLabel: 'Stok hareketlerinde ara',
+              isLoading: isSearchPending || (isFetching && isPlaceholderData),
+            }}
+            filters={[
+              {
+                key: 'type',
+                value: filters.type,
+                placeholder: 'Tüm İşlem Türleri',
+                ariaLabel: 'İşlem türü filtresi',
+                widthClass: 'w-full shrink-0 sm:w-[190px]',
+                onChange: (value) =>
+                  setFilter('type', value as ActivityTypeFilter),
+                options: [
+                  { value: 'all', label: 'Tüm İşlem Türleri' },
+                  { value: 'in', label: 'Stok Girişi' },
+                  { value: 'out', label: 'Stok Çıkışı' },
+                  { value: 'consume', label: 'Tüketim' },
+                  { value: 'adjust', label: 'Düzenleme' },
+                  { value: 'replace_part', label: 'Parça Değişimi' },
+                  { value: 'discard', label: 'İmha / Fire' },
+                ],
+              },
+              {
+                key: 'dateRange',
+                value: filters.dateRange,
+                placeholder: 'Tüm Zamanlar',
+                ariaLabel: 'Tarih aralığı filtresi',
+                widthClass: 'w-full shrink-0 sm:w-[160px]',
+                onChange: (value) =>
+                  setFilter('dateRange', value as ActivityDateFilter),
+                options: [
+                  { value: 'all', label: 'Tüm Zamanlar' },
+                  { value: 'today', label: 'Son 24 Saat' },
+                  { value: '7d', label: 'Son 7 Gün' },
+                  { value: '30d', label: 'Son 30 Gün' },
+                ],
+              },
+            ]}
+            countLabel={`${totalFiltered} / ${summary.totalCount} kayıt`}
+            hasActiveFilters={hasActiveFilters}
+            onResetFilters={resetAll}
+          />
 
-        <div className="hidden overflow-x-auto md:block">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Tarih</TableHead>
-                <TableHead>Ürün</TableHead>
-                <TableHead>Açıklama</TableHead>
-                <TableHead className="text-right">Değişim</TableHead>
-                <TableHead className="text-right">Son Miktar</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentMovements.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={5}
-                    className="text-center text-muted-foreground"
-                  >
-                    Henüz hareket kaydı yok.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                recentMovements.map((mov) => (
-                  <TableRow key={mov.id}>
-                    <TableCell className="text-xs text-muted-foreground">
-                      {new Date(mov.at).toLocaleString('tr-TR')}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {itemMap.get(mov.itemId)?.name ?? mov.itemId}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {mov.reason || mov.type}
-                    </TableCell>
-                    <TableCell className="text-right font-mono tabular-nums">
-                      {mov.delta > 0 ? `+${mov.delta}` : mov.delta}
-                    </TableCell>
-                    <TableCell className="text-right font-mono tabular-nums">
-                      {mov.quantityAfter}
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
+          <div
+            className={cn(
+              'transition-opacity duration-150',
+              isPlaceholderData && isFetching ? 'opacity-60' : 'opacity-100',
+            )}
+          >
+            <ActivityListView
+              entries={entries}
+              hasAnyMovements={summary.totalCount > 0}
+              onResetFilters={resetAll}
+            />
+          </div>
+
+          <ServerPaginationFooter
+            page={data?.page ?? page}
+            pageSize={data?.pageSize ?? pageSize}
+            total={totalFiltered}
+            totalPages={totalPages}
+            disabled={isFetching && isPlaceholderData}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+          />
+        </CardContent>
       </Card>
     </div>
   );

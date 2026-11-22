@@ -1,7 +1,12 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useApiMutation, useApiQuery } from '@/hooks/use-api-query';
+import type { MovementListQuery } from '@/features/inventory/schemas';
 import {
   CACHE_STRATEGIES,
   inventoryService,
@@ -65,6 +70,15 @@ export function useMovementsQuery(itemId?: string) {
     { params: itemId ? { itemId } : undefined },
     CACHE_STRATEGIES.SHORT,
   );
+}
+
+export function useMovementsPaginatedQuery(query: Partial<MovementListQuery>) {
+  return useQuery({
+    queryKey: ['inventory', 'movements', 'paginated', query] as const,
+    queryFn: () => inventoryService.listMovementsPaginated(query),
+    placeholderData: keepPreviousData,
+    ...CACHE_STRATEGIES.SHORT,
+  });
 }
 
 export function usePartsQuery() {
