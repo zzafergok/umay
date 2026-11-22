@@ -69,8 +69,8 @@ export function CommandPalette() {
   const locale = useCurrentLocale();
   const accountCopy = getAccountActionsCopy(locale);
   const [open, setOpen] = React.useState(false);
-  const { data: items = [] } = useItemsQuery();
-  const { data: partsData } = usePartsQuery();
+  const { data: items = [] } = useItemsQuery(false, open);
+  const { data: partsData } = usePartsQuery(open);
   const logoutMutation = useLogoutMutation();
 
   React.useEffect(() => {

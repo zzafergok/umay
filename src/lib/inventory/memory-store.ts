@@ -1,5 +1,6 @@
 import type {
   Category,
+  EquipmentItem,
   Item,
   Location,
   Part,
@@ -14,6 +15,7 @@ export interface UserVault {
   locations: Map<string, Location>;
   categories: Map<string, Category>;
   items: Map<string, Item>;
+  equipment: Map<string, EquipmentItem>;
   parts: Map<string, Part>;
   replacementLogs: Map<string, ReplacementLog>;
   stockMovements: Map<string, StockMovement>;
@@ -31,6 +33,7 @@ export function getUserVault(uid: string): UserVault {
       locations: new Map(),
       categories: new Map(),
       items: new Map(),
+      equipment: new Map(),
       parts: new Map(),
       replacementLogs: new Map(),
       stockMovements: new Map(),

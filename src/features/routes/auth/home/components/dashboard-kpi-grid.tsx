@@ -28,9 +28,9 @@ export function DashboardKpiGrid({ summary }: DashboardKpiGridProps) {
         primaryValue={summary.totalItems}
         primaryUnit="ürün"
         subtitle={
-          summary.estimatedInventoryValue > 0
-            ? `Tahmini değer: ${formatCurrency(
-                summary.estimatedInventoryValue,
+          summary.pricedItemsCount > 0
+            ? `Alış fiyatına göre değer: ${formatCurrency(
+                summary.inventoryValue,
                 {
                   currency: summary.currency,
                   locale: 'tr',
@@ -173,8 +173,8 @@ export function DashboardKpiGrid({ summary }: DashboardKpiGridProps) {
         primaryValue={summary.shoppingPendingCount}
         primaryUnit="alınacak"
         subtitle={
-          summary.shoppingEstimatedTotal > 0
-            ? `Sepet: ${formatCurrency(summary.shoppingEstimatedTotal, {
+          summary.shoppingPricedCount > 0
+            ? `Sepet: ${formatCurrency(summary.shoppingTotal, {
                 currency: summary.currency,
                 locale: 'tr',
               })}`

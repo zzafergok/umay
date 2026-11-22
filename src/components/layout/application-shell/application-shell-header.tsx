@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Menu, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Badge } from '@/components/core/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,43 +15,29 @@ import { Button } from '@/components/core/button';
 import { Link } from '@/components/core/link';
 import { cn } from '@/lib/utils';
 import type { BreadcrumbTrailItem } from './page-header-context';
-import {
-  SHELL_TOPBAR_HEIGHT_CLASS,
-  type ApplicationShellNavItem,
-} from './types';
+import { SHELL_TOPBAR_HEIGHT_CLASS } from './types';
 
 interface ApplicationShellHeaderProps {
-  active?: ApplicationShellNavItem;
-  pathname: string;
-  trail?: BreadcrumbTrailItem[];
+  trail: BreadcrumbTrailItem[];
+  subtitle?: React.ReactNode;
+  badge?: React.ReactNode;
   collapsed: boolean;
   headerActions?: React.ReactNode;
+  pageHeaderActions?: React.ReactNode;
   onOpenMobile: () => void;
   onToggleCollapsed: () => void;
 }
 
 export function ApplicationShellHeader({
-  active,
-  pathname,
   trail,
+  subtitle,
+  badge,
   collapsed,
   headerActions,
+  pageHeaderActions,
   onOpenMobile,
   onToggleCollapsed,
 }: ApplicationShellHeaderProps) {
-  const items: BreadcrumbTrailItem[] = React.useMemo(() => {
-    if (trail && trail.length > 0) return trail;
-    if (!active) return [];
-    const isNested =
-      !active.exact &&
-      pathname !== active.href &&
-      pathname.startsWith(`${active.href}/`);
-    if (isNested) {
-      return [{ label: active.label, href: active.href }, { label: 'Detay' }];
-    }
-    return [{ label: active.label }];
-  }, [trail, active, pathname]);
-
   return (
     <header
       className={cn(
@@ -82,40 +69,66 @@ export function ApplicationShellHeader({
           )}
         </Button>
 
-        {items.length > 0 ? (
-          <Breadcrumb className="min-w-0 flex-1">
-            <BreadcrumbList className="flex-nowrap gap-1 text-xs sm:gap-1.5 sm:text-sm">
-              {items.map((item, idx) => {
-                const isLast = idx === items.length - 1;
-                return (
-                  <React.Fragment key={`${item.label}-${idx}`}>
-                    {idx > 0 ? (
-                      <BreadcrumbSeparator className="shrink-0" />
-                    ) : null}
-                    <BreadcrumbItem className="min-w-0">
-                      {!isLast && item.href ? (
-                        <BreadcrumbLink
-                          asChild
-                          className="truncate text-text-muted hover:text-text"
-                        >
-                          <Link href={item.href}>{item.label}</Link>
-                        </BreadcrumbLink>
-                      ) : (
-                        <BreadcrumbPage className="truncate font-heading font-semibold text-text">
-                          {item.label}
-                        </BreadcrumbPage>
-                      )}
-                    </BreadcrumbItem>
-                  </React.Fragment>
-                );
-              })}
-            </BreadcrumbList>
-          </Breadcrumb>
+        {trail.length > 0 || subtitle ? (
+          <div className="flex min-w-0 flex-1 flex-col justify-center">
+            {trail.length > 0 ? (
+              <div className="flex min-w-0 items-center gap-2">
+                <Breadcrumb className="min-w-0">
+                  <BreadcrumbList className="flex-nowrap gap-1 text-xs sm:gap-1.5 sm:text-sm">
+                    {trail.map((item, idx) => {
+                      const isLast = idx === trail.length - 1;
+                      return (
+                        <React.Fragment key={`${item.label}-${idx}`}>
+                          {idx > 0 ? (
+                            <BreadcrumbSeparator className="shrink-0" />
+                          ) : null}
+                          <BreadcrumbItem className="min-w-0">
+                            {!isLast && item.href ? (
+                              <BreadcrumbLink
+                                asChild
+                                className="truncate text-text-muted hover:text-text"
+                              >
+                                <Link href={item.href}>{item.label}</Link>
+                              </BreadcrumbLink>
+                            ) : (
+                              <BreadcrumbPage className="truncate font-heading font-semibold text-text">
+                                {item.label}
+                              </BreadcrumbPage>
+                            )}
+                          </BreadcrumbItem>
+                        </React.Fragment>
+                      );
+                    })}
+                  </BreadcrumbList>
+                </Breadcrumb>
+                {badge ? (
+                  typeof badge === 'string' ? (
+                    <Badge
+                      variant="outline"
+                      className="hidden shrink-0 text-[11px] font-normal sm:inline-flex"
+                    >
+                      {badge}
+                    </Badge>
+                  ) : (
+                    <div className="hidden shrink-0 sm:inline-flex">
+                      {badge}
+                    </div>
+                  )
+                ) : null}
+              </div>
+            ) : null}
+            {subtitle ? (
+              <p className="mt-0.5 truncate text-xs text-text-muted">
+                {subtitle}
+              </p>
+            ) : null}
+          </div>
         ) : null}
       </div>
 
-      {headerActions && (
+      {(pageHeaderActions || headerActions) && (
         <div className="flex shrink-0 items-center gap-2 text-body-sm">
+          {pageHeaderActions}
           {headerActions}
         </div>
       )}

@@ -3,40 +3,97 @@
 import * as React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/core/toast';
-import type { ShoppingItemInput } from '@/features/inventory/schemas';
+import type {
+  ShoppingItemInput,
+  ShoppingSortField,
+} from '@/features/inventory/schemas';
 import type { ShoppingListItem } from '@/features/inventory/types';
 import {
   useCategoriesQuery,
   useItemsQuery,
   useLocationsQuery,
-  usePartsQuery,
   useSettingsQuery,
   useShoppingListsQuery,
-  useShoppingQuery,
+  useShoppingPaginatedQuery,
 } from '@/hooks/use-inventory-hooks';
+import { useServerListState } from '@/hooks/use-server-list-state';
+import type { ShoppingPaginatedSummary } from '@/lib/inventory/repo';
 import { inventoryService } from '@/services/inventory-service';
 import type { ShoppingSuggestion } from './shopping-suggestions';
 import {
   buildShoppingSuggestions,
-  computeShoppingSummary,
-  filterAndSortShoppingList,
   type ShoppingPriorityFilter,
   type ShoppingStatusFilter,
 } from './shopping-utils';
 import { useShoppingDelete } from './use-shopping-delete';
 import { useShoppingMutations } from './use-shopping-mutations';
 
+const EMPTY_SUMMARY: ShoppingPaginatedSummary = {
+  totalCount: 0,
+  pendingCount: 0,
+  doneCount: 0,
+  highPriorityPendingCount: 0,
+  linkedPendingCount: 0,
+  pendingTotal: 0,
+  pricedPendingCount: 0,
+  completionRate: 0,
+  unsyncedDoneCount: 0,
+};
+
+const INITIAL_FILTERS: {
+  status: ShoppingStatusFilter;
+  priority: ShoppingPriorityFilter;
+} = {
+  status: 'all',
+  priority: 'all',
+};
+
 export function useShoppingScreen(listId?: string) {
   const qc = useQueryClient();
   const isUnassigned = listId === 'unassigned';
   const scopedListId = listId && !isUnassigned ? listId : undefined;
+
+  const {
+    page,
+    pageSize,
+    searchInput,
+    filters,
+    sortState,
+    hasActiveFilters,
+    isSearchPending,
+    queryParams,
+    setSearchInput,
+    setFilter,
+    setSort,
+    handlePageChange,
+    handlePageSizeChange,
+    resetAll,
+  } = useServerListState<typeof INITIAL_FILTERS, ShoppingSortField>({
+    initialFilters: INITIAL_FILTERS,
+    initialSort: { sortBy: 'done', sortOrder: 'asc' },
+    initialPageSize: 20,
+    searchDebounceMs: 300,
+  });
+
+  const paginatedQuery = React.useMemo(
+    () => ({
+      ...queryParams,
+      ...(listId ? { listId } : {}),
+    }),
+    [queryParams, listId],
+  );
+
   const { data: lists = [], isLoading: isListsLoading } =
     useShoppingListsQuery();
-  const { data: rawList = [], isLoading } = useShoppingQuery(scopedListId);
+  const {
+    data: paginatedData,
+    isLoading,
+    isFetching,
+    isPlaceholderData,
+  } = useShoppingPaginatedQuery(paginatedQuery);
   const { data: items = [] } = useItemsQuery();
   const { data: categories = [] } = useCategoriesQuery();
   const { data: locations = [] } = useLocationsQuery();
-  const { data: partsData } = usePartsQuery();
   const { data: settings } = useSettingsQuery();
 
   const activeList = React.useMemo(() => {
@@ -53,15 +110,13 @@ export function useShoppingScreen(listId?: string) {
   }, [isUnassigned, listId, lists]);
 
   const list = React.useMemo(
-    () => (isUnassigned ? rawList.filter((item) => !item.listId) : rawList),
-    [isUnassigned, rawList],
+    () => paginatedData?.items ?? [],
+    [paginatedData?.items],
   );
+  const summary = paginatedData?.summary ?? EMPTY_SUMMARY;
+  const totalFiltered = paginatedData?.total ?? 0;
+  const totalPages = paginatedData?.totalPages ?? 0;
 
-  const [statusFilter, setStatusFilter] =
-    React.useState<ShoppingStatusFilter>('all');
-  const [priorityFilter, setPriorityFilter] =
-    React.useState<ShoppingPriorityFilter>('all');
-  const [searchQuery, setSearchQuery] = React.useState('');
   const [editingEntry, setEditingEntry] =
     React.useState<ShoppingListItem | null>(null);
 
@@ -69,7 +124,7 @@ export function useShoppingScreen(listId?: string) {
     () => qc.invalidateQueries({ queryKey: ['inventory', 'shopping'] }),
     [qc],
   );
-  const deleteState = useShoppingDelete(list, invalidateShopping);
+  const deleteState = useShoppingDelete(listId, invalidateShopping);
   const currency = settings?.currency ?? 'TRY';
   const itemMap = React.useMemo(
     () => new Map(items.map((i) => [i.id, i])),
@@ -81,27 +136,8 @@ export function useShoppingScreen(listId?: string) {
   );
 
   const suggestions = React.useMemo<ShoppingSuggestion[]>(
-    () =>
-      buildShoppingSuggestions(
-        list,
-        items,
-        partsData?.parts ?? [],
-        itemMap,
-        categoryMap,
-      ),
-    [list, items, partsData, itemMap, categoryMap],
-  );
-
-  const summary = React.useMemo(() => computeShoppingSummary(list), [list]);
-  const filteredList = React.useMemo(
-    () =>
-      filterAndSortShoppingList(
-        list,
-        { status: statusFilter, priority: priorityFilter, search: searchQuery },
-        itemMap,
-        categoryMap,
-      ),
-    [list, statusFilter, priorityFilter, searchQuery, itemMap, categoryMap],
+    () => buildShoppingSuggestions(list, items, categoryMap),
+    [list, items, categoryMap],
   );
 
   const handleAddManual = async (
@@ -158,17 +194,14 @@ export function useShoppingScreen(listId?: string) {
 
   const mutationState = useShoppingMutations(invalidateShopping);
 
-  const resetFilters = () => {
-    setStatusFilter('all');
-    setPriorityFilter('all');
-    setSearchQuery('');
-  };
-
   return {
     activeList,
     isListsLoading,
     list,
-    filteredList,
+    totalFiltered,
+    totalPages,
+    page: paginatedData?.page ?? page,
+    pageSize: paginatedData?.pageSize ?? pageSize,
     items,
     categories,
     locations,
@@ -178,15 +211,25 @@ export function useShoppingScreen(listId?: string) {
     summary,
     currency,
     isLoading,
-    statusFilter,
-    priorityFilter,
-    searchQuery,
+    isFetching,
+    isPlaceholderData,
+    isSearchPending,
+    hasActiveFilters,
+    statusFilter: filters.status,
+    priorityFilter: filters.priority,
+    searchQuery: searchInput,
+    sortState,
     editingEntry,
-    setStatusFilter,
-    setPriorityFilter,
-    setSearchQuery,
+    setStatusFilter: (value: ShoppingStatusFilter) =>
+      setFilter('status', value),
+    setPriorityFilter: (value: ShoppingPriorityFilter) =>
+      setFilter('priority', value),
+    setSearchQuery: setSearchInput,
+    setSort,
+    handlePageChange,
+    handlePageSizeChange,
+    resetFilters: resetAll,
     setEditingEntry,
-    resetFilters,
     handleAddManual,
     handleAcceptSuggestion,
     handleAcceptAllSuggestions,

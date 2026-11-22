@@ -30,11 +30,6 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
   const [receiptOpen, setReceiptOpen] = React.useState(false);
   const [suggestionsOpen, setSuggestionsOpen] = React.useState(false);
 
-  const listTitle = s.activeList?.name ?? 'Alışveriş Listesi';
-  const listTrail = React.useMemo(
-    () => [{ label: 'Alışveriş', href: '/shopping' }, { label: listTitle }],
-    [listTitle],
-  );
   const storeBadge = s.activeList?.store ? (
     <Badge variant="outline" className="gap-1 text-[11px] font-normal">
       <Store className="h-3 w-3" aria-hidden="true" />
@@ -45,13 +40,7 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
   if (!s.isListsLoading && !s.activeList) {
     return (
       <>
-        <PageHeaderMeta
-          title="Liste Bulunamadı"
-          trail={[
-            { label: 'Alışveriş', href: '/shopping' },
-            { label: 'Bulunamadı' },
-          ]}
-        />
+        <PageHeaderMeta title="Liste Bulunamadı" />
         <Empty className="border">
           <EmptyHeader>
             <EmptyTitle>Alışveriş listesi bulunamadı</EmptyTitle>
@@ -72,15 +61,14 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
     );
   }
 
-  const showTopAddButton = !s.isLoading && s.list.length > 0;
+  const showTopAddButton = !s.isLoading && s.summary.totalCount > 0;
 
   return (
     <div className="space-y-4">
       <PageHeaderMeta
-        title={listTitle}
-        description={s.activeList?.description}
+        title={s.activeList?.name}
+        description={s.activeList?.description || undefined}
         badge={storeBadge}
-        trail={listTrail}
       />
 
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -135,27 +123,39 @@ export function ShoppingDetailScreen({ listId }: { listId: string }) {
         </div>
       </div>
 
-      {s.list.length > 0 ? (
+      {s.summary.totalCount > 0 ? (
         <ShoppingSummaryStats summary={s.summary} currency={s.currency} />
       ) : null}
 
       <ShoppingListTable
-        list={s.list}
-        filteredList={s.filteredList}
+        entries={s.list}
         summary={s.summary}
+        totalFiltered={s.totalFiltered}
+        page={s.page}
+        pageSize={s.pageSize}
+        totalPages={s.totalPages}
         itemMap={s.itemMap}
         categoryMap={s.categoryMap}
         currency={s.currency}
         isLoading={s.isLoading}
+        isFetching={s.isFetching}
+        isPlaceholderData={s.isPlaceholderData}
+        isSearchPending={s.isSearchPending}
+        hasActiveFilters={s.hasActiveFilters}
         isClearingDone={s.isClearingDone}
         isBulkUpdatingDone={s.isBulkUpdatingDone}
         isSyncingDoneItems={s.isSyncingDoneItems}
         statusFilter={s.statusFilter}
         priorityFilter={s.priorityFilter}
         searchQuery={s.searchQuery}
+        sortBy={s.sortState.sortBy}
+        sortOrder={s.sortState.sortOrder}
         onStatusChange={s.setStatusFilter}
         onPriorityChange={s.setPriorityFilter}
         onSearchChange={s.setSearchQuery}
+        onSort={s.setSort}
+        onPageChange={s.handlePageChange}
+        onPageSizeChange={s.handlePageSizeChange}
         onResetFilters={s.resetFilters}
         onToggleDone={s.handleToggleDone}
         onBulkToggleDone={s.handleBulkToggleDone}

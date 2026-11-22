@@ -44,10 +44,15 @@ export function useItemsScreen() {
     [locations],
   );
 
+  const kitchenItems = React.useMemo(
+    () => items.filter((item) => item.type === 'consumable'),
+    [items],
+  );
+
   const filtered = React.useMemo(() => {
     const q = search.trim().toLowerCase();
     const soonThreshold = nowMs + 30 * 24 * 60 * 60 * 1000;
-    return items.filter((item) => {
+    return kitchenItems.filter((item) => {
       if (categoryFilter !== 'all' && item.categoryId !== categoryFilter) {
         return false;
       }
@@ -72,7 +77,7 @@ export function useItemsScreen() {
       );
     });
   }, [
-    items,
+    kitchenItems,
     search,
     categoryFilter,
     locationFilter,
@@ -150,7 +155,7 @@ export function useItemsScreen() {
 
   return {
     isLoading,
-    totalCount: items.length,
+    totalCount: kitchenItems.length,
     categories,
     locations,
     filtered,

@@ -18,19 +18,31 @@ function userCol(uid: string, name: string) {
   return getAdminFirestore().collection('users').doc(uid).collection(name);
 }
 
+function normalizeShoppingItem(
+  item: ShoppingListItem & { estimatedPrice?: unknown },
+): ShoppingListItem {
+  const { estimatedPrice, ...current } = item;
+  const price =
+    current.price ??
+    (typeof estimatedPrice === 'number' ? estimatedPrice : undefined);
+  return omitUndefined({ ...current, price });
+}
+
 export async function listShoppingItems(
   uid: string,
   listId?: string,
 ): Promise<ShoppingListItem[]> {
   if (!isFirebaseConfigured()) {
-    const all = Array.from(getUserVault(uid).shoppingList.values()).sort(
-      (a, b) => b.createdAt.localeCompare(a.createdAt),
-    );
+    const all = Array.from(getUserVault(uid).shoppingList.values())
+      .map(normalizeShoppingItem)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     return listId ? all.filter((item) => item.listId === listId) : all;
   }
   const snap = await userCol(uid, 'shoppingList').get();
   const all = snap.docs
-    .map((d) => ({ ...(d.data() as ShoppingListItem), id: d.id }))
+    .map((d) =>
+      normalizeShoppingItem({ ...(d.data() as ShoppingListItem), id: d.id }),
+    )
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return listId ? all.filter((item) => item.listId === listId) : all;
 }
@@ -134,7 +146,7 @@ export async function updateShoppingItem(
   }
 
   const now = new Date().toISOString();
-  const { estimatedPrice, locationId, minQuantity, expiresAt, ...rest } = input;
+  const { price, locationId, minQuantity, expiresAt, ...rest } = input;
   const nextBoughtAt =
     input.done === true
       ? (current.boughtAt ?? now)
@@ -145,7 +157,7 @@ export async function updateShoppingItem(
   let updated = omitUndefined<ShoppingListItem>({
     ...current,
     ...rest,
-    estimatedPrice: resolveNullable(estimatedPrice, current.estimatedPrice),
+    price: resolveNullable(price, current.price),
     locationId: resolveNullable(locationId, current.locationId),
     minQuantity: resolveNullable(minQuantity, current.minQuantity),
     expiresAt: resolveNullable(expiresAt, current.expiresAt),

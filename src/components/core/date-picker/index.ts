@@ -12,7 +12,6 @@ export {
 } from './date-picker-parts';
 
 export { ModernDatePicker } from './modern-date-picker';
-export { QuickDatesSidebar } from './modern-date-picker';
 
 export { MonthYearPicker } from './month-year-picker';
 export { MonthYearGrid, MonthYearSidebar } from './month-year-parts';

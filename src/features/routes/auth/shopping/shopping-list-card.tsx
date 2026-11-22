@@ -91,9 +91,9 @@ export function ShoppingListCard({
                 ? `${summary.doneCount} / ${summary.totalCount} alındı`
                 : 'Henüz ürün yok'}
             </span>
-            {summary.estimatedPendingTotal > 0 ? (
+            {summary.pricedPendingCount > 0 ? (
               <span className="font-medium tabular-nums text-text">
-                {formatCurrency(summary.estimatedPendingTotal, {
+                {formatCurrency(summary.pendingTotal, {
                   currency,
                   locale: 'tr',
                 })}

@@ -72,7 +72,11 @@ export function buildItemFormDefaults(
     name: editItem?.name ?? '',
     categoryId: editItem?.categoryId ?? defaultCategory?.id ?? '',
     locationId: editItem?.locationId ?? locations[0]?.id ?? '',
-    type: editItem?.type ?? defaults?.defaultType ?? 'consumable',
+    type:
+      editItem?.type ??
+      (defaults?.defaultType === 'consumable'
+        ? defaults.defaultType
+        : 'consumable'),
     status: editItem?.status ?? 'active',
     quantity: editItem?.quantity ?? 1,
     unit:

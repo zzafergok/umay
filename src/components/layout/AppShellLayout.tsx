@@ -56,6 +56,7 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
       subtitle: item.subtitle ?? copy.authHeader?.subtitle,
       icon: iconMap[item.icon] ?? Home,
       exact: item.href === '/home',
+      nestedRoutes: item.nestedRoutes,
     }),
   );
 
@@ -66,6 +67,7 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
     label: item.label,
     subtitle: item.subtitle ?? copy.authHeader?.subtitle,
     icon: iconMap[item.icon] ?? UserRound,
+    nestedRoutes: item.nestedRoutes,
   }));
 
   return (

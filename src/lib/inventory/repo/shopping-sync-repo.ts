@@ -4,11 +4,7 @@ import type {
   Location,
   ShoppingListItem,
 } from '@/features/inventory/types';
-import {
-  createItem,
-  listItems,
-  recordStockMovement,
-} from './item-stock-repo';
+import { createItem, listItems, recordStockMovement } from './item-stock-repo';
 import {
   createCategory,
   createLocation,
@@ -150,7 +146,7 @@ export async function syncShoppingEntriesToInventory(
       brand: entry.brand,
       model: entry.model,
       purchaseDate: entry.boughtAt ?? entry.updatedAt,
-      purchasePrice: entry.estimatedPrice,
+      purchasePrice: entry.price,
       currency: entry.currency ?? 'TRY',
       store: entry.store,
       expiresAt: entry.expiresAt,

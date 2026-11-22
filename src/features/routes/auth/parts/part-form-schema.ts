@@ -47,6 +47,25 @@ export const replacePartSchema = z.object({
 
 export type ReplacePartValues = z.infer<typeof replacePartSchema>;
 
+export const equipmentFormSchema = z.object({
+  kind: z.enum(['device', 'spare']),
+  name: z
+    .string()
+    .trim()
+    .min(1, 'Ad zorunludur.')
+    .max(120, 'Ad en fazla 120 karakter olabilir.'),
+  categoryId: z.string().trim().optional(),
+  locationId: z.string().trim().optional(),
+  status: z.enum(['active', 'in_repair', 'lent', 'discarded']),
+  quantity: z.union([z.number(), z.string()]),
+  unit: z.string().trim().min(1, 'Birim zorunludur.').max(24),
+  brand: z.string().trim().max(80).optional(),
+  model: z.string().trim().max(80).optional(),
+  serialNumber: z.string().trim().max(120).optional(),
+});
+
+export type EquipmentFormValues = z.infer<typeof equipmentFormSchema>;
+
 export const partUsageSchema = z.object({
   usageCurrent: z
     .union([z.string(), z.number()])

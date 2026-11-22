@@ -1,81 +1,52 @@
 'use client';
 
-import { Badge } from '@/components/core/badge';
+import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/core/button';
 import { Card, CardContent } from '@/components/core/card';
-import { Checkbox } from '@/components/core/checkbox';
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/core/table';
-import type {
-  Category,
-  CurrencyCode,
-  Item,
-  ShoppingListItem,
-} from '@/features/inventory/types';
-import { formatCurrency } from '@/lib/utils';
-import { ShoppingListRow } from './shopping-list-row';
-import { ShoppingListToolbar } from './shopping-list-toolbar';
+import { ServerPaginationFooter } from '@/components/shared/server-pagination-footer';
+import { ServerListToolbar } from '@/components/shared/server-list-toolbar';
+import { cn, formatCurrency } from '@/lib/utils';
+import { ShoppingDesktopTable } from './shopping-desktop-table';
 import { ShoppingMobileCards } from './shopping-mobile-cards';
 import {
   ShoppingTableBulkActions,
   ShoppingTableState,
 } from './shopping-table-states';
+import type { ShoppingListTableProps } from './shopping-table-types';
 import type {
   ShoppingPriorityFilter,
   ShoppingStatusFilter,
-  ShoppingSummary,
 } from './shopping-utils';
 
-interface ShoppingListTableProps {
-  list: ShoppingListItem[];
-  filteredList: ShoppingListItem[];
-  summary: ShoppingSummary;
-  itemMap: Map<string, Item>;
-  categoryMap: Map<string, Category>;
-  currency: CurrencyCode;
-  isLoading: boolean;
-  isClearingDone: boolean;
-  isBulkUpdatingDone: boolean;
-  isSyncingDoneItems?: boolean;
-  statusFilter: ShoppingStatusFilter;
-  priorityFilter: ShoppingPriorityFilter;
-  searchQuery: string;
-  onStatusChange: (value: ShoppingStatusFilter) => void;
-  onPriorityChange: (value: ShoppingPriorityFilter) => void;
-  onSearchChange: (value: string) => void;
-  onResetFilters: () => void;
-  onToggleDone: (entry: ShoppingListItem) => void;
-  onBulkToggleDone: (entries: ShoppingListItem[], nextDone: boolean) => void;
-  onSyncDoneToInventory?: () => void;
-  onAdjustQty: (entry: ShoppingListItem, delta: number) => void;
-  onEdit: (entry: ShoppingListItem) => void;
-  onDelete: (id: string) => void;
-  onClearDone: () => void;
-  onAddClick?: () => void;
-}
-
 export function ShoppingListTable({
-  list,
-  filteredList,
+  entries,
   summary,
+  totalFiltered,
+  page,
+  pageSize,
+  totalPages,
   itemMap,
   categoryMap,
   currency,
   isLoading,
+  isFetching,
+  isPlaceholderData,
+  isSearchPending,
+  hasActiveFilters,
   isClearingDone,
   isBulkUpdatingDone,
   isSyncingDoneItems = false,
   statusFilter,
   priorityFilter,
   searchQuery,
+  sortBy,
+  sortOrder,
   onStatusChange,
   onPriorityChange,
   onSearchChange,
+  onSort,
+  onPageChange,
+  onPageSizeChange,
   onResetFilters,
   onToggleDone,
   onBulkToggleDone,
@@ -86,19 +57,17 @@ export function ShoppingListTable({
   onClearDone,
   onAddClick,
 }: ShoppingListTableProps) {
-  const unsyncedDoneCount = list.filter((e) => e.done && !e.itemId).length;
-  const pendingFilteredCount = filteredList.filter((e) => !e.done).length;
-  const allFilteredDone = filteredList.length > 0 && pendingFilteredCount === 0;
-  const someFilteredDone =
-    filteredList.length > 0 && pendingFilteredCount < filteredList.length;
-  const headerDoneState: boolean | 'indeterminate' = allFilteredDone
+  const pendingPageCount = entries.filter((e) => !e.done).length;
+  const allPageDone = entries.length > 0 && pendingPageCount === 0;
+  const somePageDone = entries.length > 0 && pendingPageCount < entries.length;
+  const headerDoneState: boolean | 'indeterminate' = allPageDone
     ? true
-    : someFilteredDone
+    : somePageDone
       ? 'indeterminate'
       : false;
-  const filteredEstimatedTotal = filteredList.reduce((sum, entry) => {
-    if (typeof entry.estimatedPrice === 'number' && entry.estimatedPrice > 0) {
-      return sum + entry.estimatedPrice * entry.qty;
+  const pageTotal = entries.reduce((sum, entry) => {
+    if (typeof entry.price === 'number') {
+      return sum + entry.price * entry.qty;
     }
     return sum;
   }, 0);
@@ -106,57 +75,95 @@ export function ShoppingListTable({
   return (
     <Card>
       <CardContent className="space-y-4 pt-4 sm:pt-5">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="min-w-0 flex-1">
-            <ShoppingListToolbar
-              summary={summary}
-              statusFilter={statusFilter}
-              priorityFilter={priorityFilter}
-              searchQuery={searchQuery}
-              isClearingDone={isClearingDone}
-              onStatusChange={onStatusChange}
-              onPriorityChange={onPriorityChange}
-              onSearchChange={onSearchChange}
-              onClearDone={onClearDone}
-            />
-          </div>
-          {summary.totalCount > 0 ? (
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge
-                variant="secondary"
-                className="shrink-0 font-mono tabular-nums"
-              >
-                {summary.pendingCount} alınacak · {summary.doneCount} alındı
-              </Badge>
-              <ShoppingTableBulkActions
-                filteredCount={filteredList.length}
-                pendingFilteredCount={pendingFilteredCount}
-                allFilteredDone={allFilteredDone}
-                isBulkUpdatingDone={isBulkUpdatingDone}
-                unsyncedDoneCount={unsyncedDoneCount}
-                isSyncingDoneItems={isSyncingDoneItems}
-                onBulkToggle={() =>
-                  onBulkToggleDone(filteredList, !allFilteredDone)
-                }
-                onSyncDoneToInventory={onSyncDoneToInventory}
-              />
-            </div>
-          ) : null}
-        </div>
+        <ServerListToolbar
+          tabs={{
+            value: statusFilter,
+            onChange: (value) => onStatusChange(value as ShoppingStatusFilter),
+            options: [
+              { value: 'all', label: `Tümü (${summary.totalCount})` },
+              { value: 'pending', label: `Alınacak (${summary.pendingCount})` },
+              { value: 'done', label: `Alınan (${summary.doneCount})` },
+            ],
+          }}
+          search={{
+            value: searchQuery,
+            onChange: onSearchChange,
+            placeholder: 'Ürün, kategori veya mağaza ara',
+            ariaLabel: 'Alışveriş listesinde ara',
+            isLoading: isSearchPending || (isFetching && isPlaceholderData),
+          }}
+          filters={[
+            {
+              key: 'priority',
+              value: priorityFilter,
+              placeholder: 'Tüm Öncelikler',
+              ariaLabel: 'Öncelik filtresi',
+              widthClass: 'w-full shrink-0 sm:w-[180px]',
+              onChange: (value) =>
+                onPriorityChange(value as ShoppingPriorityFilter),
+              options: [
+                { value: 'all', label: 'Tüm Öncelikler' },
+                { value: 'high', label: 'Acil' },
+                { value: 'normal', label: 'Normal' },
+                { value: 'low', label: 'Düşük' },
+              ],
+            },
+          ]}
+          countLabel={
+            summary.totalCount > 0
+              ? `${totalFiltered} / ${summary.totalCount} kalem`
+              : undefined
+          }
+          hasActiveFilters={hasActiveFilters}
+          onResetFilters={onResetFilters}
+          actions={
+            summary.totalCount > 0 ? (
+              <>
+                <ShoppingTableBulkActions
+                  filteredCount={entries.length}
+                  pendingFilteredCount={pendingPageCount}
+                  allFilteredDone={allPageDone}
+                  isBulkUpdatingDone={isBulkUpdatingDone}
+                  unsyncedDoneCount={summary.unsyncedDoneCount}
+                  isSyncingDoneItems={isSyncingDoneItems}
+                  onBulkToggle={() => onBulkToggleDone(entries, !allPageDone)}
+                  onSyncDoneToInventory={onSyncDoneToInventory}
+                />
+                {summary.doneCount > 0 ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={isClearingDone}
+                    onClick={onClearDone}
+                  >
+                    <Trash2 className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
+                    Alınanları Temizle
+                  </Button>
+                ) : null}
+              </>
+            ) : undefined
+          }
+        />
 
         {isLoading ? (
           <ShoppingTableState variant="loading" />
-        ) : list.length === 0 ? (
+        ) : summary.totalCount === 0 ? (
           <ShoppingTableState variant="empty" onAddClick={onAddClick} />
-        ) : filteredList.length === 0 ? (
+        ) : entries.length === 0 ? (
           <ShoppingTableState
             variant="no-matches"
             onResetFilters={onResetFilters}
           />
         ) : (
-          <>
+          <div
+            className={cn(
+              'space-y-4 transition-opacity duration-150',
+              isPlaceholderData && isFetching ? 'opacity-60' : 'opacity-100',
+            )}
+          >
             <ShoppingMobileCards
-              entries={filteredList}
+              entries={entries}
               itemMap={itemMap}
               categoryMap={categoryMap}
               currency={currency}
@@ -166,69 +173,46 @@ export function ShoppingListTable({
               onDelete={onDelete}
             />
 
-            <div className="hidden overflow-hidden rounded-md border border-border md:block">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-24">
-                      <div className="flex items-center gap-2">
-                        <Checkbox
-                          checked={headerDoneState}
-                          disabled={
-                            isBulkUpdatingDone || filteredList.length === 0
-                          }
-                          onCheckedChange={() =>
-                            onBulkToggleDone(filteredList, !allFilteredDone)
-                          }
-                          aria-label={
-                            allFilteredDone
-                              ? 'Listelenen tüm kalemlerin alındı işaretini kaldır'
-                              : 'Listelenen tüm kalemleri alındı işaretle'
-                          }
-                        />
-                        <span>Alındı</span>
-                      </div>
-                    </TableHead>
-                    <TableHead>Ürün & Detaylar</TableHead>
-                    <TableHead>Öncelik</TableHead>
-                    <TableHead>Miktar</TableHead>
-                    <TableHead className="text-right">Tahmini Tutar</TableHead>
-                    <TableHead className="text-right">İşlemler</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredList.map((entry) => (
-                    <ShoppingListRow
-                      key={entry.id}
-                      entry={entry}
-                      itemMap={itemMap}
-                      categoryMap={categoryMap}
-                      currency={currency}
-                      onToggleDone={onToggleDone}
-                      onAdjustQty={onAdjustQty}
-                      onEdit={onEdit}
-                      onDelete={onDelete}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+            <ShoppingDesktopTable
+              entries={entries}
+              itemMap={itemMap}
+              categoryMap={categoryMap}
+              currency={currency}
+              headerDoneState={headerDoneState}
+              allPageDone={allPageDone}
+              isBulkUpdatingDone={isBulkUpdatingDone}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSort={onSort}
+              onBulkToggleDone={onBulkToggleDone}
+              onToggleDone={onToggleDone}
+              onAdjustQty={onAdjustQty}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
 
-            <div className="flex flex-wrap items-center justify-between gap-2 text-caption text-text-muted">
-              <span className="font-mono tabular-nums">
-                Gösterilen: {filteredList.length} / {list.length} kalem
-              </span>
-              {filteredEstimatedTotal > 0 && (
+            {entries.some((entry) => typeof entry.price === 'number') ? (
+              <div className="flex justify-end text-caption text-text-muted">
                 <span className="font-mono tabular-nums text-text">
-                  Listelenen tahmini tutar:{''}
-                  {formatCurrency(filteredEstimatedTotal, {
+                  Sayfadaki tutar:{' '}
+                  {formatCurrency(pageTotal, {
                     currency,
                     locale: 'tr',
                   })}
                 </span>
-              )}
-            </div>
-          </>
+              </div>
+            ) : null}
+
+            <ServerPaginationFooter
+              page={page}
+              pageSize={pageSize}
+              total={totalFiltered}
+              totalPages={totalPages}
+              disabled={isFetching && isPlaceholderData}
+              onPageChange={onPageChange}
+              onPageSizeChange={onPageSizeChange}
+            />
+          </div>
         )}
       </CardContent>
     </Card>

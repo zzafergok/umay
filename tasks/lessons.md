@@ -49,3 +49,11 @@ Bu dosya, kullanıcı geri bildirimleri, mimari denetimler ve geliştirme sürec
 ## 9. i18n Sözlük Yapısı Standardı
 
 - **JSON Sözlük Klasörü:** Bileşen veya rota bazlı tüm çeviri metinleri `i18n.ts` içinde inline TypeScript nesnesi olarak değil; proje standardına uygun şekilde `i18n/tr.json`, `i18n/en.json` ve `i18n/index.ts` klasör yapısıyla tanımlanmalıdır.
+
+## 10. Tablo Başlığında Etkileşimli Kontroller
+
+- Sıralanabilir tablo başlığı zaten bir buton üretir. Checkbox gibi kendi etkileşimli elemanını üreten kontrolleri sıralama butonunun içine yerleştirmeyin; aynı başlık hücresinde kardeş olarak sunun ve sunucuda üretilen HTML'i kontrol edin.
+
+## 11. Alışveriş Fiyatı ve Tutarı
+
+- Alışverişte girilen değer birim fiyattır; miktarla çarpımı tutardır. Tahmini fiyat dili kullanmayın. Eski fiyat alanını veri ve istemci uyumluluğu için okuyun; sıfır fiyatı eksik fiyattan ayırın ve fiş satırı toplamını koruyun.

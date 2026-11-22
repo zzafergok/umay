@@ -42,8 +42,8 @@ export function ShoppingSummaryStats({
         }
       />
       <Stat
-        label="Tahmini Sepet Tutarı"
-        value={formatCurrency(summary.estimatedPendingTotal, {
+        label="Sepet Tutarı"
+        value={formatCurrency(summary.pendingTotal, {
           currency,
           locale: 'tr',
         })}

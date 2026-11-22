@@ -11,6 +11,7 @@ import {
   locationInputSchema,
   type LocationInput,
 } from '@/features/inventory/schemas';
+import type { Location } from '@/features/inventory/types';
 
 interface LocationParentOption {
   value: string;
@@ -21,27 +22,45 @@ interface LocationFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   saving: boolean;
+  editingLocation?: Location | null;
   parentOptions: LocationParentOption[];
   onSubmit: (values: LocationInput) => Promise<void>;
 }
 
-/** Modal dialog for creating a new inventory location in the room/cabinet hierarchy. */
+/** Modal dialog for creating or editing an inventory location in the room/cabinet hierarchy. */
 export function LocationFormDialog({
   open,
   onOpenChange,
   saving,
+  editingLocation,
   parentOptions,
   onSubmit,
 }: LocationFormDialogProps) {
+  const isEditing = Boolean(editingLocation);
+  const defaultValues: LocationInput = editingLocation
+    ? {
+        name: editingLocation.name,
+        parentId: editingLocation.parentId ?? '__none__',
+        note: editingLocation.note ?? '',
+      }
+    : {
+        name: '',
+        parentId: '__none__',
+        note: '',
+      };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent mobilePresentation="sheet">
         <DialogHeader>
-          <DialogTitle>Yeni Konum Ekle</DialogTitle>
+          <DialogTitle>
+            {isEditing ? 'Konumu Düzenle' : 'Yeni Konum Ekle'}
+          </DialogTitle>
         </DialogHeader>
         <Form
+          key={editingLocation?.id ?? 'new'}
           schema={locationInputSchema}
-          defaultValues={{ name: '', parentId: null, note: '' }}
+          defaultValues={defaultValues}
           onSubmit={onSubmit}
           className="space-y-4"
         >
@@ -63,7 +82,7 @@ export function LocationFormDialog({
             placeholder="Örn. Baharatlar ve kuru bakliyat"
           />
           <SubmitButton isLoading={saving} fullWidth>
-            Kaydet
+            {isEditing ? 'Değişiklikleri Kaydet' : 'Kaydet'}
           </SubmitButton>
         </Form>
       </DialogContent>

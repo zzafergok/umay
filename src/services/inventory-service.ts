@@ -6,9 +6,11 @@ import {
 import type {
   MovementListItem,
   MovementListSummary,
+  ShoppingPaginatedSummary,
 } from '@/lib/inventory/repo';
 import type {
   Category,
+  EquipmentItem,
   Item,
   Location,
   Part,
@@ -20,6 +22,7 @@ import type {
 } from '@/features/inventory/types';
 import type {
   CategoryInput,
+  EquipmentInput,
   ItemInput,
   LocationInput,
   MovementListQuery,
@@ -29,6 +32,7 @@ import type {
   ShoppingItemPatchInput,
   ShoppingListInput,
   ShoppingListPatchInput,
+  ShoppingListQuery,
   StockMovementInput,
   UserSettingsInput,
 } from '@/features/inventory/schemas';
@@ -91,6 +95,15 @@ export const inventoryService = {
       data,
     ),
 
+  listEquipment: () =>
+    apiClient.get<EquipmentItem[]>('/inventory/equipment'),
+  createEquipment: (data: EquipmentInput) =>
+    apiClient.post<EquipmentItem>('/inventory/equipment', data),
+  updateEquipment: (id: string, data: Partial<EquipmentInput>) =>
+    apiClient.patch<EquipmentItem>(`/inventory/equipment/${id}`, data),
+  deleteEquipment: (id: string) =>
+    apiClient.delete<{ ok: boolean }>(`/inventory/equipment/${id}`),
+
   listParts: () =>
     apiClient.get<{ parts: Part[]; logs: ReplacementLog[] }>(
       '/inventory/parts',
@@ -128,6 +141,16 @@ export const inventoryService = {
     apiClient.get<ShoppingListItem[]>('/inventory/shopping', {
       params: listId ? { listId } : undefined,
     }),
+  listShoppingPaginated: (query: Partial<ShoppingListQuery> = {}) =>
+    apiClient.get<PaginatedResponse<ShoppingListItem, ShoppingPaginatedSummary>>(
+      '/inventory/shopping',
+      {
+        params: {
+          paginated: 'true',
+          ...buildCleanQueryParams(query),
+        },
+      },
+    ),
   createShopping: (data: ShoppingItemInput) =>
     apiClient.post<ShoppingListItem>('/inventory/shopping', data),
   createShoppingBulk: (items: ShoppingItemInput[]) =>

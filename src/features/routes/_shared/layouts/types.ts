@@ -1,11 +1,18 @@
 import type { LucideIcon } from 'lucide-react';
 
+export type ShellNestedRoute = {
+  pattern: string;
+  label: string;
+  subtitle?: string;
+};
+
 export type ShellNavItem = {
   href: string;
   label: string;
   subtitle?: string;
   icon: LucideIcon;
   highlight?: boolean;
+  nestedRoutes?: ShellNestedRoute[];
 };
 
 export type ShellCopy = {

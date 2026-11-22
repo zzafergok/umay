@@ -31,7 +31,7 @@ export const shoppingFormSchema = z.object({
   model: z.string().trim().max(80).optional(),
   barcode: z.string().trim().max(80).optional(),
   store: z.string().trim().max(80).optional(),
-  estimatedPrice: z.union([z.string(), z.number()]).optional(),
+  price: z.union([z.string(), z.number()]).optional(),
   expiresAt: z.string().trim().nullable().optional(),
   note: z.string().trim().max(240).optional(),
 });
@@ -52,7 +52,7 @@ export const SHOPPING_FORM_DEFAULT_VALUES: ShoppingFormValues = {
   model: '',
   barcode: '',
   store: '',
-  estimatedPrice: '',
+  price: '',
   expiresAt: null,
   note: '',
 };

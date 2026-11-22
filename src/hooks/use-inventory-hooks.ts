@@ -6,13 +6,17 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useApiMutation, useApiQuery } from '@/hooks/use-api-query';
-import type { MovementListQuery } from '@/features/inventory/schemas';
+import type {
+  MovementListQuery,
+  ShoppingListQuery,
+} from '@/features/inventory/schemas';
 import {
   CACHE_STRATEGIES,
   inventoryService,
 } from '@/services/inventory-service';
 import type {
   Category,
+  EquipmentItem,
   Item,
   Location,
   Part,
@@ -27,30 +31,30 @@ import type {
   StockMovementInput,
 } from '@/features/inventory/schemas';
 
-export function useLocationsQuery() {
+export function useLocationsQuery(enabled = true) {
   return useApiQuery<Location[]>(
     ['inventory', 'locations'],
     '/inventory/locations',
     {},
-    CACHE_STRATEGIES.LONG,
+    { ...CACHE_STRATEGIES.LONG, enabled },
   );
 }
 
-export function useCategoriesQuery() {
+export function useCategoriesQuery(enabled = true) {
   return useApiQuery<Category[]>(
     ['inventory', 'categories'],
     '/inventory/categories',
     {},
-    CACHE_STRATEGIES.LONG,
+    { ...CACHE_STRATEGIES.LONG, enabled },
   );
 }
 
-export function useItemsQuery(includeArchived = false) {
+export function useItemsQuery(includeArchived = false, enabled = true) {
   return useApiQuery<Item[]>(
     ['inventory', 'items', { includeArchived }],
     '/inventory/items',
     { params: includeArchived ? { includeArchived: 'true' } : undefined },
-    CACHE_STRATEGIES.SHORT,
+    { ...CACHE_STRATEGIES.SHORT, enabled },
   );
 }
 
@@ -81,12 +85,21 @@ export function useMovementsPaginatedQuery(query: Partial<MovementListQuery>) {
   });
 }
 
-export function usePartsQuery() {
+export function useEquipmentQuery(enabled = true) {
+  return useApiQuery<EquipmentItem[]>(
+    ['inventory', 'equipment'],
+    '/inventory/equipment',
+    {},
+    { ...CACHE_STRATEGIES.SHORT, enabled },
+  );
+}
+
+export function usePartsQuery(enabled = true) {
   return useApiQuery<{ parts: Part[]; logs: ReplacementLog[] }>(
     ['inventory', 'parts'],
     '/inventory/parts',
     {},
-    CACHE_STRATEGIES.SHORT,
+    { ...CACHE_STRATEGIES.SHORT, enabled },
   );
 }
 
@@ -124,6 +137,15 @@ export function useShoppingQuery(listId?: string) {
     { params: listId ? { listId } : undefined },
     CACHE_STRATEGIES.SHORT,
   );
+}
+
+export function useShoppingPaginatedQuery(query: Partial<ShoppingListQuery>) {
+  return useQuery({
+    queryKey: ['inventory', 'shopping', 'paginated', query] as const,
+    queryFn: () => inventoryService.listShoppingPaginated(query),
+    placeholderData: keepPreviousData,
+    ...CACHE_STRATEGIES.SHORT,
+  });
 }
 
 export function useSettingsQuery() {

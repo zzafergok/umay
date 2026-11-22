@@ -77,14 +77,12 @@ export function computeDashboardSummary(params: {
     (i) => i.status === 'in_repair' || i.status === 'lent',
   ).length;
 
-  let estimatedInventoryValue = 0;
+  let inventoryValue = 0;
   let pricedItemsCount = 0;
   for (const item of items) {
-    if (typeof item.purchasePrice === 'number' && item.purchasePrice > 0) {
+    if (typeof item.purchasePrice === 'number') {
       pricedItemsCount += 1;
-      const multiplier =
-        item.type === 'consumable' ? Math.max(1, item.quantity) : 1;
-      estimatedInventoryValue += item.purchasePrice * multiplier;
+      inventoryValue += item.purchasePrice * Math.max(0, item.quantity);
     }
   }
 
@@ -116,12 +114,13 @@ export function computeDashboardSummary(params: {
   const shoppingHighPriorityCount = pendingShopping.filter(
     (s) => s.priority === 'high',
   ).length;
-  const shoppingEstimatedTotal = pendingShopping.reduce(
-    (acc, s) =>
-      acc +
-      (typeof s.estimatedPrice === 'number' ? s.estimatedPrice * s.qty : 0),
+  const shoppingTotal = pendingShopping.reduce(
+    (acc, s) => acc + (typeof s.price === 'number' ? s.price * s.qty : 0),
     0,
   );
+  const shoppingPricedCount = pendingShopping.filter(
+    (item) => typeof item.price === 'number',
+  ).length;
   const shoppingCompletionPercent =
     shoppingItems.length > 0
       ? Math.round((doneShopping.length / shoppingItems.length) * 100)
@@ -139,7 +138,7 @@ export function computeDashboardSummary(params: {
     inRepairOrLentCount,
     locationsCount: locations.length,
     categoriesCount: categories.length,
-    estimatedInventoryValue,
+    inventoryValue,
     pricedItemsCount,
     currency,
     outOfStockCount,
@@ -156,7 +155,8 @@ export function computeDashboardSummary(params: {
     shoppingDoneCount: doneShopping.length,
     shoppingTotalCount: shoppingItems.length,
     shoppingHighPriorityCount,
-    shoppingEstimatedTotal,
+    shoppingTotal,
+    shoppingPricedCount,
     shoppingCompletionPercent,
     expiringOrWarrantyCount,
   };

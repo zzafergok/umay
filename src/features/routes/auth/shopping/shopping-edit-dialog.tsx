@@ -36,6 +36,7 @@ import { ShoppingProductFields } from './shopping-product-fields';
 import {
   formatShoppingUnit,
   parseOptionalPrice,
+  resolveEditedShoppingPrice,
   resolveShoppingTitle,
 } from './shopping-utils';
 
@@ -80,6 +81,7 @@ export function ShoppingEditDialog({
     defaultValues: SHOPPING_FORM_DEFAULT_VALUES,
     mode: 'onChange',
   });
+  const priceIsDirty = Boolean(methods.formState.dirtyFields.price);
 
   const selectedUnit = useWatch({
     control: methods.control,
@@ -109,9 +111,9 @@ export function ShoppingEditDialog({
       model: entry.model ?? '',
       barcode: entry.barcode ?? '',
       store: entry.store ?? '',
-      estimatedPrice:
-        typeof entry.estimatedPrice === 'number'
-          ? formatAmountInput(entry.estimatedPrice)
+      price:
+        typeof entry.price === 'number'
+          ? formatAmountInput(Number(entry.price.toFixed(2)))
           : '',
       expiresAt: entry.expiresAt ? entry.expiresAt.slice(0, 10) : null,
       note: entry.note ?? '',
@@ -120,7 +122,11 @@ export function ShoppingEditDialog({
 
   const handleSubmit = async (values: ShoppingFormValues) => {
     if (!entry) return;
-    const parsedPrice = parseOptionalPrice(values.estimatedPrice);
+    const parsedPrice = resolveEditedShoppingPrice(
+      values.price,
+      entry.price,
+      priceIsDirty,
+    );
     const parsedMinQty = parseOptionalPrice(values.minQuantity);
     const ok = await onSave(entry.id, {
       itemId: values.itemId || null,
@@ -137,7 +143,7 @@ export function ShoppingEditDialog({
       barcode: values.barcode?.trim() || '',
       currency,
       store: values.store?.trim() || '',
-      estimatedPrice: parsedPrice ?? null,
+      price: parsedPrice ?? null,
       expiresAt: values.expiresAt || null,
       note: values.note?.trim() || '',
     });
@@ -155,8 +161,8 @@ export function ShoppingEditDialog({
         <DialogHeader>
           <DialogTitle>Alışveriş Kalemini Düzenle</DialogTitle>
           <DialogDescription>
-            Miktar, öncelik, kategori, konum, ürün detayları ve tahmini birim
-            fiyat bilgilerini güncelleyin.
+            Miktar, öncelik, kategori, konum, ürün detayları ve birim fiyat
+            bilgilerini güncelleyin.
           </DialogDescription>
         </DialogHeader>
         <Form

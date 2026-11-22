@@ -6,13 +6,13 @@ import { Card, CardContent, CardTitle } from '@/components/core/card';
 import { Link } from '@/components/core/link';
 import { LifecycleProgressBar } from '@/components/core/progress';
 import { StatusPill, type StatusTone } from '@/components/core/status-pill';
-import type { Item, Part } from '@/features/inventory/types';
+import type { EquipmentItem, Part } from '@/features/inventory/types';
 import { computePartHealth } from '@/lib/lifecycle';
 
 interface PartCardProps {
   part: Part;
-  parentItem?: Item;
-  spareItem?: Item;
+  parentItem?: EquipmentItem;
+  spareItem?: EquipmentItem;
   onReplaceClick: (part: Part) => void;
 }
 

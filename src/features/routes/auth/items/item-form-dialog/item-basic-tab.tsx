@@ -34,7 +34,7 @@ export function ItemBasicTab({
       <TextField
         name="name"
         label="Ürün Adı"
-        placeholder="Örn. USB-C Hızlı Şarj Kablosu (2m)"
+        placeholder="Örn. Pilavlık Bulgur, Zeytinyağı, Bulaşık Deterjanı"
         required
       />
 
@@ -111,7 +111,7 @@ export function ItemBasicTab({
         <TextField
           name="brand"
           label="Marka (Opsiyonel)"
-          placeholder="Örn. Anker"
+          placeholder="Örn. Yayla, Tariş"
           inputClassName="h-9 min-h-[38px] text-sm sm:h-11 sm:min-h-[44px]"
         />
       </div>

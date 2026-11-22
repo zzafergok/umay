@@ -47,13 +47,27 @@
       "href": "/parts",
       "label": "Parts",
       "subtitle": "Lifecycle spare parts",
-      "icon": "wrench"
+      "icon": "wrench",
+      "nestedRoutes": [
+        {
+          "pattern": "/parts/[id]",
+          "label": "Part Detail",
+          "subtitle": "Usage, health status, and replacement history"
+        }
+      ]
     },
     {
       "href": "/shopping",
       "label": "Shopping",
       "subtitle": "Restock & suggestions",
-      "icon": "shoppingCart"
+      "icon": "shoppingCart",
+      "nestedRoutes": [
+        {
+          "pattern": "/shopping/[id]",
+          "label": "List Detail",
+          "subtitle": "Shopping items, receipt scanning, and stock sync"
+        }
+      ]
     },
     {
       "href": "/locations",

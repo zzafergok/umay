@@ -41,7 +41,7 @@ describe('detailed shopping list repository & utils', () => {
       unit: 'kutu',
       category: 'Temizlik',
       priority: 'high',
-      estimatedPrice: 249.5,
+      price: 249.5,
       store: 'Migros',
       note: '60lı paket',
       source: 'manual',
@@ -50,16 +50,16 @@ describe('detailed shopping list repository & utils', () => {
 
     expect(created.priority).toBe('high');
     expect(created.store).toBe('Migros');
-    expect(created.estimatedPrice).toBe(249.5);
+    expect(created.price).toBe(249.5);
     expect(created.boughtAt).toBeUndefined();
 
     const markedDone = await updateShoppingItem(uid, created.id, {
       done: true,
-      estimatedPrice: null,
+      price: null,
     });
     expect(markedDone.done).toBe(true);
     expect(markedDone.boughtAt).toBeTruthy();
-    expect(markedDone.estimatedPrice).toBeUndefined();
+    expect(markedDone.price).toBeUndefined();
 
     const reopened = await updateShoppingItem(uid, created.id, {
       done: false,
@@ -76,7 +76,7 @@ describe('detailed shopping list repository & utils', () => {
       qty: 1,
       unit: 'paket',
       priority: 'low',
-      estimatedPrice: 90,
+      price: 90,
       source: 'manual',
       done: false,
     });
@@ -87,7 +87,7 @@ describe('detailed shopping list repository & utils', () => {
       unit: 'lt',
       category: 'Gıda',
       priority: 'high',
-      estimatedPrice: 300,
+      price: 300,
       store: 'Carrefour',
       source: 'auto_low_stock',
       done: false,
@@ -98,7 +98,7 @@ describe('detailed shopping list repository & utils', () => {
       qty: 1,
       unit: 'şişe',
       priority: 'normal',
-      estimatedPrice: 150,
+      price: 150,
       source: 'receipt_ai',
       done: true,
     });
@@ -110,7 +110,7 @@ describe('detailed shopping list repository & utils', () => {
     expect(summary.doneCount).toBe(1);
     expect(summary.highPriorityPendingCount).toBe(1);
     expect(summary.linkedPendingCount).toBe(1);
-    expect(summary.estimatedPendingTotal).toBe(690);
+    expect(summary.pendingTotal).toBe(690);
     expect(summary.completionRate).toBe(33);
 
     const itemMap = new Map<string, Item>();

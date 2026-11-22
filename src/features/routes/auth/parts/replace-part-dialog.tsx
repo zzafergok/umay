@@ -23,7 +23,6 @@ import {
 import type { Part } from '@/features/inventory/types';
 import { useReplacePartMutation } from '@/hooks/use-inventory-hooks';
 import { parseAmountInput } from '@/lib/utils';
-import { inventoryService } from '@/services/inventory-service';
 import { replacePartSchema, type ReplacePartValues } from './part-form-schema';
 
 interface ReplacePartDialogProps {
@@ -72,21 +71,8 @@ export function ReplacePartDialog({ part, onClose }: ReplacePartDialogProps) {
           : `${part.name} değişimi kaydedildi.`,
       );
 
-      if (result.suggestShopping && part.spareItemId) {
-        await inventoryService.createShopping({
-          itemId: part.spareItemId,
-          freeText: `${part.name} Yedeği`,
-          qty: 1,
-          unit: 'adet',
-          source: 'auto_part_due',
-          done: false,
-        });
-        await qc.invalidateQueries({ queryKey: ['inventory', 'shopping'] });
-        toast.info(
-          'Yedek stok azaldığı için alışveriş listesine öneri eklendi.',
-        );
-      }
-
+      await qc.invalidateQueries({ queryKey: ['inventory', 'parts'] });
+      await qc.invalidateQueries({ queryKey: ['inventory', 'equipment'] });
       onClose();
     } catch (err) {
       toast.error(

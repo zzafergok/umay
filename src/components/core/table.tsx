@@ -128,13 +128,15 @@ TableCaption.displayName = 'TableCaption';
 
 export type TableSortOrder = 'asc' | 'desc';
 
-export interface SortableTableHeadProps<TKey extends string = string>
-  extends Omit<React.ThHTMLAttributes<HTMLTableCellElement>, 'onSelect'> {
+export interface SortableTableHeadProps<
+  TKey extends string = string,
+> extends Omit<React.ThHTMLAttributes<HTMLTableCellElement>, 'onSelect'> {
   sortKey: TKey;
   sortBy?: string;
   sortOrder?: TableSortOrder;
   onSort: (key: TKey) => void;
   align?: 'left' | 'right';
+  leadingControl?: React.ReactNode;
 }
 
 function SortableTableHead<TKey extends string = string>({
@@ -143,6 +145,7 @@ function SortableTableHead<TKey extends string = string>({
   sortOrder = 'desc',
   onSort,
   align = 'left',
+  leadingControl,
   className,
   children,
   ...props
@@ -154,37 +157,46 @@ function SortableTableHead<TKey extends string = string>({
       : 'descending'
     : 'none';
 
+  const sortButton = (
+    <Button
+      type="button"
+      variant="ghost"
+      size="sm"
+      onClick={() => onSort(sortKey)}
+      className={cn(
+        '-mx-2 h-7 min-h-0 gap-1.5 px-2 text-caption font-medium text-text-muted hover:bg-surface/70 hover:text-text',
+        leadingControl && 'mx-0',
+        isActive && 'text-text',
+        align === 'right' && 'ml-auto flex-row-reverse',
+      )}
+    >
+      <span>{children}</span>
+      {isActive ? (
+        sortOrder === 'asc' ? (
+          <ArrowUp className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+        ) : (
+          <ArrowDown className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+        )
+      ) : (
+        <ArrowUpDown className="h-3.5 w-3.5 opacity-45" aria-hidden="true" />
+      )}
+    </Button>
+  );
+
   return (
     <TableHead
       aria-sort={ariaSort}
       className={cn(align === 'right' && 'text-right', className)}
       {...props}
     >
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={() => onSort(sortKey)}
-        className={cn(
-          '-mx-2 h-7 min-h-0 gap-1.5 px-2 text-caption font-medium text-text-muted hover:bg-surface/70 hover:text-text',
-          isActive && 'text-text',
-          align === 'right' && 'ml-auto flex-row-reverse',
-        )}
-      >
-        <span>{children}</span>
-        {isActive ? (
-          sortOrder === 'asc' ? (
-            <ArrowUp className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
-          ) : (
-            <ArrowDown className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
-          )
-        ) : (
-          <ArrowUpDown
-            className="h-3.5 w-3.5 opacity-45"
-            aria-hidden="true"
-          />
-        )}
-      </Button>
+      {leadingControl ? (
+        <span className="inline-flex items-center gap-2">
+          {leadingControl}
+          {sortButton}
+        </span>
+      ) : (
+        sortButton
+      )}
     </TableHead>
   );
 }

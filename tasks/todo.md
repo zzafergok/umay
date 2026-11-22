@@ -101,3 +101,20 @@
   - **Kategori Dağılımı (`CategoryDistributionCard`)**: Merkezinde toplam ürün sayısını gösteren `PieChart` (Donut) + kategori renkli alt liste.
   - **Konum Dağılımı (`LocationDistributionCard`)**: En yoğun 6 konumu ürün çeşidine göre sıralayan yatay `BarChart`.
 - **Doğrulama**: Tüm dosyalar 250 satır sınırının altında (`home-utils.ts`: 199, `dashboard-kpi-grid.tsx`: 207, `stock-activity-chart.tsx`: 160, `category-distribution-card.tsx`: 136, `kpi-card-shell.tsx`: 119, `home-chart-utils.ts`: 107, `screen.tsx`: 98, `location-distribution-card.tsx`: 86, `types.ts`: 82, `quick-actions-bar.tsx`: 76, `attention-list-card.tsx`: 66 satır). `npm run type-check`, `npm run lint`, `npm test` (23 dosya, 149 test) ve `npm run build` sıfır hata ile geçti.
+
+---
+
+# Alışveriş Tablosu Hydration Hatası İncelemesi
+
+- Sıralama butonu ile toplu seçim kutusu aynı tablo başlığında kardeş kontrollere ayrıldı; sıralama ve seçim erişilebilirlik bilgileri korundu.
+- `npx vitest run tests/components/shopping/shopping-desktop-table.test.tsx` başarılı.
+- `npm run type-check` ve `npm run build`, mevcut `part-equipment-dialog.tsx:110` ekipman oluşturma girdisindeki eksik zorunlu alanlar nedeniyle başarısız; bu hata ilgili değişikliğin dışında kalıyor.
+
+---
+
+# Alışveriş Tutarı Dönüşümü İncelemesi
+
+- Alışveriş ekranları, fiş aktarımı, sıralama, özetler ve API fiyat/tutar terminolojisine taşındı. Eski kayıtlar ve eski API istemcileri uyumluluk alanlarıyla destekleniyor; fiyat temizleme eski değeri geri getirmiyor.
+- Fişten aktarılan satır toplamı korunuyor, sıfır fiyat gösteriliyor ve envanter değeri alış fiyatı ile stok miktarından hesaplanıyor.
+- Doğrulama: `npm run type-check`, `npm test` (33 dosya, 183 test), ilgili dosyalarda ESLint ve `npm run build` başarılı. Gerçek tarayıcı testi yapılmadı.
+- Açık nokta: Mevcut çoklu para birimi toplamlarında kur dönüşümü uygulanmıyor; farklı para birimlerini içeren toplamlar ortak bir para birimine çevrilmiş sonuç olarak değerlendirilmemeli.

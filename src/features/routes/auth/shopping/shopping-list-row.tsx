@@ -46,9 +46,8 @@ export function ShoppingListRow({
   const linked = entry.itemId ? itemMap.get(entry.itemId) : undefined;
   const priority = entry.priority ?? 'normal';
   const priorityMeta = SHOPPING_PRIORITY_META[priority];
-  const hasPrice =
-    typeof entry.estimatedPrice === 'number' && entry.estimatedPrice > 0;
-  const lineTotal = hasPrice ? (entry.estimatedPrice ?? 0) * entry.qty : null;
+  const hasPrice = typeof entry.price === 'number';
+  const lineTotal = hasPrice ? (entry.price ?? 0) * entry.qty : null;
 
   return (
     <TableRow
@@ -138,7 +137,7 @@ export function ShoppingListRow({
               {formatCurrency(lineTotal, { currency, locale: 'tr' })}
             </p>
             <p className="text-2xs text-text-muted">
-              {formatCurrency(entry.estimatedPrice ?? 0, {
+              {formatCurrency(entry.price ?? 0, {
                 currency,
                 locale: 'tr',
               })}

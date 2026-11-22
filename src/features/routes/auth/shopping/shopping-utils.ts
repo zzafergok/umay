@@ -1,7 +1,6 @@
 import type {
   Category,
   Item,
-  Part,
   ShoppingListItem,
   ShoppingPriority,
 } from '@/features/inventory/types';
@@ -17,7 +16,7 @@ export interface ShoppingSummary {
   doneCount: number;
   highPriorityPendingCount: number;
   linkedPendingCount: number;
-  estimatedPendingTotal: number;
+  pendingTotal: number;
   pricedPendingCount: number;
   completionRate: number;
 }
@@ -63,11 +62,11 @@ export function computeShoppingSummary(
     Boolean(item.itemId),
   ).length;
 
-  let estimatedPendingTotal = 0;
+  let pendingTotal = 0;
   let pricedPendingCount = 0;
   for (const item of pending) {
-    if (typeof item.estimatedPrice === 'number' && item.estimatedPrice > 0) {
-      estimatedPendingTotal += item.estimatedPrice * item.qty;
+    if (typeof item.price === 'number') {
+      pendingTotal += item.price * item.qty;
       pricedPendingCount += 1;
     }
   }
@@ -81,7 +80,7 @@ export function computeShoppingSummary(
     doneCount,
     highPriorityPendingCount,
     linkedPendingCount,
-    estimatedPendingTotal,
+    pendingTotal,
     pricedPendingCount,
     completionRate,
   };
@@ -161,19 +160,39 @@ export function parseOptionalPrice(value: unknown): number | undefined {
   return Number(parsed.toFixed(2));
 }
 
+export function resolveReceiptUnitPrice(
+  totalPrice: number | null | undefined,
+  unitPrice: number | null | undefined,
+  quantity: number,
+): number | undefined {
+  if (typeof totalPrice === 'number' && totalPrice >= 0 && quantity > 0) {
+    return totalPrice / quantity;
+  }
+  return typeof unitPrice === 'number' && unitPrice >= 0
+    ? unitPrice
+    : undefined;
+}
+
+export function resolveEditedShoppingPrice(
+  value: unknown,
+  originalPrice: number | undefined,
+  changed: boolean,
+): number | undefined {
+  return changed ? parseOptionalPrice(value) : originalPrice;
+}
+
 export function buildShoppingSuggestions(
   list: ShoppingListItem[],
   items: Item[],
-  parts: Part[],
-  itemMap: Map<string, Item>,
   categoryMap: Map<string, Category>,
 ): ShoppingSuggestion[] {
   const existingItemIds = new Set(
     list.filter((s) => !s.done && s.itemId).map((s) => s.itemId),
   );
-  const lowStock: ShoppingSuggestion[] = items
+  return items
     .filter(
       (i) =>
+        i.type !== 'component' &&
         i.minQuantity > 0 &&
         i.quantity <= i.minQuantity &&
         !existingItemIds.has(i.id),
@@ -191,27 +210,4 @@ export function buildShoppingSuggestions(
       reason: `Mevcut: ${i.quantity}/${i.minQuantity} ${formatShoppingUnit(i.unit)}`,
       source: 'auto_low_stock',
     }));
-
-  const dueParts: ShoppingSuggestion[] = parts
-    .filter(
-      (p) =>
-        p.status !== 'ok' &&
-        p.spareItemId &&
-        !existingItemIds.has(p.spareItemId),
-    )
-    .map((p) => {
-      const spare = p.spareItemId ? itemMap.get(p.spareItemId) : undefined;
-      return {
-        key: `part_${p.id}`,
-        itemId: p.spareItemId,
-        label: spare ? spare.name : `${p.name} Yedeği`,
-        suggestedQty: 1,
-        unit: formatShoppingUnit(spare?.unit),
-        category: spare ? categoryMap.get(spare.categoryId)?.name : undefined,
-        reason: p.status === 'overdue' ? 'Değişim gecikti' : 'Değişim yakın',
-        source: 'auto_part_due',
-      };
-    });
-
-  return [...lowStock, ...dueParts];
 }

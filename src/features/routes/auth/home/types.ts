@@ -59,7 +59,7 @@ export interface DashboardSummary {
   inRepairOrLentCount: number;
   locationsCount: number;
   categoriesCount: number;
-  estimatedInventoryValue: number;
+  inventoryValue: number;
   pricedItemsCount: number;
   currency: CurrencyCode;
   outOfStockCount: number;
@@ -76,7 +76,8 @@ export interface DashboardSummary {
   shoppingDoneCount: number;
   shoppingTotalCount: number;
   shoppingHighPriorityCount: number;
-  shoppingEstimatedTotal: number;
+  shoppingTotal: number;
+  shoppingPricedCount: number;
   shoppingCompletionPercent: number;
   expiringOrWarrantyCount: number;
 }

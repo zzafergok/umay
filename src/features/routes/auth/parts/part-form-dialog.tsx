@@ -20,7 +20,7 @@ import {
   SubmitButton,
   TextField,
 } from '@/components/forms';
-import type { Item } from '@/features/inventory/types';
+import type { EquipmentItem } from '@/features/inventory/types';
 import { parseAmountInput } from '@/lib/utils';
 import { inventoryService } from '@/services/inventory-service';
 import { partFormSchema, type PartFormValues } from './part-form-schema';
@@ -28,7 +28,7 @@ import { partFormSchema, type PartFormValues } from './part-form-schema';
 interface PartFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  items: Item[];
+  equipment: EquipmentItem[];
 }
 
 function getDefaultValues(): PartFormValues {
@@ -47,7 +47,7 @@ function getDefaultValues(): PartFormValues {
 export function PartFormDialog({
   open,
   onOpenChange,
-  items,
+  equipment,
 }: PartFormDialogProps) {
   const qc = useQueryClient();
   const methods = useForm<PartFormValues>({
@@ -61,13 +61,16 @@ export function PartFormDialog({
 
   const mode = useWatch({ control: methods.control, name: 'mode' });
 
+  const devices = equipment.filter((item) => item.kind === 'device');
+  const spares = equipment.filter((item) => item.kind === 'spare');
+
   const parentOptions = [
     { value: '__none__', label: 'Bağımsız' },
-    ...items.map((item) => ({ value: item.id, label: item.name })),
+    ...devices.map((item) => ({ value: item.id, label: item.name })),
   ];
   const spareOptions = [
     { value: '__none__', label: 'Yedek Bağlı Değil' },
-    ...items.map((item) => ({
+    ...spares.map((item) => ({
       value: item.id,
       label: `${item.name} (${item.quantity})`,
     })),
@@ -128,17 +131,24 @@ export function PartFormDialog({
             required
           />
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <SelectField
-              name="parentItemId"
-              label="Ana Ürün"
-              options={parentOptions}
-            />
-            <SelectField
-              name="spareItemId"
-              label="Stoktaki Yedek"
-              options={spareOptions}
-            />
+          <div className="space-y-1.5">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <SelectField
+                name="parentItemId"
+                label="Ana Ürün"
+                options={parentOptions}
+              />
+              <SelectField
+                name="spareItemId"
+                label="Stoktaki Yedek"
+                options={spareOptions}
+              />
+            </div>
+            <p className="text-xs text-text-muted">
+              Ana Ürün yalnızca Cihaz / Demirbaş, Stoktaki Yedek ise Yedek Parça
+              / Aksesuar türündeki ürünleri listeler. Eklemek için &ldquo;Cihaz
+              &amp; Yedek Ürünler&rdquo; sekmesini kullanın.
+            </p>
           </div>
 
           <SelectField

@@ -6,6 +6,10 @@ import type {
 import { getAdminFirestore, isFirebaseConfigured } from '@/lib/firebase/admin';
 import { getUserVault } from '@/lib/inventory/memory-store';
 import { InventoryRepoError, newId } from './errors';
+import {
+  buildDescendantLocationUpdates,
+  collectDescendantLocationIds,
+} from './location-tree-utils';
 import { omitUndefinedDeep } from './utils';
 
 function userCol(uid: string, name: string) {
@@ -76,6 +80,15 @@ export async function updateLocation(
   if (nextParentId === id) {
     throw new InventoryRepoError(400, 'Konum kendisinin üst konumu olamaz.');
   }
+  if (nextParentId) {
+    const descendants = collectDescendantLocationIds(all, id);
+    if (descendants.has(nextParentId)) {
+      throw new InventoryRepoError(
+        400,
+        'Konum kendi alt konumunun altına taşınamaz.',
+      );
+    }
+  }
 
   let path = [nextName];
   if (nextParentId) {
@@ -86,6 +99,7 @@ export async function updateLocation(
     path = [...parent.path, nextName];
   }
 
+  const now = new Date().toISOString();
   const updated = omitUndefinedDeep<Location>({
     ...current,
     name: nextName,
@@ -93,15 +107,32 @@ export async function updateLocation(
     path,
     icon: input.icon !== undefined ? input.icon : current.icon,
     note: input.note !== undefined ? input.note : current.note,
-    updatedAt: new Date().toISOString(),
+    updatedAt: now,
   });
 
+  const pathChanged =
+    current.path.length !== path.length ||
+    current.path.some((segment, idx) => segment !== path[idx]);
+  const descendantUpdates = pathChanged
+    ? buildDescendantLocationUpdates(all, updated, now)
+    : [];
+
   if (!isFirebaseConfigured()) {
-    getUserVault(uid).locations.set(id, updated);
+    const vault = getUserVault(uid);
+    vault.locations.set(id, updated);
+    for (const child of descendantUpdates) {
+      vault.locations.set(child.id, child);
+    }
     return updated;
   }
 
-  await userCol(uid, 'locations').doc(id).set(updated);
+  const col = userCol(uid, 'locations');
+  await col.doc(id).set(updated);
+  if (descendantUpdates.length > 0) {
+    await Promise.all(
+      descendantUpdates.map((child) => col.doc(child.id).set(child)),
+    );
+  }
   return updated;
 }
 

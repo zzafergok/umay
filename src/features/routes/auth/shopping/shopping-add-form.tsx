@@ -113,7 +113,7 @@ export function ShoppingAddForm({
       barcode: values.barcode?.trim() || undefined,
       currency,
       priority: values.priority,
-      estimatedPrice: parseOptionalPrice(values.estimatedPrice),
+      price: parseOptionalPrice(values.price),
       store: values.store?.trim() || undefined,
       expiresAt: values.expiresAt || undefined,
       note: values.note?.trim() || undefined,

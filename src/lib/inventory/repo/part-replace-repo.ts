@@ -37,29 +37,45 @@ export async function replacePart(
     let suggestShopping = false;
 
     if (input.deductSpare && current.spareItemId) {
-      const spare = vault.items.get(current.spareItemId);
-      if (spare && spare.quantity > 0) {
-        const nextQty = spare.quantity - 1;
-        vault.items.set(spare.id, {
-          ...spare,
-          quantity: nextQty,
-          updatedAt: now,
-        });
-        const mov: StockMovement = {
-          id: newId('mov'),
-          itemId: spare.id,
-          type: 'replace_part',
-          delta: -1,
-          quantityAfter: nextQty,
-          reason: `${current.name} değişimi`,
-          relatedPartId: partId,
-          at: now,
-        };
-        vault.stockMovements.set(mov.id, mov);
-        spareDeducted = true;
-        if (nextQty <= spare.minQuantity) suggestShopping = true;
+      const eqSpare = vault.equipment.get(current.spareItemId);
+      if (eqSpare) {
+        if (eqSpare.quantity > 0) {
+          const nextQty = eqSpare.quantity - 1;
+          vault.equipment.set(eqSpare.id, {
+            ...eqSpare,
+            quantity: nextQty,
+            updatedAt: now,
+          });
+          spareDeducted = true;
+          if (nextQty === 0) suggestShopping = true;
+        } else {
+          suggestShopping = true;
+        }
       } else {
-        suggestShopping = true;
+        const spare = vault.items.get(current.spareItemId);
+        if (spare && spare.quantity > 0) {
+          const nextQty = spare.quantity - 1;
+          vault.items.set(spare.id, {
+            ...spare,
+            quantity: nextQty,
+            updatedAt: now,
+          });
+          const mov: StockMovement = {
+            id: newId('mov'),
+            itemId: spare.id,
+            type: 'replace_part',
+            delta: -1,
+            quantityAfter: nextQty,
+            reason: `${current.name} değişimi`,
+            relatedPartId: partId,
+            at: now,
+          };
+          vault.stockMovements.set(mov.id, mov);
+          spareDeducted = true;
+          if (nextQty <= spare.minQuantity) suggestShopping = true;
+        } else {
+          suggestShopping = true;
+        }
       }
     }
 
@@ -105,36 +121,61 @@ export async function replacePart(
     let suggestShopping = false;
 
     if (input.deductSpare && current.spareItemId) {
-      const spareRef = userCol(uid, 'items').doc(current.spareItemId);
-      const spareDoc = await tx.get(spareRef);
-      if (spareDoc.exists) {
-        const spare = { ...(spareDoc.data() as Item), id: spareDoc.id };
-        if (spare.quantity > 0) {
-          const nextQty = spare.quantity - 1;
-          tx.set(
-            spareRef,
-            omitUndefinedDeep<Item>({
-              ...spare,
-              quantity: nextQty,
-              updatedAt: now,
-            }),
-          );
-          const movId = newId('mov');
-          const mov: StockMovement = omitUndefinedDeep<StockMovement>({
-            id: movId,
-            itemId: spare.id,
-            type: 'replace_part',
-            delta: -1,
-            quantityAfter: nextQty,
-            reason: `${current.name} değişimi`,
-            relatedPartId: partId,
-            at: now,
+      const eqSpareRef = userCol(uid, 'equipment').doc(current.spareItemId);
+      const eqSpareDoc = await tx.get(eqSpareRef);
+      if (eqSpareDoc.exists) {
+        const eqSpare = {
+          ...(eqSpareDoc.data() as {
+            id: string;
+            quantity: number;
+            updatedAt: string;
+          }),
+          id: eqSpareDoc.id,
+        };
+        if (eqSpare.quantity > 0) {
+          const nextQty = eqSpare.quantity - 1;
+          tx.set(eqSpareRef, {
+            ...eqSpare,
+            quantity: nextQty,
+            updatedAt: now,
           });
-          tx.set(userCol(uid, 'stockMovements').doc(movId), mov);
           spareDeducted = true;
-          if (nextQty <= spare.minQuantity) suggestShopping = true;
+          if (nextQty === 0) suggestShopping = true;
         } else {
           suggestShopping = true;
+        }
+      } else {
+        const spareRef = userCol(uid, 'items').doc(current.spareItemId);
+        const spareDoc = await tx.get(spareRef);
+        if (spareDoc.exists) {
+          const spare = { ...(spareDoc.data() as Item), id: spareDoc.id };
+          if (spare.quantity > 0) {
+            const nextQty = spare.quantity - 1;
+            tx.set(
+              spareRef,
+              omitUndefinedDeep<Item>({
+                ...spare,
+                quantity: nextQty,
+                updatedAt: now,
+              }),
+            );
+            const movId = newId('mov');
+            const mov: StockMovement = omitUndefinedDeep<StockMovement>({
+              id: movId,
+              itemId: spare.id,
+              type: 'replace_part',
+              delta: -1,
+              quantityAfter: nextQty,
+              reason: `${current.name} değişimi`,
+              relatedPartId: partId,
+              at: now,
+            });
+            tx.set(userCol(uid, 'stockMovements').doc(movId), mov);
+            spareDeducted = true;
+            if (nextQty <= spare.minQuantity) suggestShopping = true;
+          } else {
+            suggestShopping = true;
+          }
         }
       }
     }

@@ -74,34 +74,54 @@ export const shoppingListInputSchema = z.object({
 
 export const shoppingListPatchSchema = shoppingListInputSchema.partial();
 
-export const shoppingItemInputSchema = z
-  .object({
-    listId: z.string().trim().optional(),
-    itemId: z.string().trim().nullable().default(null),
-    freeText: z.string().trim().max(120).optional(),
-    qty: z.number().positive('Miktar 0 dan büyük olmalıdır.').max(100000),
-    unit: z.string().trim().max(24).optional(),
-    category: z.string().trim().max(60).optional(),
-    locationId: z.string().trim().nullable().optional(),
-    type: z.enum(['durable', 'consumable', 'component']).optional(),
-    minQuantity: z.number().min(0).max(1000000).optional(),
-    brand: z.string().trim().max(80).optional(),
-    model: z.string().trim().max(80).optional(),
-    barcode: z.string().trim().max(80).optional(),
-    currency: z.enum(['TRY', 'USD', 'EUR']).optional(),
-    expiresAt: z.string().trim().nullable().optional(),
-    priority: shoppingPrioritySchema.optional(),
-    estimatedPrice: z.number().min(0).max(10000000).optional(),
-    store: z.string().trim().max(80).optional(),
-    note: z.string().trim().max(240).optional(),
-    source: z
-      .enum(['auto_low_stock', 'auto_part_due', 'manual', 'receipt_ai'])
-      .default('manual'),
-    done: z.boolean().default(false),
-  })
-  .refine((val) => Boolean(val.itemId || val.freeText), {
-    message: 'Ürün veya serbest metin belirtilmelidir.',
-  });
+function normalizeLegacyShoppingPrice(value: unknown): unknown {
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    !('estimatedPrice' in value)
+  ) {
+    return value;
+  }
+  return {
+    ...value,
+    price:
+      'price' in value && value.price !== undefined
+        ? value.price
+        : value.estimatedPrice,
+  };
+}
+
+export const shoppingItemInputSchema = z.preprocess(
+  normalizeLegacyShoppingPrice,
+  z
+    .object({
+      listId: z.string().trim().optional(),
+      itemId: z.string().trim().nullable().default(null),
+      freeText: z.string().trim().max(120).optional(),
+      qty: z.number().positive('Miktar 0 dan büyük olmalıdır.').max(100000),
+      unit: z.string().trim().max(24).optional(),
+      category: z.string().trim().max(60).optional(),
+      locationId: z.string().trim().nullable().optional(),
+      type: z.enum(['durable', 'consumable', 'component']).optional(),
+      minQuantity: z.number().min(0).max(1000000).optional(),
+      brand: z.string().trim().max(80).optional(),
+      model: z.string().trim().max(80).optional(),
+      barcode: z.string().trim().max(80).optional(),
+      currency: z.enum(['TRY', 'USD', 'EUR']).optional(),
+      expiresAt: z.string().trim().nullable().optional(),
+      priority: shoppingPrioritySchema.optional(),
+      price: z.number().min(0).max(10000000).optional(),
+      store: z.string().trim().max(80).optional(),
+      note: z.string().trim().max(240).optional(),
+      source: z
+        .enum(['auto_low_stock', 'auto_part_due', 'manual', 'receipt_ai'])
+        .default('manual'),
+      done: z.boolean().default(false),
+    })
+    .refine((val) => Boolean(val.itemId || val.freeText), {
+      message: 'Ürün veya serbest metin belirtilmelidir.',
+    }),
+);
 
 export const shoppingBulkItemsInputSchema = z.object({
   items: z
@@ -118,31 +138,34 @@ export const shoppingBulkDoneInputSchema = z.object({
   done: z.boolean(),
 });
 
-export const shoppingItemPatchSchema = z.object({
-  listId: z.string().trim().optional(),
-  itemId: z.string().trim().nullable().optional(),
-  freeText: z.string().trim().max(120).optional(),
-  qty: z
-    .number()
-    .positive('Miktar 0 dan büyük olmalıdır.')
-    .max(100000)
-    .optional(),
-  unit: z.string().trim().max(24).optional(),
-  category: z.string().trim().max(60).optional(),
-  locationId: z.string().trim().nullable().optional(),
-  type: z.enum(['durable', 'consumable', 'component']).optional(),
-  minQuantity: z.number().min(0).max(1000000).nullable().optional(),
-  brand: z.string().trim().max(80).optional(),
-  model: z.string().trim().max(80).optional(),
-  barcode: z.string().trim().max(80).optional(),
-  currency: z.enum(['TRY', 'USD', 'EUR']).optional(),
-  expiresAt: z.string().trim().nullable().optional(),
-  priority: shoppingPrioritySchema.optional(),
-  estimatedPrice: z.number().min(0).max(10000000).nullable().optional(),
-  store: z.string().trim().max(80).optional(),
-  note: z.string().trim().max(240).optional(),
-  done: z.boolean().optional(),
-});
+export const shoppingItemPatchSchema = z.preprocess(
+  normalizeLegacyShoppingPrice,
+  z.object({
+    listId: z.string().trim().optional(),
+    itemId: z.string().trim().nullable().optional(),
+    freeText: z.string().trim().max(120).optional(),
+    qty: z
+      .number()
+      .positive('Miktar 0 dan büyük olmalıdır.')
+      .max(100000)
+      .optional(),
+    unit: z.string().trim().max(24).optional(),
+    category: z.string().trim().max(60).optional(),
+    locationId: z.string().trim().nullable().optional(),
+    type: z.enum(['durable', 'consumable', 'component']).optional(),
+    minQuantity: z.number().min(0).max(1000000).nullable().optional(),
+    brand: z.string().trim().max(80).optional(),
+    model: z.string().trim().max(80).optional(),
+    barcode: z.string().trim().max(80).optional(),
+    currency: z.enum(['TRY', 'USD', 'EUR']).optional(),
+    expiresAt: z.string().trim().nullable().optional(),
+    priority: shoppingPrioritySchema.optional(),
+    price: z.number().min(0).max(10000000).nullable().optional(),
+    store: z.string().trim().max(80).optional(),
+    note: z.string().trim().max(240).optional(),
+    done: z.boolean().optional(),
+  }),
+);
 
 export const userSettingsInputSchema = z.object({
   currency: z.enum(['TRY', 'USD', 'EUR']).optional(),
@@ -174,10 +197,51 @@ export const movementListQuerySchema = createSortablePaginationQuerySchema(
   dateRange: z.enum(['all', 'today', '7d', '30d']).default('all'),
 });
 
+export const SHOPPING_SORT_FIELDS = [
+  'done',
+  'title',
+  'priority',
+  'qty',
+  'total',
+  'estimatedTotal',
+  'createdAt',
+] as const;
+
+export type ShoppingSortField = (typeof SHOPPING_SORT_FIELDS)[number];
+
+export const shoppingListQuerySchema = createSortablePaginationQuerySchema(
+  SHOPPING_SORT_FIELDS,
+  'done',
+  'asc',
+).extend({
+  listId: z.string().trim().min(1).optional(),
+  status: z.enum(['all', 'pending', 'done']).default('all'),
+  priority: z.enum(['all', 'high', 'normal', 'low']).default('all'),
+});
+
+export const equipmentInputSchema = z.object({
+  kind: z.enum(['device', 'spare']).default('device'),
+  name: z.string().trim().min(1, 'Ad zorunludur.').max(120),
+  categoryId: z.string().trim().optional(),
+  locationId: z.string().trim().optional(),
+  status: z
+    .enum(['active', 'in_repair', 'lent', 'discarded'])
+    .default('active'),
+  quantity: z.number().min(0).max(1000000).default(1),
+  unit: z.string().trim().min(1).max(24).default('adet'),
+  brand: z.string().trim().max(80).optional(),
+  model: z.string().trim().max(80).optional(),
+  serialNumber: z.string().trim().max(120).optional(),
+  notes: z.string().trim().max(2000).optional(),
+});
+
+export type EquipmentInput = z.infer<typeof equipmentInputSchema>;
+
 export type PartInput = z.infer<typeof partInputSchema>;
 export type PartReplaceInput = z.infer<typeof partReplaceInputSchema>;
 export type StockMovementInput = z.infer<typeof stockMovementInputSchema>;
 export type MovementListQuery = z.infer<typeof movementListQuerySchema>;
+export type ShoppingListQuery = z.infer<typeof shoppingListQuerySchema>;
 export type ShoppingListInput = z.infer<typeof shoppingListInputSchema>;
 export type ShoppingListPatchInput = z.infer<typeof shoppingListPatchSchema>;
 export type ShoppingItemInput = z.infer<typeof shoppingItemInputSchema>;

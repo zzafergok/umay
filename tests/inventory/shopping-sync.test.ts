@@ -40,7 +40,7 @@ describe('shopping done -> inventory items auto-sync', () => {
       minQuantity: 0.5,
       brand: 'Torku',
       barcode: '2910005',
-      estimatedPrice: 1044.75,
+      price: 1044.75,
       currency: 'TRY',
       store: 'Yunus Market',
       source: 'receipt_ai',

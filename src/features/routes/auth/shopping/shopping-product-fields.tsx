@@ -68,8 +68,8 @@ export function ShoppingProductFields({
         placeholder="Örn. Migros, Yunus Market"
       />
       <AmountField
-        name="estimatedPrice"
-        label={`Tahmini Birim Fiyat (${currency})`}
+        name="price"
+        label={`Birim Fiyat (${currency})`}
         placeholder="0,00"
         inputClassName="font-medium tabular-nums"
       />

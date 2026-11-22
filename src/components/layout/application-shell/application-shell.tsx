@@ -11,12 +11,11 @@ import {
   SidebarProvider,
   useSidebar,
 } from '@/components/core/sidebar';
-import { PageHeader } from '@/components/layout/page-header';
 import { ApplicationShellFooter } from './application-shell-footer';
 import { SidebarBrand } from './sidebar-brand';
 import { SidebarNav } from './sidebar-nav';
 import { ApplicationShellHeader } from './application-shell-header';
-import { isNavItemActive } from './nav-utils';
+import { resolveNavigationHeader } from './nav-utils';
 import {
   PageHeaderProvider,
   usePageHeaderOverride,
@@ -51,10 +50,26 @@ function ApplicationShellContent({
   const { setOpenMobile, state, toggleSidebar } = useSidebar();
   const override = usePageHeaderOverride();
   const collapsed = state === 'collapsed';
-  const active =
-    [...navItems, ...accountNavItems].find((item) =>
-      isNavItemActive(pathname, item),
-    ) ?? navItems[0];
+
+  const resolvedHeader = React.useMemo(
+    () =>
+      resolveNavigationHeader({
+        pathname,
+        navItems,
+        accountNavItems,
+        override,
+        fallbackTitle: pageHeaderTitle,
+        fallbackSubtitle: pageHeaderDescription,
+      }),
+    [
+      pathname,
+      navItems,
+      accountNavItems,
+      override,
+      pageHeaderTitle,
+      pageHeaderDescription,
+    ],
+  );
 
   return (
     <>
@@ -93,25 +108,15 @@ function ApplicationShellContent({
 
       <SidebarInset className="min-h-screen bg-bg text-text antialiased selection:bg-accent/20 selection:text-text">
         <ApplicationShellHeader
-          active={active}
-          pathname={pathname}
-          trail={override?.trail}
+          trail={resolvedHeader.trail}
+          subtitle={hidePageHeader ? undefined : resolvedHeader.subtitle}
+          badge={hidePageHeader ? undefined : resolvedHeader.badge}
           collapsed={collapsed}
           headerActions={headerActions}
+          pageHeaderActions={hidePageHeader ? undefined : pageHeaderActions}
           onOpenMobile={toggleSidebar}
           onToggleCollapsed={toggleSidebar}
         />
-
-        {active && !hidePageHeader && (
-          <PageHeader
-            title={override?.title ?? pageHeaderTitle ?? active.label}
-            description={
-              override?.description ?? pageHeaderDescription ?? active.subtitle
-            }
-            badge={override?.badge}
-            actions={pageHeaderActions}
-          />
-        )}
 
         <div className="w-full min-w-0 flex-1 p-4 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:p-5 sm:pb-[calc(7rem+env(safe-area-inset-bottom))] md:pb-8 lg:px-8 lg:py-5">
           {children}

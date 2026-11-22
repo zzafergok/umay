@@ -79,7 +79,7 @@ export function CategoryItemDefaultsPanel({
                 variant="outline"
                 onClick={() => onChange({ ...value, defaultType: opt.value })}
                 className={cn(
-                  'h-auto flex-col items-start gap-1 whitespace-normal p-3 text-left',
+                  'h-auto min-h-0 flex-col items-start justify-start gap-1 whitespace-normal p-3 text-left md:h-auto md:min-h-0',
                   active && 'border-accent bg-accent-subtle/40',
                 )}
               >

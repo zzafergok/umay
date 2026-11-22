@@ -1,4 +1,23 @@
-import type { CurrencyCode, ItemType } from './inventory';
+import type { CurrencyCode, ItemStatus, ItemType } from './inventory';
+
+export type EquipmentKind = 'device' | 'spare';
+
+export interface EquipmentItem {
+  id: string;
+  kind: EquipmentKind;
+  name: string;
+  categoryId?: string;
+  locationId?: string;
+  status: ItemStatus;
+  quantity: number;
+  unit: string;
+  brand?: string;
+  model?: string;
+  serialNumber?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export type LifespanMode = 'time' | 'usage' | 'both';
 
@@ -85,7 +104,7 @@ export interface ShoppingListItem {
   currency?: CurrencyCode;
   expiresAt?: string;
   priority?: ShoppingPriority;
-  estimatedPrice?: number;
+  price?: number;
   store?: string;
   note?: string;
   source: ShoppingSource;
