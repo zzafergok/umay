@@ -1,3 +1,23 @@
+# Güvenlik, Rate Limiting, API Route Wrapper ve CI Pipeline Özeti
+
+## Yapılan Değişiklikler
+
+- **Gerçek HS256 JWT İmzalama ve Fail-Closed Secret Politikası** ([jwt.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/auth/jwt.ts), [jwt.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/auth/jwt.test.ts)): `node:crypto` üzerinden `createHmac('sha256')` ve `timingSafeEqual` ile standart HS256 imza doğrulamasına geçildi; `alg=HS256` kontrolü, UTF-8 `base64url` kodlama ve production'da `JWT_SECRET` zorunluluğu eklendi.
+- **Dinamik Nonce Tabanlı CSP** ([csp.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/security/csp.ts), [proxy.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/proxy.ts), [next.config.mjs](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/next.config.mjs), [csp-http.test.mjs](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/security/csp-http.test.mjs), [proxy.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/auth/proxy.test.ts)): Statik CSP kaldırılıp sayfa isteklerinde her istekte dönen `nonce` tabanlı `Content-Security-Policy` başlığı eklendi (`upgrade-insecure-requests` yalnızca production'da).
+- **Sabit Pencere Rate Limiting Altyapısı** ([src/lib/rate-limit](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/rate-limit/index.ts), [rate-limit-window.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/lib/rate-limit-window.test.ts)): `evaluateRateLimitWindow`, `consumeRateLimit` ve `resolveClientIp` ile `auth_login`, `auth_register`, `ai_receipt_analyze` ve `ai_receipt_enrich` politikaları tanımlandı.
+- **Standardize API Route Wrapper (`withApiRoute`)** ([src/lib/api/server](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/src/lib/api/server/index.ts), [api-route-handler.test.ts](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/tests/lib/api-route-handler.test.ts)): Auth, Zod body doğrulama, rate limiting, `x-request-id` ve hata eşleme tek merkezde toplandı; `/api/auth/login`, `/api/auth/register`, `/api/ai/receipt/analyze` ve `/api/ai/receipt/enrich` uç noktalarına entegre edildi.
+- **CI Güvenlik & Kalite Pipeline'ı** ([security.yml](file:///Users/zafergok/Documents/github/ZAFER/WEB/umay/.github/workflows/security.yml)): Node 22 ile `npm audit`, `type-check`, `lint`, `metadata:check`, `test`, `build` ve canlı sunucu CSP doğrulaması eklendi.
+
+## Doğrulama Sonuçları
+
+- `npm run type-check`: Başarılı (0 hata)
+- `npm run lint`: Başarılı (0 hata)
+- `npm run metadata:check`: Başarılı (`All app routes expose metadata.`)
+- `npm test`: Başarılı (27 test dosyası, 167/167 test geçti)
+- `npm run build`: Başarılı (`next build` hatasız tamamlandı)
+
+---
+
 # Çoklu Görsel ile Uzun Fiş Analizi, Reasoning Token Kontrolü ve Yarıda Kesilen JSON Kurtarma Özeti
 
 ## Kök Neden Analizi (Canlı OpenRouter Testleriyle Doğrulandı)

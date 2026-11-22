@@ -1,27 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { clearLastAuthRoute, createSession } from '@/lib/auth/session';
-import { signToken } from '@/lib/auth/jwt';
+import { NextResponse } from 'next/server';
+import { withApiRoute } from '@/lib/api/server';
 import { loginSchema } from '@/lib/auth/auth-schema';
 import { signInWithFirebasePassword } from '@/lib/auth/firebase-identity';
+import { signToken } from '@/lib/auth/jwt';
+import { clearLastAuthRoute, createSession } from '@/lib/auth/session';
 
-export async function POST(request: NextRequest) {
-  try {
-    const rawBody: unknown = await request.json();
-    const parseResult = loginSchema.safeParse(rawBody);
-
-    if (!parseResult.success) {
-      const firstError =
-        parseResult.error.errors[0]?.message ?? 'Geçersiz giriş bilgileri';
-      return NextResponse.json(
-        {
-          message: firstError,
-          errors: parseResult.error.flatten().fieldErrors,
-        },
-        { status: 400 },
-      );
-    }
-
-    const { email, password } = parseResult.data;
+export const POST = withApiRoute({
+  rateLimitPolicy: 'auth_login',
+  bodySchema: loginSchema,
+  handler: async ({ body }) => {
+    const { email, password } = body;
     const identity = await signInWithFirebasePassword(email, password);
     if (!identity) {
       return NextResponse.json(
@@ -56,10 +44,5 @@ export async function POST(request: NextRequest) {
       },
       { status: 200 },
     );
-  } catch {
-    return NextResponse.json(
-      { message: 'Kimlik doğrulama sırasında bir hata oluştu' },
-      { status: 500 },
-    );
-  }
-}
+  },
+});

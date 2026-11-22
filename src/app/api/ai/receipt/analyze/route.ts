@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { handleRouteError, requireAuth } from '@/lib/api/route-helpers';
-import { OpenRouterApiError } from '@/lib/ai/openrouter';
+import { NextResponse } from 'next/server';
+import { withApiRoute } from '@/lib/api/server';
 import {
   analyzeReceiptImage,
   receiptAnalyzeRequestSchema,
@@ -9,30 +8,12 @@ import {
 /** Uzun fişler büyük modellerde dakikalarca sürebilir (Vercel vb. için). */
 export const maxDuration = 200;
 
-export async function POST(request: NextRequest) {
-  const auth = await requireAuth(request);
-  if (auth instanceof NextResponse) return auth;
-
-  try {
-    const body: unknown = await request.json();
-    const input = receiptAnalyzeRequestSchema.parse(body);
-    const analysis = await analyzeReceiptImage(input);
-
+export const POST = withApiRoute({
+  requireAuth: true,
+  rateLimitPolicy: 'ai_receipt_analyze',
+  bodySchema: receiptAnalyzeRequestSchema,
+  handler: async ({ body }) => {
+    const analysis = await analyzeReceiptImage(body);
     return NextResponse.json({ analysis });
-  } catch (error) {
-    if (error instanceof OpenRouterApiError) {
-      return NextResponse.json(
-        {
-          message: error.message,
-          code: error.code,
-          providerName: error.providerName,
-        },
-        {
-          status:
-            error.status >= 400 && error.status < 600 ? error.status : 502,
-        },
-      );
-    }
-    return handleRouteError(error);
-  }
-}
+  },
+});

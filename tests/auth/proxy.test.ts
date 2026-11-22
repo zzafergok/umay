@@ -168,4 +168,26 @@ describe('Proxy Auth & Route Guard', () => {
     expect(assetRes.status).toBe(200);
     expect(assetRes.headers.get('location')).toBeNull();
   });
+
+  it('attaches rotating per-request nonce Content-Security-Policy on page responses', () => {
+    const first = proxy(makeRequest('/'));
+    const second = proxy(makeRequest('/'));
+
+    const cspOne = first.headers.get('content-security-policy') ?? '';
+    const cspTwo = second.headers.get('content-security-policy') ?? '';
+
+    const nonceOne = cspOne.match(/'nonce-([^']+)'/)?.[1];
+    const nonceTwo = cspTwo.match(/'nonce-([^']+)'/)?.[1];
+
+    const scriptDirective = cspOne
+      .split(';')
+      .map((part) => part.trim())
+      .find((part) => part.startsWith('script-src'));
+
+    expect(nonceOne).toBeTruthy();
+    expect(nonceTwo).toBeTruthy();
+    expect(nonceOne).not.toBe(nonceTwo);
+    expect(scriptDirective).toBeDefined();
+    expect(scriptDirective).not.toContain("'unsafe-inline'");
+  });
 });

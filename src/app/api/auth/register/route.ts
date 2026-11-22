@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { clearLastAuthRoute, createSession } from '@/lib/auth/session';
-import { signToken } from '@/lib/auth/jwt';
+import { withApiRoute } from '@/lib/api/server';
 import { signUpWithFirebasePassword } from '@/lib/auth/firebase-identity';
+import { signToken } from '@/lib/auth/jwt';
+import { clearLastAuthRoute, createSession } from '@/lib/auth/session';
 
 const registerSchema = z.object({
   email: z.string().trim().email('Geçerli bir e-posta adresi giriniz.'),
@@ -10,22 +11,11 @@ const registerSchema = z.object({
   name: z.string().trim().min(1).max(80).optional(),
 });
 
-export async function POST(request: NextRequest) {
-  try {
-    const rawBody: unknown = await request.json();
-    const parseResult = registerSchema.safeParse(rawBody);
-
-    if (!parseResult.success) {
-      return NextResponse.json(
-        {
-          message:
-            parseResult.error.errors[0]?.message ?? 'Geçersiz kayıt bilgileri',
-        },
-        { status: 400 },
-      );
-    }
-
-    const { email, password, name } = parseResult.data;
+export const POST = withApiRoute({
+  rateLimitPolicy: 'auth_register',
+  bodySchema: registerSchema,
+  handler: async ({ body }) => {
+    const { email, password, name } = body;
     const identity = await signUpWithFirebasePassword(email, password, name);
     if (!identity) {
       return NextResponse.json(
@@ -58,10 +48,5 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 },
     );
-  } catch {
-    return NextResponse.json(
-      { message: 'Kayıt sırasında bir hata oluştu' },
-      { status: 500 },
-    );
-  }
-}
+  },
+});

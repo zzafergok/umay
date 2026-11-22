@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { routing } from '@/i18n/routing';
+import { buildContentSecurityPolicy } from '@/lib/security/csp';
 import {
   isAuthRoutePath,
   isPublicRoutePath,
@@ -38,8 +39,13 @@ function withLocaleHeader(request: NextRequest): NextResponse {
 
   const headers = new Headers(request.headers);
   headers.set(LOCALE_HEADER, locale);
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const csp = buildContentSecurityPolicy(nonce);
+  headers.set('x-nonce', nonce);
+  headers.set('Content-Security-Policy', csp);
 
   const response = NextResponse.next({ request: { headers } });
+  response.headers.set('Content-Security-Policy', csp);
   return applySecurityHeaders(response);
 }
 
