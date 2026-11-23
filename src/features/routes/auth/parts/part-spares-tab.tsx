@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Cpu, Pencil, Plus, Trash2, Wrench } from 'lucide-react';
+import { Package, Pencil, Plus, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import {
@@ -21,7 +21,6 @@ import {
 } from '@/components/core/empty';
 import { toast } from '@/components/core/toast';
 import { DeleteConfirmationDialog } from '@/components/shared/delete-confirmation-dialog';
-import { ITEM_STATUS_OPTIONS } from '@/features/inventory/constants';
 import type {
   Category,
   EquipmentItem,
@@ -29,25 +28,23 @@ import type {
 } from '@/features/inventory/types';
 import { inventoryService } from '@/services/inventory-service';
 
-const STATUS_LABEL_MAP = new Map(
-  ITEM_STATUS_OPTIONS.map((opt) => [opt.value, opt.label]),
-);
-
-interface PartEquipmentTabProps {
-  equipmentItems: EquipmentItem[];
+interface PartSparesTabProps {
+  spares: EquipmentItem[];
+  linkedCountBySpareId: Map<string, number>;
   categories: Category[];
   locations: Location[];
-  onCreateClick: () => void;
-  onEditClick: (item: EquipmentItem) => void;
+  onCreateSpareClick: () => void;
+  onEditSpareClick: (item: EquipmentItem) => void;
 }
 
-export function PartEquipmentTab({
-  equipmentItems,
+export function PartSparesTab({
+  spares,
+  linkedCountBySpareId,
   categories,
   locations,
-  onCreateClick,
-  onEditClick,
-}: PartEquipmentTabProps) {
+  onCreateSpareClick,
+  onEditSpareClick,
+}: PartSparesTabProps) {
   const qc = useQueryClient();
   const [deleteTarget, setDeleteTarget] = React.useState<EquipmentItem | null>(
     null,
@@ -67,7 +64,7 @@ export function PartEquipmentTab({
     try {
       await inventoryService.deleteEquipment(deleteTarget.id);
       await qc.invalidateQueries({ queryKey: ['inventory', 'equipment'] });
-      toast.success('Cihaz / yedek ürün silindi.');
+      toast.success('Yedek parça silindi.');
       setDeleteTarget(null);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Silinemedi.');
@@ -75,23 +72,23 @@ export function PartEquipmentTab({
     }
   };
 
-  if (equipmentItems.length === 0) {
+  if (spares.length === 0) {
     return (
       <Empty className="border">
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <Cpu />
+            <Package />
           </EmptyMedia>
-          <EmptyTitle>Henüz cihaz veya yedek ürün yok</EmptyTitle>
+          <EmptyTitle>Henüz yedek parça stoğu yok</EmptyTitle>
           <EmptyDescription>
-            Yedek parçası takip edilecek cihazları ve stoktaki yedek parçaları
-            mutfak ürünlerinden ayrı olarak buraya ekleyin.
+            Dolabınızda bekleyen yedek filtre, solüsyon, fırça veya aksesuarları
+            buraya ekleyin. Aktif parça değiştiğinde stoktan otomatik düşülür.
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <Button size="sm" onClick={onCreateClick}>
+          <Button size="sm" onClick={onCreateSpareClick}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Cihaz / Yedek Ekle
+            Yedek Parça Ekle
           </Button>
         </EmptyContent>
       </Empty>
@@ -101,65 +98,57 @@ export function PartEquipmentTab({
   return (
     <div className="space-y-4">
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {equipmentItems.map((item) => {
-          const isDevice = item.kind === 'device';
+        {spares.map((spare) => {
+          const linkedCount = linkedCountBySpareId.get(spare.id) ?? 0;
           return (
-            <Card key={item.id}>
+            <Card key={spare.id}>
               <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
                 <div className="min-w-0 flex-1 space-y-1">
                   <CardTitle className="flex items-center gap-2 text-base">
-                    {isDevice ? (
-                      <Cpu className="h-4 w-4 shrink-0 text-accent" />
-                    ) : (
-                      <Wrench className="h-4 w-4 shrink-0 text-text-muted" />
-                    )}
-                    <span className="truncate">{item.name}</span>
+                    <Package className="h-4 w-4 shrink-0 text-text-muted" />
+                    <span className="truncate">{spare.name}</span>
                   </CardTitle>
                   <p className="truncate text-xs text-text-muted">
                     {[
-                      item.categoryId ? categoryMap.get(item.categoryId) : null,
-                      item.locationId ? locationMap.get(item.locationId) : null,
-                      item.brand,
-                      item.model,
+                      spare.categoryId
+                        ? categoryMap.get(spare.categoryId)
+                        : null,
+                      spare.locationId
+                        ? locationMap.get(spare.locationId)
+                        : null,
+                      spare.brand,
+                      spare.model,
                     ]
                       .filter(Boolean)
-                      .join(' · ') || 'Genel'}
+                      .join(' · ') || 'Yedek Parça'}
                   </p>
                 </div>
-                <Badge
-                  variant={isDevice ? 'secondary' : 'outline'}
-                  className="shrink-0"
-                >
-                  {isDevice ? 'Cihaz / Demirbaş' : 'Yedek Parça'}
+                <Badge variant="outline" className="shrink-0 font-mono">
+                  {spare.quantity} {spare.unit}
                 </Badge>
               </CardHeader>
               <CardContent className="flex items-center justify-between gap-2 pt-2">
-                <span className="min-w-0 truncate font-mono text-xs tabular-nums text-text-muted">
-                  {isDevice
-                    ? [
-                        STATUS_LABEL_MAP.get(item.status) ?? 'Aktif',
-                        item.serialNumber ? `SN: ${item.serialNumber}` : null,
-                      ]
-                        .filter(Boolean)
-                        .join(' · ')
-                    : `Stok: ${item.quantity} ${item.unit}`}
+                <span className="truncate text-xs text-text-muted">
+                  {linkedCount > 0
+                    ? `${linkedCount} aktif parçaya bağlı`
+                    : 'Henüz aktif parçaya bağlı değil'}
                 </span>
                 <div className="flex shrink-0 items-center gap-1">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-9 w-9 text-text-muted hover:bg-surface-sunken hover:text-text sm:h-8 sm:w-8"
-                    aria-label={`${item.name} düzenle`}
-                    onClick={() => onEditClick(item)}
+                    className="h-8 w-8 text-text-muted hover:bg-surface-sunken hover:text-text"
+                    aria-label={`${spare.name} düzenle`}
+                    onClick={() => onEditSpareClick(spare)}
                   >
                     <Pencil className="h-4 w-4" aria-hidden="true" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-9 w-9 text-danger/80 hover:bg-danger-subtle hover:text-danger sm:h-8 sm:w-8"
-                    aria-label={`${item.name} sil`}
-                    onClick={() => setDeleteTarget(item)}
+                    className="h-8 w-8 text-danger/80 hover:bg-danger-subtle hover:text-danger"
+                    aria-label={`${spare.name} sil`}
+                    onClick={() => setDeleteTarget(spare)}
                   >
                     <Trash2 className="h-4 w-4" aria-hidden="true" />
                   </Button>
@@ -175,7 +164,7 @@ export function PartEquipmentTab({
         onOpenChange={(nextOpen) => {
           if (!nextOpen) setDeleteTarget(null);
         }}
-        entityLabel="Cihaz / Yedek Ürün"
+        entityLabel="Yedek Parça"
         itemName={deleteTarget?.name ?? ''}
         onConfirm={handleConfirmDelete}
       />

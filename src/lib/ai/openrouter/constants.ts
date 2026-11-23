@@ -8,10 +8,10 @@ export const OPENROUTER_SINGLE_MODEL_PATH = '/model';
 export const OPENROUTER_DEFAULT_TIMEOUT_MS = 75_000;
 export const OPENROUTER_MODELS_CACHE_TTL_MS = 1000 * 60 * 15;
 
-export const OPENROUTER_DEFAULT_VISION_MODEL =
-  'nvidia/nemotron-3.5-super-vl:free';
+export const OPENROUTER_DEFAULT_VISION_MODEL = 'openai/gpt-6-luna';
 
 export const FALLBACK_VISION_MODEL_IDS: readonly string[] = [
+  'openai/gpt-6-luna',
   'nvidia/nemotron-3.5-super-vl:free',
   'google/gemma-4-31b-it:free',
   'google/gemma-4-26b-a4b-it:free',

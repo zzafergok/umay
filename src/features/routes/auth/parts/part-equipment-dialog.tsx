@@ -39,6 +39,7 @@ interface PartEquipmentDialogProps {
   categories: Category[];
   locations: Location[];
   editItem?: EquipmentItem | null;
+  defaultKind?: 'device' | 'spare';
 }
 
 export function PartEquipmentDialog({
@@ -47,13 +48,14 @@ export function PartEquipmentDialog({
   categories,
   locations,
   editItem,
+  defaultKind = 'device',
 }: PartEquipmentDialogProps) {
   const qc = useQueryClient();
   const isEditing = Boolean(editItem);
 
   const defaultValues = React.useMemo<EquipmentFormValues>(
     () => ({
-      kind: editItem?.kind ?? 'device',
+      kind: editItem?.kind ?? defaultKind,
       name: editItem?.name ?? '',
       categoryId: editItem?.categoryId ?? '__none__',
       locationId: editItem?.locationId ?? '__none__',
@@ -64,7 +66,7 @@ export function PartEquipmentDialog({
       model: editItem?.model ?? '',
       serialNumber: editItem?.serialNumber ?? '',
     }),
-    [editItem],
+    [editItem, defaultKind],
   );
 
   const methods = useForm<EquipmentFormValues>({

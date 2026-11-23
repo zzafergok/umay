@@ -15,9 +15,7 @@ export function extractJsonFromModelText(rawContent: string): string | null {
   if (!trimmed) return null;
 
   const fencedMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
-  if (fencedMatch?.[1]) {
-    return fencedMatch[1].trim();
-  }
+  if (fencedMatch?.[1]) return fencedMatch[1].trim();
 
   const firstBrace = trimmed.indexOf('{');
   const firstBracket = trimmed.indexOf('[');
@@ -35,7 +33,6 @@ export function extractJsonFromModelText(rawContent: string): string | null {
   if (firstBrace !== -1 && lastBrace > firstBrace) {
     return trimmed.slice(firstBrace, lastBrace + 1);
   }
-
   return null;
 }
 
@@ -84,10 +81,8 @@ function normalizeReceiptItem(item: Record<string, unknown>) {
     if (Math.abs(computedTotal - totalPrice) <= 0.15) {
       // Fişte basılı satır tutarı esastır; yuvarlama farkında olduğu gibi korunur.
     } else if (quantity > 1 && Math.abs(totalPrice - unitPrice) <= 0.01) {
-      // Model birim fiyatı satır tutarı olarak kopyalamış.
       totalPrice = computedTotal;
     } else {
-      // Basılı tutar ile birim fiyat doğruysa yanlış okunan şey miktardır (ör. 3,694 → 0,694).
       const inferredQty = Number((totalPrice / unitPrice).toFixed(3));
       const inferredTotal = Number((inferredQty * unitPrice).toFixed(2));
       if (inferredQty > 0 && Math.abs(inferredTotal - totalPrice) <= 0.02) {

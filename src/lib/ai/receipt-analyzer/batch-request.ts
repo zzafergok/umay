@@ -3,19 +3,25 @@ import {
   FALLBACK_VISION_MODEL_IDS,
   fetchOpenRouterModelBySlug,
   fetchOpenRouterModels,
-  OpenRouterApiError,
   type OpenRouterChatCompletionResponse,
   type OpenRouterModel,
-  type OpenRouterReasoningConfig,
 } from '@/lib/ai/openrouter';
 import {
   filterAndSortReceiptModels,
   isFreeOpenRouterModel,
   isRouterModelId,
-  supportsJsonObject,
   supportsReasoningOutput,
 } from './model-catalog';
 import { buildReceiptUserPrompt, RECEIPT_SYSTEM_PROMPT } from './prompt';
+import {
+  buildReasoningConfig,
+  isRetryableParamError,
+  isStructuredSchemaError,
+  pickLowestMandatoryEffort,
+  selectResponseFormat,
+  shouldRetryWithBasicPayload,
+  supportsTemperature,
+} from './request-options';
 import type { ReceiptAnalyzeInput } from './schemas';
 
 const OPENROUTER_MAX_MODELS_PER_REQUEST = 3;
@@ -57,42 +63,6 @@ export function buildModelBatches(
   return preferred ? [[preferred], ...fallbackBatches] : fallbackBatches;
 }
 
-function isMandatoryReasoningModel(batch: string[]): boolean {
-  return batch.some((id) => id.startsWith('google/gemini-4'));
-}
-
-function buildReasoningConfig(
-  batch: string[],
-  anySupportsReasoning: boolean,
-): OpenRouterReasoningConfig | undefined {
-  if (!anySupportsReasoning) return undefined;
-  if (isMandatoryReasoningModel(batch)) {
-    return { effort: 'low' };
-  }
-  return { enabled: false };
-}
-
-function shouldRetryWithLowReasoning(error: unknown): boolean {
-  if (!(error instanceof OpenRouterApiError)) return false;
-  if (error.status !== 400 && error.status !== 422) return false;
-  const msg = error.message.toLowerCase();
-  return msg.includes('reasoning') && msg.includes('mandatory');
-}
-
-function shouldRetryWithBasicPayload(error: unknown): boolean {
-  if (!(error instanceof OpenRouterApiError)) return false;
-  if (error.status !== 400 && error.status !== 422) return false;
-  const msg = error.message.toLowerCase();
-  return [
-    'response_format',
-    'json_object',
-    'structured',
-    'reasoning',
-    'max_tokens',
-    'parameter',
-  ].some((token) => msg.includes(token));
-}
-
 export async function requestBatchCompletion(
   batch: string[],
   input: ReceiptAnalyzeInput,
@@ -103,10 +73,7 @@ export async function requestBatchCompletion(
   const call = (
     payload: Parameters<typeof createOpenRouterChatCompletion>[0],
   ) => createOpenRouterChatCompletion(payload, { timeoutMs });
-  const allSupportJson = batch.every((id) => {
-    const model = modelMap.get(id);
-    return model ? supportsJsonObject(model) : false;
-  });
+
   const anySupportsReasoning = batch.some((id) => {
     const model = modelMap.get(id);
     return model ? supportsReasoningOutput(model) : false;
@@ -126,7 +93,7 @@ export async function requestBatchCompletion(
 
   const basePayload = {
     ...(batch.length === 1 ? { model: batch[0] } : { models: batch }),
-    temperature: 0.1,
+    ...(supportsTemperature(batch, modelMap) ? { temperature: 0.1 } : {}),
     max_tokens: defaultMaxTokens,
     messages: [
       { role: 'system' as const, content: RECEIPT_SYSTEM_PROMPT },
@@ -146,33 +113,55 @@ export async function requestBatchCompletion(
     ],
   };
 
-  const reasoningConfig = buildReasoningConfig(batch, anySupportsReasoning);
-  if (!allSupportJson && !reasoningConfig) {
+  const reasoningConfig = buildReasoningConfig(
+    batch,
+    modelMap,
+    anySupportsReasoning,
+  );
+  const { primary: responseFormat, supportsJsonObject: canUseJsonObject } =
+    selectResponseFormat(batch, modelMap);
+
+  if (!responseFormat && !reasoningConfig) {
     return call(basePayload);
   }
 
   try {
     return await call({
       ...basePayload,
-      ...(allSupportJson
-        ? { response_format: { type: 'json_object' as const } }
-        : {}),
+      ...(responseFormat ? { response_format: responseFormat } : {}),
       ...(reasoningConfig ? { reasoning: reasoningConfig } : {}),
     });
   } catch (error) {
-    if (shouldRetryWithLowReasoning(error)) {
+    if (!isRetryableParamError(error)) throw error;
+    const msg = error.message.toLowerCase();
+
+    if (msg.includes('reasoning') && msg.includes('mandatory')) {
       return call({
         ...basePayload,
-        ...(allSupportJson
-          ? { response_format: { type: 'json_object' as const } }
-          : {}),
-        reasoning: { effort: 'low' },
+        ...(responseFormat ? { response_format: responseFormat } : {}),
+        reasoning: { effort: pickLowestMandatoryEffort(batch, modelMap) },
       });
     }
-    if (shouldRetryWithBasicPayload(error)) {
+
+    if (
+      responseFormat?.type === 'json_schema' &&
+      isStructuredSchemaError(error) &&
+      canUseJsonObject
+    ) {
       return call({
         ...basePayload,
+        response_format: { type: 'json_object' },
+        ...(reasoningConfig ? { reasoning: reasoningConfig } : {}),
+      });
+    }
+
+    if (shouldRetryWithBasicPayload(error)) {
+      const keepReasoning = !msg.includes('reasoning') && reasoningConfig;
+      return call({
+        ...(batch.length === 1 ? { model: batch[0] } : { models: batch }),
         max_tokens: imageUrls.length > 1 ? 6144 : 4096,
+        messages: basePayload.messages,
+        ...(keepReasoning ? { reasoning: reasoningConfig } : {}),
       });
     }
     throw error;

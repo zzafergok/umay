@@ -1,5 +1,6 @@
 import {
   createOpenRouterChatCompletion,
+  OPENROUTER_DEFAULT_VISION_MODEL,
   OpenRouterApiError,
 } from '@/lib/ai/openrouter';
 import { isRecord, toOptionalString } from './normalizers';
@@ -12,7 +13,7 @@ import {
 } from './schemas';
 
 const ENRICH_TIMEOUT_MS = 60_000;
-const FALLBACK_MODEL = 'openrouter/free';
+const FALLBACK_MODEL = OPENROUTER_DEFAULT_VISION_MODEL;
 const MAX_NAME_LENGTH = 120;
 
 /**
@@ -41,10 +42,10 @@ export function parseEnrichmentResponse(
   content: string,
   count: number,
 ): ReceiptEnrichedItem[] {
-  const result = Array.from(
-    { length: count },
-    (): ReceiptEnrichedItem => ({ normalizedName: '', categoryHint: null }),
-  );
+  const result = Array.from({ length: count }, (): ReceiptEnrichedItem => ({
+    normalizedName: '',
+    categoryHint: null,
+  }));
   const json = extractJsonFromModelText(content);
   if (!json) return result;
 
@@ -69,13 +70,17 @@ export function parseEnrichmentResponse(
         : position;
     if (index < 0 || index >= count) return;
 
-    const name = toOptionalString(entry.n ?? entry.name ?? entry.normalizedName);
+    const name = toOptionalString(
+      entry.n ?? entry.name ?? entry.normalizedName,
+    );
     const category = toOptionalString(
       entry.c ?? entry.category ?? entry.categoryHint,
     );
     result[index] = {
       normalizedName: name ? name.slice(0, MAX_NAME_LENGTH) : '',
-      categoryHint: category ? (CATEGORY_LOOKUP.get(canonical(category)) ?? null) : null,
+      categoryHint: category
+        ? (CATEGORY_LOOKUP.get(canonical(category)) ?? null)
+        : null,
     };
   });
   return result;
@@ -85,9 +90,10 @@ export async function enrichReceiptItemNames(
   input: ReceiptEnrichInput,
 ): Promise<ReceiptEnrichedItem[]> {
   const model = input.modelId ?? FALLBACK_MODEL;
+  const isGpt6 = model.startsWith('openai/gpt-6');
   const basePayload = {
     model,
-    temperature: 0,
+    ...(isGpt6 ? {} : { temperature: 0 }),
     max_tokens: Math.min(8192, 1500 + input.names.length * 45),
     messages: [
       { role: 'system' as const, content: RECEIPT_ENRICH_SYSTEM_PROMPT },
@@ -99,7 +105,9 @@ export async function enrichReceiptItemNames(
   };
   const reasoning = model.startsWith('google/gemini-4')
     ? { effort: 'low' as const }
-    : { enabled: false as const };
+    : isGpt6
+      ? { effort: 'none' as const }
+      : { enabled: false as const };
   const send = (withReasoning: boolean) =>
     createOpenRouterChatCompletion(
       withReasoning ? { ...basePayload, reasoning } : basePayload,

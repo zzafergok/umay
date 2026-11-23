@@ -29,6 +29,9 @@ export function ReceiptResultMeta({ analysis }: ReceiptResultMetaProps) {
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-center gap-2">
+        {analysis.merchantName && (
+          <Badge variant="outline">Market: {analysis.merchantName}</Badge>
+        )}
         {analysis.date && (
           <Badge variant="outline" className="font-mono tabular-nums">
             Tarih: {analysis.date}
@@ -42,7 +45,7 @@ export function ReceiptResultMeta({ analysis }: ReceiptResultMetaProps) {
         )}
         {analysis.taxTotal !== null && (
           <Badge variant="secondary" className="font-mono tabular-nums">
-            Toplam KDV:{''}
+            Toplam KDV:{' '}
             {formatReceiptMoney(analysis.taxTotal, analysis.currency)}
           </Badge>
         )}
@@ -51,11 +54,11 @@ export function ReceiptResultMeta({ analysis }: ReceiptResultMetaProps) {
         <Alert variant="warning">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription className="text-xs">
-            Ürün toplamı fişteki ara toplamla uyuşmuyor (fiş:{''}
+            Ürün toplamı fişteki tutarla uyuşmuyor (fiş:{' '}
             {formatReceiptMoney(mismatch.printedSubtotal, analysis.currency)},
             okunan: {formatReceiptMoney(mismatch.itemsSum, analysis.currency)},
             fark: {mismatch.difference! > 0 ? '+' : ''}
-            {mismatch.difference!.toFixed(2)}).{''}
+            {mismatch.difference!.toFixed(2)}).{' '}
             {mismatch.difference! < 0 ? 'Eksik' : 'Fazla'} kalem olabilir;
             lütfen kalemleri fişle karşılaştırın.
           </AlertDescription>

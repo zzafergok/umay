@@ -58,11 +58,14 @@ export async function analyzeReceiptImage(
 
   let best: CandidateAttempt | null = null;
   let fallbackCandidate: CandidateAttempt | null = null;
+  let preferredFallbackNote: string | null = null;
   let scoredAttempts = 0;
   let lastError: unknown = null;
   const deadline = Date.now() + RECEIPT_ANALYSIS_BUDGET_MS;
 
-  for (const batch of batches) {
+  for (let batchIndex = 0; batchIndex < batches.length; batchIndex += 1) {
+    const batch = batches[batchIndex]!;
+    const isPreferredBatch = Boolean(input.modelId && batchIndex === 0);
     const remainingMs = deadline - Date.now();
     if (remainingMs < (best ? MIN_RETRY_MS : MIN_ATTEMPT_MS)) break;
     try {
@@ -86,6 +89,9 @@ export async function analyzeReceiptImage(
           502,
           'empty_completion',
         );
+        if (isPreferredBatch) {
+          preferredFallbackNote = `${input.modelId} boş yanıt döndürdüğü için yedek modele geçildi.`;
+        }
         continue;
       }
 
@@ -113,11 +119,20 @@ export async function analyzeReceiptImage(
           502,
           'reasoning_only_incomplete',
         );
+        if (isPreferredBatch) {
+          preferredFallbackNote = `${input.modelId} eksik yanıt döndürdüğü için yedek modele geçildi.`;
+        }
         continue;
       }
 
       scoredAttempts += 1;
-      if (!best || attempt.score < best.score) best = attempt;
+      const skipsMultiImageItems =
+        best &&
+        imageUrls.length > 1 &&
+        best.finalized.items.length > attempt.finalized.items.length;
+      if (!best || (!skipsMultiImageItems && attempt.score < best.score)) {
+        best = attempt;
+      }
       // Sağlam (doğrulanmış/kesilmemiş) yanıt bulunduysa dur; aksi halde başka model dene.
       if (attempt.score === 0 || scoredAttempts >= MAX_SCORED_ATTEMPTS) break;
     } catch (error) {
@@ -126,6 +141,11 @@ export async function analyzeReceiptImage(
         error.code === 'missing_api_key'
       ) {
         throw error;
+      }
+      if (isPreferredBatch) {
+        const reason =
+          error instanceof Error ? error.message : 'Bilinmeyen hata';
+        preferredFallbackNote = `${input.modelId} hatası (${reason}) nedeniyle yedek modele geçildi.`;
       }
       lastError = error;
     }
@@ -152,7 +172,9 @@ export async function analyzeReceiptImage(
   const fallbackNote =
     !extracted.contentText && (extracted.reasoning || extracted.refusal)
       ? 'Model doğrudan içerik yerine muhakeme/red yanıtı döndürdü; ham çıktı korundu.'
-      : parsed.data.notes;
+      : preferredFallbackNote && response.model !== input.modelId
+        ? preferredFallbackNote
+        : parsed.data.notes;
 
   return {
     ...parsed.data,

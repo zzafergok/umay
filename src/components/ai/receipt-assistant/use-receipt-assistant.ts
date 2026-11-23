@@ -4,7 +4,10 @@ import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from '@/components/core/toast';
-import type { OpenRouterModelsQueryParams } from '@/lib/ai/openrouter';
+import {
+  OPENROUTER_DEFAULT_VISION_MODEL,
+  type OpenRouterModelsQueryParams,
+} from '@/lib/ai/openrouter';
 import {
   MAX_RECEIPT_IMAGES,
   type ReceiptAnalysisResult,
@@ -21,7 +24,7 @@ import {
 import { enrichAnalysisItems } from './receipt-enrich-client';
 import type { ReceiptImageEntry } from './types';
 import type { ReceiptStage } from './use-receipt-progress';
-import { useReceiptModels } from './use-receipt-models';
+// import { useReceiptModels } from './use-receipt-models';
 
 export function useReceiptAssistant(options: {
   modelQuery?: OpenRouterModelsQueryParams;
@@ -32,10 +35,11 @@ export function useReceiptAssistant(options: {
     analysis: ReceiptAnalysisResult,
   ) => void | Promise<void>;
 }) {
-  const modelState = useReceiptModels({
-    modelQuery: options.modelQuery,
-    defaultFreeOnly: options.defaultFreeOnly,
-  });
+  // const modelState = useReceiptModels({
+  //   modelQuery: options.modelQuery,
+  //   defaultFreeOnly: options.defaultFreeOnly,
+  // });
+  const selectedModelId = OPENROUTER_DEFAULT_VISION_MODEL;
 
   const formMethods = useForm<ReceiptAssistantFormValues>({
     resolver: zodResolver(receiptAssistantFormSchema),
@@ -134,7 +138,7 @@ export function useReceiptAssistant(options: {
       const result = await aiReceiptService.analyzeReceipt({
         imageDataUrl: imageDataUrls[0],
         imageDataUrls,
-        modelId: modelState.selectedModelId || undefined,
+        modelId: selectedModelId,
         promptHint: promptHint || undefined,
       });
 
@@ -219,7 +223,7 @@ export function useReceiptAssistant(options: {
 
   return {
     formMethods,
-    ...modelState,
+    selectedModelId,
     isConfigured,
     images,
     analysis,

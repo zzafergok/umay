@@ -45,13 +45,37 @@ describe('receipt multi-image overlap vs genuine repeated items', () => {
 
   it('skips contiguous overlapping photo blocks while keeping genuine repeated items on the receipt as-is', () => {
     const items: ReceiptLineItem[] = [
-      item('ULKER PROBIS SAND 75', 26.25, { normalizedName: 'Ülker Probis 75g' }),
-      item('ULKER PROBIS SAND 75', 26.25, { normalizedName: 'Ülker Probis 75g' }),
-      item('SÜT 1L Y.YAĞLI', 79.8, { quantity: 2, unitPrice: null, categoryHint: null, vatRate: null }),
-      item('PİLAVLIK BULGUR 2.5KG', 95, { normalizedName: 'Pilavlık Bulgur 2.5 Kg', unit: 'paket' }),
-      item('SUT 1L Y.YAGLI', 79.8, { normalizedName: 'Yarım Yağlı Süt 1L', quantity: 2, unitPrice: 39.9 }),
-      item('PILAVLIK BULGUR 2.5KG', 95, { normalizedName: 'Pilavlık Bulgur 2.5 Kg', unit: 'paket' }),
-      item('DOMATES EKO KG', 311.87, { normalizedName: 'Domates Eko Kg', quantity: 2.6, unit: 'kg', unitPrice: 119.95 }),
+      item('ULKER PROBIS SAND 75', 26.25, {
+        normalizedName: 'Ülker Probis 75g',
+      }),
+      item('ULKER PROBIS SAND 75', 26.25, {
+        normalizedName: 'Ülker Probis 75g',
+      }),
+      item('SÜT 1L Y.YAĞLI', 79.8, {
+        quantity: 2,
+        unitPrice: null,
+        categoryHint: null,
+        vatRate: null,
+      }),
+      item('PİLAVLIK BULGUR 2.5KG', 95, {
+        normalizedName: 'Pilavlık Bulgur 2.5 Kg',
+        unit: 'paket',
+      }),
+      item('SUT 1L Y.YAGLI', 79.8, {
+        normalizedName: 'Yarım Yağlı Süt 1L',
+        quantity: 2,
+        unitPrice: 39.9,
+      }),
+      item('PILAVLIK BULGUR 2.5KG', 95, {
+        normalizedName: 'Pilavlık Bulgur 2.5 Kg',
+        unit: 'paket',
+      }),
+      item('DOMATES EKO KG', 311.87, {
+        normalizedName: 'Domates Eko Kg',
+        quantity: 2.6,
+        unit: 'kg',
+        unitPrice: 119.95,
+      }),
     ];
 
     const result = deduplicateReceiptItems(items);
@@ -125,7 +149,10 @@ describe('multi-image reasoning truncation & preferred model isolation', () => {
           id: 'meta/muse-spark-1.2',
           name: 'Meta Muse Spark 1.2',
           context_length: 128000,
-          architecture: { input_modalities: ['text', 'image'], output_modalities: ['text'] },
+          architecture: {
+            input_modalities: ['text', 'image'],
+            output_modalities: ['text'],
+          },
           pricing: { prompt: '0', completion: '0' },
           supported_parameters: ['temperature', 'reasoning', 'response_format'],
         },
@@ -133,7 +160,10 @@ describe('multi-image reasoning truncation & preferred model isolation', () => {
           id: 'google/gemini-flash:free',
           name: 'Gemini Flash Free',
           context_length: 1000000,
-          architecture: { input_modalities: ['text', 'image'], output_modalities: ['text'] },
+          architecture: {
+            input_modalities: ['text', 'image'],
+            output_modalities: ['text'],
+          },
           pricing: { prompt: '0', completion: '0' },
           supported_parameters: ['temperature', 'response_format'],
         },
@@ -142,7 +172,9 @@ describe('multi-image reasoning truncation & preferred model isolation', () => {
 
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(new Response(JSON.stringify(modelsPayload), { status: 200 }))
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify(modelsPayload), { status: 200 }),
+      )
       .mockResolvedValueOnce(
         new Response(
           JSON.stringify({
@@ -150,7 +182,17 @@ describe('multi-image reasoning truncation & preferred model isolation', () => {
             object: 'chat.completion',
             created: 1795284500,
             model: 'meta/muse-spark-1.2',
-            choices: [{ index: 0, finish_reason: 'length', message: { role: 'assistant', content: null, reasoning: 'Combining rotated...' } }],
+            choices: [
+              {
+                index: 0,
+                finish_reason: 'length',
+                message: {
+                  role: 'assistant',
+                  content: null,
+                  reasoning: 'Combining rotated...',
+                },
+              },
+            ],
           }),
           { status: 200 },
         ),
@@ -172,10 +214,30 @@ describe('multi-image reasoning truncation & preferred model isolation', () => {
                     merchantName: 'Yunus Market',
                     grandTotal: 190.68,
                     items: [
-                      { name: 'DOMATES EKO KG', quantity: 2.6, unit: 'kg', totalPrice: 311.87 },
-                      { name: 'SALATALIK KG', quantity: 0.9, unit: 'kg', totalPrice: 81.67 },
-                      { name: 'DOMATES EKO KG', quantity: 2.6, unit: 'kg', totalPrice: 311.87 },
-                      { name: 'SALATALIK KG', quantity: 0.9, unit: 'kg', totalPrice: 81.67 },
+                      {
+                        name: 'DOMATES EKO KG',
+                        quantity: 2.6,
+                        unit: 'kg',
+                        totalPrice: 311.87,
+                      },
+                      {
+                        name: 'SALATALIK KG',
+                        quantity: 0.9,
+                        unit: 'kg',
+                        totalPrice: 81.67,
+                      },
+                      {
+                        name: 'DOMATES EKO KG',
+                        quantity: 2.6,
+                        unit: 'kg',
+                        totalPrice: 311.87,
+                      },
+                      {
+                        name: 'SALATALIK KG',
+                        quantity: 0.9,
+                        unit: 'kg',
+                        totalPrice: 81.67,
+                      },
                     ],
                     rawText: 'YUNUS MARKET',
                   }),
@@ -202,18 +264,11 @@ describe('multi-image reasoning truncation & preferred model isolation', () => {
   });
 
   it('reconciles a +1 optical illusion in a 3+ consecutive identical item run against ARA TOPLAM', () => {
-    const probis = {
-      name: 'ULKER PROBIS SAND.75',
+    const probis = item('ULKER PROBIS SAND.75', 26.25, {
       normalizedName: 'Ülker Probis Sandviç 75g',
-      quantity: 1,
-      unit: 'adet',
-      unitPrice: 26.25,
-      totalPrice: 26.25,
-      categoryHint: 'Gıda',
-      vatRate: 1,
-    };
+    });
     const items = [
-      { ...probis, name: 'PATOS PARTI ACI SOSL', unitPrice: 94.5, totalPrice: 94.5 },
+      item('PATOS PARTI ACI SOSL', 94.5),
       probis,
       probis,
       probis,
@@ -226,8 +281,36 @@ describe('multi-image reasoning truncation & preferred model isolation', () => {
     );
     expect(reconciled).toHaveLength(5);
     const sum = Number(
-      reconciled.reduce((acc, item) => acc + (item.totalPrice ?? 0), 0).toFixed(2),
+      reconciled.reduce((acc, i) => acc + (i.totalPrice ?? 0), 0).toFixed(2),
     );
     expect(sum).toBe(199.5);
+  });
+
+  it('reconciles a single top-edge seam duplicate (e.g. FANTA PET 1,5 LT *83.90) in multi-image receipts against ARA TOPLAM', () => {
+    const fanta = item('FANTA PET 1,5 LT', 83.9, { vatRate: 10 });
+    const items = [
+      item('DİĞER 61 ÜRÜN', 10171.55),
+      fanta,
+      item('MUZ İTHAL', 97.13),
+      fanta,
+      fanta, // 2nd photo starts mid-item with FANTA PET 1,5 LT (barcode cropped at top edge)
+      item('KARNABAHAR KG', 44.2),
+    ];
+    const reconciled = reconcileConsecutiveRunsWithAraToplam(
+      items,
+      'Yunus Market 01.11.2026 15:15 ARA TOPLAM 10480,68 TOPKDV 8,78 TOPLAM 190,68',
+      10480.68,
+      190.68,
+      null,
+      2,
+    );
+    expect(reconciled).toHaveLength(5);
+    expect(
+      reconciled.filter((i) => i.name === 'FANTA PET 1,5 LT'),
+    ).toHaveLength(2);
+    const sum = Number(
+      reconciled.reduce((acc, i) => acc + (i.totalPrice ?? 0), 0).toFixed(2),
+    );
+    expect(sum).toBe(10480.68);
   });
 });

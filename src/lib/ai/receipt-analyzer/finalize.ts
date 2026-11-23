@@ -40,8 +40,17 @@ export function finalizeReceiptItems(
     overlapCleaned,
     data.rawText,
     data.subtotal,
+    data.grandTotal,
+    data.discountTotal,
+    imageCount,
   );
-  const totalsCheck = buildTotalsCheck(items, data.rawText, data.subtotal);
+  const totalsCheck = buildTotalsCheck(
+    items,
+    data.rawText,
+    data.subtotal,
+    data.grandTotal,
+    data.discountTotal,
+  );
 
   const hasPricedItems = items.some((item) => item.totalPrice !== null);
   const taxTotal =
@@ -70,7 +79,8 @@ export function scoreFinalizedReceipt(
   if (finalized.items.length === 0) return SCORE_EMPTY;
   const truncated = [finishReason, nativeFinishReason].some(
     (reason) =>
-      typeof reason === 'string' && TRUNCATION_REASONS.has(reason.toLowerCase()),
+      typeof reason === 'string' &&
+      TRUNCATION_REASONS.has(reason.toLowerCase()),
   );
   if (truncated) return SCORE_TRUNCATED;
   if (finalized.totalsCheck.status === 'mismatch') {

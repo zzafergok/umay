@@ -9,7 +9,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/core/alert';
-import { Badge } from '@/components/core/badge';
+// import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import {
   Card,
@@ -22,7 +22,7 @@ import { Form, SubmitButton, TextField } from '@/components/forms';
 import { cn } from '@/lib/utils';
 import { receiptAssistantFormSchema } from './receipt-assistant-utils';
 import { ReceiptImageField } from './receipt-image-field';
-import { ReceiptModelSelector } from './receipt-model-selector';
+// import { ReceiptModelSelector } from './receipt-model-selector';
 import { ReceiptProgress } from './receipt-progress';
 import { ReceiptResultView } from './receipt-result-view';
 import type { ReceiptAssistantProps } from './types';
@@ -57,21 +57,21 @@ export function ReceiptAssistant({
 
   const isExpanded = embedded || expanded;
   const imageCount = state.images.length;
-  const filterBadgeLabel =
-    state.pricingFilter === 'free'
-      ? 'Ücretsiz OCR Modeller'
-      : state.pricingFilter === 'paid'
-        ? 'Ücretli OCR Modeller'
-        : 'Uyumlu OCR Modeller';
+  // const filterBadgeLabel =
+  //   state.pricingFilter === 'free'
+  //     ? 'Ücretsiz OCR Modeller'
+  //     : state.pricingFilter === 'paid'
+  //       ? 'Ücretli OCR Modeller'
+  //       : 'Uyumlu OCR Modeller';
 
   const bodyNode = (
     <div className={cn('min-w-0 space-y-3.5', !embedded && 'space-y-4')}>
       {embedded ? (
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs text-text-muted">{description}</p>
-          <Badge variant="secondary" size="sm" className="shrink-0 font-mono">
+          {/* <Badge variant="secondary" size="sm" className="shrink-0 font-mono">
             {filterBadgeLabel} ({state.models.length})
-          </Badge>
+          </Badge> */}
         </div>
       ) : null}
 
@@ -93,12 +93,7 @@ export function ReceiptAssistant({
         onSubmit={state.handleAnalyze}
         className="space-y-3.5"
       >
-        <div
-          className={cn(
-            'grid grid-cols-1 items-start gap-3.5',
-            !embedded && 'md:grid-cols-2 md:gap-4',
-          )}
-        >
+        <div className="grid grid-cols-1 items-start gap-3.5">
           <ReceiptImageField
             fileInputRef={fileInputRef}
             images={state.images}
@@ -108,7 +103,7 @@ export function ReceiptAssistant({
             onClearAll={handleReset}
           />
 
-          <ReceiptModelSelector
+          {/* <ReceiptModelSelector
             models={state.models}
             modelCounts={state.modelCounts}
             pricingFilter={state.pricingFilter}
@@ -121,7 +116,7 @@ export function ReceiptAssistant({
             isRefreshingModels={state.isRefreshingModels}
             onSelectModel={state.setSelectedModelId}
             onRefreshModels={state.refreshModels}
-          />
+          /> */}
         </div>
 
         <TextField
@@ -195,9 +190,9 @@ export function ReceiptAssistant({
           <div className="flex flex-wrap items-center gap-2">
             <ReceiptText className="h-4 w-4 shrink-0 text-umay-blue" />
             <CardTitle className="font-display text-base">{title}</CardTitle>
-            <Badge variant="secondary" size="sm" className="font-mono">
+            {/* <Badge variant="secondary" size="sm" className="font-mono">
               {filterBadgeLabel} ({state.models.length})
-            </Badge>
+            </Badge> */}
           </div>
           <CardDescription className="text-caption">
             {description}

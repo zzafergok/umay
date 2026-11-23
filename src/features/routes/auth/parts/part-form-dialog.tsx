@@ -29,12 +29,13 @@ interface PartFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   equipment: EquipmentItem[];
+  defaultParentItemId?: string;
 }
 
-function getDefaultValues(): PartFormValues {
+function getDefaultValues(parentItemId = '__none__'): PartFormValues {
   return {
     name: '',
-    parentItemId: '__none__',
+    parentItemId,
     spareItemId: '__none__',
     mode: 'time',
     days: 180,
@@ -48,16 +49,17 @@ export function PartFormDialog({
   open,
   onOpenChange,
   equipment,
+  defaultParentItemId,
 }: PartFormDialogProps) {
   const qc = useQueryClient();
   const methods = useForm<PartFormValues>({
     resolver: zodResolver(partFormSchema),
-    defaultValues: getDefaultValues(),
+    defaultValues: getDefaultValues(defaultParentItemId),
   });
 
   React.useEffect(() => {
-    if (open) methods.reset(getDefaultValues());
-  }, [open, methods]);
+    if (open) methods.reset(getDefaultValues(defaultParentItemId));
+  }, [open, defaultParentItemId, methods]);
 
   const mode = useWatch({ control: methods.control, name: 'mode' });
 
@@ -115,7 +117,7 @@ export function PartFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent mobilePresentation="sheet" className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Yeni Ömürlü Parça</DialogTitle>
+          <DialogTitle>Yeni Aktif Parça</DialogTitle>
         </DialogHeader>
 
         <Form
@@ -126,7 +128,7 @@ export function PartFormDialog({
         >
           <TextField
             name="name"
-            label="Parça Adı"
+            label="Aktif Parça Adı"
             placeholder="Örn. Su Arıtma Karbon Filtresi"
             required
           />
@@ -135,19 +137,18 @@ export function PartFormDialog({
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <SelectField
                 name="parentItemId"
-                label="Ana Ürün"
+                label="Takılı Olduğu Cihaz"
                 options={parentOptions}
               />
               <SelectField
                 name="spareItemId"
-                label="Stoktaki Yedek"
+                label="Yedek Parça Stoğu"
                 options={spareOptions}
               />
             </div>
             <p className="text-xs text-text-muted">
-              Ana Ürün yalnızca Cihaz / Demirbaş, Stoktaki Yedek ise Yedek Parça
-              / Aksesuar türündeki ürünleri listeler. Eklemek için &ldquo;Cihaz
-              &amp; Yedek Ürünler&rdquo; sekmesini kullanın.
+              Cihazları &ldquo;Cihazlar&rdquo; sekmesinden, yedek stoklarını
+              &ldquo;Yedek Parçalar&rdquo; sekmesinden ekleyebilirsiniz.
             </p>
           </div>
 

@@ -1,16 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Cpu, Plus, Wrench } from 'lucide-react';
+import { Cpu, Package, Plus, Wrench } from 'lucide-react';
 import { Button } from '@/components/core/button';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/core/empty';
 import {
   Tabs,
   TabsContent,
@@ -28,43 +20,66 @@ import {
   useLocationsQuery,
   usePartsQuery,
 } from '@/hooks/use-inventory-hooks';
-import { PartCard } from './part-card';
+import { PartActivePartsTab } from './part-active-parts-tab';
+import { PartDevicesTab } from './part-devices-tab';
 import { PartEquipmentDialog } from './part-equipment-dialog';
-import { PartEquipmentTab } from './part-equipment-tab';
 import { PartFormDialog } from './part-form-dialog';
+import { PartSparesTab } from './part-spares-tab';
 import { ReplacePartDialog } from './replace-part-dialog';
+
+type PartsTabKey = 'devices' | 'active' | 'spares';
 
 export function PartsScreen() {
   const { data, isLoading } = usePartsQuery();
 
-  const [activeTab, setActiveTab] = React.useState<'parts' | 'equipment'>(
-    'parts',
-  );
+  const [activeTab, setActiveTab] = React.useState<PartsTabKey>('devices');
   const [statusFilter, setStatusFilter] = React.useState<'all' | PartStatus>(
     'all',
   );
   const [formOpen, setFormOpen] = React.useState(false);
+  const [defaultParentId, setDefaultParentId] = React.useState<string>();
   const [equipmentOpen, setEquipmentOpen] = React.useState(false);
+  const [equipmentDefaultKind, setEquipmentDefaultKind] = React.useState<
+    'device' | 'spare'
+  >('device');
   const [editingEquipment, setEditingEquipment] =
     React.useState<EquipmentItem | null>(null);
   const [replaceTarget, setReplaceTarget] = React.useState<Part | null>(null);
 
-  const needsEquipmentMeta = activeTab === 'equipment' || equipmentOpen;
-  const hasLinkedEquipment = (data?.parts ?? []).some((p) =>
-    Boolean(p.parentItemId || p.spareItemId),
+  const { data: equipmentItems = [] } = useEquipmentQuery(true);
+  const { data: categories = [] } = useCategoriesQuery(true);
+  const { data: locations = [] } = useLocationsQuery(true);
+
+  const devices = React.useMemo(
+    () => equipmentItems.filter((item) => item.kind === 'device'),
+    [equipmentItems],
   );
-  const needsEquipment = needsEquipmentMeta || formOpen || hasLinkedEquipment;
-
-  const { data: equipmentItems = [] } = useEquipmentQuery(needsEquipment);
-  const { data: categories = [] } = useCategoriesQuery(needsEquipmentMeta);
-  const { data: locations = [] } = useLocationsQuery(needsEquipmentMeta);
-
+  const spares = React.useMemo(
+    () => equipmentItems.filter((item) => item.kind === 'spare'),
+    [equipmentItems],
+  );
   const equipmentMap = React.useMemo(
     () => new Map(equipmentItems.map((i) => [i.id, i])),
     [equipmentItems],
   );
 
-  const parts = React.useMemo(() => {
+  const { partsByDeviceId, linkedCountBySpareId } = React.useMemo(() => {
+    const byDevice = new Map<string, Part[]>();
+    const bySpare = new Map<string, number>();
+    for (const part of data?.parts ?? []) {
+      if (part.parentItemId) {
+        const list = byDevice.get(part.parentItemId) ?? [];
+        list.push(part);
+        byDevice.set(part.parentItemId, list);
+      }
+      if (part.spareItemId) {
+        bySpare.set(part.spareItemId, (bySpare.get(part.spareItemId) ?? 0) + 1);
+      }
+    }
+    return { partsByDeviceId: byDevice, linkedCountBySpareId: bySpare };
+  }, [data?.parts]);
+
+  const filteredParts = React.useMemo(() => {
     const list = data?.parts ?? [];
     const order: Record<PartStatus, number> = {
       overdue: 0,
@@ -76,164 +91,116 @@ export function PartsScreen() {
       .sort((a, b) => order[a.status] - order[b.status]);
   }, [data?.parts, statusFilter]);
 
-  const totalPartsCount = data?.parts?.length ?? 0;
-  const hasParts = !isLoading && totalPartsCount > 0;
+  const allPartsCount = data?.parts?.length ?? 0;
+
+  const openCreateEquipment = (kind: 'device' | 'spare') => {
+    setEditingEquipment(null);
+    setEquipmentDefaultKind(kind);
+    setEquipmentOpen(true);
+  };
+
+  const openEditEquipment = (item: EquipmentItem) => {
+    setEditingEquipment(item);
+    setEquipmentDefaultKind(item.kind);
+    setEquipmentOpen(true);
+  };
+
+  const openAddPart = (deviceId?: string) => {
+    setDefaultParentId(deviceId);
+    setFormOpen(true);
+  };
+
+  const actionLabel =
+    activeTab === 'devices'
+      ? 'Cihaz Ekle'
+      : activeTab === 'active'
+        ? 'Aktif Parça Ekle'
+        : 'Yedek Parça Ekle';
+
+  const handlePrimaryAction = () => {
+    if (activeTab === 'devices') openCreateEquipment('device');
+    else if (activeTab === 'active') openAddPart();
+    else openCreateEquipment('spare');
+  };
 
   return (
     <div className="space-y-5 md:space-y-6">
       <Tabs
         value={activeTab}
-        onValueChange={(v) => setActiveTab(v as 'parts' | 'equipment')}
+        onValueChange={(v) => setActiveTab(v as PartsTabKey)}
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <TabsList className="h-auto w-full max-w-full flex-wrap justify-start sm:w-fit">
-            <TabsTrigger value="parts" className="gap-1.5">
-              <Wrench className="h-3.5 w-3.5" aria-hidden="true" />
-              Ömürlü Parçalar ({totalPartsCount})
-            </TabsTrigger>
-            <TabsTrigger value="equipment" className="gap-1.5">
+            <TabsTrigger value="devices" className="gap-1.5">
               <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
-              Cihaz &amp; Yedek Ürünler ({equipmentItems.length})
+              Cihazlar ({devices.length})
+            </TabsTrigger>
+            <TabsTrigger value="active" className="gap-1.5">
+              <Wrench className="h-3.5 w-3.5" aria-hidden="true" />
+              Aktif Parçalar ({allPartsCount})
+            </TabsTrigger>
+            <TabsTrigger value="spares" className="gap-1.5">
+              <Package className="h-3.5 w-3.5" aria-hidden="true" />
+              Yedek Parçalar ({spares.length})
             </TabsTrigger>
           </TabsList>
 
-          {activeTab === 'parts' && hasParts ? (
-            <Button
-              type="button"
-              onClick={() => setFormOpen(true)}
-              className="min-h-[44px] w-full shrink-0 sm:min-h-0 sm:w-auto"
-            >
-              <Plus className="mr-1.5 h-4 w-4" />
-              Parça Ekle
-            </Button>
-          ) : activeTab === 'equipment' && equipmentItems.length > 0 ? (
-            <Button
-              type="button"
-              onClick={() => {
-                setEditingEquipment(null);
-                setEquipmentOpen(true);
-              }}
-              className="min-h-[44px] w-full shrink-0 sm:min-h-0 sm:w-auto"
-            >
-              <Plus className="mr-1.5 h-4 w-4" />
-              Cihaz / Yedek Ekle
-            </Button>
-          ) : null}
+          <Button
+            type="button"
+            onClick={handlePrimaryAction}
+            className="min-h-[44px] w-full shrink-0 sm:min-h-0 sm:w-auto"
+          >
+            <Plus className="mr-1.5 h-4 w-4" />
+            {actionLabel}
+          </Button>
         </div>
 
-        <TabsContent value="parts" className="space-y-5 pt-2">
-          {hasParts ? (
-            <div className="grid w-full grid-cols-4 gap-1 rounded-xl border border-border bg-surface-sunken p-1 sm:inline-flex sm:w-auto sm:flex-wrap sm:gap-1.5">
-              {(
-                [
-                  { key: 'all', label: 'Tümü' },
-                  { key: 'overdue', label: 'Geciken' },
-                  { key: 'due_soon', label: 'Yaklaşan' },
-                  { key: 'ok', label: 'İyi' },
-                ] as const
-              ).map((tab) => (
-                <Button
-                  key={tab.key}
-                  type="button"
-                  size="sm"
-                  variant={statusFilter === tab.key ? 'default' : 'ghost'}
-                  onClick={() => setStatusFilter(tab.key)}
-                  className="min-h-[40px] truncate px-2 text-xs sm:min-h-0 sm:px-3"
-                >
-                  {tab.label}
-                </Button>
-              ))}
-            </div>
-          ) : null}
-
-          {isLoading ? (
-            <p className="text-sm text-muted-foreground">
-              Parçalar yükleniyor...
-            </p>
-          ) : totalPartsCount === 0 ? (
-            <Empty className="border">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <Wrench />
-                </EmptyMedia>
-                <EmptyTitle>Takip edilen parça yok</EmptyTitle>
-                <EmptyDescription>
-                  Su arıtma filtresi, pil veya fırça gibi ömürlü parçalarını
-                  ekle.
-                </EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent>
-                <Button size="sm" onClick={() => setFormOpen(true)}>
-                  <Plus className="mr-1.5 h-4 w-4" />
-                  Parça Ekle
-                </Button>
-              </EmptyContent>
-            </Empty>
-          ) : parts.length === 0 ? (
-            <Empty className="border">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <Wrench />
-                </EmptyMedia>
-                <EmptyTitle>Bu filtrede parça yok</EmptyTitle>
-                <EmptyDescription>
-                  Seçili durum filtresine uyan parça bulunamadı.
-                </EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setStatusFilter('all')}
-                >
-                  Tümünü Göster
-                </Button>
-              </EmptyContent>
-            </Empty>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {parts.map((part) => (
-                <PartCard
-                  key={part.id}
-                  part={part}
-                  parentItem={
-                    part.parentItemId
-                      ? equipmentMap.get(part.parentItemId)
-                      : undefined
-                  }
-                  spareItem={
-                    part.spareItemId
-                      ? equipmentMap.get(part.spareItemId)
-                      : undefined
-                  }
-                  onReplaceClick={setReplaceTarget}
-                />
-              ))}
-            </div>
-          )}
-        </TabsContent>
-
-        <TabsContent value="equipment" className="pt-2">
-          <PartEquipmentTab
-            equipmentItems={equipmentItems}
+        <TabsContent value="devices" className="pt-2">
+          <PartDevicesTab
+            devices={devices}
+            partsByDeviceId={partsByDeviceId}
             categories={categories}
             locations={locations}
-            onCreateClick={() => {
-              setEditingEquipment(null);
-              setEquipmentOpen(true);
-            }}
-            onEditClick={(item) => {
-              setEditingEquipment(item);
-              setEquipmentOpen(true);
-            }}
+            onCreateDeviceClick={() => openCreateEquipment('device')}
+            onEditDeviceClick={openEditEquipment}
+            onAddPartForDevice={(deviceId) => openAddPart(deviceId)}
+            onReplacePartClick={setReplaceTarget}
+          />
+        </TabsContent>
+
+        <TabsContent value="active" className="pt-2">
+          <PartActivePartsTab
+            parts={filteredParts}
+            allPartsCount={allPartsCount}
+            statusFilter={statusFilter}
+            onStatusFilterChange={setStatusFilter}
+            equipmentMap={equipmentMap}
+            isLoading={isLoading}
+            onCreateClick={() => openAddPart()}
+            onReplaceClick={setReplaceTarget}
+          />
+        </TabsContent>
+
+        <TabsContent value="spares" className="pt-2">
+          <PartSparesTab
+            spares={spares}
+            linkedCountBySpareId={linkedCountBySpareId}
+            categories={categories}
+            locations={locations}
+            onCreateSpareClick={() => openCreateEquipment('spare')}
+            onEditSpareClick={openEditEquipment}
           />
         </TabsContent>
       </Tabs>
 
       <PartFormDialog
         open={formOpen}
-        onOpenChange={setFormOpen}
+        onOpenChange={(nextOpen) => {
+          setFormOpen(nextOpen);
+          if (!nextOpen) setDefaultParentId(undefined);
+        }}
         equipment={equipmentItems}
+        defaultParentItemId={defaultParentId}
       />
       <PartEquipmentDialog
         open={equipmentOpen}
@@ -244,6 +211,7 @@ export function PartsScreen() {
         categories={categories}
         locations={locations}
         editItem={editingEquipment}
+        defaultKind={equipmentDefaultKind}
       />
       <ReplacePartDialog
         part={replaceTarget}
