@@ -6,6 +6,10 @@ import { Badge } from '@/components/core/badge';
 import { Button } from '@/components/core/button';
 import { Checkbox } from '@/components/core/checkbox';
 import {
+  PaginationControls,
+  usePagination,
+} from '@/components/core/pagination';
+import {
   Table,
   TableBody,
   TableCell,
@@ -46,6 +50,29 @@ export function ReceiptResultView({
   isEnriching = false,
   canApply,
 }: ReceiptResultViewProps) {
+  const {
+    currentPage,
+    pageSize,
+    getPaginationInfo,
+    handlePageChange,
+    handlePageSizeChange,
+    reset,
+  } = usePagination(10);
+
+  React.useEffect(() => {
+    reset();
+  }, [analysis, reset]);
+
+  const pagination = getPaginationInfo(analysis.items.length);
+  const startIndex = (currentPage - 1) * pageSize;
+  const pagedItems = React.useMemo(
+    () =>
+      analysis.items
+        .slice(startIndex, startIndex + pageSize)
+        .map((item, offset) => ({ item, index: startIndex + offset })),
+    [analysis.items, startIndex, pageSize],
+  );
+
   const allSelected =
     analysis.items.length > 0 && selectedIndices.size === analysis.items.length;
   const hasModelMeta = Boolean(analysis.reasoning || analysis.rawResponse);
@@ -85,6 +112,25 @@ export function ReceiptResultView({
             </p>
           ) : (
             <>
+              {canApply && onApplySelected && (
+                <div className="flex flex-col gap-2 rounded-md border border-border/70 bg-surface-sunken/40 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between">
+                  <span className="font-mono text-compact tabular-nums text-ash">
+                    {selectedIndices.size} / {analysis.items.length} ürün seçili
+                  </span>
+                  <Button
+                    size="sm"
+                    className="w-full sm:w-auto"
+                    onClick={onApplySelected}
+                    disabled={
+                      isApplying || isEnriching || selectedIndices.size === 0
+                    }
+                  >
+                    <Plus className="mr-1.5 h-4 w-4" />
+                    {actionLabel}
+                  </Button>
+                </div>
+              )}
+
               <div className="overflow-x-auto rounded-md border border-border">
                 <Table>
                   <TableHeader>
@@ -104,7 +150,7 @@ export function ReceiptResultView({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {analysis.items.map((item, idx) => (
+                    {pagedItems.map(({ item, index: idx }) => (
                       <TableRow key={`${item.name}-${idx}`}>
                         {canApply && (
                           <TableCell className="w-10">
@@ -176,23 +222,23 @@ export function ReceiptResultView({
                 </Table>
               </div>
 
-              {canApply && onApplySelected && (
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <span className="font-mono text-compact tabular-nums text-ash">
-                    {selectedIndices.size} / {analysis.items.length} ürün seçili
-                  </span>
-                  <Button
-                    size="sm"
-                    className="w-full sm:w-auto"
-                    onClick={onApplySelected}
-                    disabled={
-                      isApplying || isEnriching || selectedIndices.size === 0
-                    }
-                  >
-                    <Plus className="mr-1.5 h-4 w-4" />
-                    {actionLabel}
-                  </Button>
-                </div>
+              {analysis.items.length > 0 && (
+                <PaginationControls
+                  pagination={pagination}
+                  onPageChange={handlePageChange}
+                  onPageSizeChange={handlePageSizeChange}
+                  showSizeChanger
+                  pageSizeOptions={[10, 20, 50]}
+                  pageSizeLabel="Sayfa başına:"
+                  showTotal
+                  size="small"
+                  labels={{
+                    firstPage: 'İlk sayfa',
+                    previousPage: 'Önceki sayfa',
+                    nextPage: 'Sonraki sayfa',
+                    lastPage: 'Son sayfa',
+                  }}
+                />
               )}
             </>
           )}
