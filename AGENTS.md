@@ -87,6 +87,35 @@ Bu kurallar, projedeki tüm görevlerde ve geliştirmelerde istisnasız uygulan�
 
 ---
 
+## 10. Umay Proje Bağlamı, Mimari ve Tasarım Kuralları
+
+> Bu bölüm Umay'ın mimari kararlarını, teknoloji yığınını ve görsel dil kilit kurallarını özetler. Detaylı renk/tipografi tabloları, bileşen anatomisi ve ekran bazlı akışlar için `docs/design.md` esas alınır.
+
+### Teknoloji Yığını ve Katmanlar
+
+- **Çekirdek:** Next.js 16 (App Router, Turbopack), React 19, TypeScript (`strict: true`), Tailwind CSS, Radix UI, Zustand v5, TanStack React Query v5, `react-hook-form` + `zod`, Vitest.
+- **Altyapı Modülleri:** `src/lib/api/` (`apiClient`, `ApiError`), `src/lib/auth/` (`jwt.ts`, `session.ts`), `src/services/` (`CACHE_STRATEGIES`), `src/hooks/` (`useApiQuery`, `useApiMutation`), `src/lib/i18n/`, `src/lib/metadata/`, `src/proxy.ts` (rota koruması ve güvenlik başlıkları).
+
+### Mimari ve Ürün Kararları
+
+- **Rota Yapısı:** Tek kullanıcılı ev envanteri yaklaşımı nedeniyle ayrı bir `/admin` paneli yerine ayarlar, yedekleme ve faaliyetler `(auth)` altındaki `/settings` ve `/activity` rotalarında tutulur.
+- **Veri ve Yerel Geliştirme:** Sunucuda tüm veriler `firebase-admin` üzerinden Firestore'a (`users/{uid}/...`) yazılır; yerel geliştirme ve testlerde **Firebase Emulator Suite** (`firebase.json`, `firestore.indexes.json`, `firestore.rules`) kullanılır.
+- **Kimlik Doğrulama:** Firebase Auth REST API (veya Auth Emulator) ile doğrulama sonrası sunucu tarafında `httpOnly` `session` çerezi ve JWT üretilir. `ALLOW_DEMO_AUTH=true` yalnızca yerel hızlı deneme içindir; üretimde kapalıdır.
+- **Çevrimdışı / PWA:** `public/sw.js` statik varlıkları ve `/api/*` GET yanıtlarını ağ-öncelikli (network-first) önbellekler; çevrimdışı yazma işlemleri IndexedDB `offline-queue` kuyruğuna alınır.
+- **Saat Dilimi ve Yerelleştirme:** Tüm ömür, SKT ve bildirim hesaplamaları `Europe/Istanbul` saat diliminde, saf `src/lib/lifecycle` fonksiyonlarıyla yapılır. Varsayılan dil `tr`, ikincil dil `en` olarak yapılandırılmıştır.
+- **Grafikler ve Barkod/QR:** Dağılım grafikleri `recharts` gibi ağır bağımlılıklar yerine sade SVG/CSS çubuk grafik olarak uygulanır (pasta grafik yok). Barkod taramada `BarcodeDetector` + `@zxing/browser` fallback, QR etiketlerde `qrcode` kullanılır.
+
+### Görsel Dil ve UI Kilit Kuralları
+
+- **Karakter ve Tema:** _"Sakin ocak başı düzeni."_ — sıcak nötr yüzeyler, tek vurgu rengi gök mavisi (`--accent`), yalnızca logo ve boş durum illüstrasyonlarında kor (`--ember`). Açık/koyu tema `next-themes` (`class`) ile birinci sınıf desteklenir.
+- **Semantik Token Zorunluluğu:** Bileşenlerde ham hex renk kullanılmaz; tüm renkler `src/app/globals.css` içindeki semantik CSS değişkenlerinden gelir.
+- **Durum Gösterimi:** Renk yalnızca durum bildirir (asla dekoratif kullanılmaz) ve her zaman **renk + ikon + kısa metin** birlikte verilir. "Her şey yolunda" durumunda rozet gösterilmez.
+- **Yasak Görsel Kalıplar:** Glow, neon, glassmorphism, yapay gradient, `rounded-none`, sürekli dönen/titreyen animasyonlar, kart içi süs ikonları ve kategori renginde kart zemini yasaktır.
+- **Tipografi ve Türkçe:** Başlık/metrik için `Manrope`, gövde için `Inter`, kod/barkod için `JetBrains Mono` (`src/lib/fonts.ts`). Tüm sayılarda `tabular-nums`, biçimlendirmede `tr-TR` (`Intl.NumberFormat`) kullanılır; CSS `text-transform: uppercase` kullanılmaz.
+- **İkonlar ve Etkileşim:** `lucide-react` ikonları kullanılır; mobil öncelikli yaklaşımla dokunma hedefleri `≥44px`, mobil girdi fontları `≥16px` tutulur. Hareketlerde `prefers-reduced-motion: reduce` desteklenir.
+
+---
+
 ---
 
 # Web / Next.js Production Checklist

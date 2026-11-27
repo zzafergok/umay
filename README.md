@@ -176,5 +176,4 @@ npm run build            # Production derlemesi
 ## Ek Belgeler
 
 - [Tasarım Rehberi (`docs/design.md`)](docs/design.md) — Renk token'ları, tipografi ve bileşen ilkeleri
-- [Mimari & Çalışma Kuralları (`AGENTS.md`)](AGENTS.md) — Modülerlik, form, TypeScript ve production checklist standartları
-- [Mimari Varsayımlar (`docs/ASSUMPTIONS.md`)](docs/ASSUMPTIONS.md) ve [Tulpar Notları (`docs/TULPAR-NOTES.md`)](docs/TULPAR-NOTES.md)
+- [Mimari & Çalışma Kuralları (`AGENTS.md`)](AGENTS.md) — Proje bağlamı, modülerlik, form, TypeScript ve production checklist standartları
