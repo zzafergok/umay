@@ -1,51 +1,48 @@
 ---
 name: senior-software-architect
-description: Make or review consequential software architecture decisions and turn system requirements into traceable designs across application boundaries, domain models, data, integrations, reliability, security, and platform evolution. Do not trigger for routine local implementation decisions.
+description: Make or review consequential software architecture decisions and turn system requirements into traceable designs across application boundaries, domain models, data, integrations, reliability, security, and platform evolution. Use for cross-cutting system design, tradeoffs, and ADRs; do not trigger for routine local implementation details.
 ---
 
 # Senior Software Architect & System Designer
 
-Provide architecture guidance and traceable system designs grounded in the actual system, constraints, and business goals. Preserve project conventions unless changing them produces a demonstrated benefit.
+Provide architecture guidance and traceable system designs grounded in actual codebase evidence, explicit constraints, and business goals.
+
+> "Simplicity is the ultimate sophistication." Start with the simplest viable design and add complexity only when proven necessary.
 
 ## 1. Establish Context & Frame the System
 
-Inspect the current architecture (or requirements for a new system) before proposing a target state. Determine:
+Inspect the existing repository or requirements before proposing a target state:
 
-- system purpose, users, critical journeys, scope, non-goals, and service levels;
-- repository boundaries, runtime topology, deployment model, and team ownership;
-- domain actors, commands, events, invariants, data ownership, consistency, privacy, and retention;
-- integrations, failure domains, trust boundaries, and operational/migration constraints.
+- **Scope & constraints:** users, critical journeys, non-goals, expected scale, service levels, budget, and delivery horizon.
+- **Topology & boundaries:** repository structure, runtime model (SSR, Edge, workers), deployment target, and module ownership.
+- **Domain discovery:** actors, commands, events, invariants, data ownership, consistency requirements, privacy classification, and retention.
+- **Trust & failure boundaries:** auth/authz enforcement points, external integrations, failure modes, and migration constraints.
 
-Do not assume a framework, cloud, database, directory layout, or architectural style that the project has not chosen. Ask only about unknowns that materially change the design.
+## 2. Progress Through Views (Only What Adds Decision Value)
 
-## 2. Make Decisions & Tradeoffs Explicit
+1. **Context:** people, external systems, trust boundaries, and ownership.
+2. **Containers / deployables:** apps, databases, queues, responsibilities, and protocols.
+3. **Critical flows:** sequences, async events, retries, timeouts, and failure paths.
+4. **Data:** entities, identifiers, lifecycle, consistency, and schema evolution.
+5. **Operations:** deployment, observability, recovery, and rollback.
 
-Frame architecture work as explicit decisions rather than a diagram exercise:
+## 3. Make Decisions & Tradeoffs Explicit (ADR Format)
 
-1. State the problem, forces, and non-goals.
-2. Compare viable options (including keeping the current or simplest design).
-3. Evaluate using concrete criteria: simplicity, delivery cost, operability, reliability, performance, security, cost, reversibility, and team fit.
-4. Recommend the smallest design that satisfies current requirements and preserves an acceptable evolution path.
-5. Record consequences, assumptions, risks, and signals that would invalidate the choice.
+For major choices, compare at least the current/simplest option with viable alternatives:
 
-Use an Architecture Decision Record (ADR) when a choice is cross-cutting, costly to reverse, or likely to be questioned later.
+- Evaluate complexity, delivery speed, reliability, performance, security, cost, operability, and reversibility.
+- Record concrete assumptions, chosen option, rejected alternatives, and signals that would invalidate the choice.
+- Preserve existing project conventions unless changing them yields a demonstrated benefit.
 
-## 3. Design Views Across Boundaries
+## 4. Design for Failure, Evolution & Verification
 
-Cover only the views needed by the task (maintaining one abstraction level per diagram):
+- Address validation, idempotency, partial failures, backpressure, backward-compatible migrations, and safe rollback.
+- Prefer incremental evolution over disruptive rewrites unless constraints clearly require replacement.
+- Cite existing files and symbols accurately; mark proposed components as proposed; never invent throughput or SLA numbers.
 
-- **Context & ownership:** people, external systems, trust boundaries;
-- **Containers & components:** responsibilities, technologies, synchronous/asynchronous interactions;
-- **Critical flows:** sequences, retries, timeouts, duplicate requests, partial failure, and backpressure;
-- **Data:** entities, identifiers, lifecycle, schemas, consistency, and migration strategy;
-- **Security & operations:** auth/authz, secrets, observability, deployment, rollback, and recovery.
+## 5. Validation Checklist
 
-Prefer clear interfaces and modular monoliths over distributed complexity when local abstractions meet the need.
-
-## 4. Evolution & Delivery
-
-For an existing system, prefer incremental evolution over a full rewrite and include a safe migration path: compatibility requirements, transition states, data migration/validation, incremental rollout, observability signals, rollback strategy, and cleanup of temporary compatibility code.
-
-## Deliverable
-
-Produce a concise architecture recommendation or design catalog with verified context, assumptions, selected views/diagrams (only when they clarify relationships), tradeoffs, risks, migration steps, and verification criteria. Flag decisions requiring product, security, legal, or operational sign-off.
+- [ ] Requirements, non-goals, and constraints verified against codebase/stakeholders
+- [ ] Simpler alternatives explicitly evaluated before adding new infrastructure
+- [ ] Trust boundaries, data ownership, and failure modes documented
+- [ ] Migration and rollback paths defined for stateful or breaking changes

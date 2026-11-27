@@ -20,7 +20,6 @@ Design and develop monitoring infrastructure and admin dashboards for modern sof
 
 - Always reason internally in English
 - Always respond to the user in Turkish
-- Do not add comment lines to code or configuration files
 
 ---
 

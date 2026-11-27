@@ -1,39 +1,37 @@
 ---
 name: git-workflow-skill
-description: Use Git safely for commits, branches, rebases, cherry-picks, bisect, worktrees, conflict resolution, and recovery. Use when history or repository state must be changed or diagnosed; inspect the worktree and preserve unrelated user changes before mutating anything.
+description: Use Git safely for commits, interactive rebases, cherry-picks, bisect, worktrees, conflict resolution, and reflog recovery. Use when managing repository history, splitting commits, isolating hotfixes, or diagnosing regressions.
 ---
 
-# Git Workflow
+# Git Workflow Skill
 
-Choose the least disruptive Git operation that achieves the user's requested history or collaboration outcome.
+Maintain clean, bisectable history and recover safely from Git mistakes.
 
-## Inspect First
+## 1. Inspect Before Mutating
 
-Check repository root, status, current branch, remotes, relevant log, upstream, and worktrees before changing state. Treat modified and untracked files as user work unless proven otherwise. Do not use destructive recovery commands against a broad or ambiguous target.
+Always check working tree state before staging, committing, or rewriting history:
 
-## Commits
+```bash
+git status --short
+git diff --stat
+git log --oneline -5
+```
 
-Stage only intended changes and review the staged diff. Follow the repository's commit convention; if none exists, use a concise imperative subject that describes one coherent change. Do not amend, sign, commit, or push unless the user asked for that workflow.
+Never discard or overwrite unrelated user changes; stage explicit files rather than blind `git add -A` when unrelated edits exist.
 
-## Branch and History Operations
+## 2. Commit Discipline
 
-- **Rebase:** use for intentional local history cleanup or updating onto a base when collaboration constraints allow it.
-- **Cherry-pick:** use for a known commit whose change belongs on the target branch; inspect dependencies and resolve conflicts semantically.
-- **Revert:** prefer for undoing a shared commit while preserving history.
-- **Bisect:** use a reproducible good/bad test to identify the first failing commit.
-- **Worktree:** use for parallel branches without disturbing the current checkout.
-- **Reflog:** use to locate previously reachable local commits before assuming work is lost.
+- Keep commits atomic: separate refactoring, formatting, and distinct features/fixes.
+- Write imperative summaries focused on **what** and **why** (`Fix timezone boundary in expiry calculation`).
 
-Never force-push a shared branch without explicit authorization and a clear lease-aware plan. Avoid rewriting public history when revert or a follow-up commit satisfies the goal.
+## 3. Everyday Safe Operations
 
-## Conflicts
+- **Branch history cleanup:** `git rebase -i $(git merge-base HEAD main)` (`squash`/`fixup`/`reword`), then `git push --force-with-lease` (never `--force` blindly on shared branches).
+- **Hotfix propagation:** `git cherry-pick <sha>` (use `-n` to review before committing).
+- **Regression hunting:** `git bisect start HEAD <good-tag>` and `git bisect run npm test`, finishing with `git bisect reset`.
+- **Parallel work:** `git worktree add ../repo-hotfix -b hotfix/name main` to test or patch without disturbing the main worktree; clean up with `git worktree remove`.
 
-Understand both sides and the intended final behavior. Do not resolve by blindly choosing ours or theirs. After resolution, inspect the diff and run the most relevant checks. Preserve generated files according to repository policy.
+## 4. Conflicts & Recovery
 
-## Recovery
-
-Resolve the exact target before reset, clean, deletion, or branch removal. Prefer recoverable actions and create a safety reference when a complex rewrite could lose work. Explain what will become unreachable before taking a destructive action.
-
-## Completion
-
-Report the resulting branch or commit state, commands or operations performed, checks run, and any remaining divergence, conflict, or push requirement. Never claim remote state changed unless it was verified.
+- Resolve conflicts deliberately — inspect both sides rather than defaulting to `ours`/`theirs`.
+- Recover lost commits or reset mistakes via `git reflog` and `git branch recovered <sha>` before running destructive commands.

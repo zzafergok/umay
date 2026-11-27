@@ -1,44 +1,54 @@
 ---
 name: api-design-skill
-description: Design, review, or evolve REST, GraphQL, RPC, event, or webhook contracts that are consistent, secure, observable, and compatible with their consumers. Use for new endpoints, API standards, contract migrations, or integration boundaries.
+description: Design, review, or evolve REST, GraphQL, RPC, event, or webhook contracts that are consistent, secure, observable, and compatible with their consumers. Use when designing new API endpoints, establishing API standards, or reviewing Route Handlers.
 ---
 
-# API Design
+# API Design Skill
 
-Design the public contract from consumer needs and domain behavior before choosing route names or framework code.
+Design predictable, secure, and backward-compatible API contracts.
 
-## Establish Context
+## 1. Establish Context
 
-Identify consumers, trust boundaries, operations, data ownership, consistency needs, latency and availability targets, expected scale, compatibility horizon, and whether synchronous request-response is appropriate.
+Before adding or changing an endpoint, identify consumers (SSR, browser client, mobile, webhook), auth boundaries, idempotency requirements, payload limits, and compatibility obligations.
 
-Inspect existing conventions for naming, authentication, errors, pagination, idempotency, versioning, observability, and documentation. Consistency with a sound existing API is usually more valuable than introducing a second style.
+## 2. REST Resource & Status Conventions
 
-## Contract Principles
+- Use plural nouns for resources (`/api/items`, `/api/items/{id}`), HTTP methods for actions (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`), and avoid verb endpoints (`/api/createItem`).
+- Apply accurate status codes:
+  - `200 OK` (read/update), `201 Created` (create), `204 No Content` (delete)
+  - `400 Bad Request` (malformed JSON/query), `401 Unauthorized` (unauthenticated), `403 Forbidden` (unauthorized), `404 Not Found`, `409 Conflict`, `422 Unprocessable Entity` (validation), `429 Too Many Requests`
+  - `500 Internal Server Error` (never leak stack traces or DB internals)
 
-- Model domain resources and operations clearly; avoid leaking database tables or framework internals.
-- Use stable identifiers and explicit types, nullability, units, timestamps, and enums.
-- Separate authentication from authorization and enforce both on the server.
-- Validate all external input and bound payload size, complexity, and execution cost.
-- Return errors with stable machine codes, safe user-facing messages, and correlation identifiers.
-- Do not expose stack traces, queries, secrets, or provider internals.
+## 3. Validation, Error Shape & Pagination
 
-## Collection and Mutation Behavior
+- Validate request params, query strings, and bodies at the boundary with Zod (same rules on client and server).
+- Return a consistent machine + human-readable error envelope:
 
-Define filtering, sorting, pagination, maximum page size, and consistency semantics. Prefer cursor pagination when collections change during traversal or offsets become costly.
+```typescript
+export interface ApiErrorResponse {
+  error: string; // e.g. "VALIDATION_ERROR"
+  message: string; // User-safe localized message
+  details?: Record<string, unknown>;
+}
+```
 
-For mutations, specify idempotency, concurrency control, duplicate handling, validation, partial success, and retry safety. Use idempotency keys for externally retried operations where duplicate effects are harmful.
+- List endpoints should bound page sizes (`limit` cap), support cursor or explicit offset pagination (`items`, `hasNext`, `nextCursor`), and return deterministic sort order.
 
-## Compatibility
+## 4. Next.js Route Handler Order of Operations
 
-Prefer additive change when it preserves meaning. For breaking changes, inventory consumers, provide a migration path, run old and new contracts in parallel when justified, observe adoption, and define removal criteria. Version only when the compatibility problem requires it.
+```typescript
+export async function POST(request: Request) {
+  const session = await requireAuth(request); // 1. Authenticate & authorize
+  const body = schema.parse(await request.json()); // 2. Validate & narrow input
+  const result = await domainService.create(session.uid, body); // 3. Delegate to service
+  return NextResponse.json(result, { status: 201 }); // 4. Return minimal safe DTO
+}
+```
 
-## Protocol-Specific Concerns
+## 5. Compatibility & Security Checklist
 
-- **REST:** HTTP semantics, caching, conditional requests, content negotiation, and resource boundaries.
-- **GraphQL:** schema ownership, nullability, resolver authorization, depth and cost limits, batching, and deprecation.
-- **Events/webhooks:** schema evolution, ordering, replay, signatures, delivery attempts, deduplication, and consumer lag.
-- **Streaming/RPC:** cancellation, deadlines, flow control, compatibility, and partial failure.
-
-## Verification
-
-Provide or update an inspectable contract such as OpenAPI, GraphQL schema, protobuf, or event schema when appropriate. Test authorization, validation, compatibility, rate limits, pagination boundaries, duplicate requests, timeouts, and malformed consumers. Include examples that match the real contract rather than illustrative fields that cannot be executed.
+- [ ] Auth and ownership/tenant checks enforced server-side (prevent IDOR/BOLA)
+- [ ] Additive-only evolution for existing clients (avoid renaming/removing fields silently)
+- [ ] Mutation endpoints handle retries safely (`Idempotency-Key` for billing/webhooks)
+- [ ] Rate limits and request body size limits enforced on public or expensive routes
+- [ ] Response DTOs strip internal fields, secrets, and unnecessary PII

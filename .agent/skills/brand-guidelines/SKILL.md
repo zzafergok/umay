@@ -1,6 +1,6 @@
 ---
 name: brand-guidelines
-description: Create, document, or consistently apply a brand system across product UI, marketing pages, campaigns, documents, and app store assets. Covers brand voice, tone, colour tokens, typography, iconography, motion personality, and compliance review.
+description: Create, document, or consistently apply a brand system across product UI, marketing pages, campaigns, documents, and app store assets. Use when defining brand voice, tone, colour tokens, typography, iconography, motion personality, or reviewing brand compliance.
 ---
 
 # Brand Guidelines — Creation & Application
