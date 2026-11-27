@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 import { CommandPalette } from '@/components/layout/command-palette';
 import { getCurrentLocale } from '@/lib/i18n/server-locale';
 import { getShellCopy } from './i18n';
+import { ShellNavLink } from './shell-nav-link';
 import { UmayBottomNav } from './umay-bottom-nav';
 import type { ShellCopy, ShellNavItem } from './types';
 
@@ -121,10 +122,10 @@ function ShellNav({
             direction === 'column' && 'justify-start',
           )}
         >
-          <Link href={item.href}>
+          <ShellNavLink href={item.href}>
             <item.icon className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
             {item.label}
-          </Link>
+          </ShellNavLink>
         </Button>
       ))}
     </nav>

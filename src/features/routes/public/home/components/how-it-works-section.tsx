@@ -12,11 +12,18 @@ import type { PublicHomeCopy } from '../types';
 
 export interface HowItWorksSectionProps {
   howItWorks: PublicHomeCopy['howItWorks'];
+  withAnchorId?: boolean;
 }
 
-export function HowItWorksSection({ howItWorks }: HowItWorksSectionProps) {
+export function HowItWorksSection({
+  howItWorks,
+  withAnchorId = true,
+}: HowItWorksSectionProps) {
   return (
-    <section id="nasil-calisir" className="scroll-mt-20 space-y-4 sm:space-y-6">
+    <section
+      id={withAnchorId ? 'nasil-calisir' : undefined}
+      className="scroll-mt-20 space-y-4 sm:space-y-6"
+    >
       <div className="max-w-2xl space-y-2">
         <Badge variant="outline">{howItWorks.badge}</Badge>
         <h2 className="text-xl font-semibold tracking-tight text-text sm:text-3xl">

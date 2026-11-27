@@ -25,6 +25,7 @@ import type {
 
 export interface FeatureInfoCardsProps {
   featuresSection: PublicHomeCopy['featuresSection'];
+  withAnchorId?: boolean;
 }
 
 const ICON_MAP: Record<FeatureIconKey, typeof Sparkles> = {
@@ -45,9 +46,15 @@ const TOKEN_CSS: Record<FeatureInfoCardItem['categoryToken'], string> = {
   6: '--cat-6',
 };
 
-export function FeatureInfoCards({ featuresSection }: FeatureInfoCardsProps) {
+export function FeatureInfoCards({
+  featuresSection,
+  withAnchorId = true,
+}: FeatureInfoCardsProps) {
   return (
-    <section id="ozellikler" className="scroll-mt-20 space-y-4 sm:space-y-6">
+    <section
+      id={withAnchorId ? 'ozellikler' : undefined}
+      className="scroll-mt-20 space-y-4 sm:space-y-6"
+    >
       <div className="max-w-2xl space-y-2">
         <Badge variant="outline">{featuresSection.badge}</Badge>
         <h2 className="text-xl font-semibold tracking-tight text-text sm:text-3xl">

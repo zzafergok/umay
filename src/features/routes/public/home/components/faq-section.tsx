@@ -12,11 +12,16 @@ import type { PublicHomeCopy } from '../types';
 
 export function FaqSection({
   faqSection,
+  withAnchorId = true,
 }: {
   faqSection: PublicHomeCopy['faqSection'];
+  withAnchorId?: boolean;
 }) {
   return (
-    <section id="sss" className="scroll-mt-20 space-y-6">
+    <section
+      id={withAnchorId ? 'sss' : undefined}
+      className="scroll-mt-20 space-y-6"
+    >
       <div className="mx-auto max-w-2xl space-y-2 text-center">
         <Badge variant="outline">{faqSection.badge}</Badge>
         <h2 className="font-heading text-title text-text sm:text-display">

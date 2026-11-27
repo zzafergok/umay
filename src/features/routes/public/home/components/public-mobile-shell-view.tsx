@@ -137,7 +137,10 @@ export function PublicMobileShellView({
               </CardContent>
             </Card>
 
-            <HowItWorksSection howItWorks={copy.howItWorks} />
+            <HowItWorksSection
+              howItWorks={copy.howItWorks}
+              withAnchorId={false}
+            />
           </div>
         )}
 
@@ -148,13 +151,17 @@ export function PublicMobileShellView({
               lifecycleCallout={copy.lifecycleCallout}
               loginLabel={copy.hero.loginAction}
               hideSignInCta
+              withAnchorId={false}
             />
           </div>
         )}
 
         {activeTab === 'features' && (
           <div className="space-y-6">
-            <FeatureInfoCards featuresSection={copy.featuresSection} />
+            <FeatureInfoCards
+              featuresSection={copy.featuresSection}
+              withAnchorId={false}
+            />
             <p className="text-center text-xs text-text-muted">
               {copy.mobileShell.featuresExpandHint}
             </p>
@@ -170,8 +177,9 @@ export function PublicMobileShellView({
             <QuickRoutesSection
               quickRoutesSection={copy.quickRoutesSection}
               onRequireSignIn={() => handleSelect('start')}
+              withAnchorId={false}
             />
-            <FaqSection faqSection={copy.faqSection} />
+            <FaqSection faqSection={copy.faqSection} withAnchorId={false} />
             <HomeFooterCta
               footerCta={copy.footerCta}
               onNavigateTab={handleAnchorNav}

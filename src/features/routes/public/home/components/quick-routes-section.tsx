@@ -20,6 +20,7 @@ import type { PublicHomeCopy, QuickRouteIconKey } from '../types';
 export interface QuickRoutesSectionProps {
   quickRoutesSection: PublicHomeCopy['quickRoutesSection'];
   onRequireSignIn?: () => void;
+  withAnchorId?: boolean;
 }
 
 const ROUTE_ICON_MAP: Record<QuickRouteIconKey, typeof LayoutDashboard> = {
@@ -36,9 +37,13 @@ const ROUTE_ICON_MAP: Record<QuickRouteIconKey, typeof LayoutDashboard> = {
 export function QuickRoutesSection({
   quickRoutesSection,
   onRequireSignIn,
+  withAnchorId = true,
 }: QuickRoutesSectionProps) {
   return (
-    <section id="ekranlar" className="scroll-mt-20 space-y-4 sm:space-y-6">
+    <section
+      id={withAnchorId ? 'ekranlar' : undefined}
+      className="scroll-mt-20 space-y-4 sm:space-y-6"
+    >
       <div className="max-w-2xl space-y-2">
         <Badge variant="outline">{quickRoutesSection.badge}</Badge>
         <h2 className="text-xl font-semibold tracking-tight text-text sm:text-3xl">

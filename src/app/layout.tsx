@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { headers } from 'next/headers';
 import './globals.css';
 import { Toaster } from '@/components/core/toast';
 import { fontBody, fontHeading, fontMono } from '@/lib/fonts';
@@ -18,6 +19,8 @@ export const viewport: Viewport = {
   ],
 };
 
+const THEME_INIT_SCRIPT = `(()=>{try{var t=localStorage.getItem('umay-theme')||'system';var d=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;var r=document.documentElement;r.classList.remove('light','dark');r.classList.add(d);r.style.colorScheme=d;}catch(e){}})();`;
+
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getCurrentLocale();
   return buildRootMetadata(locale);
@@ -29,6 +32,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const locale = await getCurrentLocale();
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     <html
@@ -36,10 +40,17 @@ export default async function RootLayout({
       className={`${fontBody.variable} ${fontHeading.variable} ${fontMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          nonce={nonce}
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
+        />
+      </head>
       <body>
         <ClientLocaleProvider initialLocale={locale}>
           <LocaleHtmlSync />
-          <ThemeProvider>
+          <ThemeProvider nonce={nonce}>
             <QueryProvider>
               {children}
               <Toaster />

@@ -13,6 +13,7 @@
 
 @layer base {
   :root {
+    color-scheme: light;
     /* ── Umay Light Theme (RGB triplets) ── */
     --bg: 250 248 245; /* #FAF8F5 */
     --surface: 255 255 255; /* #FFFFFF */
@@ -88,6 +89,7 @@
   }
 
   .dark {
+    color-scheme: dark;
     /* ── Umay Dark Theme (RGB triplets) ── */
     --bg: 18 17 16; /* #121110 */
     --surface: 26 24 22; /* #1A1816 */

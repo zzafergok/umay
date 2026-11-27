@@ -20,12 +20,14 @@ export interface LifecycleCtaCardProps {
   lifecycleCallout: PublicHomeCopy['lifecycleCallout'];
   loginLabel: string;
   hideSignInCta?: boolean;
+  withAnchorId?: boolean;
 }
 
 export function LifecycleCtaCard({
   lifecycleCallout,
   loginLabel,
   hideSignInCta = false,
+  withAnchorId = true,
 }: LifecycleCtaCardProps) {
   const [replaced, setReplaced] = useState(false);
 
@@ -37,7 +39,10 @@ export function LifecycleCtaCard({
     : lifecycleCallout.remainingDueText;
 
   return (
-    <section id="omurlu-parcalar" className="scroll-mt-20">
+    <section
+      id={withAnchorId ? 'omurlu-parcalar' : undefined}
+      className="scroll-mt-20"
+    >
       <Card className="overflow-hidden border-border">
         <div className="grid gap-5 p-4 sm:p-6 md:grid-cols-12 md:items-center md:gap-6 md:p-8">
           <div className="space-y-3 sm:space-y-4 md:col-span-6">
