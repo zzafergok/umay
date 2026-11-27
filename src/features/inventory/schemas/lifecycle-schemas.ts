@@ -54,7 +54,7 @@ export const stockMovementInputSchema = z.object({
   itemId: z.string().trim().min(1, 'Ürün kimliği zorunludur.'),
   type: z.enum(['in', 'out', 'adjust', 'consume', 'replace_part', 'discard']),
   delta: z
-    .number({ invalid_type_error: 'Değişim miktarı sayı olmalıdır.' })
+    .number({ error: 'Değişim miktarı sayı olmalıdır.' })
     .refine((v) => v !== 0, 'Miktar değişimi 0 olamaz.'),
   reason: z.string().trim().max(240).optional(),
   relatedPartId: z.string().trim().optional(),

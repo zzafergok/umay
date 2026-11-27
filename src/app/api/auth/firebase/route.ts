@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const parsed = firebaseTokenSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
-        { message: parsed.error.errors[0]?.message ?? 'Geçersiz istek.' },
+        { message: parsed.error.issues[0]?.message ?? 'Geçersiz istek.' },
         { status: 400 },
       );
     }

@@ -39,7 +39,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         {
           message:
-            parsed.error.errors[0]?.message ?? 'Geçersiz hesap silme onayı.',
+            parsed.error.issues[0]?.message ?? 'Geçersiz hesap silme onayı.',
           errors: parsed.error.flatten().fieldErrors,
         },
         { status: 400 },

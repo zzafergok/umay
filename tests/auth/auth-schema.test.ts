@@ -31,7 +31,7 @@ describe('Auth Validation Schemas', () => {
       const result = loginSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.errors[0]?.message).toBe(
+        expect(result.error.issues[0]?.message).toBe(
           'Geçerli bir e-posta adresi giriniz',
         );
       }
@@ -46,7 +46,7 @@ describe('Auth Validation Schemas', () => {
       const result = loginSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.errors[0]?.message).toBe(
+        expect(result.error.issues[0]?.message).toBe(
           'Şifre en az 6 karakter olmalıdır',
         );
       }

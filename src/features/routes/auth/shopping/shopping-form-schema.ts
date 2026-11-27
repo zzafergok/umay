@@ -17,7 +17,7 @@ export const shoppingFormSchema = z.object({
     .min(1, 'Ürün adı zorunludur.')
     .max(120, 'En fazla 120 karakter olabilir.'),
   qty: z
-    .number({ invalid_type_error: 'Geçerli bir miktar girin.' })
+    .number({ error: 'Geçerli bir miktar girin.' })
     .positive('Miktar 0 dan büyük olmalıdır.')
     .max(100000),
   unit: z.string().trim().min(1).max(24),

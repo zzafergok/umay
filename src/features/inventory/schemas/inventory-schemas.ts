@@ -113,12 +113,12 @@ export const itemInputSchema = z.object({
   locationId: z.string().trim().min(1, 'Konum seçimi zorunludur.'),
   type: z.enum(['durable', 'consumable', 'component']).default('consumable'),
   quantity: z
-    .number({ invalid_type_error: 'Miktar sayı olmalıdır.' })
+    .number({ error: 'Miktar sayı olmalıdır.' })
     .min(0, 'Miktar negatif olamaz.')
     .max(1000000),
   unit: z.string().trim().min(1, 'Birim zorunludur.').max(24).default('adet'),
   minQuantity: z
-    .number({ invalid_type_error: 'Minimum miktar sayı olmalıdır.' })
+    .number({ error: 'Minimum miktar sayı olmalıdır.' })
     .min(0, 'Minimum miktar negatif olamaz.')
     .max(1000000)
     .default(0),

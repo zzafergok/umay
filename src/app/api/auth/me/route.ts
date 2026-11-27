@@ -51,7 +51,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json(
         {
           message:
-            parsed.error.errors[0]?.message ?? 'Geçersiz profil bilgileri.',
+            parsed.error.issues[0]?.message ?? 'Geçersiz profil bilgileri.',
           errors: parsed.error.flatten().fieldErrors,
         },
         { status: 400 },
