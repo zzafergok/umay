@@ -10,13 +10,6 @@ description: |
 
 
   Credits: Original skill by @blader - https://github.com/blader/humanizer
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Grep
-  - Glob
-  - AskUserQuestion
 ---
 
 # Humanizer: Remove AI Writing Patterns

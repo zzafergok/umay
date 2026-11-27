@@ -8,7 +8,6 @@ description: >
   standards, writing App Store descriptions, push notification copy,
   onboarding copy, error message writing, brand colours, logo usage,
   visual identity consistency.
-allowed-tools: Read, Glob, Grep
 ---
 
 # Brand Guidelines — Mobile Application Brand Identity

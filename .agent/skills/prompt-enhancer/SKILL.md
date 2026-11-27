@@ -1,7 +1,6 @@
 ---
 name: prompt-enhancer
 description: Transform vague prompts into actionable specs using intelligent analysis and session memory. Use when user input contains -e or --enhance flag.
-allowed-tools: (none)
 ---
 
 # prompt-enhancer

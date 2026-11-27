@@ -20,7 +20,7 @@ Audit UI components and pages in modern web applications against professional st
 
 - Always reason internally in English
 - Always respond to the user in Turkish
-- Do not add comment lines to code or configuration files
+- Enforce `AGENTS.md` project standards (250-line file limit, `@/components/core/*` and `@/components/forms/*` usage instead of raw HTML primitives, `@/` path aliases, and `react-hook-form` + `zod`)
 - Report findings in `file:line` format
 
 ---

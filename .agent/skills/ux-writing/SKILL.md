@@ -8,7 +8,6 @@ description: >
   empty screen copy, modal headings, form placeholders, loading state text,
   success messages, App Store descriptions, tooltips, in-app messages,
   or dialog box copy.
-allowed-tools: Read, Glob, Grep
 ---
 
 # UX Writing — Mobile Application Microcopy Guide
