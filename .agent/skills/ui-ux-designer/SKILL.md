@@ -1,50 +1,50 @@
 ---
 name: ui-ux-designer
-description: Design or improve responsive, accessible product interfaces and translate UX requirements into coherent layouts, components, states, and implementation guidance. Use for ordinary web or app UI design work; use ux-researcher-designer for research and ui-ux-audit-specialist for audit-only requests.
+description: Design or refine responsive, accessible product interfaces — from standard UI flows to high-fidelity premium visual direction and art direction. Translate UX requirements into coherent layouts, components, states, and implementation guidance. Use ux-researcher-designer for research and ui-ux-audit-specialist for audit-only requests.
 ---
 
 # UI/UX Designer
 
-Create interfaces that help users complete their tasks clearly, efficiently, and accessibly while fitting the product's existing visual language.
+Create interfaces that help users complete their tasks clearly, efficiently, and accessibly while fitting the product's existing visual language — and elevate visual direction when distinctive, high-fidelity polish is requested.
 
-## Start with Context
+## 1. Start with Context & Visual Thesis
 
 Inspect the product, design system, existing components, routes, content, and target platforms before proposing a direction. Establish:
 
-- primary users and tasks;
-- page or flow purpose;
-- required content and actions;
-- existing tokens and reusable components;
-- responsive, localization, accessibility, and technical constraints;
-- loading, empty, error, success, disabled, and permission states.
+- primary users, tasks, and page/flow purpose;
+- required content, actions, and signature moments;
+- desired character, emotional tone, and aspects of the existing product that must remain recognizable;
+- existing tokens (`@/components/core/*`, `@/components/forms/*`) and reusable components;
+- responsive, localization (`tr`/`en`), accessibility, and performance constraints;
+- loading, empty, error, success, disabled, selected, and destructive/permission states.
 
 Ask only for missing information that would materially change the design. Otherwise, state reasonable assumptions and proceed.
 
-## Design the Experience
+## 2. Experience & Layout Principles
 
-1. Define the information hierarchy and primary action.
+1. Define the information hierarchy and primary action using proportion, spacing, contrast, and typography before adding decoration.
 2. Arrange content in the order users need it, not the order the data model exposes it.
-3. Choose familiar interaction patterns unless a novel pattern provides a clear benefit.
-4. Make system status and consequences visible, especially for destructive or irreversible actions.
-5. Reduce unnecessary choices and visual competition without hiding essential controls.
+3. Make dense information scannable through grouping, alignment, and progressive disclosure.
+4. Preserve calm default states; reserve emphasis for meaningful actions and information.
+5. Make system status and consequences visible, especially for destructive or irreversible actions.
 6. Design keyboard, touch, pointer, and assistive-technology behavior together.
-7. Specify meaningful responsive changes rather than merely shrinking the desktop layout.
+7. Treat responsive behavior as recomposition rather than uniform desktop shrinking.
 
-## Visual System
+## 3. Visual System & Craft
 
-- Reuse existing tokens and components before introducing new variants.
-- Use spacing, typography, color, and elevation to communicate hierarchy consistently.
-- Preserve readable line lengths, sufficient contrast, and predictable alignment.
-- Use motion to explain state or continuity; respect reduced-motion preferences.
-- Keep decoration subordinate to comprehension and interaction.
-- Ensure touch targets, focus states, labels, and error messages remain perceivable.
+- Reuse existing tokens and components before introducing new variants; keep one-off composition local.
+- Use a restrained set of distinctive motifs consistently rather than many unrelated effects.
+- Avoid defaulting to excessive gradients, glass effects, glow, oversized type, floating cards, or gratuitous animation.
+- Preserve readable line lengths, sufficient contrast (WCAG AA), and predictable alignment.
+- Use motion to clarify state, continuity, or feedback; respect `prefers-reduced-motion`.
+- Ensure touch targets, `focus-visible` states, labels, and error messages remain perceivable.
 
-## Implementation Guidance
+## 4. Implementation & Quality Pass
 
-When code changes are requested, follow the repository's framework and conventions. Build reusable abstractions only when repetition or shared behavior justifies them. Preserve semantic HTML, progressive enhancement, and native control behavior where practical.
+When code changes are requested, follow the repository's framework and `AGENTS.md` conventions. Preserve semantic HTML, progressive enhancement, and native control behavior.
 
-Avoid mock data or polished happy paths that conceal missing states. Validate with realistic content, long labels, narrow screens, zoom or text scaling, keyboard navigation, and failure conditions.
+Avoid mock data or polished happy paths that conceal missing states. Review at representative viewport sizes with realistic content, long labels, narrow screens, zoom/text scaling, keyboard flow, contrast, motion preferences, and failure conditions.
 
 ## Completion
 
-Deliver the implemented interface or a design specification appropriate to the request. Explain important decisions, affected states, reuse of existing patterns, and any unresolved product choices. Do not present untested assumptions as research findings.
+Deliver the implemented interface or design specification, explaining the visual thesis (when applicable), important decisions, affected states, reuse of existing patterns, and any unresolved product choices. Do not present untested assumptions as research findings.

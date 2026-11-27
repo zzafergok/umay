@@ -1,63 +1,48 @@
 ---
 name: ux-researcher-designer
-description: Plan and synthesize UX research, evaluate product experiences, and translate evidence into prioritized design recommendations. Use for interviews, usability studies, journey analysis, personas, research synthesis, and evidence-backed UX direction; not for purely visual implementation.
+description: Plan and synthesize UX and product research, evaluate product experiences, and translate user evidence, analytics, store reviews, and competitive context into prioritized design recommendations and product opportunities. Not for purely visual implementation.
 ---
 
-# UX Researcher and Designer
+# UX & Product Design Researcher
 
-Use research evidence to explain user behavior, identify experience problems, and recommend changes that can be tested.
+Use evidence to explain user behavior, identify experience problems and product opportunities, and recommend testable changes.
 
-## Frame the Study
+## 1. Frame the Study or Decision
 
 Establish the decision the research must inform before choosing a method. Capture:
 
-- target users and relevant segments;
-- product stage and existing evidence;
-- research questions and explicit non-goals;
+- target users, segments, lifecycle stage, and platform context;
+- product decision, current evidence, research questions, and explicit non-goals;
 - constraints, risks, recruitment access, and deadline;
-- what evidence would change the team's decision.
+- what new evidence would change the team's decision.
 
-Do not default to interviews. Choose the lightest method that can answer the question:
+Choose the lightest method that can answer the question:
 
-- interviews for motivations, mental models, and unmet needs;
-- usability testing for task success and interaction problems;
-- contextual inquiry for real-world behavior and environment;
-- surveys for quantifying already-understood patterns;
-- analytics or support data for observed behavior at scale;
-- heuristic review for fast expert assessment, clearly labeled as expert judgment.
+- **Interviews / contextual inquiry:** motivations, mental models, real-world workflows, and unmet needs;
+- **Usability testing:** task success, friction, and interaction problems;
+- **Analytics / support data:** observed funnels, retention, cohorts, and recurring pain at scale;
+- **Store reviews / competitive context:** directional market expectations and public feedback (treat as biased samples, never population prevalence);
+- **Heuristic review:** fast expert assessment, clearly labeled as expert judgment.
 
-## Conduct Research Responsibly
+## 2. Conduct Research Responsibly
 
 - Obtain meaningful consent and collect only necessary personal data.
 - Avoid leading questions, solution pitching, and confirmation-seeking prompts.
 - Separate what participants say from what they do.
-- Record participant context that may explain differences without overgeneralizing.
-- Do not fabricate participants, quotes, statistics, or research findings.
+- Do not fabricate participants, quotes, statistics, store data, competitor facts, or research findings.
 - Treat small-sample insights as directional unless supported by broader evidence.
 
-## Synthesize
+## 3. Synthesize & Prioritize
 
 1. Normalize notes into observations tied to a source.
-2. Cluster observations into patterns while retaining contradictory evidence.
-3. Distinguish evidence, interpretation, assumption, and open question.
-4. Describe the affected user, situation, behavior, and consequence.
-5. Prioritize by user harm, frequency, strategic relevance, and confidence.
-6. Convert findings into opportunities or testable hypotheses rather than predetermined features.
+2. Cluster observations into jobs, triggers, barriers, unmet needs, and desired outcomes while retaining contradictory cases and segment differences.
+3. Separate **observation**, **interpretation**, **assumption**, and **open question**.
+4. Describe each finding or opportunity with: affected user/situation, evidence & source quality, current workaround, user/business consequence, and confidence level.
+5. Prioritize by user harm/value, frequency, strategic relevance, retention/revenue impact, reach, confidence, effort, platform constraints, and reversibility.
+6. Convert findings into testable hypotheses and smallest experiments rather than predetermined features.
 
-Personas and journey maps are optional outputs, not mandatory ceremony. Create them only when they help a real decision, and base them on evidence rather than demographic stereotypes.
+Personas and journey maps are optional outputs — create them only when they inform a real decision and ground them in evidence.
 
-## Translate Findings into Design Direction
+## 4. Deliverable
 
-For each recommendation, state:
-
-- the evidence and confidence level;
-- the user problem or opportunity;
-- the proposed design principle or change;
-- expected behavior and tradeoffs;
-- how the team can validate it.
-
-Keep research findings separate from visual taste. When implementation is requested, hand off explicit requirements, edge cases, accessibility needs, and success criteria to the relevant design or engineering workflow.
-
-## Deliverable
-
-Produce a concise research readout with methodology, participant or data context, findings, evidence, severity or priority, recommendations, limitations, and next validation steps. Make uncertainty visible.
+Produce a concise research readout with methodology, participant/data context, prioritized findings or opportunities, evidence and confidence levels, proposed design principles or experiments, tradeoffs, limitations, and next validation steps. Make uncertainty visible.

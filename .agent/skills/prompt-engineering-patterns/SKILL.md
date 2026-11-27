@@ -1,212 +1,62 @@
 ---
 name: prompt-engineering-patterns
-description: Master advanced prompt engineering techniques to maximize LLM performance, reliability, and controllability in production. Use when optimizing prompts, improving LLM outputs, or designing production prompt templates.
+description: Master advanced prompt engineering and LLM caching strategies (few-shot, chain-of-thought, structured templates, prompt prefix caching, response caching, and cache invalidation) to maximize performance, reliability, cost efficiency, and controllability in production.
 ---
 
-# Prompt Engineering Patterns
+# Prompt Engineering & Caching Patterns
 
-Master advanced prompt engineering techniques to maximize LLM performance, reliability, and controllability.
+Design reliable, controllable, and cost-efficient LLM prompts for production applications.
 
 ## When to Use This Skill
 
-- Designing complex prompts for production LLM applications
-- Optimizing prompt performance and consistency
-- Implementing structured reasoning patterns (chain-of-thought, tree-of-thought)
-- Building few-shot learning systems with dynamic example selection
-- Creating reusable prompt templates with variable interpolation
-- Debugging and refining prompts that produce inconsistent outputs
-- Implementing system prompts for specialized AI assistants
+- Designing or debugging production system prompts and structured output templates
+- Optimizing prompt accuracy, consistency, latency, and token cost
+- Implementing few-shot learning, chain-of-thought reasoning, or self-verification steps
+- Designing LLM caching layers (prompt prefix caching, response caching, or cache invalidation)
 
-## Core Capabilities
+---
 
-### 1. Few-Shot Learning
+## 1. Core Prompting Patterns
 
-- Example selection strategies (semantic similarity, diversity sampling)
-- Balancing example count with context window constraints
-- Constructing effective demonstrations with input-output pairs
-- Dynamic example retrieval from knowledge bases
-- Handling edge cases through strategic example selection
+### Progressive Disclosure (Start Simple)
 
-### 2. Chain-of-Thought Prompting
-
-- Step-by-step reasoning elicitation
-- Zero-shot CoT with "Let's think step by step"
-- Few-shot CoT with reasoning traces
-- Self-consistency techniques (sampling multiple reasoning paths)
-- Verification and validation steps
-
-### 3. Prompt Optimization
-
-- Iterative refinement workflows
-- A/B testing prompt variations
-- Measuring prompt performance metrics (accuracy, consistency, latency)
-- Reducing token usage while maintaining quality
-- Handling edge cases and failure modes
-
-### 4. Template Systems
-
-- Variable interpolation and formatting
-- Conditional prompt sections
-- Multi-turn conversation templates
-- Role-based prompt composition
-- Modular prompt components
-
-### 5. System Prompt Design
-
-- Setting model behavior and constraints
-- Defining output formats and structure
-- Establishing role and expertise
-- Safety guidelines and content policies
-- Context setting and background information
-
-## Quick Start
-
-```python
-from prompt_optimizer import PromptTemplate, FewShotSelector
-
-
-# Define a structured prompt template
-template = PromptTemplate(
-    system="You are an expert SQL developer. Generate efficient, secure SQL queries.",
-    instruction="Convert the following natural language query to SQL:\n{query}",
-    few_shot_examples=True,
-    output_format="SQL code block with explanatory comments"
-)
-
-
-# Configure few-shot learning
-selector = FewShotSelector(
-    examples_db="sql_examples.jsonl",
-    selection_strategy="semantic_similarity",
-    max_examples=3
-)
-
-
-# Generate optimized prompt
-prompt = template.render(
-    query="Find all users who registered in the last 30 days",
-    examples=selector.select(query="user registration date filter")
-)
-```
-
-## Key Patterns
-
-### Progressive Disclosure
-
-Start with simple prompts, add complexity only when needed:
-
-1. **Level 1**: Direct instruction
-   - "Summarize this article"
-
-2. **Level 2**: Add constraints
-   - "Summarize this article in 3 bullet points, focusing on key findings"
-
-3. **Level 3**: Add reasoning
-   - "Read this article, identify the main findings, then summarize in 3 bullet points"
-
-4. **Level 4**: Add examples
-   - Include 2-3 example summaries with input-output pairs
+1. **Level 1 (Direct instruction):** Clear, specific single-task directive.
+2. **Level 2 (Constraints):** Explicit format, length, and boundary rules.
+3. **Level 3 (Reasoning):** Step-by-step analysis before final answer (zero-shot or few-shot CoT).
+4. **Level 4 (Few-shot examples):** 2–3 diverse, representative input-output pairs.
 
 ### Instruction Hierarchy
 
-```
-[System Context] → [Task Instruction] → [Examples] → [Input Data] → [Output Format]
-```
-
-### Error Recovery
-
-Build prompts that gracefully handle failures:
-
-- Include fallback instructions
-- Request confidence scores
-- Ask for alternative interpretations when uncertain
-- Specify how to indicate missing information
-
-## Best Practices
-
-1. **Be Specific**: Vague prompts produce inconsistent results
-2. **Show, Don't Tell**: Examples are more effective than descriptions
-3. **Test Extensively**: Evaluate on diverse, representative inputs
-4. **Iterate Rapidly**: Small changes can have large impacts
-5. **Monitor Performance**: Track metrics in production
-6. **Version Control**: Treat prompts as code with proper versioning
-7. **Document Intent**: Explain why prompts are structured as they are
-
-## Common Pitfalls
-
-- **Over-engineering**: Starting with complex prompts before trying simple ones
-- **Example pollution**: Using examples that don't match the target task
-- **Context overflow**: Exceeding token limits with excessive examples
-- **Ambiguous instructions**: Leaving room for multiple interpretations
-- **Ignoring edge cases**: Not testing on unusual or boundary inputs
-
-## Integration Patterns
-
-### With RAG Systems
-
-```python
-# Combine retrieved context with prompt engineering
-prompt = f"""Given the following context:
-{retrieved_context}
-
-
-{few_shot_examples}
-
-
-Question: {user_question}
-
-
-Provide a detailed answer based solely on the context above. If the context doesn't contain enough information, explicitly state what's missing."""
+```text
+[System Context & Role] → [Task Instruction & Constraints] → [Examples] → [Input Data] → [Output Schema]
 ```
 
-### With Validation
+### Error Recovery & Self-Verification
 
-```python
-# Add self-verification step
-prompt = f"""{main_task_prompt}
+- Define explicit fallback behavior when input is ambiguous or incomplete.
+- Instruct the model to flag missing fields or low confidence rather than fabricating values.
+- Add a concise verification checklist for structured extraction tasks (e.g., totals, units, schema types).
 
+---
 
-After generating your response, verify it meets these criteria:
-1. Answers the question directly
-2. Uses only information from provided context
-3. Cites specific sources
-4. Acknowledges any uncertainty
+## 2. Prompt & Response Caching Strategies
 
+Provider cache semantics, minimum token thresholds, billing, and TTLs change — verify current provider documentation before estimating savings.
 
-If verification fails, revise your response."""
-```
+- **Prompt Prefix Caching:** Place static instructions, schemas, and few-shot examples at the _beginning_ of the prompt (system message) and dynamic user input at the _end_ so repeated prefixes stay cache-eligible.
+- **Response Caching:** Cache deterministic outputs (e.g., `temperature: 0` or structured extraction keyed by content hash + prompt version + model ID).
+- **Cache Augmented Generation (CAG):** Pre-load stable reference catalogs/context into the cached prefix instead of dynamic retrieval when the corpus fits comfortably.
 
-## Performance Optimization
+### Caching Pitfalls to Avoid
 
-### Token Efficiency
+- **Changing prefixes:** Injecting timestamps, request IDs, or dynamic lists at the top of the prompt busts prefix caches on every request.
+- **Caching high-temperature calls:** Non-deterministic creative outputs should not share exact-match caches.
+- **Missing invalidation:** Always include `promptVersion` and `schemaVersion` in response cache keys so prompt updates never serve stale formats.
 
-- Remove redundant words and phrases
-- Use abbreviations consistently after first definition
-- Consolidate similar instructions
-- Move stable content to system prompts
+---
 
-### Latency Reduction
+## 3. Best Practices & KPIs
 
-- Minimize prompt length without sacrificing quality
-- Use streaming for long-form outputs
-- Cache common prompt prefixes
-- Batch similar requests when possible
-
-## Success Metrics
-
-Track these KPIs for your prompts:
-
-- **Accuracy**: Correctness of outputs
-- **Consistency**: Reproducibility across similar inputs
-- **Latency**: Response time (P50, P95, P99)
-- **Token Usage**: Average tokens per request
-- **Success Rate**: Percentage of valid outputs
-- **User Satisfaction**: Ratings and feedback
-
-## Next Steps
-
-1. Review the prompt template library for common patterns
-2. Experiment with few-shot learning for your specific use case
-3. Implement prompt versioning and A/B testing
-4. Set up automated evaluation pipelines
-5. Document your prompt engineering decisions and learnings
+- **Be Specific & Show, Don't Tell:** Concrete examples outperform abstract prose rules.
+- **Version Prompts as Code:** Track prompt and schema changes together with offline evaluation sets.
+- **Measure What Matters:** Track schema validity rate, accuracy, P50/P95 latency, cache hit rate, and average tokens per request.

@@ -1,63 +1,51 @@
 ---
 name: senior-software-architect
-description: Make or review consequential software architecture decisions across application boundaries, data, integrations, reliability, security, and platform evolution. Use for cross-cutting design and long-term tradeoffs; do not trigger for routine local implementation decisions.
+description: Make or review consequential software architecture decisions and turn system requirements into traceable designs across application boundaries, domain models, data, integrations, reliability, security, and platform evolution. Do not trigger for routine local implementation decisions.
 ---
 
-# Senior Software Architect
+# Senior Software Architect & System Designer
 
-Provide architecture guidance grounded in the actual system, constraints, and business goals. Preserve project conventions unless changing them produces a demonstrated benefit.
+Provide architecture guidance and traceable system designs grounded in the actual system, constraints, and business goals. Preserve project conventions unless changing them produces a demonstrated benefit.
 
-## Establish Context
+## 1. Establish Context & Frame the System
 
-Inspect the current architecture before proposing a target state. Determine:
+Inspect the current architecture (or requirements for a new system) before proposing a target state. Determine:
 
-- system purpose, users, critical journeys, and service levels;
-- repository boundaries, runtime topology, deployment model, and ownership;
-- data sources, consistency needs, privacy classification, and retention;
-- integrations, failure domains, trust boundaries, and operational constraints;
-- expected scale, team capability, delivery horizon, and migration tolerance.
+- system purpose, users, critical journeys, scope, non-goals, and service levels;
+- repository boundaries, runtime topology, deployment model, and team ownership;
+- domain actors, commands, events, invariants, data ownership, consistency, privacy, and retention;
+- integrations, failure domains, trust boundaries, and operational/migration constraints.
 
-Do not assume a framework, cloud, database, directory layout, or architectural style that the project has not chosen.
+Do not assume a framework, cloud, database, directory layout, or architectural style that the project has not chosen. Ask only about unknowns that materially change the design.
 
-## Make the Decision Explicit
+## 2. Make Decisions & Tradeoffs Explicit
 
-Frame architecture work as a decision rather than a diagram exercise:
+Frame architecture work as explicit decisions rather than a diagram exercise:
 
 1. State the problem, forces, and non-goals.
-2. Identify viable options, including keeping the current design.
-3. Compare options using the constraints that matter: simplicity, delivery cost, operability, reliability, performance, security, reversibility, and team fit.
+2. Compare viable options (including keeping the current or simplest design).
+3. Evaluate using concrete criteria: simplicity, delivery cost, operability, reliability, performance, security, cost, reversibility, and team fit.
 4. Recommend the smallest design that satisfies current requirements and preserves an acceptable evolution path.
-5. Record consequences, assumptions, risks, and signals that would justify revisiting the decision.
+5. Record consequences, assumptions, risks, and signals that would invalidate the choice.
 
-Use an Architecture Decision Record when a choice is cross-cutting, costly to reverse, or likely to be questioned later.
+Use an Architecture Decision Record (ADR) when a choice is cross-cutting, costly to reverse, or likely to be questioned later.
 
-## Design Across Boundaries
+## 3. Design Views Across Boundaries
 
-Cover only the views needed by the task:
+Cover only the views needed by the task (maintaining one abstraction level per diagram):
 
-- context and ownership boundaries;
-- components or services and their responsibilities;
-- synchronous and asynchronous interactions;
-- data ownership, lifecycle, schemas, and migration strategy;
-- authentication, authorization, secrets, and trust boundaries;
-- capacity, latency budgets, caching, backpressure, and failure handling;
-- observability, deployment, rollback, recovery, and operational ownership.
+- **Context & ownership:** people, external systems, trust boundaries;
+- **Containers & components:** responsibilities, technologies, synchronous/asynchronous interactions;
+- **Critical flows:** sequences, retries, timeouts, duplicate requests, partial failure, and backpressure;
+- **Data:** entities, identifiers, lifecycle, schemas, consistency, and migration strategy;
+- **Security & operations:** auth/authz, secrets, observability, deployment, rollback, and recovery.
 
-Prefer clear interfaces and explicit ownership over fashionable patterns. Avoid distributed components when a modular monolith or local abstraction meets the need.
+Prefer clear interfaces and modular monoliths over distributed complexity when local abstractions meet the need.
 
-## Evolution and Delivery
+## 4. Evolution & Delivery
 
-For an existing system, include a safe migration path:
-
-- compatibility requirements and transition states;
-- data migration and validation;
-- incremental rollout, feature flags, or parallel operation where justified;
-- observability and acceptance signals;
-- rollback or containment strategy;
-- removal of temporary compatibility code.
-
-Do not describe a full rewrite as the default path. Separate required changes from optional future optimizations.
+For an existing system, prefer incremental evolution over a full rewrite and include a safe migration path: compatibility requirements, transition states, data migration/validation, incremental rollout, observability signals, rollback strategy, and cleanup of temporary compatibility code.
 
 ## Deliverable
 
-Produce an architecture recommendation proportionate to the decision. Include diagrams only when they clarify relationships or sequence. State verified context, assumptions, tradeoffs, risks, migration steps, and validation criteria. Flag decisions that require product, security, legal, or operational ownership rather than silently making them.
+Produce a concise architecture recommendation or design catalog with verified context, assumptions, selected views/diagrams (only when they clarify relationships), tradeoffs, risks, migration steps, and verification criteria. Flag decisions requiring product, security, legal, or operational sign-off.
